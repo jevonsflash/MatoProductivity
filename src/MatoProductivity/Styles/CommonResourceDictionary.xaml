@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converter="clr-namespace:MatoProductivity.Converter;assembly=MatoProductivity"
+                    x:Class="MatoProductivity.Styles.CommonResourceDictionary"
+                    >
+    <system:String x:Key="Version">2.0</system:String>
+    <system:Double x:Key="TinyFontSize">10</system:Double>
+    <system:Double x:Key="StandOutBodyFontSize">28</system:Double>
+    <system:Double x:Key="MidFontSize">22</system:Double>
+    <system:Double x:Key="BodyFontSize">18</system:Double>
+
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource PhoneForegroundBrush}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="TextColor" Value="{DynamicResource PhoneContrastForegroundBrush}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource PhoneContrastBackgroundBrush}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Margin" Value="5,0" />
+
+    </Style>
+    <Style TargetType="Button" x:Key="PrimaryButton">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="TextColor" Value="{DynamicResource PhoneContrastForegroundBrush}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource PhoneAccentBrush}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Margin" Value="5,0" />
+    </Style>
+   
+    <Style TargetType="Button" x:Key="TextButton">
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="TextColor" Value="{DynamicResource PhoneContrastForegroundBrush}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Margin" Value="5,0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="PrimaryButtonOutline">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="TextColor" Value="{DynamicResource PhoneContrastForegroundBrush}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="BorderWidth" Value="1"/>
+        <Setter Property="BorderColor" Value="{DynamicResource PhoneAccentBrush}"/>
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="Margin" Value="5,0" />
+    </Style>
+
+    <Style TargetType="TabBar">
+        <Setter Property="Shell.TabBarBackgroundColor"
+            Value="{DynamicResource PhoneContrastBackgroundBrush}" />
+        <Setter Property="Shell.TabBarTitleColor"
+            Value="{DynamicResource PhoneAccentBrush}" />
+        <Setter Property="Shell.TabBarForegroundColor"
+            Value="{DynamicResource PhoneAccentBrush}" />
+    </Style>
+
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource PhoneBackgroundBrush}"/>
+    </Style>
+
+    <Style TargetType="NavigationPage" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PhoneBackgroundBrush}"/>
+        <Setter Property="BarBackgroundColor" Value="{DynamicResource PhoneBackgroundBrush}"/>
+        <Setter Property="BarTextColor" Value="{DynamicResource White}"/>
+    </Style>
+
+    <Thickness x:Key="DefaultContentPadding"
+                       Left="12"
+                       Top="64"
+                       Right="12"
+                       Bottom="0" />
+
+
+    <converter:True2FalseConverter x:Key="True2FalseConverter">
+    </converter:True2FalseConverter>
+    <converter:SliderMaxValueConverter x:Key="SliderMaxValueConverter">
+    </converter:SliderMaxValueConverter>
+    <converter:SecondsToTimeSpanConverter x:Key="SecondsToTimeSpanConverter">
+    </converter:SecondsToTimeSpanConverter>
+    <converter:IsValid2BoolConverter x:Key="IsNotEmpty2BoolConverter">
+    </converter:IsValid2BoolConverter>
+    <converter:AlbumArtConverter x:Key="AlbumArtConverter">
+    </converter:AlbumArtConverter>
+    <converter:Bool2StringConverter x:Key="Bool2StringConverter">
+    </converter:Bool2StringConverter>
+</ResourceDictionary>

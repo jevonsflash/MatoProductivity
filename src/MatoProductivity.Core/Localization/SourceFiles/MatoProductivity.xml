@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localizationDictionary culture="en">
+	<texts>
+		<text name="About">About</text>
+		<text name="AboutContent1">First of all thanks to download and experience, I wish you a good mood</text>
+		<text name="AboutContent2">If you are in doubt during use, you can refer to the following use of help, you can also send e-mail to me. Mail link in the "feedback" column。</text>
+		<text name="AboutContent3">Update content:</text>
+		<text name="AddMusic">Add a track</text>
+		<text name="AddPlaylist">Add song list</text>
+		<text name="AddTo">Add to..</text>
+		<text name="AddToFavourite">Add favorites</text>
+		<text name="AddToQueue">Add to queue</text>
+		<text name="AddToQueue2">Append to queue</text>
+		<text name="Albums">Album</text>
+		<text name="Artists">Artist</text>
+		<text name="Brief">This is a music player that focuses on the local music experience</text>
+		<text name="Cancel">Cancel</text>
+		<text name="Clean">Clean up</text>
+		<text name="CreatePlaylist">Add song list</text>
+		<text name="CreatePlaylistPlaceholder">Please enter the song name</text>
+		<text name="Edit">Edit</text>
+		<text name="EditPlaylist">Edit song list</text>
+		<text name="Feedback">Feedback</text>
+		<text name="FeedBackContent">If you think MatoPlayer is good, please support me!</text>
+		<text name="FeedbackContent1">Likewise, I am very much looking forward to your comments and suggestions. Please send the feedback to the following address:</text>
+		<text name="FeedbackContent2">You can also Subscribe to my Sina Weibo</text>
+		<text name="FliperAlert1">Look around the music library</text>
+		<text name="FliperAlert2">The current track is empty</text>
+		<text name="GivePraise">Scoring and evaluating on AppStore</text>
+		<text name="Help">Help</text>
+		<text name="HelpContent">
+			"1. In the music library, if you just click on the song without adding to the queue, can only play a preview role and can not find this song again
+			2. In the queue and the song can be activated by long press the sort status
+			3. On the home page you can click on the album cover to open the lyrics"
+		</text>
+		<text name="Library">Library</text>
+		<text name="LibraryAlert">Please connect your device to iTunes and sync some songs</text>
+		<text name="LibraryAlert2">Please copy some songs to your Android device</text>
+		<text name="LyricAlert">Please start a song to show the lyrics</text>
+		<text name="LyricAlert2">Auto lyrics have been closed</text>
+		<text name="LyricContent">Click here to load</text>
+		<text name="MatoPlayer">MatoPlayer</text>
+		<text name="Msg_AddFailed">Add failed</text>
+		<text name="Msg_AlreadyExists">Existed</text>
+		<text name="Msg_EditFailed">Save failed</text>
+		<text name="Msg_HasAdded">Added</text>
+		<text name="Msg_HasAddedQueue">Has been added to the queue</text>
+		<text name="Msg_HasAddedQueue2">Has been append to the queue</text>
+		<text name="Msg_HasCreated">Created</text>
+		<text name="Msg_HasEdit">Saved</text>
+		<text name="Msg_HasRemoved">Removed</text>
+		<text name="Msg_Nameillegal">Name illegal</text>
+		<text name="Msg_QueueCleaned">Queue cleaned</text>
+		<text name="Msg_RemoveFailed">Remove failed</text>
+		<text name="Msg_TrunoffSleepMode">Sleep mode has been turned off</text>
+		<text name="Musics">Song</text>
+		<text name="MyFavourite">I love it most</text>
+		<text name="NewPlaylist">New song list</text>
+		<text name="Next">Next</text>
+		<text name="NoItem">Here is empty</text>
+		<text name="NoteAndAppreciation">Statement</text>
+		<text name="NowPlaying">Now Playing</text>
+		<text name="Personalize">Personalise</text>
+		<text name="Play">Play</text>
+		<text name="PlayAll">Play all</text>
+		<text name="Playlist">Song list</text>
+		<text name="PlayNext">Next play</text>
+		<text name="PlayThis">Play this</text>
+		<text name="Queue">Queue</text>
+		<text name="Remove">Remove</text>
+		<text name="Rename">Rename..</text>
+		<text name="Search">Search </text>
+		<text name="SearchPlaceholder">Please enter the name of the song, artist, or album</text>
+		<text name="Setting">Setting</text>
+		<text name="SettingContent1">Sleep mode setting</text>
+		<text name="SettingContent2">Conventional</text>
+		<text name="SettingContent3">Automatically download lyrics</text>
+		<text name="SettingContent4">Assist in improving the product</text>
+		<text name="SleepMode">Sleep mode</text>
+		<text name="SleepModeContent1">Sleep Mode On. Will stop in {0} hours and {1} minutes</text>
+		<text name="SleepModeContent3">Note: Please ensure that the player is running in the foreground, can lock screen</text>
+		<text name="SleepModeOn">Sleep Mode On</text>
+		<text name="Statement">
+			"This App use and follow the terms of each open source framework
+			This App collects usage information to improve the product without involving user privacy
+			"
+		</text>
+		<text name="Submit">Submit</text>
+		<text name="Timer">Timer</text>
+
+	</texts>
+</localizationDictionary>
