@@ -55,7 +55,7 @@
 		<text name="Next">下一曲</text>
 		<text name="NoItem">没有任何项目</text>
 		<text name="NoteAndAppreciation">说明</text>
-		<text name="NowPlaying">正在播放</text>
+		<text name="NoteTemplate">正在播放</text>
 		<text name="Personalize">个性化</text>
 		<text name="Play">播放</text>
 		<text name="PlayAll">播放全部</text>

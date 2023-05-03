@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class Playlist : FullAuditedEntity<long>
+    public class Note : FullAuditedEntity<long>
     {
-        public Playlist()
+        public Note()
         {
 
         }
-        public Playlist(string name, bool isHidden, bool isRemovable)
+        public Note(string name, bool isHidden, bool isRemovable)
         {
             Title = name;
             IsHidden = isHidden;
@@ -30,6 +30,5 @@ namespace MatoProductivity.Core.Models.Entities
 
         public bool IsRemovable { get; set; }
 
-        public ICollection<PlaylistItem> PlaylistItems { get; set; }
     }
 }

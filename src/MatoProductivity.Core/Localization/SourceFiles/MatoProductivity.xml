@@ -59,7 +59,7 @@
 		<text name="Next">Next</text>
 		<text name="NoItem">Here is empty</text>
 		<text name="NoteAndAppreciation">Statement</text>
-		<text name="NowPlaying">Now Playing</text>
+		<text name="NoteTemplate">Now Playing</text>
 		<text name="Personalize">Personalise</text>
 		<text name="Play">Play</text>
 		<text name="PlayAll">Play all</text>

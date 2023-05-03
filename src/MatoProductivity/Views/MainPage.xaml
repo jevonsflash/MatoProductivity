@@ -3,50 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MatoProductivity.MainPage"
             FlyoutBackgroundColor="{DynamicResource PhoneAccentBrush}">
-    <Shell.FlyoutHeaderTemplate>
-        <DataTemplate>
-            <StackLayout Orientation="Vertical">
-                <Label 
-                    Text="MATO_MUSIC" 
-                    FontSize="50"
-                    FontAttributes="Bold"
-                    TextColor="#00c4c4"
-                    Margin="0,20"
-                    HorizontalOptions="Center"></Label>
 
-
-
-            </StackLayout>
-        </DataTemplate>
-    </Shell.FlyoutHeaderTemplate>
-    <Shell.FlyoutFooterTemplate>
-        <DataTemplate>
-            <StackLayout Orientation="Vertical">
-                <Image Source="dotnet_bot.svg"></Image>
-                <Label Text="This app is build with .NET MAUI"
-                    TextColor="#00c4c4"
-                    Margin="0,20"
-                    HorizontalOptions="Center">
-
-                </Label>
-            </StackLayout>
-        </DataTemplate>
-    </Shell.FlyoutFooterTemplate>
-    <!-- Desktop/Tablet-->
-    <FlyoutItem Route="NowPlayingPage" Title="正在播放" Icon="tab_home.png">
-        <ShellContent x:Name="NowPlayingPageShellContent"/>
-    </FlyoutItem>
-    <FlyoutItem Route="QueuePage" Title="播放队列" Icon="tab_favorites.png">
-        <ShellContent x:Name="QueuePageShellContent"/>
-    </FlyoutItem>
-    <FlyoutItem  Route="LibraryMainPage" Title="库" Icon="tab_map.png" >
-        <Tab>
-            <ShellContent  Title="歌曲" Icon="headphone.png"  x:Name="MusicPageShellContent"/>
-            <ShellContent  Title="艺术家" Icon="microphone2.png"  x:Name="ArtistPageShellContent"/>
-            <ShellContent  Title="专辑" Icon="cd2.png"  x:Name="AlbumPageShellContent"/>
+    <TabBar>
+        <Tab  Title="场景" Icon="headphone.png">
+            <ShellContent  x:Name="NoteTemplateContent"/>
         </Tab>
-    </FlyoutItem>
-    <FlyoutItem  Route="PlaylistPage"  Title="歌单" Icon="tab_map.png">
-        <ShellContent x:Name="PlaylistPageShellContent"/>
-    </FlyoutItem>
+        <Tab  Title="笔记" Icon="microphone2.png"  >
+            <ShellContent x:Name="NoteContent"/>
+        </Tab>
+    </TabBar>
 </Shell>

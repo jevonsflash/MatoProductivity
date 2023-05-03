@@ -3,18 +3,9 @@ using Abp.Modules;
 using Abp.Reflection.Extensions;
 using MatoProductivity.Core.Configuration;
 using MatoProductivity.Core.Localization;
-using MatoProductivity.Core.Services;
 using MatoProductivity.Core.Settings;
-using MatoProductivity.Core.ViewModel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatoProductivity.Core
 {

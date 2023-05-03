@@ -67,4 +67,16 @@
 	  <ProjectReference Include="..\MatoProductivity.Infrastructure\MatoProductivity.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Views\NoteTemplatePage.xaml.cs">
+	    <DependentUpon>NoteTemplatePage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\NotePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

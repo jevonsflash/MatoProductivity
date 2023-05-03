@@ -9,26 +9,27 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class Queue : FullAuditedEntity<long>
+    public class NoteGroup : FullAuditedEntity<long>
     {
-        public Queue()
+        public NoteGroup()
         {
 
         }
-        public Queue(string musicTitle, int rank, long musicInfoId)
+        public NoteGroup(string name, bool isHidden, bool isRemovable)
         {
-            MusicTitle = musicTitle;
-            Rank = rank;
-            MusicInfoId = musicInfoId;
+            Title = name;
+            IsHidden = isHidden;
+            IsRemovable = isRemovable;
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
+        public string Title { get; set; }
 
-        public long MusicInfoId { get; set; }
+        public bool IsHidden { get; set; }
 
-        public int Rank { get; set; }
+        public bool IsRemovable { get; set; }
 
-        public string MusicTitle { get; set; }
+        public ICollection<Note> Notes { get; set; }
     }
 }

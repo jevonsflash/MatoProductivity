@@ -5,9 +5,6 @@ using Abp.Localization;
 using Abp.Localization.Sources;
 using Abp.ObjectMapping;
 using MatoProductivity.Core;
-using MatoProductivity.Core.Interfaces;
-using MatoProductivity.Core.Services;
-using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Services;
 using System;
 using System.Collections.Generic;
@@ -21,11 +18,6 @@ namespace MatoProductivity
     public class ContentViewBase : ContentView
     {
 
-        public IMusicInfoManager MusicInfoManager => IocManager.Instance.Resolve<IMusicInfoManager>();
-
-        public IMusicControlService MusicControlService => IocManager.Instance.Resolve<IMusicControlService>();
-
-        public MusicRelatedService MusicRelatedService => IocManager.Instance.Resolve<MusicRelatedService>();
 
         public IObjectMapper ObjectMapper { get; set; }
 

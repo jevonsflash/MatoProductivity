@@ -5,16 +5,9 @@ using Abp.Localization.Sources;
 using Abp.ObjectMapping;
 using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core;
-using MatoProductivity.Core.Interfaces;
-using MatoProductivity.Core.Services;
-using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Services;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MatoProductivity
 {

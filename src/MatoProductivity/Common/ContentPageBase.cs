@@ -1,31 +1,17 @@
 ﻿using Abp;
 using Abp.Configuration;
-using Abp.Dependency;
 using Abp.Localization;
 using Abp.Localization.Sources;
 using Abp.ObjectMapping;
 using MatoProductivity.Core;
-using MatoProductivity.Core.Interfaces;
-using MatoProductivity.Core.Services;
-using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Services;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MatoProductivity
 {
     public class ContentPageBase : ContentPage
     {
-
-        public IMusicInfoManager MusicInfoManager => IocManager.Instance.Resolve<IMusicInfoManager>();
-
-        public IMusicControlService MusicControlService => IocManager.Instance.Resolve<IMusicControlService>();
-
-        public MusicRelatedService MusicRelatedService => IocManager.Instance.Resolve<MusicRelatedService>();
 
         public IObjectMapper ObjectMapper { get; set; }
 
