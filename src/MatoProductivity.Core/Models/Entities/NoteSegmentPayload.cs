@@ -27,9 +27,9 @@ namespace MatoProductivity.Core.Models.Entities
 
         public string Key { get; set; }
 
-        public object Value { get; set; }
+        public byte[] Value { get; set; }
 
-        public Type ValueType { get; set; }
+        public string ValueType { get; set; }
 
 
 

@@ -8,18 +8,65 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MatoProductivity.Migrations
+namespace MatoProductivity.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(MatoProductivityDbContext))]
-    [Migration("20211129105407_init")]
+    [Migration("20230503115746_init")]
     partial class init
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
 
-            modelBuilder.Entity("MatoProductivity.Core.Playlist", b =>
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.Note", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRemovable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("NoteGroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteGroupId");
+
+                    b.ToTable("Note");
+                });
+
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteGroup", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,10 +104,74 @@ namespace MatoProductivity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Playlist");
+                    b.ToTable("NoteGroup");
                 });
 
-            modelBuilder.Entity("MatoProductivity.Core.PlaylistItem", b =>
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteSegment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Desc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRemovable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("NoteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("NoteSegment");
+                });
+
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteSegmentPayload", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,51 +192,8 @@ namespace MatoProductivity.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("LastModificationTime")
+                    b.Property<string>("Key")
                         .HasColumnType("TEXT");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MusicInfoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("MusicTitle")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("PlaylistId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlaylistId");
-
-                    b.ToTable("PlaylistItem");
-                });
-
-            modelBuilder.Entity("MatoProductivity.Core.Queue", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("TEXT");
@@ -133,18 +201,20 @@ namespace MatoProductivity.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MusicInfoId")
+                    b.Property<long>("NoteSegmentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("MusicTitle")
+                    b.Property<byte[]>("Value")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("ValueType")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Queue");
+                    b.HasIndex("NoteSegmentId");
+
+                    b.ToTable("NoteSegmentPayload");
                 });
 
             modelBuilder.Entity("MatoProductivity.Core.Theme.Theme", b =>
@@ -200,20 +270,43 @@ namespace MatoProductivity.Migrations
                     b.ToTable("Theme");
                 });
 
-            modelBuilder.Entity("MatoProductivity.Core.PlaylistItem", b =>
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.Note", b =>
                 {
-                    b.HasOne("MatoProductivity.Core.Playlist", "Playlist")
-                        .WithMany("PlaylistItems")
-                        .HasForeignKey("PlaylistId")
+                    b.HasOne("MatoProductivity.Core.Models.Entities.NoteGroup", null)
+                        .WithMany("Notes")
+                        .HasForeignKey("NoteGroupId");
+                });
+
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteSegment", b =>
+                {
+                    b.HasOne("MatoProductivity.Core.Models.Entities.Note", "Note")
+                        .WithMany()
+                        .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Playlist");
+                    b.Navigation("Note");
                 });
 
-            modelBuilder.Entity("MatoProductivity.Core.Playlist", b =>
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteSegmentPayload", b =>
                 {
-                    b.Navigation("PlaylistItems");
+                    b.HasOne("MatoProductivity.Core.Models.Entities.NoteSegment", "NoteSegment")
+                        .WithMany("NoteSegmentPayloads")
+                        .HasForeignKey("NoteSegmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NoteSegment");
+                });
+
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteGroup", b =>
+                {
+                    b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("MatoProductivity.Core.Models.Entities.NoteSegment", b =>
+                {
+                    b.Navigation("NoteSegmentPayloads");
                 });
 #pragma warning restore 612, 618
         }

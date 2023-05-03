@@ -1,7 +1,6 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
-using MatoProductivity.Core.Configuration;
 using MatoProductivity.Core.Localization;
 using MatoProductivity.Core.Settings;
 using Microsoft.Extensions.Configuration;
@@ -28,8 +27,7 @@ namespace MatoProductivity.Core
 
             string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), MatoProductivityConsts.LocalizationSourceName);
 
-            var configuration = AppConfigurations.Get(documentsPath, development);
-            var connectionString = configuration.GetConnectionString(MatoProductivityConsts.ConnectionStringName);
+            var connectionString = "Data Source=file:mato.db;";
 
             var dbName = "mato.db";
             string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), MatoProductivityConsts.LocalizationSourceName, dbName);
