@@ -9,26 +9,29 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class Note : FullAuditedEntity<long>
+    public class NoteSegmentPayload : FullAuditedEntity<long>
     {
-        public Note()
+        public NoteSegmentPayload()
         {
 
         }
-        public Note(string name, bool isHidden, bool isRemovable)
-        {
-            Title = name;
-            IsHidden = isHidden;
-            IsRemovable = isRemovable;
-        }
+
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
-        public string Title { get; set; }
 
-        public bool IsHidden { get; set; }
+        [ForeignKey(nameof(NoteSegmentId))]
+        public NoteSegment NoteSegment { get; set; }
 
-        public bool IsRemovable { get; set; }
+        public long NoteSegmentId { get; set; }
+
+        public string Key { get; set; }
+
+        public object Value { get; set; }
+
+        public Type ValueType { get; set; }
+
+
 
     }
 }

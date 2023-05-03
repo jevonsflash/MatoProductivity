@@ -68,13 +68,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\NoteListPage.xaml.cs">
+	    <DependentUpon>NoteListPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\NoteTemplatePage.xaml.cs">
 	    <DependentUpon>NoteTemplatePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\NotePage.xaml">
+	  <MauiXaml Update="Views\EditNotePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\NoteListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

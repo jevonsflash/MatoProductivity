@@ -1,9 +1,9 @@
 ﻿using Abp.Modules;
 using Abp.Reflection.Extensions;
 using MatoProductivity.Core;
-using MatoProductivity.Core.Services;
 using MatoProductivity.EntityFrameworkCore;
 using MatoProductivity.ViewModels;
+using MatoProductivity.Views;
 
 namespace MatoProductivity
 {
@@ -15,6 +15,12 @@ namespace MatoProductivity
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(MatoProductivityModule).GetAssembly());
+        }
+
+        public override void PostInitialize()
+        {
+            Routing.RegisterRoute(nameof(EditNotePage), typeof(EditNotePage));
+            base.PostInitialize();
         }
 
     }

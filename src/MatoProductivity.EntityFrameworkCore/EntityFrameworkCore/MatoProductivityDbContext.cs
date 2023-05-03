@@ -9,9 +9,10 @@ namespace MatoProductivity.EntityFrameworkCore
     {
         //Add DbSet properties for your entities...
 
-        public DbSet<Queue> Queue { get; set; }
-        public DbSet<NoteGroup> Playlist { get; set; }
-        public DbSet<PlaylistItem> PlaylistItem { get; set; }
+        public DbSet<Note> Note { get; set; }
+        public DbSet<NoteGroup> NoteGroup { get; set; }
+        public DbSet<NoteSegment> NoteSegment { get; set; }
+        public DbSet<NoteSegmentPayload> NoteSegmentPayload { get; set; }
         public DbSet<Theme> Theme { get; set; }
         public MatoProductivityDbContext(DbContextOptions<MatoProductivityDbContext> options) 
             : base(options)

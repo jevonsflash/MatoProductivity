@@ -21,7 +21,7 @@ public partial class MainPage : Shell, ITransientDependency
         var noteTemplatePage = iocManager.Resolve<NoteTemplatePage>();
         this.NoteTemplateContent.Content = noteTemplatePage;
 
-        var notePage = iocManager.Resolve<NotePage>();
+        var notePage = iocManager.Resolve<NoteListPage>();
         this.NoteContent.Content = notePage;
     }
 
