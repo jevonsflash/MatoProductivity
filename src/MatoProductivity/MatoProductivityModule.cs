@@ -19,7 +19,8 @@ namespace MatoProductivity
 
         public override void PostInitialize()
         {
-            Routing.RegisterRoute(nameof(EditNotePage), typeof(EditNotePage));
+          var matoRouteFactory= IocManager.Resolve<MatoRouteFactory>(new { T=typeof(EditNotePage) });
+            Routing.RegisterRoute(nameof(EditNotePage), matoRouteFactory);
             base.PostInitialize();
         }
 

@@ -1,22 +1,43 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mato:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
-             x:Class="MatoProductivity.Views.NoteListPage"
-             Title="NoteListPage">
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                      x:Class="MatoProductivity.Views.NoteListPage"
+                      Title="NoteListPage">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <CollectionView ItemsSource="{Binding Notes}">
+        <Label Text="Welcome to .NET MAUI!"
+               VerticalOptions="Center"
+               HorizontalOptions="Center" />
+        <CollectionView  ItemsLayout="VerticalList"
+                         ItemsSource="{Binding Notes}"
+                         SelectionMode="Single"
+                         SelectedItem="{Binding SelectedNote}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Label Text="{Binding Title}"></Label>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Favorite"
+                                           IconImageSource="favorite.png"
+                                           BackgroundColor="LightGreen"
+                                           Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.FavoriteCommand}"
+                                           CommandParameter="{Binding}" />
+                                <SwipeItem Text="Delete"
+                                           IconImageSource="delete.png"
+                                           BackgroundColor="LightPink"
+                                           Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.DeleteCommand}"
+                                           CommandParameter="{Binding}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid
+                              Padding="10">
+                            <Label TextColor="Red" Text="{Binding Title}"></Label>
+                        </Grid>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
-        
+
+
     </VerticalStackLayout>
 </mato:ContentPageBase>

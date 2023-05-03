@@ -4,15 +4,25 @@
              xmlns:style="clr-namespace:MatoProductivity.Styles;assembly=MatoProductivity"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:view="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+             xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
              x:Class="MatoProductivity.App"
              windows:Application.ImageDirectory="Assets">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <style:DarkTheme />
-                <!--<style:LightTheme />-->
+                <!--<style:DarkTheme />-->
+                <style:LightTheme />
                 <style:CommonResourceDictionary />
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="DateTimeSegment">
+                <core:DateTimeSegmentView></core:DateTimeSegmentView>
+            </DataTemplate>
+            <DataTemplate x:Key="TextSegment">
+                <Grid>
+                    <core:TextSegmentView></core:TextSegmentView>
+                </Grid>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

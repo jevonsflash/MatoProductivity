@@ -7,11 +7,11 @@ using System.Collections.ObjectModel;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NotePageViewModel : ViewModelBase, ITransientDependency
+    public class NoteListPageViewModel : ViewModelBase, ISingletonDependency
     {
         private readonly IRepository<Note, long> repository;
 
-        public NotePageViewModel(IRepository<Note, long> repository)
+        public NoteListPageViewModel(IRepository<Note, long> repository)
         {
             this.repository = repository;
             this.PropertyChanged += NotePageViewModel_PropertyChangedAsync;

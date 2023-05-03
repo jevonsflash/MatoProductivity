@@ -1,5 +1,6 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -10,25 +11,31 @@ namespace MatoProductivity.ViewModels
     public class EditNotePageViewModel : ViewModelBase, ITransientDependency
     {
         private readonly IRepository<NoteSegment, long> repository;
+        private readonly IUnitOfWorkManager unitOfWorkManager;
 
-        public EditNotePageViewModel(IRepository<NoteSegment, long> repository)
+        public EditNotePageViewModel(IRepository<NoteSegment, long> repository, IUnitOfWorkManager unitOfWorkManager)
         {
             Submit = new Command(SubmitAction);
             this.repository = repository;
+            this.unitOfWorkManager = unitOfWorkManager;
             this.PropertyChanged += EditNotePageViewModel_PropertyChanged;
         }
 
         private async void EditNotePageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(noteId))
+            if (e.PropertyName == nameof(NoteId))
             {
-                if (noteId != default)
+                if (NoteId != default)
                 {
-                    var noteSegments = await this.repository
-              .GetAllIncluding(c => c.NoteSegmentPayloads)
-              .Where(c => c.Id == this.NoteId).ToListAsync();
 
-                    this.NoteSegments = new ObservableCollection<NoteSegment>(noteSegments);
+                    await unitOfWorkManager.WithUnitOfWorkAsync( async() =>
+                    {
+                        var noteSegments = await this.repository
+                  .GetAllIncluding(c => c.NoteSegmentPayloads)
+                  .Where(c => c.Id == this.NoteId).ToListAsync();
+
+                        this.NoteSegments = new ObservableCollection<NoteSegment>(noteSegments);
+                    });
                 }
             }
 

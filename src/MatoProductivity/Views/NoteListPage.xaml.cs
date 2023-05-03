@@ -1,11 +1,16 @@
 using Abp.Dependency;
+using MatoProductivity.ViewModels;
 
 namespace MatoProductivity.Views;
 
-public partial class NoteListPage :  ContentPageBase, ITransientDependency
+public partial class NoteListPage : ContentPageBase, ITransientDependency
 {
-	public NoteListPage()
-	{
-		InitializeComponent();
-	}
+    private NoteListPageViewModel noteListPageViewModel => this.BindingContext as NoteListPageViewModel;
+
+    public NoteListPage(NoteListPageViewModel noteListPageViewModel)
+    {
+        InitializeComponent();
+        this.BindingContext = noteListPageViewModel;
+
+    }
 }

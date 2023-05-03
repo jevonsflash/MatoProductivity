@@ -16,7 +16,13 @@ namespace MatoProductivity.Core.Views
             {
                 return default;
             }
-            return Application.Current.Resources[item as string] as DataTemplate;
+            if (item is NoteSegment)
+            {
+                var type = (item as NoteSegment).Type;
+                return Application.Current.Resources[type] as DataTemplate;
+
+            }
+            return default;
 
         }
     }

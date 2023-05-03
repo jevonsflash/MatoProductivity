@@ -14,10 +14,12 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
         internal void Create()
         {
-          var noteEntity=  this.context.Set<Note>().Add(new Note() { 
-             Title = "Test",
+            var noteEntity = this.context.Set<Note>().Add(new Note()
+            {
+                Title = "Test",
 
             });
+            this.context.SaveChanges();
             var noteId = noteEntity.Entity.Id;
             this.context.Set<NoteSegment>().Add(new NoteSegment()
             {

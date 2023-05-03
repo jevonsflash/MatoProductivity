@@ -45,7 +45,6 @@ namespace MatoProductivity.Core
 
             builder.Services.AddSingleton(_bootstrapper);
             WindsorRegistrationHelper.CreateServiceProvider(_bootstrapper.IocManager.IocContainer, builder.Services);
-
             return builder;
         }
 
