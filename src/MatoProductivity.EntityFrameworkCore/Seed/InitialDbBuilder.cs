@@ -14,48 +14,48 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
         internal void Create()
         {
-            Note noteEntity = CreateNote("Test");
-            Note noteEntity2 = CreateNote("Test2");
-            var noteId = noteEntity.Id;
+            NoteTemplate noteTemplateEntity = CreateNoteTemplate("Test");
+            NoteTemplate noteTemplateEntity2 = CreateNoteTemplate("Test2");
+            var noteTemplateId = noteTemplateEntity.Id;
 
-            CreateNoteSegment(noteId, "TestDateTime", "DateTimeSegment", "this is DateTimeSegment test desc");
-            CreateNoteSegment(noteId, "TestText", "TextSegment", "this is TextSegment test desc");           
+            CreateNoteSegmentTemplate(noteTemplateId, "TestDateTime", "DateTimeSegment", "this is DateTimeSegment test desc");
+            CreateNoteSegmentTemplate(noteTemplateId, "TestText", "TextSegment", "this is TextSegment test desc");           
         }
 
-        private Note CreateNote(string title)
+        private NoteTemplate CreateNoteTemplate(string title)
         {
-            var noteEntity = this.context.Set<Note>().FirstOrDefault(c => c.Title == title);
-            if (noteEntity == null)
+            var noteTemplateEntity = this.context.Set<NoteTemplate>().FirstOrDefault(c => c.Title == title);
+            if (noteTemplateEntity == null)
             {
-                var noteEntityEntry = this.context.Set<Note>().Add(new Note()
+                var noteTemplateEntityEntry = this.context.Set<NoteTemplate>().Add(new NoteTemplate()
                 {
                     Title = title,
                 });
                 this.context.SaveChanges();
-                noteEntity = noteEntityEntry.Entity;
+                noteTemplateEntity = noteTemplateEntityEntry.Entity;
             }
 
-            return noteEntity;
+            return noteTemplateEntity;
         }
 
 
-        private NoteSegment CreateNoteSegment(long noteId, string title, string type, string desc)
+        private NoteSegmentTemplate CreateNoteSegmentTemplate(long noteTemplateId, string title, string type, string desc)
         {
-            var noteSegmentEntity = this.context.Set<NoteSegment>().FirstOrDefault(c => c.Title == title);
-            if (noteSegmentEntity == null)
+            var noteSegmentTemplateEntity = this.context.Set<NoteSegmentTemplate>().FirstOrDefault(c => c.Title == title);
+            if (noteSegmentTemplateEntity == null)
             {
-                var noteSegmentEntityEntry = this.context.Set<NoteSegment>().Add(new NoteSegment()
+                var noteSegmentTemplateEntityEntry = this.context.Set<NoteSegmentTemplate>().Add(new NoteSegmentTemplate()
                 {
-                    NoteId = noteId,
+                    NoteTemplateId = noteTemplateId,
                     Title = title,
                     Type = type,
                     Desc = desc
                 });
                 this.context.SaveChanges();
-                noteSegmentEntity = noteSegmentEntityEntry.Entity;
+                noteSegmentTemplateEntity = noteSegmentTemplateEntityEntry.Entity;
             }
 
-            return noteSegmentEntity;
+            return noteSegmentTemplateEntity;
         }
     }
 }

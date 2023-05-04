@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.AutoMapper;
+using Abp.Domain.Entities.Auditing;
 using AutoMapper.Configuration.Annotations;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,24 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class Note : FullAuditedEntity<long>
+    [AutoMap(typeof(Note))]
+    public class NoteTemplate : FullAuditedEntity<long>
     {
-        public Note()
+        public NoteTemplate()
         {
 
         }
-        public Note(string name, bool isHidden, bool isRemovable)
+        public NoteTemplate(string name, bool isHidden, bool isRemovable)
         {
             Title = name;
             IsHidden = isHidden;
             IsRemovable = isRemovable;
         }
-
         [Ignore]
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
 
-        public ICollection<NoteSegment> NoteSegments { get; set; }
+        public ICollection<NoteSegmentTemplate> NoteSegmentTemplates { get; set; }
 
         public string Title { get; set; }
 

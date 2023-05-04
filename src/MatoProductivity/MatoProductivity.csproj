@@ -71,8 +71,8 @@
 	  <Compile Update="Views\NoteListPage.xaml.cs">
 	    <DependentUpon>NoteListPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\NoteTemplatePage.xaml.cs">
-	    <DependentUpon>NoteTemplatePage.xaml</DependentUpon>
+	  <Compile Update="Views\NoteTemplateListPage.xaml.cs">
+	    <DependentUpon>NoteTemplateListPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 

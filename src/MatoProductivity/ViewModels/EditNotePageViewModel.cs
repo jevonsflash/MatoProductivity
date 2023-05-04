@@ -12,20 +12,42 @@ namespace MatoProductivity.ViewModels
 {
     public class EditNotePageViewModel : ViewModelBase, ITransientDependency
     {
+        private readonly IRepository<NoteTemplate, long> templateRepository;
         private readonly IRepository<Note, long> repository;
         private readonly IUnitOfWorkManager unitOfWorkManager;
         private readonly IIocResolver iocResolver;
 
-        public EditNotePageViewModel(IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
+        public EditNotePageViewModel(
+            IRepository<NoteTemplate, long> templateRepository,
+            IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
         {
             Submit = new Command(SubmitAction);
+            Clone = new Command(CloneAction);
             Create = new Command(CreateAction);
             Remove = new Command(RemoveAction);
             IsEditingNoteSegment = false;
+            this.templateRepository = templateRepository;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
             this.PropertyChanged += EditNotePageViewModel_PropertyChanged;
+        }
+
+        private async void CloneAction(object obj)
+        {
+            var id = (long)obj;
+            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+            {
+                var noteTemplate = await templateRepository.GetAll().Include(c => c.NoteSegmentTemplates)
+                              .ThenInclude(c => c.NoteSegmentTemplatePayloads)
+                              .Where(c => c.Id == id).FirstOrDefaultAsync();
+                var note = ObjectMapper.Map<Note>(noteTemplate);
+
+             
+                var result = await repository.InsertAsync(note);
+                Init(result);
+            });
+
         }
 
         private void NoteSegments_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -110,15 +132,7 @@ namespace MatoProductivity.ViewModels
                             .Include(c => c.NoteSegments)
                             .ThenInclude(c => c.NoteSegmentPayloads)
                             .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
-
-
-                        var noteSegments = note.NoteSegments;
-                        this.NoteSegments = new ObservableCollection<INoteSegmentViewModel>(
-
-                          noteSegments.Select(c => GetNoteSegmentViewModel(c))
-                          );
-                        this.NoteSegments.CollectionChanged += NoteSegments_CollectionChanged;
-
+                        Init(note);
 
                     });
                 }
@@ -126,6 +140,16 @@ namespace MatoProductivity.ViewModels
 
 
 
+        }
+
+        private void Init(Note note)
+        {
+            var noteSegments = note.NoteSegments;
+            this.NoteSegments = new ObservableCollection<INoteSegmentViewModel>(
+
+              noteSegments.Select(c => GetNoteSegmentViewModel(c))
+              );
+            this.NoteSegments.CollectionChanged += NoteSegments_CollectionChanged;
         }
 
         private INoteSegmentViewModel GetNoteSegmentViewModel(NoteSegment c)
@@ -225,6 +249,7 @@ namespace MatoProductivity.ViewModels
             }
         }
         public Command Submit { get; set; }
+        public Command Clone { get; set; }
 
 
 

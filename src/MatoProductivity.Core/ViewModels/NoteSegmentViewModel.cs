@@ -49,6 +49,12 @@ namespace MatoProductivity.Core.ViewModels
         {
             await payloadRepository.DeleteAsync(c => c.NoteSegmentId == NoteSegment.Id);
             await this.repository.InsertOrUpdateAsync(noteSegment);
+
+            foreach (var item in noteSegment.NoteSegmentPayloads)
+            {
+                await payloadRepository.UpdateAsync(item);               
+            }
+           
         }
 
         public Command Submit { get; set; }

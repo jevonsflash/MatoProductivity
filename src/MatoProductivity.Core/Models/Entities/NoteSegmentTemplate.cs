@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.AutoMapper;
+using Abp.Domain.Entities.Auditing;
 using Abp.Extensions;
 using AutoMapper.Configuration.Annotations;
 using System;
@@ -11,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class NoteSegment : FullAuditedEntity<long>
+    [AutoMap(typeof(NoteSegment))]
+    public class NoteSegmentTemplate : FullAuditedEntity<long>
     {
-        public NoteSegment()
+        public NoteSegmentTemplate()
         {
 
         }
@@ -23,12 +25,12 @@ namespace MatoProductivity.Core.Models.Entities
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
 
-        [ForeignKey(nameof(NoteId))]
-        public Note Note { get; set; }
+        [ForeignKey(nameof(NoteTemplateId))]
+        public NoteTemplate NoteTemplate { get; set; }
 
-        public ICollection<NoteSegmentPayload> NoteSegmentPayloads { get; set; }
+        public ICollection<NoteSegmentTemplatePayload> NoteSegmentTemplatePayloads { get; set; }
 
-        public long NoteId { get; set; }
+        public long NoteTemplateId { get; set; }
 
         public string Title { get; set; }
         public string Type { get; set; }
@@ -43,31 +45,31 @@ namespace MatoProductivity.Core.Models.Entities
         public bool IsRemovable { get; set; }
 
 
-        public void SetNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)
+        public void SetNoteSegmentTemplatePayloads(NoteSegmentTemplatePayload noteSegmentPayload)
         {
-            if (NoteSegmentPayloads != null)
+            if (NoteSegmentTemplatePayloads != null)
             {
-                var currentPayload = NoteSegmentPayloads.FirstOrDefault(c => c.Key == noteSegmentPayload.Key);
+                var currentPayload = NoteSegmentTemplatePayloads.FirstOrDefault(c => c.Key == noteSegmentPayload.Key);
                 if (currentPayload != null)
                 {
-                    NoteSegmentPayloads.Remove(currentPayload);
+                    NoteSegmentTemplatePayloads.Remove(currentPayload);
                 }
-                NoteSegmentPayloads.Add(noteSegmentPayload);
+                NoteSegmentTemplatePayloads.Add(noteSegmentPayload);
             }
         }
 
-        public NoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, NoteSegmentPayload noteSegmentPayload)
+        public NoteSegmentTemplatePayload GetOrSetNoteSegmentTemplatePayloads(string key, NoteSegmentTemplatePayload noteSegmentPayload)
         {
-            if (NoteSegmentPayloads != null)
+            if (NoteSegmentTemplatePayloads != null)
             {
-                var currentPayload = NoteSegmentPayloads.FirstOrDefault(c => c.Key == key);
+                var currentPayload = NoteSegmentTemplatePayloads.FirstOrDefault(c => c.Key == key);
                 if (currentPayload != null)
                 {
                     return currentPayload;
                 }
                 if (noteSegmentPayload != null)
                 {
-                    NoteSegmentPayloads.Add(noteSegmentPayload);
+                    NoteSegmentTemplatePayloads.Add(noteSegmentPayload);
                 }
                 return noteSegmentPayload;
             }
