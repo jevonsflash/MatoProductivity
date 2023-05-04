@@ -1,7 +1,9 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using Abp.Extensions;
 using Castle.MicroKernel.Registration;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -19,9 +21,16 @@ namespace MatoProductivity.Core.Models.Entities
 
         }
 
-        public NoteSegmentPayload(string key, string value)
+
+
+        public NoteSegmentPayload(string key, object value, string valuetype = null):this(key,value.ToString(),valuetype)
+        {
+        }
+
+        public NoteSegmentPayload(string key, string value, string valuetype = null)
         {
             this.Key = key;
+            this.ValueType = valuetype;
             this.SetStringValue(value);
         }
 
@@ -39,6 +48,16 @@ namespace MatoProductivity.Core.Models.Entities
         public byte[] Value { get; set; }
 
         public string ValueType { get; set; }
+
+        [NotMapped]
+        public string StringValue => GetStringValue();
+
+        public T GetConcreteValue<T>() where T : struct
+        {
+            var value = Encoding.UTF8.GetString(Value);
+            T result = value.To<T>();
+            return result;
+        }
 
         public string GetStringValue()
         {

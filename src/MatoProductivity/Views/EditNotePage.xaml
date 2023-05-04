@@ -15,7 +15,18 @@
                HorizontalOptions="Center" />
         <CollectionView x:Name="collectionView"
                         ItemsSource="{Binding NoteSegments}"
+                        SelectedItems="{Binding SelectedNoteSegments}"
+                        SelectedItem="{Binding SelectedNoteSegment}"
+                        SelectionMode="{Binding SelectionMode}"
                         ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}" />
+        
+        
+
+        <Switch IsToggled="{Binding IsEditingNoteSegment}"></Switch>
+
+        <Button Text="删除"
+                IsVisible="{Binding IsEditingNoteSegment}"
+                Command="{Binding Remove}"></Button>
 
         <Button Text="添加"
                 Command="{Binding Create}"

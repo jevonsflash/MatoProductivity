@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
     <VerticalStackLayout>
-        <Editor Text="{Binding TextSegment.Content}"></Editor>
+        <Label Text="{Binding NoteSegment.Title}"></Label>
+        <Editor Text="{Binding Content}"
+                Placeholder="{Binding PlaceHolder}"></Editor>
     </VerticalStackLayout>
 </ContentView>

@@ -12,46 +12,44 @@ namespace MatoProductivity.Core.ViewModels
     public class DataTimeSegmentViewModel : NoteSegmentViewModel, ITransientDependency
     {
 
-        public DataTimeSegmentViewModel(IRepository<NoteSegment, long> repository, NoteSegment noteSegment) : base(repository, noteSegment)
+        private NoteSegmentPayload DefaultIsAutoSetNoteSegmentPayload => new NoteSegmentPayload(nameof(IsAutoSet), false.ToString());
+        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), new DateTime(2020, 1, 1).ToString());
+        public DataTimeSegmentViewModel(
+            IRepository<NoteSegment, long> repository,
+            IRepository<NoteSegmentPayload, long> payloadRepository,
+            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += DataTimeSegmentViewModel_PropertyChanged;
         }
 
-        private void DataTimeSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void DataTimeSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var defaultTimeNoteSegmentPayload = NoteSegment.NoteSegmentPayloads.FirstOrDefault(c => c.Key == nameof(DefaultTime));
-                if (defaultTimeNoteSegmentPayload != null)
-                {
-                    this.DefaultTime = DateTime.Parse(defaultTimeNoteSegmentPayload.GetStringValue());
-                }
+                var time = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
+                var isAutoSet = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
 
-                var isAutoSetNoteSegmentPayload = NoteSegment.NoteSegmentPayloads.FirstOrDefault(c => c.Key == nameof(IsAutoSet));
-                if (isAutoSetNoteSegmentPayload != null)
-                {
-                    this.IsAutoSet = bool.Parse(isAutoSetNoteSegmentPayload.GetStringValue());
-                }
+                this.Time = DateTime.Parse(time.GetStringValue());
+                this.IsAutoSet = bool.Parse(isAutoSet.GetStringValue());
             }
 
             else if (e.PropertyName == nameof(IsAutoSet))
             {
-                this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
+                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
             }
 
-            else if (e.PropertyName == nameof(DefaultTime))
+            else if (e.PropertyName == nameof(Time))
             {
-                this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(DefaultTime), DefaultTimeNoteSegmentPayload);
+                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time));
             }
+
         }
-        private NoteSegmentPayload DefaultIsAutoSetNoteSegmentPayload => new NoteSegmentPayload(nameof(IsAutoSet), false.ToString());
-        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(DefaultTime), new DateTime(2020, 1, 1).ToString());
 
 
         public override void CreateAction(object obj)
         {
-            this.NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);      
             this.NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
+            this.NoteSegment?.SetNoteSegmentPayloads(DefaultIsAutoSetNoteSegmentPayload);
         }
 
 
@@ -67,17 +65,6 @@ namespace MatoProductivity.Core.ViewModels
             }
         }
 
-        private DateTime _defaultTime;
-
-        public DateTime DefaultTime
-        {
-            get { return _defaultTime; }
-            set
-            {
-                _defaultTime = value;
-                RaisePropertyChanged();
-            }
-        }
 
         private bool _isAutoSet;
 

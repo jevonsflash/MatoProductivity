@@ -16,12 +16,38 @@
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="DateTimeSegment">
-                <core:DateTimeSegmentView></core:DateTimeSegmentView>
+                <SwipeView>
+                    <SwipeView.LeftItems>
+                        <SwipeItems>
+                            <SwipeItem Text="Favorite"
+                                       IconImageSource="favorite.png"
+                                       BackgroundColor="LightGreen"
+                                        />
+                            <SwipeItem Text="Delete"
+                                       IconImageSource="delete.png"
+                                       BackgroundColor="LightPink"
+                                        />
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
+                    <!-- Content -->
+                    <core:DateTimeSegmentView></core:DateTimeSegmentView>
+
+                </SwipeView>
             </DataTemplate>
             <DataTemplate x:Key="TextSegment">
-                <Grid>
+                <SwipeView>
+                    <SwipeView.LeftItems>
+                        <SwipeItems>
+                            <SwipeItem Text="Favorite"
+                                       IconImageSource="favorite.png"
+                                       BackgroundColor="LightGreen" />
+                            <SwipeItem Text="Delete"
+                                       IconImageSource="delete.png"
+                                       BackgroundColor="LightPink" />
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
                     <core:TextSegmentView></core:TextSegmentView>
-                </Grid>
+                </SwipeView>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

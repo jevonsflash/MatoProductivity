@@ -12,36 +12,67 @@ namespace MatoProductivity.Core.ViewModels
     public class TextSegmentViewModel : NoteSegmentViewModel, ITransientDependency
     {
 
-        public TextSegmentViewModel(IRepository<NoteSegment, long> repository, NoteSegment noteSegment) : base(repository, noteSegment)
+        private NoteSegmentPayload DefaultPlaceHolderSegmentPayload => new NoteSegmentPayload(nameof(PlaceHolder), "PlaceHolder");
+        private NoteSegmentPayload DefaultContentSegmentPayload => new NoteSegmentPayload(nameof(Content), "");
+        public TextSegmentViewModel(
+            IRepository<NoteSegment, long> repository,
+            IRepository<NoteSegmentPayload, long> payloadRepository,
+            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += TextSegmentViewModel_PropertyChanged;
         }
 
         private void TextSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var noteSegmentPayload = NoteSegment.NoteSegmentPayloads.FirstOrDefault(c => c.Key == "DefaultValue");
-            if (noteSegmentPayload != null)
+            if (e.PropertyName == nameof(NoteSegment))
             {
-                this.DefaultContent = noteSegmentPayload.Value.ToString();
+                var content = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                this.Content = content.GetStringValue();
+
+                var placeHolder = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), DefaultPlaceHolderSegmentPayload);
+                this.PlaceHolder = placeHolder.GetStringValue();
+            }
+
+            else if (e.PropertyName == nameof(Content))
+            {
+                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
+            }
+
+            else if (e.PropertyName == nameof(PlaceHolder))
+            {
+                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
             }
         }
 
         public override void CreateAction(object obj)
         {
-            
+
         }
 
-        private string _defaultContent;
+        private string _content;
 
-        public string DefaultContent
+        public string Content
         {
-            get { return _defaultContent; }
+            get { return _content; }
             set
             {
-                _defaultContent = value;
+                _content = value;
                 RaisePropertyChanged();
             }
         }
+
+        private string _placeHolder;
+
+        public string PlaceHolder
+        {
+            get { return _placeHolder; }
+            set
+            {
+                _placeHolder = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
 
 

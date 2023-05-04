@@ -6,8 +6,10 @@ namespace MatoProductivity.Core.ViewModels
     {
         NoteSegment NoteSegment { get; set; }
         Command Submit { get; set; }
+        Command Create { get; set; }
 
-        public void SubmitAction(object obj);
+        void SubmitAction(object obj);
+        void CreateAction(object obj);
 
     }
 }

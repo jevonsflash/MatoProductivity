@@ -20,10 +20,27 @@ namespace MatoProductivity.ViewModels
         {
             Submit = new Command(SubmitAction);
             Create = new Command(CreateAction);
+            Remove = new Command(RemoveAction);
+            IsEditingNoteSegment = false;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
             this.PropertyChanged += EditNotePageViewModel_PropertyChanged;
+        }
+
+        private void NoteSegments_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    (item as INoteSegmentViewModel).Submit.Execute(null);
+                }
+            }
+        }
+
+        private void RemoveAction(object obj)
+        {
         }
 
         private void CreateAction(object obj)
@@ -61,6 +78,7 @@ namespace MatoProductivity.ViewModels
                             Desc = "TestDescDesc",
                             NoteSegmentPayloads = new List<NoteSegmentPayload>()
                         }
+
                     }))
                     {
                         newModel = objWrapper.Object;
@@ -72,6 +90,7 @@ namespace MatoProductivity.ViewModels
             }
             if (newModel != null)
             {
+                newModel.Create.Execute(null);
                 this.NoteSegments.Add(newModel);
             }
 
@@ -93,11 +112,14 @@ namespace MatoProductivity.ViewModels
                             .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
 
 
-                            var noteSegments = note.NoteSegments;
-                            this.NoteSegments = new ObservableCollection<INoteSegmentViewModel>(
+                        var noteSegments = note.NoteSegments;
+                        this.NoteSegments = new ObservableCollection<INoteSegmentViewModel>(
 
                           noteSegments.Select(c => GetNoteSegmentViewModel(c))
                           );
+                        this.NoteSegments.CollectionChanged += NoteSegments_CollectionChanged;
+
+
                     });
                 }
             }
@@ -153,6 +175,48 @@ namespace MatoProductivity.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+        private ObservableCollection<INoteSegmentViewModel> _selectedNoteSegments;
+
+        public ObservableCollection<INoteSegmentViewModel> SelectedNoteSegments
+        {
+            get { return _selectedNoteSegments; }
+            set
+            {
+                _selectedNoteSegments = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private INoteSegmentViewModel _selectedNoteSegment;
+
+        public INoteSegmentViewModel SelectedNoteSegment
+        {
+            get { return _selectedNoteSegment; }
+            set
+            {
+                _selectedNoteSegment = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isEditingNoteSegment;
+
+        public bool IsEditingNoteSegment
+        {
+            get { return _isEditingNoteSegment; }
+            set
+            {
+                _isEditingNoteSegment = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(SelectionMode));
+
+            }
+        }
+
+        public SelectionMode SelectionMode => IsEditingNoteSegment ? SelectionMode.Multiple : SelectionMode.Single;
+
+
         private void SubmitAction(object obj)
         {
             foreach (var noteSegment in NoteSegments)
@@ -161,7 +225,11 @@ namespace MatoProductivity.ViewModels
             }
         }
         public Command Submit { get; set; }
+
+
+
         public Command Create { get; set; }
+        public Command Remove { get; set; }
 
     }
 }

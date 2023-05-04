@@ -14,27 +14,48 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
         internal void Create()
         {
-            var noteEntity = this.context.Set<Note>().Add(new Note()
-            {
-                Title = "Test",
+            Note noteEntity = CreateNote("Test");
+            Note noteEntity2 = CreateNote("Test2");
+            var noteId = noteEntity.Id;
 
-            });
-            this.context.SaveChanges();
-            var noteId = noteEntity.Entity.Id;
-            this.context.Set<NoteSegment>().Add(new NoteSegment()
-            {
-                NoteId = noteId,
-                Title = "TestDateTime",
-                Type = "DateTimeSegment",
+            CreateNoteSegment(noteId, "TestDateTime", "DateTimeSegment", "this is DateTimeSegment test desc");
+            CreateNoteSegment(noteId, "TestText", "TextSegment", "this is TextSegment test desc");           
+        }
 
-            });
-            this.context.Set<NoteSegment>().Add(new NoteSegment()
+        private Note CreateNote(string title)
+        {
+            var noteEntity = this.context.Set<Note>().FirstOrDefault(c => c.Title == title);
+            if (noteEntity == null)
             {
-                NoteId = noteId,
-                Title = "TestText",
-                Type = "TextSegment",
+                var noteEntityEntry = this.context.Set<Note>().Add(new Note()
+                {
+                    Title = title,
+                });
+                this.context.SaveChanges();
+                noteEntity = noteEntityEntry.Entity;
+            }
 
-            });
+            return noteEntity;
+        }
+
+
+        private NoteSegment CreateNoteSegment(long noteId, string title, string type, string desc)
+        {
+            var noteSegmentEntity = this.context.Set<NoteSegment>().FirstOrDefault(c => c.Title == title);
+            if (noteSegmentEntity == null)
+            {
+                var noteSegmentEntityEntry = this.context.Set<NoteSegment>().Add(new NoteSegment()
+                {
+                    NoteId = noteId,
+                    Title = title,
+                    Type = type,
+                    Desc = desc
+                });
+                this.context.SaveChanges();
+                noteSegmentEntity = noteSegmentEntityEntry.Entity;
+            }
+
+            return noteSegmentEntity;
         }
     }
 }

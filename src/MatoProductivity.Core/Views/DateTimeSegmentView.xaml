@@ -4,7 +4,6 @@
              x:Class="MatoProductivity.Core.Views.DateTimeSegmentView">
     <VerticalStackLayout>
         <Label Text="{Binding NoteSegment.Title}"></Label>
-        <DatePicker Date="{Binding DefaultTime}"></DatePicker>
         <DatePicker Date="{Binding Time}"></DatePicker>
         <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
     </VerticalStackLayout>
