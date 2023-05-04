@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MatoProductivity.Core.Views.DateTimeSegmentView">
     <VerticalStackLayout>
-        <DatePicker Date="{Binding DateTimeSegment.Time}"></DatePicker>
+        <Label Text="{Binding NoteSegment.Title}"></Label>
+        <DatePicker Date="{Binding DefaultTime}"></DatePicker>
+        <DatePicker Date="{Binding Time}"></DatePicker>
+        <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
     </VerticalStackLayout>
 </ContentView>

@@ -1,8 +1,10 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Castle.MicroKernel.Registration;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
+using MatoProductivity.Core.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
@@ -10,15 +12,69 @@ namespace MatoProductivity.ViewModels
 {
     public class EditNotePageViewModel : ViewModelBase, ITransientDependency
     {
-        private readonly IRepository<NoteSegment, long> repository;
+        private readonly IRepository<Note, long> repository;
         private readonly IUnitOfWorkManager unitOfWorkManager;
+        private readonly IIocResolver iocResolver;
 
-        public EditNotePageViewModel(IRepository<NoteSegment, long> repository, IUnitOfWorkManager unitOfWorkManager)
+        public EditNotePageViewModel(IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
         {
             Submit = new Command(SubmitAction);
+            Create = new Command(CreateAction);
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
+            this.iocResolver = iocResolver;
             this.PropertyChanged += EditNotePageViewModel_PropertyChanged;
+        }
+
+        private void CreateAction(object obj)
+        {
+
+            var type = obj as string;
+            INoteSegmentViewModel newModel;
+            switch (type)
+            {
+                case "DateTimeSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<DataTimeSegmentViewModel>(new
+                    {
+                        noteSegment = new NoteSegment()
+                        {
+                            NoteId = this.NoteId,
+                            Title = "Add DateTimeSegment Test",
+                            Type = type,
+                            Desc = "TestDescDesc",
+                            NoteSegmentPayloads = new List<NoteSegmentPayload>()
+
+                        }
+                    }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                case "TextSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<TextSegmentViewModel>(new
+                    {
+                        noteSegment = new NoteSegment()
+                        {
+                            NoteId = this.NoteId,
+                            Title = "Add TextSegment Test",
+                            Type = type,
+                            Desc = "TestDescDesc",
+                            NoteSegmentPayloads = new List<NoteSegmentPayload>()
+                        }
+                    }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                default:
+                    newModel = null;
+                    break;
+            }
+            if (newModel != null)
+            {
+                this.NoteSegments.Add(newModel);
+            }
+
         }
 
         private async void EditNotePageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -28,18 +84,51 @@ namespace MatoProductivity.ViewModels
                 if (NoteId != default)
                 {
 
-                    await unitOfWorkManager.WithUnitOfWorkAsync( async() =>
+                    await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
                     {
-                        var noteSegments = await this.repository
-                  .GetAllIncluding(c => c.NoteSegmentPayloads)
-                  .Where(c => c.Id == this.NoteId).ToListAsync();
+                        var note = await this.repository
+                            .GetAll()
+                            .Include(c => c.NoteSegments)
+                            .ThenInclude(c => c.NoteSegmentPayloads)
+                            .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
 
-                        this.NoteSegments = new ObservableCollection<NoteSegment>(noteSegments);
+
+                            var noteSegments = note.NoteSegments;
+                            this.NoteSegments = new ObservableCollection<INoteSegmentViewModel>(
+
+                          noteSegments.Select(c => GetNoteSegmentViewModel(c))
+                          );
                     });
                 }
             }
 
 
+
+        }
+
+        private INoteSegmentViewModel GetNoteSegmentViewModel(NoteSegment c)
+        {
+            var type = c.Type;
+            INoteSegmentViewModel result;
+            switch (type)
+            {
+                case "DateTimeSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<DataTimeSegmentViewModel>(new { noteSegment = c }))
+                    {
+                        result = objWrapper.Object;
+                    }
+                    break;
+                case "TextSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<TextSegmentViewModel>(new { noteSegment = c }))
+                    {
+                        result = objWrapper.Object;
+                    }
+                    break;
+                default:
+                    result = null;
+                    break;
+            }
+            return result;
         }
 
         private long noteId;
@@ -53,9 +142,9 @@ namespace MatoProductivity.ViewModels
                 RaisePropertyChanged();
             }
         }
-        private ObservableCollection<NoteSegment> _noteSegments;
+        private ObservableCollection<INoteSegmentViewModel> _noteSegments;
 
-        public ObservableCollection<NoteSegment> NoteSegments
+        public ObservableCollection<INoteSegmentViewModel> NoteSegments
         {
             get { return _noteSegments; }
             set
@@ -64,16 +153,15 @@ namespace MatoProductivity.ViewModels
                 RaisePropertyChanged();
             }
         }
-        private async void SubmitAction(object obj)
+        private void SubmitAction(object obj)
         {
             foreach (var noteSegment in NoteSegments)
             {
-                await this.repository.InsertOrUpdateAsync(noteSegment);
-
+                noteSegment.Submit.Execute(null);
             }
-
         }
         public Command Submit { get; set; }
+        public Command Create { get; set; }
 
     }
 }

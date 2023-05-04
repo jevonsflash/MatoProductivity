@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using Abp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -38,6 +39,38 @@ namespace MatoProductivity.Core.Models.Entities
         public bool IsHidden { get; set; }
 
         public bool IsRemovable { get; set; }
+
+
+        public void SetNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)
+        {
+            if (NoteSegmentPayloads != null)
+            {
+                var currentPayload = NoteSegmentPayloads.FirstOrDefault(c => c.Key == noteSegmentPayload.Key);
+                if (currentPayload != null)
+                {
+                    NoteSegmentPayloads.Remove(currentPayload);
+                }
+                NoteSegmentPayloads.Add(noteSegmentPayload);
+            }
+        }
+
+        public NoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, NoteSegmentPayload noteSegmentPayload)
+        {
+            if (NoteSegmentPayloads != null)
+            {
+                var currentPayload = NoteSegmentPayloads.FirstOrDefault(c => c.Key == key);
+                if (currentPayload != null)
+                {
+                    return currentPayload;
+                }
+                if (noteSegmentPayload != null)
+                {
+                    NoteSegmentPayloads.Add(noteSegmentPayload);
+                }
+                return noteSegmentPayload;
+            }
+            return noteSegmentPayload;
+        }
 
     }
 }

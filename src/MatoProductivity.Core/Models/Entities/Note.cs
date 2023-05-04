@@ -24,6 +24,9 @@ namespace MatoProductivity.Core.Models.Entities
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
+
+        public ICollection<NoteSegment> NoteSegments { get; set; }
+
         public string Title { get; set; }
 
         public bool IsHidden { get; set; }

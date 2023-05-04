@@ -8,30 +8,41 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.ViewModels
 {
-    public class NoteSegmentViewModel:ViewModelBase
+    public abstract class NoteSegmentViewModel : ViewModelBase, INoteSegmentViewModel
     {
         private readonly IRepository<NoteSegment, long> repository;
 
-        public NoteSegmentViewModel(IRepository<NoteSegment,long> repository)
+        public NoteSegmentViewModel(IRepository<NoteSegment, long> repository, NoteSegment noteSegment)
         {
             Submit = new Command(SubmitAction);
+            Create = new Command(CreateAction);
             this.repository = repository;
+            this.NoteSegment = noteSegment;
         }
+
+        public abstract void CreateAction(object obj);
+
 
         private NoteSegment noteSegment;
 
         public NoteSegment NoteSegment
         {
             get { return noteSegment; }
-            set { noteSegment = value; }
+            set
+            {
+                noteSegment = value;
+                RaisePropertyChanged();
+
+            }
         }
 
 
-        private async void SubmitAction(object obj)
+        public virtual async void SubmitAction(object obj)
         {
-           await this.repository.UpdateAsync(noteSegment);
+            await this.repository.InsertOrUpdateAsync(noteSegment);
         }
 
         public Command Submit { get; set; }
+        public Command Create { get; set; }
     }
 }

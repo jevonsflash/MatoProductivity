@@ -16,5 +16,12 @@
         <CollectionView x:Name="collectionView"
                         ItemsSource="{Binding NoteSegments}"
                         ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}" />
+
+        <Button Text="添加"
+                Command="{Binding Create}"
+                CommandParameter="DateTimeSegment"></Button>
+
+        <Button Text="提交"
+                Command="{Binding Submit}"></Button>
     </VerticalStackLayout>
 </mato:ContentPageBase>

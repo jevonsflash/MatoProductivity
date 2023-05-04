@@ -14,7 +14,7 @@
                          SelectedItem="{Binding SelectedNote}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <SwipeView>
+                    <!--<SwipeView>
                         <SwipeView.RightItems>
                             <SwipeItems>
                                 <SwipeItem Text="Favorite"
@@ -31,9 +31,12 @@
                         </SwipeView.RightItems>
                         <Grid
                               Padding="10">
-                            <Label TextColor="Red" Text="{Binding Title}"></Label>
+                            <Label Text="{Binding Title}"></Label>
                         </Grid>
-                    </SwipeView>
+                    </SwipeView>-->
+                    <Grid Padding="10">
+                        <Label Text="{Binding Title}"></Label>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
