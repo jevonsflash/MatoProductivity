@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:core="clr-namespace:MatoProductivity.Core.ViewModels;assembly=MatoProductivity.Core"
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
-    <VerticalStackLayout>
-        <Label Text="{Binding NoteSegment.Title}"></Label>
-        <Editor Text="{Binding Content}"
-                Placeholder="{Binding PlaceHolder}"></Editor>
-    </VerticalStackLayout>
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding Title}"></Span>
+                        <Span Text="{Binding Time,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
+            <Label Text="{Binding Title}"></Label>
+            <Editor Text="{Binding Content}"
+                    Placeholder="{Binding PlaceHolder}"></Editor>
+
+   
+        </VerticalStackLayout>
+
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
+            <Entry  Text="{Binding Title}"
+                    Placeholder="请输入标题" />
+            <Entry  Text="{Binding PlaceHolder}"
+                    Placeholder="请输入PlaceHolder" />
+            <Editor Text="{Binding Content}"
+                    Placeholder="{Binding PlaceHolder}"></Editor>
+        </VerticalStackLayout>
+    </Grid>
 </ContentView>

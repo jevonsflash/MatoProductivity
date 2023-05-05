@@ -8,16 +8,20 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.ViewModels
 {
+
+    public enum NoteSegmentState
+    {
+        Config,
+        Edit,
+        PreView
+    }
     public abstract class NoteSegmentViewModel : ViewModelBase, INoteSegmentViewModel
     {
         private readonly IRepository<NoteSegment, long> repository;
         private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
 
         public NoteSegmentViewModel(
-
-
             IRepository<NoteSegment, long> repository,
-
             IRepository<NoteSegmentPayload, long> payloadRepository,
             NoteSegment noteSegment)
         {
@@ -26,6 +30,7 @@ namespace MatoProductivity.Core.ViewModels
             this.repository = repository;
             this.payloadRepository = payloadRepository;
             this.NoteSegment = noteSegment;
+            this.NoteSegmentState = NoteSegmentState.Config;
         }
 
         public abstract void CreateAction(object obj);
@@ -44,6 +49,19 @@ namespace MatoProductivity.Core.ViewModels
             }
         }
 
+        private NoteSegmentState _isConfigState;
+
+        public NoteSegmentState NoteSegmentState
+        {
+            get { return _isConfigState; }
+            set
+            {
+                _isConfigState = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
 
         public virtual async void SubmitAction(object obj)
         {
@@ -52,9 +70,9 @@ namespace MatoProductivity.Core.ViewModels
 
             foreach (var item in noteSegment.NoteSegmentPayloads)
             {
-                await payloadRepository.UpdateAsync(item);               
+                await payloadRepository.UpdateAsync(item);
             }
-           
+
         }
 
         public Command Submit { get; set; }

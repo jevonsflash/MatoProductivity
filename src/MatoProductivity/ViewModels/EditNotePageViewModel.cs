@@ -25,7 +25,7 @@ namespace MatoProductivity.ViewModels
             Clone = new Command(CloneAction);
             Create = new Command(CreateAction);
             Remove = new Command(RemoveAction);
-            IsEditingNoteSegment = false;
+            IsConfiguratingNoteSegment = true;
             this.templateRepository = templateRepository;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
@@ -43,7 +43,6 @@ namespace MatoProductivity.ViewModels
                               .Where(c => c.Id == id).FirstOrDefaultAsync();
                 var note = ObjectMapper.Map<Note>(noteTemplate);
 
-             
                 var result = await repository.InsertAsync(note);
                 Init(result);
             });
@@ -137,8 +136,17 @@ namespace MatoProductivity.ViewModels
                     });
                 }
             }
+            else if (e.PropertyName == nameof(IsConfiguratingNoteSegment))
+            {
+                if (NoteSegments != null)
+                {
+                    foreach (var noteSegment in NoteSegments)
+                    {
+                        noteSegment.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
+                    }
+                }
 
-
+            }
 
         }
 
@@ -174,6 +182,7 @@ namespace MatoProductivity.ViewModels
                     result = null;
                     break;
             }
+
             return result;
         }
 
@@ -224,21 +233,21 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private bool _isEditingNoteSegment;
+        private bool _isConfiguratingNoteSegment;
 
-        public bool IsEditingNoteSegment
+        public bool IsConfiguratingNoteSegment
         {
-            get { return _isEditingNoteSegment; }
+            get { return _isConfiguratingNoteSegment; }
             set
             {
-                _isEditingNoteSegment = value;
+                _isConfiguratingNoteSegment = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(SelectionMode));
 
             }
         }
 
-        public SelectionMode SelectionMode => IsEditingNoteSegment ? SelectionMode.Multiple : SelectionMode.Single;
+        public SelectionMode SelectionMode => IsConfiguratingNoteSegment ? SelectionMode.Multiple : SelectionMode.Single;
 
 
         private void SubmitAction(object obj)

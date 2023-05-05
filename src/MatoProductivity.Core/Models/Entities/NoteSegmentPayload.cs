@@ -36,7 +36,7 @@ namespace MatoProductivity.Core.Models.Entities
         }
 
 
-        [Ignore]
+        
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
 

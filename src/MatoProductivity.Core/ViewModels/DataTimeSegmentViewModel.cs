@@ -13,7 +13,7 @@ namespace MatoProductivity.Core.ViewModels
     {
 
         private NoteSegmentPayload DefaultIsAutoSetNoteSegmentPayload => new NoteSegmentPayload(nameof(IsAutoSet), false.ToString());
-        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), new DateTime(2020, 1, 1).ToString());
+        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), DateTime.Now.ToString());
         public DataTimeSegmentViewModel(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
@@ -29,6 +29,11 @@ namespace MatoProductivity.Core.ViewModels
                 var time = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
                 var isAutoSet = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
 
+
+                var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
+                var title = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                this.Title = title.GetStringValue();
+
                 this.Time = DateTime.Parse(time.GetStringValue());
                 this.IsAutoSet = bool.Parse(isAutoSet.GetStringValue());
             }
@@ -41,6 +46,11 @@ namespace MatoProductivity.Core.ViewModels
             else if (e.PropertyName == nameof(Time))
             {
                 this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time));
+            }
+
+            else if (e.PropertyName == nameof(Title))
+            {
+                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
             }
 
         }
@@ -61,6 +71,20 @@ namespace MatoProductivity.Core.ViewModels
             set
             {
                 _time = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        private string _title;
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
                 RaisePropertyChanged();
             }
         }

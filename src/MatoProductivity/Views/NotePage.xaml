@@ -3,8 +3,8 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                       xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
-                      x:Class="MatoProductivity.Views.EditNotePage"
-                      Title="EditNotePage">
+                      x:Class="MatoProductivity.Views.NotePage"
+                      Title="NotePage">
     <ContentPage.Resources>
 
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector" />
@@ -15,24 +15,14 @@
                HorizontalOptions="Center" />
         <CollectionView x:Name="collectionView"
                         ItemsSource="{Binding NoteSegments}"
-                        SelectedItems="{Binding SelectedNoteSegments}"
-                        SelectedItem="{Binding SelectedNoteSegment}"
-                        SelectionMode="{Binding SelectionMode}"
+                        SelectionMode="None"
                         ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}" />
-        
-        
-
-        <Switch IsToggled="{Binding IsConfiguratingNoteSegment}"></Switch>
+   
 
         <Button Text="删除"
                 IsVisible="{Binding IsConfiguratingNoteSegment}"
                 Command="{Binding Remove}"></Button>
 
-        <Button Text="添加"
-                Command="{Binding Create}"
-                CommandParameter="DateTimeSegment"></Button>
-
-        <Button Text="提交"
-                Command="{Binding Submit}"></Button>
+    
     </VerticalStackLayout>
 </mato:ContentPageBase>

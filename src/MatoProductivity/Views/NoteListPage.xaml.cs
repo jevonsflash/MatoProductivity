@@ -13,4 +13,9 @@ public partial class NoteListPage : ContentPageBase, ITransientDependency
         this.BindingContext = noteListPageViewModel;
 
     }
+
+    private void ContentPageBase_Appearing(object sender, EventArgs e)
+    {
+        noteListPageViewModel.Init();
+    }
 }

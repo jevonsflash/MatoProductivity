@@ -24,13 +24,24 @@ namespace MatoProductivity.Core.Models.Entities
             IsHidden = isHidden;
             IsRemovable = isRemovable;
         }
-        [Ignore]
+        
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
 
         public ICollection<NoteSegmentTemplate> NoteSegmentTemplates { get; set; }
 
         public string Title { get; set; }
+        public string Type { get; set; }
+        public string Status { get; set; }
+        public string Desc { get; set; }
+        public string Icon { get; set; }
+        public string Color { get; set; }
+        public string BackgroundColor { get; set; }
+        public string BackgroundImage { get; set; }
+
+        public string PreViewContent { get; set; }
+
+        public bool IsEditable { get; set; }
 
         public bool IsHidden { get; set; }
 

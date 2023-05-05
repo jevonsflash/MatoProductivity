@@ -42,13 +42,19 @@ namespace MatoProductivity.Core
                 config.CreateMap<NoteTemplate, Note>()
                 .ForMember(
                     c => c.NoteSegments,
-                    options => options.MapFrom(input => input.NoteSegmentTemplates));
+                    options => options.MapFrom(input => input.NoteSegmentTemplates))              
+                  .ForMember(
+                    c => c.Id,
+                    options => options.Ignore());
 
 
                 config.CreateMap<Note, NoteTemplate>()
                    .ForMember(
                        c => c.NoteSegmentTemplates,
-                       options => options.MapFrom(input => input.NoteSegments));
+                       options => options.MapFrom(input => input.NoteSegments))
+                  .ForMember(
+                    c => c.Id,
+                    options => options.Ignore());
 
 
                 config.CreateMap<NoteSegmentTemplate, NoteSegment>()
@@ -57,26 +63,50 @@ namespace MatoProductivity.Core
                     options => options.MapFrom(input => input.NoteTemplate))
                 .ForMember(
                     c => c.NoteSegmentPayloads,
-                    options => options.MapFrom(input => input.NoteSegmentTemplatePayloads));
+                    options => options.MapFrom(input => input.NoteSegmentTemplatePayloads))
+                 .ForMember(
+                    c => c.NoteId,
+                    options => options.MapFrom(input => input.NoteTemplateId))
+                  .ForMember(
+                    c => c.Id,
+                    options => options.Ignore());
 
                 config.CreateMap<NoteSegment, NoteSegmentTemplate>()
                    .ForMember(
                     c => c.NoteTemplate,
                     options => options.MapFrom(input => input.Note))
                    .ForMember(
+                    c => c.NoteTemplateId,
+                    options => options.MapFrom(input => input.NoteId))
+                   .ForMember(
                        c => c.NoteSegmentTemplatePayloads,
-                       options => options.MapFrom(input => input.NoteSegmentPayloads));
+                       options => options.MapFrom(input => input.NoteSegmentPayloads))
+                  .ForMember(
+                    c => c.Id,
+                    options => options.Ignore());
 
                 config.CreateMap<NoteSegmentTemplatePayload, NoteSegmentPayload>()
                    .ForMember(
                        c => c.NoteSegment,
-                       options => options.MapFrom(input => input.NoteSegmentTemplate));
+                       options => options.MapFrom(input => input.NoteSegmentTemplate))
+                   .ForMember(
+                    c => c.NoteSegmentId,
+                    options => options.MapFrom(input => input.NoteSegmentTemplateId))
+                  .ForMember(
+                    c => c.Id,
+                    options => options.Ignore());
 
 
                 config.CreateMap<NoteSegmentPayload, NoteSegmentTemplatePayload>()
                    .ForMember(
                        c => c.NoteSegmentTemplate,
-                       options => options.MapFrom(input => input.NoteSegment));
+                       options => options.MapFrom(input => input.NoteSegment))
+                   .ForMember(
+                    c => c.NoteSegmentTemplateId,
+                    options => options.MapFrom(input => input.NoteSegmentId))
+                  .ForMember(
+                    c => c.Id,
+                    options => options.Ignore());
 
             });
 

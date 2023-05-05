@@ -3,8 +3,6 @@ using MatoProductivity.ViewModels;
 
 namespace MatoProductivity.Views;
 
-[QueryProperty(nameof(NoteId), nameof(NoteId))]
-[QueryProperty(nameof(NoteTemplateId), nameof(NoteTemplateId))]
 public partial class EditNotePage : ContentPageBase, ITransientDependency
 {
     private EditNotePageViewModel editNotePageViewModel => this.BindingContext as EditNotePageViewModel;
@@ -13,33 +11,18 @@ public partial class EditNotePage : ContentPageBase, ITransientDependency
     {
         InitializeComponent();
         this.BindingContext = editNotePageViewModel;
-
     }
-    private long noteId;
 
-    public long NoteId
+    public EditNotePage(EditNotePageViewModel editNotePageViewModel, long NoteId) : this(editNotePageViewModel)
     {
-        get { return noteId; }
-        set
-        {
-            noteId = value;
-            editNotePageViewModel.NoteId = value;
+        this.editNotePageViewModel.NoteId = NoteId;
 
-        }
     }
 
-    private long noteTemplateId;
-
-    public long NoteTemplateId
+    public EditNotePage(EditNotePageViewModel editNotePageViewModel, long NoteId, long NoteTemplateId) : this(editNotePageViewModel, NoteId)
     {
-        get { return noteTemplateId; }
-        set
-        {
-            noteTemplateId = value;
-            editNotePageViewModel.Clone.Execute(noteTemplateId);
+        editNotePageViewModel.Clone.Execute(NoteTemplateId);
 
-        }
     }
-
 
 }
