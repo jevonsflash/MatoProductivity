@@ -1,4 +1,5 @@
 ﻿using Abp.Dependency;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Castle.MicroKernel.Registration;
@@ -203,7 +204,13 @@ namespace MatoProductivity.ViewModels
                     ? new ObservableCollection<INoteSegmentService>(
                   noteSegments.Select(noteSegmentServiceFactory.GetNoteSegmentService))
                     : new ObservableCollection<INoteSegmentService>();
-
+                Title = note.Title;
+                Desc = note.Desc;
+                Icon = note.Icon;
+                Color = note.Color;
+                BackgroundColor = note.BackgroundColor;
+                PreViewContent = note.PreViewContent;
+                IsEditable = note.IsEditable;
             }
 
         }
@@ -225,6 +232,100 @@ namespace MatoProductivity.ViewModels
 
             }
         }
+
+        private string _title;
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        private string _desc;
+
+        public string Desc
+        {
+            get { return _desc; }
+            set
+            {
+                _desc = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _icon;
+
+        public string Icon
+        {
+            get { return _icon; }
+            set
+            {
+                _icon = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _color;
+
+        public string Color
+        {
+            get { return _color; }
+            set
+            {
+                _color = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _backgroundColor;
+
+
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set
+            {
+                _backgroundColor = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private string _preViewContent;
+
+        public string PreViewContent
+        {
+            get { return _preViewContent; }
+            set
+            {
+                _preViewContent = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isEditable;
+
+        public bool IsEditable
+        {
+            get { return _isEditable; }
+            set
+            {
+                _isEditable = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
+
+
+
         private ObservableCollection<INoteSegmentService> _noteSegments;
 
         public ObservableCollection<INoteSegmentService> NoteSegments
@@ -297,6 +398,21 @@ namespace MatoProductivity.ViewModels
             {
                 noteSegment.Submit.Execute(null);
             }
+          
+
+            this.repository.UpdateAsync(this.NoteId, (note) =>
+            {
+                note.Title = this.Title;
+                note.Desc = this.Desc;
+                note.Icon = this.Icon;
+                note.Color = this.Color;
+                note.BackgroundColor = this.BackgroundColor;
+                note.PreViewContent = this.PreViewContent;
+                note.IsEditable = this.IsEditable;
+                return Task.FromResult(note);
+            });
+
+
         }
         public Command Submit { get; set; }
         public Command Clone { get; set; }

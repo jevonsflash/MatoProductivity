@@ -13,8 +13,20 @@
         <Label Text="Welcome to .NET MAUI!"
                VerticalOptions="Center"
                HorizontalOptions="Center" />
-        
-                
+        <Grid>
+
+
+            <VerticalStackLayout IsVisible="{Binding IsConfiguratingNoteSegment}">
+                <Entry  Text="{Binding Title}"
+                        Placeholder="请输入标题" />
+                <Entry  Text="{Binding Desc}"
+                        Placeholder="请输入描述" />
+            </VerticalStackLayout>
+            <VerticalStackLayout IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
+                <Label  Text="{Binding Title}"/>
+                <Label  Text="{Binding Desc}" />
+            </VerticalStackLayout>
+        </Grid>
         <CollectionView x:Name="collectionView"
                         ItemsSource="{Binding NoteSegments}"
                         SelectedItems="{Binding SelectedNoteSegments}"
@@ -26,6 +38,10 @@
 
         <Switch IsToggled="{Binding IsConfiguratingNoteSegment}"></Switch>
 
+        <VerticalStackLayout IsVisible="{Binding IsConfiguratingNoteSegment}">
+            <Entry  Text="{Binding Color}" />
+            <Switch IsToggled="{Binding IsEditable}"></Switch>
+        </VerticalStackLayout>
         <Button Text="删除选中"
                 IsVisible="{Binding IsConfiguratingNoteSegment}"
                 Command="{Binding RemoveSelectedSegment}"></Button>
