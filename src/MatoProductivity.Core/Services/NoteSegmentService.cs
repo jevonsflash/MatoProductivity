@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
 using System;
@@ -62,16 +63,22 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-
+        [UnitOfWork]
         public virtual async void SubmitAction(object obj)
         {
-            await payloadRepository.DeleteAsync(c => c.NoteSegmentId == NoteSegment.Id);
-            await repository.InsertOrUpdateAsync(noteSegment);
 
-            foreach (var item in noteSegment.NoteSegmentPayloads)
-            {
-                await payloadRepository.UpdateAsync(item);
-            }
+            var entity = await repository.GetAsync(this.NoteSegment.Id);
+
+            ObjectMapper.Map(this.NoteSegment, entity);
+
+                   
+            var payloadEntity = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == this.NoteSegment.Id);
+
+            payloadEntity.Clear();
+
+            ObjectMapper.Map(this.NoteSegment.NoteSegmentPayloads, payloadEntity);
+        
+            UnitOfWorkManager.Current.SaveChanges();
 
         }
 
