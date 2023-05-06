@@ -10,9 +10,12 @@
                VerticalOptions="Center"
                HorizontalOptions="Center" />
         <CollectionView  ItemsLayout="VerticalList"
+                         x:Name="MainCollectionView"
                          ItemsSource="{Binding Notes}"
-                         SelectionMode="Single"
+                         SelectedItems="{Binding SelectedNotes}"
+                         SelectionMode="{Binding SelectionMode}"
                          SelectedItem="{Binding SelectedNote}">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <!--<SwipeView>
@@ -35,13 +38,32 @@
                             <Label Text="{Binding Title}"></Label>
                         </Grid>
                     </SwipeView>-->
+
                     <Grid Padding="10">
+                        <FlyoutBase.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="修改"
+                                                Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                                CommandParameter="{Binding}" />
+                                <MenuFlyoutItem Text="删除"
+                                                Command="{Binding  Source={x:Reference MainCollectionView}, Path=BindingContext.Remove}"
+                                                CommandParameter="{Binding}" />
+                            </MenuFlyout>
+                        </FlyoutBase.ContextFlyout>
                         <Label Text="{Binding Title}"></Label>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Switch IsToggled="{Binding IsEditing}"></Switch>
 
+        <Button Text="删除"
+                IsVisible="{Binding IsEditing}"
+                Command="{Binding Remove}"></Button>
+
+        <Button Text="添加"
+                Command="{Binding Create}"
+                CommandParameter="DateTimeSegment"></Button>
 
     </VerticalStackLayout>
 </mato:ContentPageBase>

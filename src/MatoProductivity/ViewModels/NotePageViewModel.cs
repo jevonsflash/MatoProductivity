@@ -1,46 +1,57 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using Castle.MicroKernel.Registration;
+using System.Reflection;
 using MatoProductivity.Core.Models.Entities;
+using MatoProductivity.Core.Services;
 using MatoProductivity.Core.ViewModel;
-using MatoProductivity.Core.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using MatoProductivity.Services;
+using MatoProductivity.Views;
 
 namespace MatoProductivity.ViewModels
 {
     public class NotePageViewModel : ViewModelBase, ITransientDependency
     {
+        private readonly NavigationService navigationService;
+        private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
         private readonly IRepository<Note, long> repository;
         private readonly IUnitOfWorkManager unitOfWorkManager;
         private readonly IIocResolver iocResolver;
 
         public NotePageViewModel(
-            IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
+            NavigationService navigationService,
+
+            INoteSegmentServiceFactory noteSegmentServiceFactory,
+            IRepository<Note, long> repository,
+            IUnitOfWorkManager unitOfWorkManager,
+            IIocResolver iocResolver)
         {
             Remove = new Command(RemoveAction);
+            Edit = new Command(EditAction);
+            this.navigationService = navigationService;
+            this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
             this.PropertyChanged += NotePageViewModel_PropertyChanged;
         }
 
-
-        private void NoteSegments_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private async void EditAction(object obj)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = this.NoteId }))
             {
-                foreach (var item in e.NewItems)
-                {
-                    (item as INoteSegmentViewModel).Submit.Execute(null);
-                }
+                await navigationService.PopAsync(false);
+                await navigationService.PushAsync(objWrapper.Object);
             }
         }
 
         private async void RemoveAction(object obj)
         {
             await repository.DeleteAsync(this.NoteId);
+            await navigationService.PopAsync();
+
         }
 
 
@@ -63,41 +74,24 @@ namespace MatoProductivity.ViewModels
                     });
                 }
             }
-
+            else if (e.PropertyName == nameof(NoteSegments))
+            {
+                RaisePropertyChanged(nameof(CanSimplified));
+            }
         }
 
         private void Init(Note note)
         {
             var noteSegments = note.NoteSegments;
-            this.NoteSegments = new ObservableCollection<INoteSegmentViewModel>(
+            this.NoteSegments = new ObservableCollection<INoteSegmentService>(
 
-              noteSegments.Select(c => GetNoteSegmentViewModel(c))
+              noteSegments.Select(GetNoteSegmentViewModel)
               );
-            this.NoteSegments.CollectionChanged += NoteSegments_CollectionChanged;
         }
 
-        private INoteSegmentViewModel GetNoteSegmentViewModel(NoteSegment c)
+        private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)
         {
-            var type = c.Type;
-            INoteSegmentViewModel result;
-            switch (type)
-            {
-                case "DateTimeSegment":
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<DataTimeSegmentViewModel>(new { noteSegment = c }))
-                    {
-                        result = objWrapper.Object;
-                    }
-                    break;
-                case "TextSegment":
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<TextSegmentViewModel>(new { noteSegment = c }))
-                    {
-                        result = objWrapper.Object;
-                    }
-                    break;
-                default:
-                    result = null;
-                    break;
-            }
+            var result = noteSegmentServiceFactory.GetNoteSegmentService(c);
             result.NoteSegmentState = NoteSegmentState.PreView;
             return result;
         }
@@ -113,9 +107,9 @@ namespace MatoProductivity.ViewModels
                 RaisePropertyChanged();
             }
         }
-        private ObservableCollection<INoteSegmentViewModel> _noteSegments;
+        private ObservableCollection<INoteSegmentService> _noteSegments;
 
-        public ObservableCollection<INoteSegmentViewModel> NoteSegments
+        public ObservableCollection<INoteSegmentService> NoteSegments
         {
             get { return _noteSegments; }
             set
@@ -125,8 +119,22 @@ namespace MatoProductivity.ViewModels
             }
         }
 
+        public bool CanSimplified => NoteSegments.All(this.GetIsItemSimplified);
+
+        public bool GetIsItemSimplified(INoteSegmentService noteSegment)
+        {
+            foreach (var interfaceType in noteSegment.GetType().GetInterfaces())
+            {
+                if (!interfaceType.GetTypeInfo().IsGenericType && interfaceType == typeof(IAutoSet))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public Command Remove { get; set; }
+        public Command Edit { get; set; }
 
     }
 }

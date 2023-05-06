@@ -1,8 +1,8 @@
 ﻿using MatoProductivity.Core.Models.Entities;
 
-namespace MatoProductivity.Core.ViewModels
+namespace MatoProductivity.Core.Services
 {
-    public interface INoteSegmentViewModel
+    public interface INoteSegmentService
     {
         NoteSegment NoteSegment { get; set; }
         Command Submit { get; set; }

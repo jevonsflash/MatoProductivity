@@ -1,5 +1,4 @@
 using Abp.Dependency;
-using MatoProductivity.Core.ViewModels;
 
 namespace MatoProductivity.Core.Views;
 

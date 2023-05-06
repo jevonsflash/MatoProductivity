@@ -7,14 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MatoProductivity.Core.ViewModels
+namespace MatoProductivity.Core.Services
 {
-    public class DataTimeSegmentViewModel : NoteSegmentViewModel, ITransientDependency
+    public class DataTimeSegmentService : NoteSegmentService, ITransientDependency, IAutoSet
     {
 
         private NoteSegmentPayload DefaultIsAutoSetNoteSegmentPayload => new NoteSegmentPayload(nameof(IsAutoSet), false.ToString());
         private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), DateTime.Now.ToString());
-        public DataTimeSegmentViewModel(
+        public DataTimeSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
@@ -26,31 +26,31 @@ namespace MatoProductivity.Core.ViewModels
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var time = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
-                var isAutoSet = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
+                var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
+                var isAutoSet = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
 
 
                 var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
-                this.Title = title.GetStringValue();
+                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                Title = title.GetStringValue();
 
-                this.Time = DateTime.Parse(time.GetStringValue());
-                this.IsAutoSet = bool.Parse(isAutoSet.GetStringValue());
+                Time = DateTime.Parse(time.GetStringValue());
+                IsAutoSet = bool.Parse(isAutoSet.GetStringValue());
             }
 
             else if (e.PropertyName == nameof(IsAutoSet))
             {
-                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
             }
 
             else if (e.PropertyName == nameof(Time))
             {
-                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time));
             }
 
             else if (e.PropertyName == nameof(Title))
             {
-                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
             }
 
         }
@@ -58,8 +58,8 @@ namespace MatoProductivity.Core.ViewModels
 
         public override void CreateAction(object obj)
         {
-            this.NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
-            this.NoteSegment?.SetNoteSegmentPayloads(DefaultIsAutoSetNoteSegmentPayload);
+            NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
+            NoteSegment?.SetNoteSegmentPayloads(DefaultIsAutoSetNoteSegmentPayload);
         }
 
 

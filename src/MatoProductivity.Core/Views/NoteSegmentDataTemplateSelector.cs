@@ -1,6 +1,6 @@
 ﻿using Abp.Dependency;
 using MatoProductivity.Core.Models.Entities;
-using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,9 @@ namespace MatoProductivity.Core.Views
             {
                 return default;
             }
-            if (item is INoteSegmentViewModel)
+            if (item is INoteSegmentService)
             {
-                var dataTemplateName = (item as INoteSegmentViewModel).NoteSegment.Type;
+                var dataTemplateName = (item as INoteSegmentService).NoteSegment.Type;
                 return Application.Current.Resources[dataTemplateName] as DataTemplate;
 
             }

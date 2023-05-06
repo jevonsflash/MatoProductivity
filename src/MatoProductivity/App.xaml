@@ -21,12 +21,10 @@
                         <SwipeItems>
                             <SwipeItem Text="Favorite"
                                        IconImageSource="favorite.png"
-                                       BackgroundColor="LightGreen"
-                                        />
+                                       BackgroundColor="LightGreen" />
                             <SwipeItem Text="Delete"
                                        IconImageSource="delete.png"
-                                       BackgroundColor="LightPink"
-                                        />
+                                       BackgroundColor="LightPink" />
                         </SwipeItems>
                     </SwipeView.LeftItems>
                     <!-- Content -->

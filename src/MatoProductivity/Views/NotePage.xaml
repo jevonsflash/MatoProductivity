@@ -20,9 +20,10 @@
    
 
         <Button Text="删除"
-                IsVisible="{Binding IsConfiguratingNoteSegment}"
+               
                 Command="{Binding Remove}"></Button>
+        <Button Text="编辑"
+                Command="{Binding Edit}"></Button>
 
-    
     </VerticalStackLayout>
 </mato:ContentPageBase>

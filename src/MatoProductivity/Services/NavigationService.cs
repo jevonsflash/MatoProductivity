@@ -30,36 +30,39 @@ namespace MatoProductivity.Services
 
         }
 
-        public async Task PushAsync(string pageName, object[] args = null)
+        public async Task PushAsync(string pageName, object[] args = null, bool animated = true)
         {
             var page = GetPageInstance(pageName, args);
-            await mainPageNavigation.PushAsync(page);
+            await mainPageNavigation.PushAsync(page, animated);
         }
 
-        public async Task PushModalAsync(string pageName, object[] args = null)
+        public async Task PushModalAsync(string pageName, object[] args = null, bool animated = true)
         {
             var page = GetPageInstance(pageName, args);
-            await mainPageNavigation.PushModalAsync(page);
+            await mainPageNavigation.PushModalAsync(page, animated);
         }
 
-        public async Task PushAsync(Page page)
+        public async Task PushAsync(Page page, bool animated = true)
         {
-            await mainPageNavigation.PushAsync(page);
+            await mainPageNavigation.PushAsync(page, animated);
         }
 
-        public async Task PushModalAsync(Page page)
+        public async Task PushModalAsync(Page page, bool animated = true)
         {
-            await mainPageNavigation.PushModalAsync(page);
+            await mainPageNavigation.PushModalAsync(page, animated);
         }
 
-        public async Task PopAsync()
+
+
+        public async Task PopAsync(bool animated = true)
         {
-            await mainPageNavigation.PopAsync();
+            await mainPageNavigation.PopAsync(animated);
         }
 
-        public async Task PopToRootAsync()
+
+        public async Task PopToRootAsync(bool animated = true)
         {
-            await mainPageNavigation.PopToRootAsync();
+            await mainPageNavigation.PopToRootAsync(animated);
         }
 
 
@@ -93,7 +96,7 @@ namespace MatoProductivity.Services
                                               Params = m.GetParameters(),
                                           }).Where(c => c.Params.Length == args.Length)
                                           .FirstOrDefault();
-                    if (ctorInfo==null)
+                    if (ctorInfo == null)
                     {
                         throw new Exception("找不到对应的构造函数");
                     }

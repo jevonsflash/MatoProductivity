@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MatoProductivity.Core.ViewModels
+namespace MatoProductivity.Core.Services
 {
-    public class TextSegmentViewModel : NoteSegmentViewModel, ITransientDependency
+    public class TextSegmentService : NoteSegmentService, ITransientDependency
     {
 
         private NoteSegmentPayload DefaultContentSegmentPayload => new NoteSegmentPayload(nameof(Content), "");
-        public TextSegmentViewModel(
+        public TextSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
@@ -26,31 +26,31 @@ namespace MatoProductivity.Core.ViewModels
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
-                this.Title = title.GetStringValue();
+                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                Title = title.GetStringValue();
 
 
-                var content = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
-                this.Content = content.GetStringValue();
+                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                Content = content.GetStringValue();
 
                 var defaultPlaceHolderSegmentPayload = new NoteSegmentPayload(nameof(PlaceHolder), "请输入" + Title);
 
-                var placeHolder = this.NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
-                this.PlaceHolder = placeHolder.GetStringValue();
+                var placeHolder = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
+                PlaceHolder = placeHolder.GetStringValue();
             }
 
             else if (e.PropertyName == nameof(Content))
             {
-                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
             }
 
             else if (e.PropertyName == nameof(PlaceHolder))
             {
-                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
             }
             else if (e.PropertyName == nameof(Title))
             {
-                this.NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
             }
         }
 

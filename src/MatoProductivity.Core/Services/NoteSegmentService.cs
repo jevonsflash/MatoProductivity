@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MatoProductivity.Core.ViewModels
+namespace MatoProductivity.Core.Services
 {
 
     public enum NoteSegmentState
@@ -15,12 +15,12 @@ namespace MatoProductivity.Core.ViewModels
         Edit,
         PreView
     }
-    public abstract class NoteSegmentViewModel : ViewModelBase, INoteSegmentViewModel
+    public abstract class NoteSegmentService : ViewModelBase, INoteSegmentService
     {
         private readonly IRepository<NoteSegment, long> repository;
         private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
 
-        public NoteSegmentViewModel(
+        public NoteSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             NoteSegment noteSegment)
@@ -29,8 +29,8 @@ namespace MatoProductivity.Core.ViewModels
             Create = new Command(CreateAction);
             this.repository = repository;
             this.payloadRepository = payloadRepository;
-            this.NoteSegment = noteSegment;
-            this.NoteSegmentState = NoteSegmentState.Config;
+            NoteSegment = noteSegment;
+            NoteSegmentState = NoteSegmentState.Config;
         }
 
         public abstract void CreateAction(object obj);
@@ -66,7 +66,7 @@ namespace MatoProductivity.Core.ViewModels
         public virtual async void SubmitAction(object obj)
         {
             await payloadRepository.DeleteAsync(c => c.NoteSegmentId == NoteSegment.Id);
-            await this.repository.InsertOrUpdateAsync(noteSegment);
+            await repository.InsertOrUpdateAsync(noteSegment);
 
             foreach (var item in noteSegment.NoteSegmentPayloads)
             {
