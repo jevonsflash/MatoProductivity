@@ -34,8 +34,17 @@ namespace MatoProductivity.Core.Services
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
-                Time = DateTime.Parse(time.GetStringValue());
-                IsAutoSet = bool.Parse(isAutoSet.GetStringValue());
+                DateTime parsedTime;
+                if (DateTime.TryParse(time.GetStringValue(), out parsedTime))
+                {
+                    Time =parsedTime;
+                }
+
+                bool parsedIsAutoSet;
+                if (bool.TryParse(isAutoSet.GetStringValue(), out parsedIsAutoSet))
+                {
+                    IsAutoSet =parsedIsAutoSet;
+                }
             }
 
             else if (e.PropertyName == nameof(IsAutoSet))

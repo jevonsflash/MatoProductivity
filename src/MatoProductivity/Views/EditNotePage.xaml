@@ -9,53 +9,74 @@
 
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector" />
     </ContentPage.Resources>
-    <VerticalStackLayout>
-        <Label Text="Welcome to .NET MAUI!"
-               VerticalOptions="Center"
-               HorizontalOptions="Center" />
-        <Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
 
-
-            <VerticalStackLayout IsVisible="{Binding IsConfiguratingNoteSegment}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-                <Entry  Text="{Binding Desc}"
-                        Placeholder="请输入描述" />
-            </VerticalStackLayout>
-            <VerticalStackLayout IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
-                <Label  Text="{Binding Title}"/>
-                <Label  Text="{Binding Desc}" />
-            </VerticalStackLayout>
-        </Grid>
-        <CollectionView x:Name="collectionView"
+        <CollectionView x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteSegments}"
                         SelectedItems="{Binding SelectedNoteSegments}"
                         SelectedItem="{Binding SelectedNoteSegment}"
                         SelectionMode="{Binding SelectionMode}"
-                        ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}" />
-
-        <Label Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
-
-        <Switch IsToggled="{Binding IsConfiguratingNoteSegment}"></Switch>
-
-        <VerticalStackLayout IsVisible="{Binding IsConfiguratingNoteSegment}">
-            <Entry  Text="{Binding Color}" />
-            <Switch IsToggled="{Binding IsEditable}"></Switch>
-        </VerticalStackLayout>
-        <Button Text="删除选中"
-                IsVisible="{Binding IsConfiguratingNoteSegment}"
-                Command="{Binding RemoveSelectedSegment}"></Button>
+                        ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
 
 
-        <Button Text="全选"
-                IsVisible="{Binding IsConfiguratingNoteSegment}"
-                Command="{Binding SelectAllSegment}"></Button>
+            <CollectionView.Header>
+                <Grid>
+                    <TableView Intent="Form"
+                               IsVisible="{Binding IsConfiguratingNoteSegment}">
+                        <TableRoot>
+                            <TableSection>
+                                <EntryCell Label="标题"
+                                           Text="{Binding Title}"
+                                           Placeholder="请输入标题"></EntryCell>
+                                <EntryCell Label="描述"
+                                           Text="{Binding Desc}"
+                                           Placeholder="请输入描述"></EntryCell>
+                            </TableSection>
+                        </TableRoot>
+                    </TableView>
+                    <TableView Intent="Form"
+                               IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
+                        <TableRoot>
+                            <TableSection>
+                                <TextCell Text="{Binding Title}" />
+                                <TextCell Text="{Binding Desc}" />
+                            </TableSection>
+                        </TableRoot>
+                    </TableView>
 
-        <Button Text="添加"
-                Command="{Binding CreateSegmentFromStore}"
-                CommandParameter="DateTimeSegment"></Button>
 
-        <Button Text="提交"
-                Command="{Binding Submit}"></Button>
-    </VerticalStackLayout>
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.Footer>
+                <VerticalStackLayout>
+                    <Label Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
+
+                    <Switch IsToggled="{Binding IsConfiguratingNoteSegment}"></Switch>
+                </VerticalStackLayout>
+            </CollectionView.Footer>
+        </CollectionView>
+
+        <StackLayout Grid.Row="1">
+
+            <Button Text="删除选中"
+                    IsVisible="{Binding IsConfiguratingNoteSegment}"
+                    Command="{Binding RemoveSelectedSegment}"></Button>
+
+
+            <Button Text="全选"
+                    IsVisible="{Binding IsConfiguratingNoteSegment}"
+                    Command="{Binding SelectAllSegment}"></Button>
+
+            <Button Text="添加"
+                    Command="{Binding CreateSegmentFromStore}"
+                    CommandParameter="DateTimeSegment"></Button>
+
+            <Button Text="提交"
+                    Command="{Binding Submit}"></Button>
+        </StackLayout>
+    </Grid>
 </mato:ContentPageBase>

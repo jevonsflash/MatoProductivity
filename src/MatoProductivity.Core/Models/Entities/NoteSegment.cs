@@ -19,7 +19,7 @@ namespace MatoProductivity.Core.Models.Entities
         }
 
 
-        
+
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
 
@@ -41,6 +41,16 @@ namespace MatoProductivity.Core.Models.Entities
         public bool IsHidden { get; set; }
 
         public bool IsRemovable { get; set; }
+
+
+        public NoteSegmentPayload GetNoteSegmentPayload(string key)
+        {
+            if (NoteSegmentPayloads != null)
+            {
+                return NoteSegmentPayloads.FirstOrDefault(c => c.Key==key);
+            }
+            return default;
+        }
 
 
         public void SetNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)

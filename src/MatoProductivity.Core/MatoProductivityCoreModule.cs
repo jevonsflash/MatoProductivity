@@ -1,6 +1,7 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using MatoProductivity.Core.Configuration;
 using MatoProductivity.Core.Localization;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.Settings;
@@ -28,7 +29,8 @@ namespace MatoProductivity.Core
 
             string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), MatoProductivityConsts.LocalizationSourceName);
 
-            var connectionString = "Data Source=file:mato.db;";
+            var configuration = AppConfigurations.Get(documentsPath, development);
+            var connectionString = configuration.GetConnectionString(MatoProductivityConsts.ConnectionStringName);
 
             var dbName = "mato.db";
             string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), MatoProductivityConsts.LocalizationSourceName, dbName);
@@ -71,6 +73,11 @@ namespace MatoProductivity.Core
                     c => c.Id,
                     options => options.Ignore());
 
+                config.CreateMap<NoteSegmentStore, NoteSegment>()              
+                 .ForMember(
+                   c => c.Id,
+                   options => options.Ignore());
+
                 config.CreateMap<NoteSegment, NoteSegmentTemplate>()
                    .ForMember(
                     c => c.NoteTemplate,
@@ -107,6 +114,8 @@ namespace MatoProductivity.Core
                   .ForMember(
                     c => c.Id,
                     options => options.Ignore());
+
+
 
             });
 

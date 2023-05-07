@@ -13,7 +13,7 @@
         <Label Text="Welcome to .NET MAUI!"
                VerticalOptions="Center"
                HorizontalOptions="Center" />
-        <CollectionView x:Name="collectionView"
+        <CollectionView x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteSegments}"
                         SelectionMode="None"
                         ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}" />

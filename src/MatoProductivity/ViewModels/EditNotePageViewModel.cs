@@ -7,6 +7,7 @@ using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.Services;
 using MatoProductivity.Core.ViewModel;
+using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,12 @@ using System.Reflection;
 
 namespace MatoProductivity.ViewModels
 {
-    public class EditNotePageViewModel : ViewModelBase, ITransientDependency
+    public class EditNotePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
         private readonly IRepository<NoteTemplate, long> templateRepository;
+        private readonly IRepository<NoteSegment, long> noteSegmentRepository;
         private readonly IRepository<Note, long> repository;
         private readonly IUnitOfWorkManager unitOfWorkManager;
         private readonly IIocResolver iocResolver;
@@ -29,6 +31,7 @@ namespace MatoProductivity.ViewModels
             NavigationService navigationService,
             INoteSegmentServiceFactory noteSegmentServiceFactory,
             IRepository<NoteTemplate, long> templateRepository,
+            IRepository<NoteSegment, long> noteSegmentRepository,
             IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
         {
             Submit = new Command(SubmitAction);
@@ -44,6 +47,7 @@ namespace MatoProductivity.ViewModels
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.templateRepository = templateRepository;
+            this.noteSegmentRepository=noteSegmentRepository;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
@@ -211,6 +215,11 @@ namespace MatoProductivity.ViewModels
                 BackgroundColor = note.BackgroundColor;
                 PreViewContent = note.PreViewContent;
                 IsEditable = note.IsEditable;
+
+                foreach (var noteSegment in NoteSegments)
+                {
+                    noteSegment.Container=this;
+                }
             }
 
         }
@@ -392,15 +401,10 @@ namespace MatoProductivity.ViewModels
             return false;
         }
 
-        private void SubmitAction(object obj)
+        [UnitOfWork]
+        private async void SubmitAction(object obj)
         {
-            foreach (var noteSegment in NoteSegments)
-            {
-                noteSegment.Submit.Execute(null);
-            }
-          
-
-            this.repository.UpdateAsync(this.NoteId, (note) =>
+            await this.repository.UpdateAsync(this.NoteId, (note) =>
             {
                 note.Title = this.Title;
                 note.Desc = this.Desc;
@@ -411,6 +415,23 @@ namespace MatoProductivity.ViewModels
                 note.IsEditable = this.IsEditable;
                 return Task.FromResult(note);
             });
+
+            var noteSegments = await noteSegmentRepository.GetAllListAsync(c => c.NoteId == this.NoteId);
+            foreach (var noteSegment in noteSegments)
+            {
+                if (!NoteSegments.Select(c => c.NoteSegment)
+                      .Where(c => !c.IsTransient())
+                      .Any(c => c.Id==noteSegment.Id))
+                {
+                    await noteSegmentRepository.DeleteAsync(noteSegment.Id);
+                }
+            }
+     
+            foreach (var noteSegment in NoteSegments)
+            {
+                await noteSegmentRepository.InsertOrUpdateAsync(noteSegment.NoteSegment);
+                noteSegment.Submit.Execute(null);
+            }
 
 
         }

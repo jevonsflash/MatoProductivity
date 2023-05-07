@@ -6,6 +6,28 @@
                       Appearing="ContentPageBase_Appearing"
                       Title="NoteListPage">
     <VerticalStackLayout>
+        <SwipeView>
+            <SwipeView.LeftItems>
+                <SwipeItems>
+                    <SwipeItemView Command="{Binding CheckAnswerCommand}"
+                        >
+                        <StackLayout Margin="10"
+                             WidthRequest="300">
+                            <Entry x:Name="resultEntry"
+                           Placeholder="Enter answer"
+                           HorizontalOptions="CenterAndExpand" />
+                            <Label Text="Check"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                        </StackLayout>
+                    </SwipeItemView>
+                </SwipeItems>
+            </SwipeView.LeftItems>
+            <!-- Content -->
+            <Label Text="Welcome to .NET MAUI!"
+               VerticalOptions="Center"
+               HorizontalOptions="Center" />
+        </SwipeView>
         <Label Text="Welcome to .NET MAUI!"
                VerticalOptions="Center"
                HorizontalOptions="Center" />
@@ -42,7 +64,7 @@
                     <Grid Padding="10">
                         <FlyoutBase.ContextFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem Text="修改"
+                                <MenuFlyoutItem Text="编辑"
                                                 Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
                                                 CommandParameter="{Binding}" />
                                 <MenuFlyoutItem Text="删除"

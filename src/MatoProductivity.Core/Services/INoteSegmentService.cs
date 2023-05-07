@@ -1,4 +1,5 @@
 ﻿using MatoProductivity.Core.Models.Entities;
+using MatoProductivity.Core.ViewModels;
 
 namespace MatoProductivity.Core.Services
 {
@@ -8,6 +9,7 @@ namespace MatoProductivity.Core.Services
         Command Submit { get; set; }
         Command Create { get; set; }
         NoteSegmentState NoteSegmentState { get; set; }
+        INoteSegmentServiceContainer Container { get; set; }
 
         void SubmitAction(object obj);
         void CreateAction(object obj);
