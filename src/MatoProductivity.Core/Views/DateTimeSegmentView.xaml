@@ -5,11 +5,13 @@
              x:Class="MatoProductivity.Core.Views.DateTimeSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
-            <Label>
+            <Label FontSize="Large">
                 <Label.FormattedText>
                     <FormattedString>
+                        <Span Text="本次"></Span>
                         <Span Text="{Binding Title}"></Span>
-                        <Span Text="{Binding Time,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                        <Span Text="的时间是"></Span>
+                        <Span Text="{Binding ExactTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
@@ -19,6 +21,8 @@
             <Label Text="{Binding Title}"></Label>
             <DatePicker Date="{Binding Time}"
                         IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
+            <TimePicker Time="{Binding TimeOffset}"
+                        IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
@@ -26,6 +30,8 @@
                     Placeholder="请输入标题" />
             <DatePicker Date="{Binding Time}"
                         IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
+            <TimePicker Time="{Binding TimeOffset}"
+                        IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
             <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
         </VerticalStackLayout>
     </Grid>

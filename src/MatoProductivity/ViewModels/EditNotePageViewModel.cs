@@ -433,6 +433,7 @@ namespace MatoProductivity.ViewModels
                 noteSegment.Submit.Execute(null);
             }
 
+            await navigationService.PopAsync();
 
         }
         public Command Submit { get; set; }

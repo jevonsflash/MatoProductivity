@@ -33,16 +33,13 @@
                                 Padding="8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
                                     <ColumnDefinition Width="50"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="100"></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Label Text="{TemplateBinding BindingContext.Title}"></Label>
-                                <ContentPresenter Grid.Column="0"
-                                                  Grid.Row="1" />
+                                <Label Text="{TemplateBinding BindingContext.Icon}"
+                                       FontFamily="FontAwesome"></Label>
+                                <ContentPresenter Grid.Column="1" />
                             </Grid>
                         </Frame>
                     </SwipeView>
@@ -63,16 +60,13 @@
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="100"></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Label Text="{TemplateBinding BindingContext.Title}"></Label>
-                        <ContentPresenter Grid.Column="0"
-                                          Grid.Row="1" />
+                        <Label Text="{TemplateBinding BindingContext.Icon}"
+                               FontFamily="FontAwesome"></Label>
+                        <ContentPresenter Grid.Column="1" />
                     </Grid>
                 </Frame>
 

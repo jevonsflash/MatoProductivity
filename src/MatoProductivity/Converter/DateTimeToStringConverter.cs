@@ -9,7 +9,7 @@ namespace MatoProductivity.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var time = (DateTime)value;
-            string parseFomate = parameter == null ? "F" : parameter as string;
+            string parseFomate = parameter == null ? "yyyy年MM月dd日 HH:mm:ss" : parameter as string;
             return time.ToString(parseFomate);
             //return time.ToString("yyyy年MM月dd日 HH:mm:ss");
         }

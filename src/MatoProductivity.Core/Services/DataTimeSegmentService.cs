@@ -37,7 +37,8 @@ namespace MatoProductivity.Core.Services
                 DateTime parsedTime;
                 if (DateTime.TryParse(time.GetStringValue(), out parsedTime))
                 {
-                    Time =parsedTime;
+                    Time =parsedTime.Date;
+                    TimeOffset=parsedTime.TimeOfDay;
                 }
 
                 bool parsedIsAutoSet;
@@ -52,9 +53,9 @@ namespace MatoProductivity.Core.Services
                 NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
             }
 
-            else if (e.PropertyName == nameof(Time))
+            else if (e.PropertyName == nameof(Time) || e.PropertyName == nameof(TimeOffset))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time+TimeOffset));
             }
 
             else if (e.PropertyName == nameof(Title))
@@ -81,8 +82,24 @@ namespace MatoProductivity.Core.Services
             {
                 _time = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ExactTime));
             }
         }
+
+        private TimeSpan _timeOffset;
+
+        public TimeSpan TimeOffset
+        {
+            get { return _timeOffset; }
+            set
+            {
+                _timeOffset = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ExactTime));
+            }
+        }
+
+        public DateTime ExactTime => Time+TimeOffset;
 
 
 
