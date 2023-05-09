@@ -100,8 +100,9 @@ namespace MatoProductivity.ViewModels
         {
             var notes = this.repository.GetAllList()
                 .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
-            var notegroupedlist = notes.GroupBy(c => CommonHelper.FormatTimeString(c.CreationTime, "M月d日")).Select(c => new NoteTimeLineGroup(c.Key, c));
-            this.NoteGroups = new ObservableCollection<NoteTimeLineGroup>(notegroupedlist);
+            var notegroupedlist = notes.OrderByDescending(c => c.CreationTime).GroupBy(c => CommonHelper.FormatTimeString(c.LastModificationTime==null ? c.CreationTime : c.LastModificationTime.Value)).Select(c => new NoteTimeLineGroup(c.Key, c));
+            this.NoteGroups = new ObservableCollection<NoteTimeLineGroup>(notegroupedlist.Reverse());
+
             foreach (var noteGroups in this.NoteGroups)
             {
                 noteGroups.CollectionChanged += Notes_CollectionChanged;

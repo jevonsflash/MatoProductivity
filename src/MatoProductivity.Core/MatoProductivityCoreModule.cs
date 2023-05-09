@@ -1,12 +1,15 @@
 ﻿using Abp.AutoMapper;
+using Abp.Domain.Entities.Auditing;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using AutoMapper;
 using MatoProductivity.Core.Configuration;
 using MatoProductivity.Core.Localization;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System.Linq.Expressions;
 
 namespace MatoProductivity.Core
 {
@@ -41,25 +44,25 @@ namespace MatoProductivity.Core
 
             Configuration.Modules.AbpAutoMapper().Configurators.Add(config =>
             {
-                config.CreateMap<NoteTemplate, Note>()
+                IgnoreAbpProperties(config.CreateMap<NoteTemplate, Note>()
                 .ForMember(
                     c => c.NoteSegments,
-                    options => options.MapFrom(input => input.NoteSegmentTemplates))              
+                    options => options.MapFrom(input => input.NoteSegmentTemplates))
                   .ForMember(
                     c => c.Id,
-                    options => options.Ignore());
+                    options => options.Ignore()));
 
 
-                config.CreateMap<Note, NoteTemplate>()
+                IgnoreAbpProperties(config.CreateMap<Note, NoteTemplate>()
                    .ForMember(
                        c => c.NoteSegmentTemplates,
                        options => options.MapFrom(input => input.NoteSegments))
                   .ForMember(
                     c => c.Id,
-                    options => options.Ignore());
+                    options => options.Ignore()));
 
 
-                config.CreateMap<NoteSegmentTemplate, NoteSegment>()
+                IgnoreAbpProperties(config.CreateMap<NoteSegmentTemplate, NoteSegment>()
                 .ForMember(
                     c => c.Note,
                     options => options.MapFrom(input => input.NoteTemplate))
@@ -71,14 +74,14 @@ namespace MatoProductivity.Core
                     options => options.MapFrom(input => input.NoteTemplateId))
                   .ForMember(
                     c => c.Id,
-                    options => options.Ignore());
+                    options => options.Ignore()));
 
-                config.CreateMap<NoteSegmentStore, NoteSegment>()              
+                IgnoreAbpProperties(config.CreateMap<NoteSegmentStore, NoteSegment>()
                  .ForMember(
                    c => c.Id,
-                   options => options.Ignore());
+                   options => options.Ignore()));
 
-                config.CreateMap<NoteSegment, NoteSegmentTemplate>()
+                IgnoreAbpProperties(config.CreateMap<NoteSegment, NoteSegmentTemplate>()
                    .ForMember(
                     c => c.NoteTemplate,
                     options => options.MapFrom(input => input.Note))
@@ -90,30 +93,28 @@ namespace MatoProductivity.Core
                        options => options.MapFrom(input => input.NoteSegmentPayloads))
                   .ForMember(
                     c => c.Id,
-                    options => options.Ignore());
+                    options => options.Ignore()));
 
-                config.CreateMap<NoteSegmentTemplatePayload, NoteSegmentPayload>()
+                IgnoreAbpProperties(config.CreateMap<NoteSegmentTemplatePayload, NoteSegmentPayload>()
                    .ForMember(
                        c => c.NoteSegment,
                        options => options.MapFrom(input => input.NoteSegmentTemplate))
                    .ForMember(
                     c => c.NoteSegmentId,
                     options => options.MapFrom(input => input.NoteSegmentTemplateId))
+
                   .ForMember(
                     c => c.Id,
-                    options => options.Ignore());
+                    options => options.Ignore()));
 
-
+                IgnoreAbpProperties(
                 config.CreateMap<NoteSegmentPayload, NoteSegmentTemplatePayload>()
                    .ForMember(
                        c => c.NoteSegmentTemplate,
                        options => options.MapFrom(input => input.NoteSegment))
                    .ForMember(
                     c => c.NoteSegmentTemplateId,
-                    options => options.MapFrom(input => input.NoteSegmentId))
-                  .ForMember(
-                    c => c.Id,
-                    options => options.Ignore());
+                    options => options.MapFrom(input => input.NoteSegmentId)));
 
 
 
@@ -127,5 +128,18 @@ namespace MatoProductivity.Core
         {
             IocManager.RegisterAssemblyByConvention(typeof(MatoProductivityCoreModule).GetAssembly());
         }
+
+
+        public IMappingExpression<TSource, TDestination> IgnoreAbpProperties<TSource, TDestination>(IMappingExpression<TSource, TDestination> expression) where TDestination : IFullAudited
+        {
+            return expression.ForMember(c => c.CreationTime, option => option.Ignore())
+                     .ForMember(c => c.LastModificationTime, option => option.Ignore())
+                     .ForMember(c => c.CreatorUserId, option => option.Ignore())
+                     .ForMember(c => c.LastModifierUserId, option => option.Ignore())
+                     .ForMember(c => c.DeleterUserId, option => option.Ignore())
+                     .ForMember(c => c.DeletionTime, option => option.Ignore());
+
+        }
+
     }
 }
