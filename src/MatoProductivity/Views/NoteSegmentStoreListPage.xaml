@@ -12,6 +12,11 @@
                          SelectedItem="{Binding SelectedNoteSegmentStore}"
                          SelectionMode="Single"
                          IsGrouped="true">
+            <CollectionView.Header>
+                <SearchBar Placeholder="查找"
+                           Text="{Binding SearchKeywords}"
+                           SearchCommand="{Binding  Search}" />
+            </CollectionView.Header>
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate>
                     <Label Text="{Binding Category}"

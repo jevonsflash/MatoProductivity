@@ -21,59 +21,66 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="appsettings.json" />
-	  <None Remove="log4net.config" />
-	  <None Remove="log4net.Production.config" />
-	  <None Remove="mato.db" />
+		<None Remove="appsettings.json" />
+		<None Remove="log4net.config" />
+		<None Remove="log4net.Production.config" />
+		<None Remove="mato.db" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="appsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="log4net.config" />
-	  <EmbeddedResource Include="log4net.Production.config" />
-	  <EmbeddedResource Include="mato.db">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
+		<EmbeddedResource Include="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="log4net.config" />
+		<EmbeddedResource Include="log4net.Production.config" />
+		<EmbeddedResource Include="mato.db">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Abp" Version="8.1.0" />
-	  <PackageReference Include="Abp.AutoMapper" Version="8.1.0" />
-	  <PackageReference Include="Abp.Castle.Log4Net" Version="8.1.0" />
-	  <PackageReference Include="Abp.EntityFrameworkCore" Version="8.1.0" />
-	  <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
-	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-	  <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-	  <PackageReference Include="Microsoft.PinYinConverter" Version="1.0.0" />
+		<PackageReference Include="Abp" Version="8.1.0" />
+		<PackageReference Include="Abp.AutoMapper" Version="8.1.0" />
+		<PackageReference Include="Abp.Castle.Log4Net" Version="8.1.0" />
+		<PackageReference Include="Abp.EntityFrameworkCore" Version="8.1.0" />
+		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.PinYinConverter" Version="1.0.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
+		<PackageReference Include="XamarinLibrary.Net.iOS.WechatSDK" />
+
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android33.0'">
+		<PackageReference Include="XamarinLibrary.Xamarin.Android.WechatSDK" />
+
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MatoProductivity.Infrastructure\MatoProductivity.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MatoProductivity.Infrastructure\MatoProductivity.Infrastructure.csproj" />
+		<Folder Include="Platforms\iOS\" />
+		<Folder Include="Platforms\Windows\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Platforms\Android\" />
-	  <Folder Include="Platforms\iOS\" />
-	  <Folder Include="Platforms\Windows\" />
+		<Compile Update="Views\TextSegmentView.xaml.cs">
+			<SubType>Code</SubType>
+			<DependentUpon>TextSegmentView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\TextSegmentView.xaml.cs">
-	    <SubType>Code</SubType>
-	    <DependentUpon>TextSegmentView.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Views\TextSegmentView.xaml">
-	    <SubType>Designer</SubType>
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DateTimeSegmentView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Views\TextSegmentView.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\DateTimeSegmentView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Abp.Dependency;
+﻿using Abp.Collections.Extensions;
+using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
 using MatoProductivity.Core.Models.Entities;
@@ -10,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NoteSegmentStoreListPageViewModel : ViewModelBase, ISingletonDependency
+    public class NoteSegmentStoreListPageViewModel : ViewModelBase, ISingletonDependency, ISearchViewModel
     {
         private readonly IRepository<NoteSegmentStore, long> repository;
         private readonly IIocResolver iocResolver;
@@ -25,6 +26,8 @@ namespace MatoProductivity.ViewModels
 
             )
         {
+            this.Search = new Command(SearchAction);
+
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -32,9 +35,16 @@ namespace MatoProductivity.ViewModels
             Init();
         }
 
+        private void SearchAction(object obj)
+        {
+            this.Init();
+        }
+
         public void Init()
         {
-            var noteSegmentStores = this.repository.GetAllList();
+            var noteSegmentStores = this.repository.GetAllList()
+                .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
+
             var noteSegmentStoreGroups = noteSegmentStores.GroupBy(c => c.Category).Select(c => new NoteSegmentStoreGroup(c.Key, c));
             this.NoteSegmentStoreGroups = new ObservableCollection<NoteSegmentStoreGroup>(noteSegmentStoreGroups);
         }
@@ -51,6 +61,14 @@ namespace MatoProductivity.ViewModels
                     OnFinishedChooise?.Invoke(this, noteSegment);
 
                     SelectedNoteSegmentStore = default;
+                }
+            }
+
+            else if (e.PropertyName == nameof(SearchKeywords))
+            {
+                if (string.IsNullOrEmpty(SearchKeywords))
+                {
+                    Init();
                 }
             }
         }
@@ -78,6 +96,20 @@ namespace MatoProductivity.ViewModels
 
             }
         }
+        private string _searchKeywords;
+
+        public string SearchKeywords
+        {
+            get { return _searchKeywords; }
+            set
+            {
+                _searchKeywords = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+        public Command Search { get; set; }
 
     }
 

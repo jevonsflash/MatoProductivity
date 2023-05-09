@@ -2,90 +2,147 @@
 <mato:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                      xmlns:vm="clr-namespace:MatoProductivity.ViewModels;assembly=MatoProductivity"
                       x:Class="MatoProductivity.Views.NoteListPage"
-                      Appearing="ContentPageBase_Appearing"
-                      Title="NoteListPage">
+                      Appearing="ContentPageBase_Appearing">
+
+    <mato:ContentPageBase.Resources>
+        <ControlTemplate x:Key="NoteSegmentCardViewPhone">
+            <Grid>
+                <SwipeView>
+                    <SwipeView.LeftItems>
+                        <SwipeItems>
+                            <SwipeItem Text="删除"
+                                       Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
+                                       CommandParameter="{TemplateBinding}"
+                                       IconImageSource="delete.png"
+                                       BackgroundColor="Red" />
+                            <SwipeItem Text="编辑"
+                                       Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                       CommandParameter="{TemplateBinding}"
+                                       IconImageSource="delete.png"
+                                       BackgroundColor="Red" />
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
+                    <Frame  HasShadow="True"
+                            Margin="0,10,0,10"
+                            CornerRadius="5"
+                            Padding="8">
+                        <Grid>
+                            <ContentPresenter Grid.Column="1" />
+                        </Grid>
+                    </Frame>
+                </SwipeView>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
+            <Frame HasShadow="True"
+                   Margin="0,10,0,10"
+                   CornerRadius="5"
+                   Padding="8">
+                <!--https://github.com/dotnet/maui/issues/5382-->
+                <!--<FlyoutBase.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="删除"
+                                        Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
+                                        CommandParameter="{TemplateBinding}" />
+
+                        <MenuFlyoutItem Text="编辑"
+                                        Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                        CommandParameter="{TemplateBinding}" />
+                    </MenuFlyout>
+                </FlyoutBase.ContextFlyout>-->
+
+                <Grid>
+                    <ContentPresenter Grid.Column="1" />
+                </Grid>
+            </Frame>
+
+        </ControlTemplate>
+        <Style TargetType="ContentView">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </mato:ContentPageBase.Resources>
+
     <VerticalStackLayout>
-        <SwipeView>
-            <SwipeView.LeftItems>
-                <SwipeItems>
-                    <SwipeItemView Command="{Binding CheckAnswerCommand}"
-                        >
-                        <StackLayout Margin="10"
-                             WidthRequest="300">
-                            <Entry x:Name="resultEntry"
-                           Placeholder="Enter answer"
-                           HorizontalOptions="CenterAndExpand" />
-                            <Label Text="Check"
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center" />
-                        </StackLayout>
-                    </SwipeItemView>
-                </SwipeItems>
-            </SwipeView.LeftItems>
-            <!-- Content -->
-            <Label Text="Welcome to .NET MAUI!"
-               VerticalOptions="Center"
-               HorizontalOptions="Center" />
-        </SwipeView>
-        <Label Text="Welcome to .NET MAUI!"
-               VerticalOptions="Center"
-               HorizontalOptions="Center" />
+        <HorizontalStackLayout>
+            <Button Text="新建"
+                    Command="{Binding Create}"></Button>
+            <Button Text="删除选中"
+                    IsEnabled="{Binding IsEditing}"
+                    Command="{Binding RemoveSelected}"></Button>
+
+            <Button Text="全选"
+                    IsEnabled="{Binding IsEditing}"
+                    Command="{Binding SelectAll}"></Button>
+
+
+        </HorizontalStackLayout>
         <CollectionView  ItemsLayout="VerticalList"
                          x:Name="MainCollectionView"
-                         ItemsSource="{Binding Notes}"
+                         ItemsSource="{Binding NoteGroups}"
                          SelectedItems="{Binding SelectedNotes}"
                          SelectionMode="{Binding SelectionMode}"
-                         SelectedItem="{Binding SelectedNote}">
-
+                         SelectedItem="{Binding SelectedNote}"
+                         IsGrouped="true">
+            <CollectionView.Header>
+                <SearchBar Placeholder="查找笔记"
+                           Text="{Binding SearchKeywords}"
+                           SearchCommand="{Binding Search}" />
+            </CollectionView.Header>
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding TimeCategory}"
+                           BackgroundColor="LightGray"
+                           FontSize="18"
+                           FontAttributes="Bold" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!--<SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItems>
-                                <SwipeItem Text="Favorite"
-                                           IconImageSource="favorite.png"
-                                           BackgroundColor="LightGreen"
-                                           Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.FavoriteCommand}"
-                                           CommandParameter="{Binding}" />
-                                <SwipeItem Text="Delete"
-                                           IconImageSource="delete.png"
-                                           BackgroundColor="LightPink"
-                                           Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.DeleteCommand}"
-                                           CommandParameter="{Binding}" />
-                            </SwipeItems>
-                        </SwipeView.RightItems>
-                        <Grid
-                              Padding="10">
+                    <ContentView>
+                        <ContentView.ControlTemplate>
+                            <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                                     Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                                     Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                            </OnIdiom>
+                        </ContentView.ControlTemplate>
+                        <Grid Padding="10">
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="编辑"
+                                                    Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                                    CommandParameter="{Binding}" />
+                                    <MenuFlyoutItem Text="删除"
+                                                    Command="{Binding  Source={x:Reference MainCollectionView}, Path=BindingContext.Remove}"
+                                                    CommandParameter="{Binding}" />
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
                             <Label Text="{Binding Title}"></Label>
                         </Grid>
-                    </SwipeView>-->
 
-                    <Grid Padding="10">
-                        <FlyoutBase.ContextFlyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Text="编辑"
-                                                Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
-                                                CommandParameter="{Binding}" />
-                                <MenuFlyoutItem Text="删除"
-                                                Command="{Binding  Source={x:Reference MainCollectionView}, Path=BindingContext.Remove}"
-                                                CommandParameter="{Binding}" />
-                            </MenuFlyout>
-                        </FlyoutBase.ContextFlyout>
-                        <Label Text="{Binding Title}"></Label>
-                    </Grid>
+                    </ContentView>
+
+
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Switch IsToggled="{Binding IsEditing}"></Switch>
 
-        <Button Text="删除"
-                IsVisible="{Binding IsEditing}"
-                Command="{Binding Remove}"></Button>
 
-        <Button Text="添加"
-                Command="{Binding Create}"
-                CommandParameter="DateTimeSegment"></Button>
 
     </VerticalStackLayout>
 </mato:ContentPageBase>

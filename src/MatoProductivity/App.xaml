@@ -37,7 +37,7 @@
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
                                     <ColumnDefinition Width="50"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <Label Text="{TemplateBinding BindingContext.Icon}"
+                                <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
                                        FontFamily="FontAwesome"></Label>
                                 <ContentPresenter Grid.Column="1" />
                             </Grid>
@@ -64,7 +64,7 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                             <ColumnDefinition Width="50"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Text="{TemplateBinding BindingContext.Icon}"
+                        <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
                                FontFamily="FontAwesome"></Label>
                         <ContentPresenter Grid.Column="1" />
                     </Grid>
@@ -76,8 +76,8 @@
                 <core:DateTimeSegmentView>
                     <core:DateTimeSegmentView.ControlTemplate>
                         <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
-                                 Desktop="{StaticResource NoteSegmentCardViewDesktop}"
-                                 Default="{StaticResource NoteSegmentCardViewPhone}">
+                                 Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                                 Desktop="{StaticResource NoteSegmentCardViewDesktop}">
                         </OnIdiom>
                     </core:DateTimeSegmentView.ControlTemplate>
                 </core:DateTimeSegmentView>
@@ -87,8 +87,9 @@
                     <core:TextSegmentView.ControlTemplate>
 
                         <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                                 Tablet="{StaticResource NoteSegmentCardViewDesktop}"
                                  Desktop="{StaticResource NoteSegmentCardViewDesktop}"
-                                 Default="{StaticResource NoteSegmentCardViewPhone}">
+                                 >
                         </OnIdiom>
 
                     </core:TextSegmentView.ControlTemplate>

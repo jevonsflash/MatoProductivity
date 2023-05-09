@@ -1,7 +1,10 @@
-﻿using Abp.Dependency;
+﻿using Abp.Collections.Extensions;
+using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Castle.MicroKernel.Registration;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
+using MatoProductivity.Infrastructure.Helper;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using System.Collections.ObjectModel;
@@ -9,7 +12,7 @@ using System.Collections.Specialized;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NoteListPageViewModel : ViewModelBase, ISingletonDependency
+    public class NoteListPageViewModel : ViewModelBase, ISingletonDependency, ISearchViewModel
     {
         private readonly IRepository<Note, long> repository;
         private readonly IIocResolver iocResolver;
@@ -27,11 +30,17 @@ namespace MatoProductivity.ViewModels
             this.Create = new Command(CreateActionAsync);
             this.Edit = new Command(EditAction);
             this.Remove = new Command(RemoveAction);
-            this.RemoveSelected=new Command(RemoveSelectedAction);
-            this.SelectAll=new Command(SelectAllAction);
-            SelectedNotes = new ObservableCollection<Note>();
+            this.RemoveSelected = new Command(RemoveSelectedAction);
+            this.SelectAll = new Command(SelectAllAction);
+            this.Search = new Command(SearchAction);
+            SelectedNotes = new ObservableCollection<object>();
 
             //Init();
+        }
+
+        private void SearchAction(object obj)
+        {
+            this.Init();
         }
 
         private void SelectAllAction(object obj)
@@ -44,17 +53,25 @@ namespace MatoProductivity.ViewModels
 
         private void RemoveSelectedAction(object obj)
         {
-            foreach (var notes in SelectedNotes.ToList())
+            foreach (var note in SelectedNotes.ToList())
             {
-                Notes.Remove((Note)notes);
+                foreach (var noteGroup in this.NoteGroups)
+                {
+                    var delete = noteGroup.FirstOrDefault(c => c.Id == (note as Note).Id);
+                    noteGroup.Remove(delete);
+                }
             }
+
         }
 
         private void RemoveAction(object obj)
         {
             var note = (Note)obj;
-            Notes.Remove(note);
-
+            foreach (var noteGroup in this.NoteGroups)
+            {
+                var delete = noteGroup.FirstOrDefault(c => c.Id == note.Id);
+                noteGroup.Remove(delete);
+            }
 
         }
 
@@ -81,9 +98,14 @@ namespace MatoProductivity.ViewModels
 
         public void Init()
         {
-            var notes = this.repository.GetAllList();
-            this.Notes = new ObservableCollection<Note>(notes);
-            this.Notes.CollectionChanged += Notes_CollectionChanged;
+            var notes = this.repository.GetAllList()
+                .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
+            var notegroupedlist = notes.GroupBy(c => CommonHelper.FormatTimeString(c.CreationTime, "M月d日")).Select(c => new NoteTimeLineGroup(c.Key, c));
+            this.NoteGroups = new ObservableCollection<NoteTimeLineGroup>(notegroupedlist);
+            foreach (var noteGroups in this.NoteGroups)
+            {
+                noteGroups.CollectionChanged += Notes_CollectionChanged;
+            }
         }
 
         private async void Notes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -104,28 +126,42 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNote != default)
                 {
-
-
                     using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
                     {
                         await navigationService.PushAsync(objWrapper.Object);
                     }
-
                     SelectedNote = default;
                 }
             }
-        }
-        private ObservableCollection<Note> _notes;
 
-        public ObservableCollection<Note> Notes
-        {
-            get { return _notes; }
-            set
+            else if (e.PropertyName == nameof(SearchKeywords))
             {
-                _notes = value;
-                RaisePropertyChanged();
+                if (string.IsNullOrEmpty(SearchKeywords))
+                {
+                    Init();
+                }
             }
         }
+
+        private ObservableCollection<NoteTimeLineGroup> _noteGroups;
+
+        public ObservableCollection<NoteTimeLineGroup> NoteGroups
+        {
+            get { return _noteGroups; }
+            set
+            {
+                _noteGroups = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Notes));
+            }
+        }
+
+
+
+
+
+        public IEnumerable<Note> Notes => NoteGroups.SelectMany(c => c);
+
 
         private Note _selectedNote;
 
@@ -141,9 +177,9 @@ namespace MatoProductivity.ViewModels
         }
 
 
-        private ObservableCollection<Note> _selectedNotes;
+        private ObservableCollection<object> _selectedNotes;
 
-        public ObservableCollection<Note> SelectedNotes
+        public ObservableCollection<object> SelectedNotes
         {
             get { return _selectedNotes; }
             set
@@ -168,6 +204,19 @@ namespace MatoProductivity.ViewModels
             }
         }
 
+        private string _searchKeywords;
+
+        public string SearchKeywords
+        {
+            get { return _searchKeywords; }
+            set
+            {
+                _searchKeywords = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
 
 
         public SelectionMode SelectionMode => IsEditing ? SelectionMode.Multiple : SelectionMode.Single;
@@ -178,5 +227,6 @@ namespace MatoProductivity.ViewModels
         public Command Edit { get; set; }
         public Command RemoveSelected { get; set; }
         public Command SelectAll { get; set; }
+        public Command Search { get; set; }
     }
 }

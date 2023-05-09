@@ -36,6 +36,32 @@ namespace MatoProductivity.Infrastructure.Helper
             return arr;
         }
 
+        public static string FormatTimeString(DateTime dateTime,  string format= "yyyy年MM月dd日 HH:mm:ss")
+        {            
+            DateTime now = DateTime.Now;
+            double diff = (now - dateTime).TotalSeconds;
 
+            if (diff < 30)
+            {
+                return "刚刚";
+            }
+            else if (diff < 3600)
+            {
+                // less 1 hour
+                return Math.Ceiling(diff / 60) + "分钟前";
+            }
+            else if (diff < 3600 * 24)
+            {
+                return Math.Ceiling(diff / 3600) + "小时前";
+            }
+            else if (diff < 3600 * 24 * 2)
+            {
+                return "1天前";
+            }
+            else
+            {
+                return dateTime.ToString(format);
+            }
+        }
     }
 }

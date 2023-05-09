@@ -27,7 +27,7 @@ namespace MatoProductivity.ViewModels
             this.PropertyChanged += NoteTemplatePageViewModel_PropertyChangedAsync;
             //Init();
         }
-
+    
         public void Init()
         {
             var noteTemplates = this.repository.GetAllList();

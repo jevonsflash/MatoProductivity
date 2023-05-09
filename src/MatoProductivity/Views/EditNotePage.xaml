@@ -8,12 +8,42 @@
     <ContentPage.Resources>
 
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector" />
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
     </ContentPage.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-        </Grid.RowDefinitions>
+    <VerticalStackLayout>
+        <HorizontalStackLayout>
+            <Button Text="添加片段"
+                    Command="{Binding CreateSegmentFromStore}"
+                    CommandParameter="DateTimeSegment"></Button>
+
+            <Button Text="删除"
+                    Command="{Binding Remove}"></Button>
+
+            <Button Text="提交"
+                    Command="{Binding Submit}"></Button>
+
+            <Button Text="删除选中片段"
+                    IsEnabled="{Binding IsConfiguratingNoteSegment}"
+                    Command="{Binding RemoveSelectedSegment}"></Button>
+
+            <Button Text="全选片段"
+                    IsEnabled="{Binding IsConfiguratingNoteSegment}"
+                    Command="{Binding SelectAllSegment}"></Button>
+        </HorizontalStackLayout>
 
         <CollectionView x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteSegments}"
@@ -60,23 +90,6 @@
             </CollectionView.Footer>
         </CollectionView>
 
-        <StackLayout Grid.Row="1">
 
-            <Button Text="删除选中"
-                    IsVisible="{Binding IsConfiguratingNoteSegment}"
-                    Command="{Binding RemoveSelectedSegment}"></Button>
-
-
-            <Button Text="全选"
-                    IsVisible="{Binding IsConfiguratingNoteSegment}"
-                    Command="{Binding SelectAllSegment}"></Button>
-
-            <Button Text="添加"
-                    Command="{Binding CreateSegmentFromStore}"
-                    CommandParameter="DateTimeSegment"></Button>
-
-            <Button Text="提交"
-                    Command="{Binding Submit}"></Button>
-        </StackLayout>
-    </Grid>
+    </VerticalStackLayout>
 </mato:ContentPageBase>

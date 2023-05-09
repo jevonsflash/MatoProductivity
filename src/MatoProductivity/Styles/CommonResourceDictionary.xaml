@@ -97,5 +97,7 @@
     </converter:Bool2StringConverter>
     <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter">
     </converter:DateTimeToStringConverter>
+    <converter:DateTimeToFormatTimeStringConverter x:Key="DateTimeToFormatTimeStringConverter">
+    </converter:DateTimeToFormatTimeStringConverter>
     <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
 </ResourceDictionary>

@@ -1,4 +1,5 @@
 using Abp.Dependency;
+using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.ViewModels;
 
 namespace MatoProductivity.Views;
@@ -18,4 +19,6 @@ public partial class NoteListPage : ContentPageBase, ITransientDependency
     {
         noteListPageViewModel.Init();
     }
+
+    
 }

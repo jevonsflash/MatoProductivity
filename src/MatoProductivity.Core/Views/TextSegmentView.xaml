@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:core="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity.Core"
+             xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity.Core"
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
     <Grid>
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
             <Label>
                 <Label.FormattedText>
                     <FormattedString>
@@ -16,7 +16,7 @@
             <Label Text="{Binding Content}"></Label>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
             <Label Text="{Binding Title}"></Label>
             <Editor Text="{Binding Content}"
                     Placeholder="{Binding PlaceHolder}"></Editor>
@@ -24,7 +24,7 @@
    
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
             <Entry  Text="{Binding Title}"
                     Placeholder="请输入标题" />
             <Entry  Text="{Binding PlaceHolder}"

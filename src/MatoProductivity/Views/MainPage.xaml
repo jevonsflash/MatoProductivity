@@ -4,7 +4,11 @@
              x:Class="MatoProductivity.MainPage"
       
             FlyoutBackgroundColor="{DynamicResource PhoneAccentBrush}">
-
+    <Shell.SearchHandler>
+        <SearchHandler Placeholder="Enter search term"
+                                      ShowsResults="true"
+                                      DisplayMemberName="Name" />
+    </Shell.SearchHandler>
     <TabBar>
         <Tab  Title="场景" Icon="headphone.png">
             <ShellContent  x:Name="NoteTemplateContent"/>
