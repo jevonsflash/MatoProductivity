@@ -13,7 +13,7 @@ using MatoProductivity.Core.ViewModels;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NotePageViewModel : ViewModelBase, ITransientDependency, IDraggableViewModel
+    public class NotePageViewModel : ViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer, IDraggableViewModel
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
@@ -38,12 +38,12 @@ namespace MatoProductivity.ViewModels
             this.iocResolver = iocResolver;
             this.PropertyChanged += NotePageViewModel_PropertyChanged;
 
-            ItemDragged = new Command<INoteSegmentService>(OnItemDragged);
-            ItemDraggedOver = new Command<INoteSegmentService>(OnItemDraggedOver);
-            ItemDragLeave = new Command<INoteSegmentService>(OnItemDragLeave);
-            ItemDropped = new Command<INoteSegmentService>(i => OnItemDropped(i));
+            ItemDragged = new Command(OnItemDragged);
+            ItemDraggedOver = new Command(OnItemDraggedOver);
+            ItemDragLeave = new Command(OnItemDragLeave);
+            ItemDropped = new Command(i => OnItemDropped(i));
         }
-        private void OnItemDragged(INoteSegmentService item)
+        private void OnItemDragged(object item)
         {
             foreach (var noteSegment in NoteSegments)
             {
@@ -51,7 +51,7 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private void OnItemDraggedOver(INoteSegmentService item)
+        private void OnItemDraggedOver(object item)
         {
 
             var itemBeingDragged = NoteSegments.FirstOrDefault(i => i.IsBeingDragged);
@@ -62,7 +62,7 @@ namespace MatoProductivity.ViewModels
 
         }
 
-        private void OnItemDragLeave(INoteSegmentService item)
+        private void OnItemDragLeave(object item)
         {
             foreach (var noteSegment in NoteSegments)
             {
@@ -70,10 +70,10 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private void OnItemDropped(INoteSegmentService item)
+        private void OnItemDropped(object item)
         {
             var itemToMove = NoteSegments.First(i => i.IsBeingDragged);
-            var itemToInsertBefore = item;
+            var itemToInsertBefore = item as INoteSegmentService;
 
             if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
                 return;
@@ -137,6 +137,11 @@ namespace MatoProductivity.ViewModels
 
               noteSegments.Select(GetNoteSegmentViewModel)
               );
+
+            foreach (var noteSegment in NoteSegments)
+            {
+                noteSegment.Container = this;
+            }
         }
 
         private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)

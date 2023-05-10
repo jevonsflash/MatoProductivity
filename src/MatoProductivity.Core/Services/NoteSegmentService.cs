@@ -34,16 +34,65 @@ namespace MatoProductivity.Core.Services
             this.payloadRepository = payloadRepository;
             NoteSegment = noteSegment;
             NoteSegmentState = NoteSegmentState.Config;
+
+            Dragged = new Command(OnDragged);
+            DraggedOver = new Command(OnDraggedOver);
+            DragLeave = new Command(OnDragLeave);
+            Dropped = new Command(i => OnDropped(i));
+
+        }
+
+        private void OnDragged(object item)
+        {
+            IsBeingDragged=true;
+        }
+
+        private void OnDraggedOver(object item)
+        {
+            if (!IsBeingDragged)
+            {
+                IsBeingDraggedOver=true;
+            }
+
+        }
+
+        private void OnDragLeave(object item)
+        {
+
+            IsBeingDraggedOver = false;
+
+        }
+
+        private void OnDropped(object item)
+        {
+            var itemToMove = Container.NoteSegments.First(i => i.IsBeingDragged);
+
+            if (itemToMove == null ||  itemToMove == this)
+                return;
+
+
+            Container.NoteSegments.Remove(itemToMove);
+
+            var insertAtIndex = Container.NoteSegments.IndexOf(this);
+
+            Container.NoteSegments.Insert(insertAtIndex, itemToMove);
+            itemToMove.IsBeingDragged = false;
+            this.IsBeingDraggedOver = false;
+
+
         }
 
         private async void RemoveAction(object obj)
         {
-            Container?.RemoveSegment.Execute(this);
+            if (Container is INoteSegmentServiceContainer)
+            {
+                (Container as INoteSegmentServiceContainer).RemoveSegment.Execute(this);
+            }
         }
 
         public abstract void CreateAction(object obj);
 
-        public INoteSegmentServiceContainer Container { get; set; }
+        public IReadOnlyNoteSegmentServiceContainer Container { get; set; }
 
 
         private NoteSegment noteSegment;
@@ -138,5 +187,14 @@ namespace MatoProductivity.Core.Services
         public Command Submit { get; set; }
         public Command Create { get; set; }
         public Command Remove { get; set; }
+
+
+        public Command Dragged { get; set; }
+
+        public Command DraggedOver { get; set; }
+
+        public Command DragLeave { get; set; }
+
+        public Command Dropped { get; set; }
     }
 }

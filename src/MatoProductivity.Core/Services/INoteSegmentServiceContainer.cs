@@ -3,11 +3,10 @@ using System.Collections.ObjectModel;
 
 namespace MatoProductivity.Core.ViewModels
 {
-    public interface INoteSegmentServiceContainer
+    public interface INoteSegmentServiceContainer: IReadOnlyNoteSegmentServiceContainer
     {
         Command CreateSegment { get; set; }
         bool IsConfiguratingNoteSegment { get; set; }
-        ObservableCollection<INoteSegmentService> NoteSegments { get; set; }
         Command RemoveSegment { get; set; }
     }
 }

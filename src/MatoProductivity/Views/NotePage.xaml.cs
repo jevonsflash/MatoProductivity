@@ -19,4 +19,9 @@ public partial class NotePage : ContentPageBase, ITransientDependency
     {
 
     }
+
+    private void DropGestureRecognizer_DragOver(object sender, DragEventArgs e)
+    {
+
+    }
 }

@@ -34,4 +34,9 @@ public partial class EditNotePage : ContentPageBase, ITransientDependency
     {
 
     }
+
+    private void DragGestureRecognizer_DragStarting_Collection(object sender, DragStartingEventArgs e)
+    {
+
+    }
 }

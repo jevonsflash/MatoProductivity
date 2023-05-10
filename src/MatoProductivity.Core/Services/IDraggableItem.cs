@@ -4,5 +4,11 @@
     {
         bool IsBeingDraggedOver { get; set; }
         bool IsBeingDragged { get; set; }
+        Command Dragged { get; set; }
+        Command DraggedOver { get; set; }
+
+        Command DragLeave { get; set; }
+
+        Command Dropped { get; set; }
     }
 }

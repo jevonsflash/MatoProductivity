@@ -24,11 +24,12 @@
                             Padding="8">
                         <Frame.GestureRecognizers>
                             <DropGestureRecognizer AllowDrop="True"
-                                                   DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference MainCollectionView}}"
+                                                  
+                                                   DragLeaveCommand="{TemplateBinding BindingContext.DragLeave}"
                                                    DragLeaveCommandParameter="{TemplateBinding}"
-                                                   DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={x:Reference MainCollectionView}}"
+                                                   DragOverCommand="{TemplateBinding BindingContext.DraggedOver}"
                                                    DragOverCommandParameter="{TemplateBinding}"
-                                                   DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference MainCollectionView}}"
+                                                   DropCommand="{TemplateBinding BindingContext.Dropped}"
                                                    DropCommandParameter="{TemplateBinding}" />
                         </Frame.GestureRecognizers>
                         <Grid>
@@ -39,7 +40,8 @@
                             </Grid.ColumnDefinitions>
                             <Grid.GestureRecognizers>
                                 <DragGestureRecognizer CanDrag="True"
-                                                       DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MainCollectionView}}"
+                                                       DragStarting="DragGestureRecognizer_DragStarting_Collection"
+                                                       DragStartingCommand="{TemplateBinding BindingContext.Dragged}"
                                                        DragStartingCommandParameter="{TemplateBinding}" />
                             </Grid.GestureRecognizers>
 
@@ -59,11 +61,11 @@
                    Padding="8">
                 <Frame.GestureRecognizers>
                     <DropGestureRecognizer AllowDrop="True"
-                                           DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference MainCollectionView}}"
+                                           DragLeaveCommand="{TemplateBinding BindingContext.DragLeave}"
                                            DragLeaveCommandParameter="{TemplateBinding}"
-                                           DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={x:Reference MainCollectionView}}"
+                                           DragOverCommand="{TemplateBinding BindingContext.DraggedOver}"
                                            DragOverCommandParameter="{TemplateBinding}"
-                                           DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference MainCollectionView}}"
+                                           DropCommand="{TemplateBinding BindingContext.Dropped}"
                                            DropCommandParameter="{TemplateBinding}" />
                 </Frame.GestureRecognizers>
 
@@ -82,7 +84,8 @@
                     </Grid.ColumnDefinitions>
                     <Grid.GestureRecognizers>
                         <DragGestureRecognizer CanDrag="True"
-                                               DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MainCollectionView}}"
+                                               DragStarting="DragGestureRecognizer_DragStarting_Collection"
+                                               DragStartingCommand="{TemplateBinding BindingContext.Dragged}"
                                                DragStartingCommandParameter="{TemplateBinding}" />
                     </Grid.GestureRecognizers>
                     <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
