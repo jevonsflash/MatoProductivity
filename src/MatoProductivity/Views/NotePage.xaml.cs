@@ -14,4 +14,9 @@ public partial class NotePage : ContentPageBase, ITransientDependency
         this.NotePageViewModel.NoteId = NoteId;
 
     }
+
+    private void DragGestureRecognizer_DragStarting_Collection(object sender, DragStartingEventArgs e)
+    {
+
+    }
 }

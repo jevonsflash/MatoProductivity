@@ -1,4 +1,4 @@
-﻿namespace MatoProductivity.ViewModels
+﻿namespace MatoProductivity.Core.ViewModels
 {
     public interface ISearchViewModel
     {

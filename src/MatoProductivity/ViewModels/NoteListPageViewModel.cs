@@ -4,6 +4,7 @@ using Abp.Domain.Repositories;
 using Castle.MicroKernel.Registration;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
+using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Infrastructure.Helper;
 using MatoProductivity.Services;
 using MatoProductivity.Views;

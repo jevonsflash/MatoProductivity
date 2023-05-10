@@ -3,11 +3,119 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                       xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
+                      x:Name="MainPage"
                       x:Class="MatoProductivity.Views.EditNotePage"
                       Title="EditNotePage">
     <ContentPage.Resources>
+        <ControlTemplate x:Key="NoteSegmentCardViewPhone">
+            <Grid>
+                <SwipeView>
+                    <SwipeView.LeftItems>
+                        <SwipeItems>
+                            <SwipeItem Text="删除"
+                                       Command="{TemplateBinding BindingContext.Remove}"
+                                       IconImageSource="delete.png"
+                                       BackgroundColor="Red" />
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
+                    <Frame  HasShadow="True"
+                            Margin="0,10,0,10"
+                            CornerRadius="5"
+                            Padding="8">
+                        <Frame.GestureRecognizers>
+                            <DropGestureRecognizer AllowDrop="True"
+                                                   DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference MainCollectionView}}"
+                                                   DragLeaveCommandParameter="{TemplateBinding}"
+                                                   DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={x:Reference MainCollectionView}}"
+                                                   DragOverCommandParameter="{TemplateBinding}"
+                                                   DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference MainCollectionView}}"
+                                                   DropCommandParameter="{TemplateBinding}" />
+                        </Frame.GestureRecognizers>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.GestureRecognizers>
+                                <DragGestureRecognizer CanDrag="True"
+                                                       DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MainCollectionView}}"
+                                                       DragStartingCommandParameter="{TemplateBinding}" />
+                            </Grid.GestureRecognizers>
+                            <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+                                   FontFamily="FontAwesome"></Label>
+                            <ContentPresenter Grid.Column="1" />
+                        </Grid>
+                    </Frame>
+                </SwipeView>
+            </Grid>
+        </ControlTemplate>
 
-        <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector" />
+        <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
+            <Frame HasShadow="True"
+                   Margin="0,10,0,10"
+                   CornerRadius="5"
+                   Padding="8">
+                <Frame.GestureRecognizers>
+                    <DropGestureRecognizer AllowDrop="True"
+                                           DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference MainCollectionView}}"
+                                           DragLeaveCommandParameter="{TemplateBinding}"
+                                           DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={x:Reference MainCollectionView}}"
+                                           DragOverCommandParameter="{TemplateBinding}"
+                                           DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference MainCollectionView}}"
+                                           DropCommandParameter="{TemplateBinding}" />
+                </Frame.GestureRecognizers>
+
+                <FlyoutBase.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="删除"
+                                        Command="{TemplateBinding BindingContext.Remove}" />
+                    </MenuFlyout>
+                </FlyoutBase.ContextFlyout>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="50"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.GestureRecognizers>
+                        <DragGestureRecognizer CanDrag="True"
+                                               DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MainCollectionView}}"
+                                               DragStartingCommandParameter="{TemplateBinding}" />
+                    </Grid.GestureRecognizers>
+                    <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+                           FontFamily="FontAwesome"></Label>
+                    <ContentPresenter Grid.Column="1" />
+                </Grid>
+            </Frame>
+
+        </ControlTemplate>
+
+        <DataTemplate x:Key="DateTimeSegment">
+            <core:DateTimeSegmentView>
+                <core:DateTimeSegmentView.ControlTemplate>
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+                </core:DateTimeSegmentView.ControlTemplate>
+            </core:DateTimeSegmentView>
+        </DataTemplate>
+        <DataTemplate x:Key="TextSegment">
+            <core:TextSegmentView>
+                <core:TextSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:TextSegmentView.ControlTemplate>
+            </core:TextSegmentView>
+        </DataTemplate>
+        <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
+                                              ResourcesContainer="{x:Reference MainPage}" />
         <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>

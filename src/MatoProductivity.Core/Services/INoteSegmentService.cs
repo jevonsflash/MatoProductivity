@@ -3,7 +3,7 @@ using MatoProductivity.Core.ViewModels;
 
 namespace MatoProductivity.Core.Services
 {
-    public interface INoteSegmentService
+    public interface INoteSegmentService:IDraggableItem
     {
         NoteSegment NoteSegment { get; set; }
         Command Submit { get; set; }

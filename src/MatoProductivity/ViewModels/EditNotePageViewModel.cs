@@ -12,11 +12,13 @@ using MatoProductivity.Services;
 using MatoProductivity.Views;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace MatoProductivity.ViewModels
 {
-    public class EditNotePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer
+    public class EditNotePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer, IDraggableViewModel
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
@@ -43,17 +45,69 @@ namespace MatoProductivity.ViewModels
             Remove = new Command(RemoveAction);
             SelectAllSegment = new Command(SelectAllSegmentAction);
             RemoveSelectedSegment = new Command(RemoveSelectedSegmentAction);
+
+            ItemDragged = new Command<INoteSegmentService>(OnItemDragged);
+            ItemDraggedOver = new Command<INoteSegmentService>(OnItemDraggedOver);
+            ItemDragLeave = new Command<INoteSegmentService>(OnItemDragLeave);
+            ItemDropped = new Command<INoteSegmentService>(i => OnItemDropped(i));
+
+
             IsConfiguratingNoteSegment = true;
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.templateRepository = templateRepository;
-            this.noteSegmentRepository=noteSegmentRepository;
+            this.noteSegmentRepository = noteSegmentRepository;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
             this.PropertyChanged += EditNotePageViewModel_PropertyChanged;
             SelectedNoteSegments = new ObservableCollection<object>();
 
+        }
+
+        private void OnItemDragged(INoteSegmentService item)
+        {
+            foreach (var noteSegment in NoteSegments)
+            {
+                noteSegment.IsBeingDragged = noteSegment == item;
+            }
+        }
+
+        private void OnItemDraggedOver(INoteSegmentService item)
+        {
+
+            var itemBeingDragged = NoteSegments.FirstOrDefault(i => i.IsBeingDragged);
+            foreach (var noteSegment in NoteSegments)
+            {
+                noteSegment.IsBeingDraggedOver = item == noteSegment && item != itemBeingDragged;
+            }
+
+        }
+
+        private void OnItemDragLeave(INoteSegmentService item)
+        {
+            foreach (var noteSegment in NoteSegments)
+            {
+                noteSegment.IsBeingDraggedOver = false;
+            }
+        }
+
+        private void OnItemDropped(INoteSegmentService item)
+        {
+            var itemToMove = NoteSegments.First(i => i.IsBeingDragged);
+            var itemToInsertBefore = item;
+
+            if (itemToMove == null || itemToInsertBefore == null || itemToMove == itemToInsertBefore)
+                return;
+
+
+            NoteSegments.Remove(itemToMove);
+
+            var insertAtIndex = NoteSegments.IndexOf(itemToInsertBefore);
+
+            NoteSegments.Insert(insertAtIndex, itemToMove);
+            itemToMove.IsBeingDragged = false;
+            itemToInsertBefore.IsBeingDraggedOver = false;
         }
 
         private void SelectAllSegmentAction(object obj)
@@ -218,7 +272,7 @@ namespace MatoProductivity.ViewModels
 
                 foreach (var noteSegment in NoteSegments)
                 {
-                    noteSegment.Container=this;
+                    noteSegment.Container = this;
                 }
             }
 
@@ -421,12 +475,12 @@ namespace MatoProductivity.ViewModels
             {
                 if (!NoteSegments.Select(c => c.NoteSegment)
                       .Where(c => !c.IsTransient())
-                      .Any(c => c.Id==noteSegment.Id))
+                      .Any(c => c.Id == noteSegment.Id))
                 {
                     await noteSegmentRepository.DeleteAsync(noteSegment.Id);
                 }
             }
-     
+
             foreach (var noteSegment in NoteSegments)
             {
                 await noteSegmentRepository.InsertOrUpdateAsync(noteSegment.NoteSegment);
@@ -448,6 +502,15 @@ namespace MatoProductivity.ViewModels
         public Command RemoveSegment { get; set; }
         public Command RemoveSelectedSegment { get; set; }
         public Command SelectAllSegment { get; set; }
+
+        //Drag and drop
+        public Command ItemDragged { get; set; }
+
+        public Command ItemDraggedOver { get; set; }
+
+        public Command ItemDragLeave { get; set; }
+
+        public Command ItemDropped { get; set; }
 
     }
 }

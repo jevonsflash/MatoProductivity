@@ -84,7 +84,7 @@ namespace MatoProductivity.Core.Services
             var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == this.NoteSegment.Id);
             foreach (var item in this.NoteSegment.NoteSegmentPayloads)
             {
-                if (!payloadEntities.Any(c => c.Key==item.Key))
+                if (!payloadEntities.Any(c => c.Key == item.Key))
                 {
                     await payloadRepository.InsertAsync(item);
 
@@ -95,19 +95,44 @@ namespace MatoProductivity.Core.Services
             foreach (var payloadEntity in payloadEntities)
             {
                 var currentPayload = this.NoteSegment.GetNoteSegmentPayload(payloadEntity.Key);
-                if (currentPayload==null)
+                if (currentPayload == null)
                 {
                     await payloadRepository.DeleteAsync(payloadEntity);
                 }
                 else
                 {
-                    payloadEntity.Value=currentPayload.Value;
-                    payloadEntity.ValueType=currentPayload.ValueType;
+                    payloadEntity.Value = currentPayload.Value;
+                    payloadEntity.ValueType = currentPayload.ValueType;
                     await payloadRepository.UpdateAsync(payloadEntity);
                 }
             }
             UnitOfWorkManager.Current.SaveChanges();
 
+        }
+
+
+        private bool _isBeingDragged;
+        public bool IsBeingDragged
+        {
+            get { return _isBeingDragged; }
+            set
+            {
+                _isBeingDragged = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+        private bool _isBeingDraggedOver;
+        public bool IsBeingDraggedOver
+        {
+            get { return _isBeingDraggedOver; }
+            set
+            {
+                _isBeingDraggedOver = value;
+                RaisePropertyChanged();
+
+            }
         }
 
         public Command Submit { get; set; }

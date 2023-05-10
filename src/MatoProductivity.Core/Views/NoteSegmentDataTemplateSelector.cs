@@ -11,6 +11,9 @@ namespace MatoProductivity.Core.Views
 {
     public class NoteSegmentDataTemplateSelector : DataTemplateSelector
     {
+
+        public object ResourcesContainer { get; set; }
+
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             if (item == null)
@@ -20,7 +23,12 @@ namespace MatoProductivity.Core.Views
             if (item is INoteSegmentService)
             {
                 var dataTemplateName = (item as INoteSegmentService).NoteSegment.Type;
-                return Application.Current.Resources[dataTemplateName] as DataTemplate;
+                if (dataTemplateName == null) { return default; }
+                if (ResourcesContainer == null)
+                {
+                    return Application.Current.Resources[dataTemplateName] as DataTemplate;
+                }
+                return (ResourcesContainer as VisualElement).Resources[dataTemplateName] as DataTemplate;
 
             }
             return default;
