@@ -2,6 +2,7 @@
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Castle.MicroKernel.Registration;
+using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Core.ViewModels;
@@ -18,6 +19,7 @@ namespace MatoProductivity.ViewModels
         private readonly IRepository<Note, long> repository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
+        private NotePage notePagePage;
 
         public NoteListPageViewModel(
             IRepository<Note, long> repository,
@@ -130,7 +132,10 @@ namespace MatoProductivity.ViewModels
                 {
                     using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
                     {
-                        await navigationService.PushAsync(objWrapper.Object);
+                        notePagePage = objWrapper.Object;
+                        (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone; ;
+
+                        await navigationService.ShowPopupAsync(notePagePage);
                     }
                     SelectedNote = default;
                 }
@@ -143,6 +148,13 @@ namespace MatoProductivity.ViewModels
                     Init();
                 }
             }
+        }
+
+        private async void NoteListPageViewModel_OnDone(object sender, EventArgs e)
+        {
+            await navigationService.HidePopupAsync(notePagePage);
+            this.Init();
+
         }
 
         private ObservableCollection<NoteTimeLineGroup> _noteGroups;

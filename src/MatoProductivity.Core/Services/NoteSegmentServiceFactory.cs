@@ -35,6 +35,12 @@ namespace MatoProductivity.Core.Services
                         newModel = objWrapper.Object;
                     }
                     break;
+                case "TimerSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<TimerSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
                 default:
                     newModel = null;
                     break;

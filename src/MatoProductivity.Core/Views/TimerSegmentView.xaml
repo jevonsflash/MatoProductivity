@@ -2,16 +2,13 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:core="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity.Core"
-             x:Class="MatoProductivity.Core.Views.DateTimeSegmentView">
+             x:Class="MatoProductivity.Core.Views.TimerSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
-            <Label  FontSize="Large"
-                    Text="{Binding Title}"></Label>
-
             <Label FontSize="Large">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text=" 于 "></Span>
+                        <Span Text="将于 "></Span>
                         <Span Text="{Binding ExactTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
                     </FormattedString>
                 </Label.FormattedText>
@@ -28,22 +25,15 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
-            <Label Text="{Binding Title}"></Label>
-            <DatePicker Date="{Binding Time}"
-                        IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-            <TimePicker Time="{Binding TimeOffset}"
-                        IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+            <DatePicker Date="{Binding Time}"></DatePicker>
+            <TimePicker Time="{Binding TimeOffset}"></TimePicker>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
-            <Entry  Text="{Binding Title}"
-                    Placeholder="请输入标题" />
-            <DatePicker Date="{Binding Time}"
-                        IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-            <TimePicker Time="{Binding TimeOffset}"
-                        IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
-            <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
-            <Switch IsToggled="{Binding IsShowFromNow, Mode=TwoWay}"></Switch>
+            <Entry  Text="{Binding NotificationContent}"
+                    Placeholder="请输入通知内容" />
+            <DatePicker Date="{Binding Time}"></DatePicker>
+            <TimePicker Time="{Binding TimeOffset}"></TimePicker>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

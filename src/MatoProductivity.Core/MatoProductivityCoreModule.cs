@@ -1,4 +1,5 @@
 ﻿using Abp.AutoMapper;
+using Abp.BackgroundJobs;
 using Abp.Domain.Entities.Auditing;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -39,8 +40,6 @@ namespace MatoProductivity.Core
             string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), MatoProductivityConsts.LocalizationSourceName, dbName);
 
             Configuration.DefaultNameOrConnectionString = String.Format(connectionString, dbPath);
-
-
 
             Configuration.Modules.AbpAutoMapper().Configurators.Add(config =>
             {

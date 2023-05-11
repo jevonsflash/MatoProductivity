@@ -117,6 +117,19 @@
                 </core:TextSegmentView.ControlTemplate>
             </core:TextSegmentView>
         </DataTemplate>
+        <DataTemplate x:Key="TimerSegment">
+            <core:TimerSegmentView>
+                <core:TimerSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:TimerSegmentView.ControlTemplate>
+            </core:TimerSegmentView>
+        </DataTemplate>
+
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                               ResourcesContainer="{x:Reference MainPage}" />
         <Style TargetType="Grid">

@@ -3,7 +3,7 @@ using MatoProductivity.ViewModels;
 
 namespace MatoProductivity.Views;
 
-public partial class NotePage : ContentPageBase, ITransientDependency
+public partial class NotePage : PopupBase, ITransientDependency
 {
     private NotePageViewModel NotePageViewModel => this.BindingContext as NotePageViewModel;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Abp;
+using Abp.BackgroundJobs;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
 using Castle.Facilities.Logging;

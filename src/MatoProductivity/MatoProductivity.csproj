@@ -72,6 +72,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Platforms\iOS\LocalNotification.cs">
+	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+	  </Compile>
 	  <Compile Update="Views\NotePage.xaml.cs">
 	    <DependentUpon>NotePage.xaml</DependentUpon>
 	  </Compile>

@@ -1,5 +1,6 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Abp.Threading.Timers;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
 using System;
@@ -9,17 +10,25 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class DataTimeSegmentService : NoteSegmentService, ITransientDependency, IAutoSet
+    public class DataTimeSegmentService : NoteSegmentService, ITransientDependency, IAutoSet, IHasTimer
     {
 
         private NoteSegmentPayload DefaultIsAutoSetNoteSegmentPayload => new NoteSegmentPayload(nameof(IsAutoSet), false.ToString());
         private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), DateTime.Now.ToString());
         public DataTimeSegmentService(
+             AbpAsyncTimer timer,
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += DataTimeSegmentViewModel_PropertyChanged;
+            this.timer = timer;
+            this.timer.Period = 1000;
+            this.timer.Elapsed = async (timer) =>
+            {
+                await Task.Run(() => RaisePropertyChanged(nameof(TimeFromNow)));
+            };
+            this.timer.Start();
         }
 
         private async void DataTimeSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -53,9 +62,9 @@ namespace MatoProductivity.Core.Services
                 NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
             }
 
-            else if (e.PropertyName == nameof(Time) || e.PropertyName == nameof(TimeOffset))
+            else if (e.PropertyName == nameof(ExactTime))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), Time+TimeOffset));
+                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), ExactTime));
             }
 
             else if (e.PropertyName == nameof(Title))
@@ -72,6 +81,19 @@ namespace MatoProductivity.Core.Services
             NoteSegment?.SetNoteSegmentPayloads(DefaultIsAutoSetNoteSegmentPayload);
         }
 
+        private bool _isShowFromNow;
+
+
+        public bool IsShowFromNow
+        {
+            get { return _isShowFromNow; }
+            set
+            {
+                _isShowFromNow = value;
+                RaisePropertyChanged();
+
+            }
+        }
 
         private DateTime _time;
 
@@ -83,6 +105,7 @@ namespace MatoProductivity.Core.Services
                 _time = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(ExactTime));
+                RaisePropertyChanged(nameof(TimeFromNow));
             }
         }
 
@@ -96,12 +119,13 @@ namespace MatoProductivity.Core.Services
                 _timeOffset = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(ExactTime));
+                RaisePropertyChanged(nameof(TimeFromNow));
             }
         }
 
         public DateTime ExactTime => Time+TimeOffset;
 
-
+        public TimeSpan TimeFromNow => DateTime.Now - ExactTime;
 
         private string _title;
 
@@ -117,6 +141,7 @@ namespace MatoProductivity.Core.Services
 
 
         private bool _isAutoSet;
+        private readonly AbpAsyncTimer timer;
 
         public bool IsAutoSet
         {

@@ -62,11 +62,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Platforms\iOS\" />
 		<Folder Include="Platforms\Windows\" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Views\TimerSegmentView.xaml.cs">
+		  <DependentUpon>TimerSegmentView.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\TextSegmentView.xaml.cs">
 			<SubType>Code</SubType>
 			<DependentUpon>TextSegmentView.xaml</DependentUpon>
@@ -74,6 +76,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Views\TimerSegmentView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\TextSegmentView.xaml">
 			<SubType>Designer</SubType>
 			<Generator>MSBuild:Compile</Generator>
