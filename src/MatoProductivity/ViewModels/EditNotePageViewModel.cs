@@ -51,6 +51,7 @@ namespace MatoProductivity.ViewModels
             ItemDragLeave = new Command(OnItemDragLeave);
             ItemDropped = new Command(i => OnItemDropped(i));
 
+            SwitchState=new Command(SwitchStateAction);
 
             IsConfiguratingNoteSegment = true;
             this.navigationService = navigationService;
@@ -64,7 +65,10 @@ namespace MatoProductivity.ViewModels
             SelectedNoteSegments = new ObservableCollection<object>();
 
         }
-
+        private void SwitchStateAction(object obj)
+        {
+            this.IsConfiguratingNoteSegment= !this.IsConfiguratingNoteSegment;
+        }
         private void OnItemDragged(object item)
         {
             foreach (var noteSegment in NoteSegments)
@@ -511,6 +515,8 @@ namespace MatoProductivity.ViewModels
         public Command ItemDragLeave { get; set; }
 
         public Command ItemDropped { get; set; }
+
+        public Command SwitchState { get; set; }
 
     }
 }

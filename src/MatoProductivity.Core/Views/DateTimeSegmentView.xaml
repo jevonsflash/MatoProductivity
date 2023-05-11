@@ -20,7 +20,7 @@
             <Label FontSize="Large">
                 <Label.FormattedText>
                     <FormattedString>
-                        <Span Text="还剩 "></Span>
+                        <Span Text="{Binding TimeFromNow, Converter={StaticResource TimeSpanToFormatStringConverter}}"></Span>
                         <Span Text="{Binding TimeFromNow}"></Span>
                     </FormattedString>
                 </Label.FormattedText>

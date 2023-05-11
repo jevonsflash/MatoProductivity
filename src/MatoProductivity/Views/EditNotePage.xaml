@@ -148,28 +148,41 @@
             </Setter>
         </Style>
     </ContentPage.Resources>
-    <VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         <HorizontalStackLayout>
             <Button Text="添加片段"
+                    Style="{StaticResource TextButton}"
                     Command="{Binding CreateSegmentFromStore}"
                     CommandParameter="DateTimeSegment"></Button>
 
             <Button Text="删除"
+                    Style="{StaticResource TextButton}"
                     Command="{Binding Remove}"></Button>
 
             <Button Text="提交"
+                    Style="{StaticResource TextButton}"
                     Command="{Binding Submit}"></Button>
 
             <Button Text="删除选中片段"
-                    IsEnabled="{Binding IsConfiguratingNoteSegment}"
+                    Style="{StaticResource TextButton}"
+                    IsVisible="{Binding IsConfiguratingNoteSegment}"
                     Command="{Binding RemoveSelectedSegment}"></Button>
 
             <Button Text="全选片段"
-                    IsEnabled="{Binding IsConfiguratingNoteSegment}"
+                    Style="{StaticResource TextButton}"
+                    IsVisible="{Binding IsConfiguratingNoteSegment}"
                     Command="{Binding SelectAllSegment}"></Button>
+            <Button Command="{Binding SwitchState}"
+                    Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
+
         </HorizontalStackLayout>
 
-        <CollectionView x:Name="MainCollectionView"
+        <CollectionView Grid.Row="1"
+                        x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteSegments}"
                         SelectedItems="{Binding SelectedNoteSegments}"
                         SelectedItem="{Binding SelectedNoteSegment}"
@@ -209,11 +222,10 @@
                 <VerticalStackLayout>
                     <Label Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
 
-                    <Switch IsToggled="{Binding IsConfiguratingNoteSegment}"></Switch>
                 </VerticalStackLayout>
             </CollectionView.Footer>
         </CollectionView>
 
 
-    </VerticalStackLayout>
+    </Grid>
 </mato:ContentPageBase>

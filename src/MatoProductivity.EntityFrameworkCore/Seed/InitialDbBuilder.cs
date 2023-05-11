@@ -31,6 +31,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
             CreateNoteSegmentTemplate(noteTemplateId, "开始时间", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId, "结束时间", FaIcons.IconClockO, "DateTimeSegment", "喂奶结束时间", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId, "计时器", FaIcons.IconClockO, "TimerSegment", "", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId2, "备注", FaIcons.IconClockO, "TextSegment", "备注信息", "#000000");
         }
 

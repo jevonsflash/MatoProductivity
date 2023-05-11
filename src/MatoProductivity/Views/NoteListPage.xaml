@@ -77,27 +77,36 @@
         </Style>
     </mato:ContentPageBase.Resources>
 
-    <VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         <HorizontalStackLayout>
             <Button Text="新建"
+                    Style="{StaticResource TextButton}"
                     Command="{Binding Create}"></Button>
             <Button Text="删除选中"
-                    IsEnabled="{Binding IsEditing}"
+                    Style="{StaticResource TextButton}"
+                    IsVisible="{Binding IsEditing}"
                     Command="{Binding RemoveSelected}"></Button>
 
             <Button Text="全选"
-                    IsEnabled="{Binding IsEditing}"
+                    Style="{StaticResource TextButton}"
+                    IsVisible="{Binding IsEditing}"
                     Command="{Binding SelectAll}"></Button>
+            <Button Command="{Binding SwitchState}" Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 
 
         </HorizontalStackLayout>
-        <CollectionView  ItemsLayout="VerticalList"
-                         x:Name="MainCollectionView"
-                         ItemsSource="{Binding NoteGroups}"
-                         SelectedItems="{Binding SelectedNotes}"
-                         SelectionMode="{Binding SelectionMode}"
-                         SelectedItem="{Binding SelectedNote}"
-                         IsGrouped="true">
+        <CollectionView Grid.Row="1"
+                        ItemsLayout="VerticalList"
+                        x:Name="MainCollectionView"
+                        ItemsSource="{Binding NoteGroups}"
+                        SelectedItems="{Binding SelectedNotes}"
+                        SelectionMode="{Binding SelectionMode}"
+                        SelectedItem="{Binding SelectedNote}"
+                        IsGrouped="true">
             <CollectionView.Header>
                 <SearchBar Placeholder="查找笔记"
                            Text="{Binding SearchKeywords}"
@@ -136,9 +145,11 @@
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <Label Text="{Binding Title}" FontSize="Body"></Label>
+                                <Label Text="{Binding Title}"
+                                       FontSize="Body"></Label>
 
-                                <Label Text="{Binding CreationTime, Converter={StaticResource DateTimeToStringConverter}}" Grid.Row="1"
+                                <Label Text="{Binding CreationTime, Converter={StaticResource DateTimeToStringConverter}}"
+                                       Grid.Row="1"
                                        FontSize="Small"
                                        FontAttributes="Bold" />
                             </Grid>
@@ -152,9 +163,8 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Switch IsToggled="{Binding IsEditing}"></Switch>
 
 
 
-    </VerticalStackLayout>
+    </Grid>
 </mato:ContentPageBase>

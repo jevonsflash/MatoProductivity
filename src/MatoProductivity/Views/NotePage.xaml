@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                      xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
-                      xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"                   
-                      x:Class="MatoProductivity.Views.NotePage">
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
+                x:Class="MatoProductivity.Views.NotePage">
 
-    <VerticalStackLayout  x:Name="MainPage">
-        <VerticalStackLayout.Resources>
+    <Grid  x:Name="MainPage">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
             <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
                 <Grid Margin="0,10,0,10"
                       Padding="8">
@@ -39,22 +43,33 @@
 
             <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                                   ResourcesContainer="{x:Reference MainPage}" />
-        </VerticalStackLayout.Resources>
-        <HorizontalStackLayout>
-            <Button Text="删除"
-                    Command="{Binding Remove}"></Button>
-            <Button Text="编辑"
-                    Command="{Binding Edit}"></Button>
-            <Button Text="分享"
-                    Command="{Binding Share}"></Button>
-        </HorizontalStackLayout>
-        <Label FontSize="Large"
-               FontAttributes="Bold"
-               Text="{Binding Title}"></Label>
-        <CollectionView x:Name="MainCollectionView"
+        </Grid.Resources>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label FontSize="Large"
+                   FontAttributes="Bold"
+                   Text="{Binding Title}"></Label>
+            <HorizontalStackLayout Grid.Column="1">
+                <Button Text="删除"
+                        Style="{StaticResource TextButton}"
+                        Command="{Binding Remove}"></Button>
+                <Button Text="编辑"
+                        Style="{StaticResource TextButton}"
+                        Command="{Binding Edit}"></Button>
+                <Button Text="分享"
+                        Style="{StaticResource TextButton}"
+                        Command="{Binding Share}"></Button>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteSegments}"
                         SelectionMode="None"
                         ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
         </CollectionView>
-    </VerticalStackLayout>
+    </Grid>
 </mato:PopupBase>

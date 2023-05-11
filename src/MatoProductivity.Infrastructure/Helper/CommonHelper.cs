@@ -36,8 +36,70 @@ namespace MatoProductivity.Infrastructure.Helper
             return arr;
         }
 
-        public static string FormatTimeString(DateTime dateTime,  string format= "yyyy年MM月dd日 HH:mm:ss")
-        {            
+        public static string FormatTimeSpamString(TimeSpan timeSpan, string format = "yyyy年MM月dd日 HH:mm:ss")
+        {
+            if (timeSpan > TimeSpan.Zero)
+            {
+                return "已过去";
+            }
+            else if (timeSpan==TimeSpan.Zero)
+            {
+                return "现在";
+            }
+            else
+            {
+                return "还剩";
+            }
+        }
+
+        public static string FormatTimeString(DateTime dateTime, string format = "yyyy年MM月dd日 HH:mm:ss")
+        {
+            DateTime now = DateTime.Now;
+            double diff = (now - dateTime).TotalSeconds;
+
+            if (diff < 30)
+            {
+                return "刚刚";
+            }
+            else if (diff < 3600)
+            {
+                // less 1 hour
+                return "几分钟前";
+            }
+            else if (diff < 3600 * 24)
+            {
+                return "今天";
+            }
+            else if (diff < 3600 * 24 * 7)
+            {
+                return "本周";
+            }
+
+            else if (diff < 3600 * 24 * 30)
+            {
+                return "本月";
+            }
+            else if (diff < 3600 * 24 * 365)
+            {
+                return "今年";
+            }
+
+            else if (diff < 3600 * 24 * 365*2)
+            {
+                return "一年前";
+            }
+            else
+            {
+                return "很久以前";
+
+            }
+        }
+
+
+
+
+        public static string FormatTimeString2(DateTime dateTime, string format = "yyyy年MM月dd日 HH:mm:ss")
+        {
             DateTime now = DateTime.Now;
             double diff = (now - dateTime).TotalSeconds;
 

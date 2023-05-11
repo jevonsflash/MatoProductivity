@@ -36,9 +36,15 @@ namespace MatoProductivity.ViewModels
             this.RemoveSelected = new Command(RemoveSelectedAction);
             this.SelectAll = new Command(SelectAllAction);
             this.Search = new Command(SearchAction);
+            this.SwitchState=new Command(SwitchStateAction);
             SelectedNotes = new ObservableCollection<object>();
 
             //Init();
+        }
+
+        private void SwitchStateAction(object obj)
+        {
+            this.IsEditing= !this.IsEditing;
         }
 
         private void SearchAction(object obj)
@@ -242,5 +248,6 @@ namespace MatoProductivity.ViewModels
         public Command RemoveSelected { get; set; }
         public Command SelectAll { get; set; }
         public Command Search { get; set; }
+        public Command SwitchState { get; set; }
     }
 }
