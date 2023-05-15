@@ -3,7 +3,9 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                       xmlns:vm="clr-namespace:MatoProductivity.ViewModels;assembly=MatoProductivity"
+                      xmlns:model="clr-namespace:MatoProductivity.Models;assembly=MatoProductivity"
                       x:Class="MatoProductivity.Views.NoteListPage"
+                      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       Appearing="ContentPageBase_Appearing">
 
     <mato:ContentPageBase.Resources>
@@ -77,29 +79,234 @@
         </Style>
     </mato:ContentPageBase.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <HorizontalStackLayout>
-            <Button Text="新建"
-                    Style="{StaticResource Base_Button}"
-                    Command="{Binding Create}"></Button>
-            <Button Text="删除选中"
-                    Style="{StaticResource Base_Button}"
-                    IsVisible="{Binding IsEditing}"
-                    Command="{Binding RemoveSelected}"></Button>
-
-            <Button Text="全选"
-                    Style="{StaticResource Base_Button}"
-                    IsVisible="{Binding IsEditing}"
-                    Command="{Binding SelectAll}"></Button>
-            <Button Command="{Binding SwitchState}" Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 
 
-        </HorizontalStackLayout>
-        <CollectionView Grid.Row="1"
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+          RowDefinitions="Auto, Auto, Auto, Auto, Auto, *">
+
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              RowDefinitions="Auto, Auto"
+              RowSpacing="0"
+              Margin="10, 10, 10, 0">
+            <Label Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+                   Text="&#xf2bd;"
+                   TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                   FontSize="{StaticResource Headline2FontSize}"
+                   FontFamily="FontAwesome_Solid"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Margin="5, 0, 5, 0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ProfileCommand}"></TapGestureRecognizer>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1"
+                   Grid.Row="0"
+                   Style="{StaticResource Body1_MulishBold}"
+                   Text="Hello"
+                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"></Label>
+            <Label Grid.Column="1"
+                   Grid.Row="1"
+                   Margin="0, -2, 0, 0"
+                   Style="{StaticResource Subtitle1_MulishBlack}"
+                   Text="Name"
+                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
+
+            <HorizontalStackLayout Grid.Column="2"
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   VerticalOptions="Center"
+                                   Margin="0, 0, 10, 0"
+                                 >
+
+                <Button Text="删除选中"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
+                        IsVisible="{Binding IsEditing}"
+                        Command="{Binding RemoveSelected}"></Button>
+
+                <Button Text="全选"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
+                        IsVisible="{Binding IsEditing}"
+                        Command="{Binding SelectAll}"></Button>
+
+
+                <Button Command="{Binding SwitchState}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
+                        Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
+
+            </HorizontalStackLayout>
+        </Grid>
+        <Grid Grid.Row="1"
+              Margin="15, 0"
+              HeightRequest="35"
+              ColumnDefinitions="Auto, *, 35, 35">
+            <Label Grid.Column="0"
+                   Text="{Binding Week.WeekString}"
+                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                   Style="{StaticResource Subtitle1_MulishBlack}"
+                   VerticalOptions="Center"></Label>
+            <Button Grid.Column="2"
+                    CornerRadius="15"
+                    Text="&#xf053;"
+                    TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
+                    FontSize="{StaticResource Body2FontSize}"
+                    FontFamily="FontAwesome_Solid"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                    Command="{Binding PreviousWeekCommand}"
+                    CommandParameter="{Binding Week.StartDay}"></Button>
+            <Button Grid.Column="3"
+                    CornerRadius="15"
+                    Text="&#xf054;"
+                    TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
+                    FontSize="{StaticResource Body2FontSize}"
+                    FontFamily="FontAwesome_Solid"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                    Command="{Binding NextWeekCommand}"
+                    CommandParameter="{Binding Week.LastDay}"></Button>
+        </Grid>
+        <Grid x:Name="daysList"
+              Grid.Row="2"
+              ColumnDefinitions="*, *, *, *, *, *"
+              BindableLayout.ItemsSource="{Binding DaysList}"
+              HeightRequest="35"
+              Margin="15, 0">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Frame Grid.Column="{Binding Column}"
+                           Padding="4, 8, 4, 8"
+                           CornerRadius="16">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.DayCommand, Source={x:Reference daysList}}"
+                                                  CommandParameter="{Binding .}"></TapGestureRecognizer>
+                        </Frame.GestureRecognizers>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="normal">
+                                    <VisualState.StateTriggers>
+                                        <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter}, ConverterParameter={x:Static model:DayStateEnum.Normal}}"></StateTrigger>
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
+                                        <Setter Property="HasShadow"
+                                                Value="True" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="active">
+                                    <VisualState.StateTriggers>
+                                        <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Active}}"></StateTrigger>
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}" />
+                                        <Setter Property="HasShadow"
+                                                Value="True" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="past">
+                                    <VisualState.StateTriggers>
+                                        <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Past}}"></StateTrigger>
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light={StaticResource LightCardDisabledBackgroundColor}, Dark={StaticResource DarkCardDisabledBackgroundColor}}" />
+                                        <Setter Property="HasShadow"
+                                                Value="False" />
+                                        <Setter Property="IsEnabled"
+                                                Value="False" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <StackLayout Spacing="0">
+                            <Label Text="{Binding DayName}"
+                                   TextTransform="Uppercase"
+                                   Style="{StaticResource Body1_MulishRegular}"
+                                   HorizontalTextAlignment="Center">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="normal">
+                                            <VisualState.StateTriggers>
+                                                <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Normal}}"></StateTrigger>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor"
+                                                        Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="active">
+                                            <VisualState.StateTriggers>
+                                                <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Active}}"></StateTrigger>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Property="FontFamily"
+                                                        Value="Mulish_Bold" />
+                                                <Setter Property="TextColor"
+                                                        Value="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="past">
+                                            <VisualState.StateTriggers>
+                                                <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Past}}"></StateTrigger>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor"
+                                                        Value="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Label>
+                            <Label HorizontalTextAlignment="Center"
+                                   Style="{StaticResource Subtitle1_MulishBlack}"
+                                   Text="{Binding Day}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="normal">
+                                            <VisualState.StateTriggers>
+                                                <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Normal}}"></StateTrigger>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor"
+                                                        Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="active">
+                                            <VisualState.StateTriggers>
+                                                <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Active}}"></StateTrigger>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor"
+                                                        Value="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="past">
+                                            <VisualState.StateTriggers>
+                                                <StateTrigger IsActive="{Binding State, Converter={xct:EnumToBoolConverter }, ConverterParameter={x:Static model:DayStateEnum.Past}}"></StateTrigger>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor"
+                                                        Value="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Label>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </Grid>
+
+
+
+        <CollectionView Grid.Row="5"
                         ItemsLayout="VerticalList"
                         x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteGroups}"
@@ -158,8 +365,26 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Frame  Grid.RowSpan="6"
+               BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+               VerticalOptions="End"
+               HorizontalOptions="End"
+               CornerRadius="20"
+               TranslationY="-20"
+               TranslationX="-20"
+               Padding="20"
+               >
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding Create}"></TapGestureRecognizer>
+            </Frame.GestureRecognizers>
+            <Label Text="&#xf067;"
+                   FontSize="{StaticResource Headline3FontSize}"
+                   FontFamily="FontAwesome_Solid"
+                   TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"></Label>
+        </Frame>
 
-
-
+       
     </Grid>
 </mato:ContentPageBase>

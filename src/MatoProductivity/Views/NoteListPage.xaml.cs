@@ -20,5 +20,8 @@ public partial class NoteListPage : ContentPageBase, ITransientDependency
         noteListPageViewModel.Init();
     }
 
-    
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+       await navigationService.ShowPopupAsync((this.Resources["PopupMenu"] as PopupBase));
+    }
 }

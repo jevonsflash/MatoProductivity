@@ -50,7 +50,7 @@ namespace MatoProductivity.ViewModels
             ItemDraggedOver = new Command(OnItemDraggedOver);
             ItemDragLeave = new Command(OnItemDragLeave);
             ItemDropped = new Command(i => OnItemDropped(i));
-
+            Back=new Command(BackAction);
             SwitchState=new Command(SwitchStateAction);
 
             IsConfiguratingNoteSegment = true;
@@ -65,6 +65,12 @@ namespace MatoProductivity.ViewModels
             SelectedNoteSegments = new ObservableCollection<object>();
 
         }
+
+        private async void BackAction(object obj)
+        {
+            await this.navigationService.PopAsync();
+        }
+
         private void SwitchStateAction(object obj)
         {
             this.IsConfiguratingNoteSegment= !this.IsConfiguratingNoteSegment;
@@ -517,6 +523,9 @@ namespace MatoProductivity.ViewModels
         public Command ItemDropped { get; set; }
 
         public Command SwitchState { get; set; }
+
+        public Command Back { get; set; }
+
 
     }
 }

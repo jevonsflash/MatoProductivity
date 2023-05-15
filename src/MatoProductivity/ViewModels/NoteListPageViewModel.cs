@@ -7,25 +7,32 @@ using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Infrastructure.Helper;
+using MatoProductivity.Models;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace MatoProductivity.ViewModels
 {
     public class NoteListPageViewModel : ViewModelBase, ISingletonDependency, ISearchViewModel
     {
+        private readonly IDateService _dateService;
         private readonly IRepository<Note, long> repository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
         private NotePage notePagePage;
 
         public NoteListPageViewModel(
+            IDateService dateService,
             IRepository<Note, long> repository,
             IIocResolver iocResolver,
             NavigationService navigationService)
         {
+            this._dateService=dateService;
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -37,9 +44,92 @@ namespace MatoProductivity.ViewModels
             this.SelectAll = new Command(SelectAllAction);
             this.Search = new Command(SearchAction);
             this.SwitchState=new Command(SwitchStateAction);
+            PreviousWeekCommand = new Command<DateTime>(PreviousWeekCommandHandler);
+            NextWeekCommand = new Command<DateTime>(NextWeekCommandHandler);
+            DayCommand = new Command<DayModel>(DayCommandHandler);
+
             SelectedNotes = new ObservableCollection<object>();
 
             //Init();
+        }
+        private DayModel _selectedDay;
+
+
+        private ObservableCollection<DayModel> _daysList;
+
+        public ObservableCollection<DayModel> DaysList
+        {
+            get { return _daysList; }
+            set
+            {
+                _daysList = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
+        private WeekModel _week;
+
+        public WeekModel Week
+        {
+            get { return _week; }
+            set
+            {
+                _week = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
+
+        private void DayCommandHandler(DayModel day)
+        {
+            SetActiveDay(day);
+            //todo
+            //CreateQueryForTasks(day.Date);
+        }
+
+        private void PreviousWeekCommandHandler(DateTime startDate)
+        {
+            Week = _dateService.GetWeek(startDate.AddDays(-1));
+            DaysList = new ObservableCollection<DayModel>(_dateService.GetDayList(Week.StartDay, Week.LastDay));
+            SetActiveDay();
+        }
+
+        private void NextWeekCommandHandler(DateTime lastDate)
+        {
+            Week = _dateService.GetWeek(lastDate.AddDays(1));
+            DaysList = new ObservableCollection<DayModel>(_dateService.GetDayList(Week.StartDay, Week.LastDay));
+            SetActiveDay();
+        }
+
+        private void SetActiveDay(DayModel day = null)
+        {
+            ResetActiveDay();
+            if (day != null)
+            {
+                _selectedDay = day;
+                day.State = DayStateEnum.Active;
+            }
+            else
+            {
+                var selectedDate = DaysList.FirstOrDefault(d => d.Date == _selectedDay.Date);
+                if (selectedDate != null)
+                {
+                    selectedDate.State = DayStateEnum.Active;
+                }
+            }
+        }
+
+        private void ResetActiveDay()
+        {
+            var selectedDay = DaysList?.FirstOrDefault(d => d.State.Equals(DayStateEnum.Active));
+            if (selectedDay != null)
+            {
+                selectedDay.State = selectedDay.Date < DateTime.Now.Date ? DayStateEnum.Past : DayStateEnum.Normal;
+            }
         }
 
         private void SwitchStateAction(object obj)
@@ -107,6 +197,10 @@ namespace MatoProductivity.ViewModels
 
         public void Init()
         {
+            Week = _dateService.GetWeek(DateTime.Now);
+            DaysList = new ObservableCollection<DayModel>(_dateService.GetDayList(Week.StartDay, Week.LastDay));
+            _selectedDay = new DayModel() { Date = DateTime.Today };
+
             var notes = this.repository.GetAllList()
                 .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
             var notegroupedlist = notes.OrderByDescending(c => c.CreationTime).GroupBy(c => CommonHelper.FormatTimeString(c.LastModificationTime==null ? c.CreationTime : c.LastModificationTime.Value)).Select(c => new NoteTimeLineGroup(c.Key, c));
@@ -249,5 +343,9 @@ namespace MatoProductivity.ViewModels
         public Command SelectAll { get; set; }
         public Command Search { get; set; }
         public Command SwitchState { get; set; }
+
+        public Command DayCommand { get; set; }
+        public Command PreviousWeekCommand { get; set; }
+        public Command NextWeekCommand { get; set; }
     }
 }

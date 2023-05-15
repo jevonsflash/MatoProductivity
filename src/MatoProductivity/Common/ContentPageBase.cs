@@ -67,6 +67,8 @@ namespace MatoProductivity
             LocalizationSourceName = MatoProductivityConsts.LocalizationSourceName;
             ObjectMapper = NullObjectMapper.Instance;
             LocalizationManager = NullLocalizationManager.Instance;
+            NavigationPage.SetHasNavigationBar(this, false);
+            Shell.SetNavBarIsVisible(this, false);
         }
 
         /// <summary>
