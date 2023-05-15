@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MatoProductivity.MainPage"
-      
-            FlyoutBackgroundColor="{DynamicResource PhoneAccentBrush}">
+             x:Class="MatoProductivity.MainPage">
     <Shell.SearchHandler>
         <SearchHandler Placeholder="Enter search term"
                                       ShowsResults="true"

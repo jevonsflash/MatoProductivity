@@ -54,13 +54,13 @@
                    Text="{Binding Title}"></Label>
             <HorizontalStackLayout Grid.Column="1">
                 <Button Text="删除"
-                        Style="{StaticResource TextButton}"
+                        Style="{StaticResource Base_Button}"
                         Command="{Binding Remove}"></Button>
                 <Button Text="编辑"
-                        Style="{StaticResource TextButton}"
+                        Style="{StaticResource Base_Button}"
                         Command="{Binding Edit}"></Button>
                 <Button Text="分享"
-                        Style="{StaticResource TextButton}"
+                        Style="{StaticResource Base_Button}"
                         Command="{Binding Share}"></Button>
             </HorizontalStackLayout>
         </Grid>

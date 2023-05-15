@@ -155,25 +155,25 @@
         </Grid.RowDefinitions>
         <HorizontalStackLayout>
             <Button Text="添加片段"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     Command="{Binding CreateSegmentFromStore}"
                     CommandParameter="DateTimeSegment"></Button>
 
             <Button Text="删除"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     Command="{Binding Remove}"></Button>
 
             <Button Text="提交"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     Command="{Binding Submit}"></Button>
 
             <Button Text="删除选中片段"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     IsVisible="{Binding IsConfiguratingNoteSegment}"
                     Command="{Binding RemoveSelectedSegment}"></Button>
 
             <Button Text="全选片段"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     IsVisible="{Binding IsConfiguratingNoteSegment}"
                     Command="{Binding SelectAllSegment}"></Button>
             <Button Command="{Binding SwitchState}"

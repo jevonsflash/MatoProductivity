@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:styles="clr-namespace:MatoProductivity.Styles"
+                    x:Class="MatoProductivity.Styles.Theme">
+    <ResourceDictionary.MergedDictionaries>
+        <styles:Colors></styles:Colors>
+        <styles:Fonts></styles:Fonts>
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Labels-->
+
+    <Style x:Key="Headline2_FontAwesome" TargetType="Label">
+        <Setter Property="FontFamily" Value="FontAwesome_Solid" />
+        <Setter Property="FontSize" Value="{StaticResource Headline2FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <Style x:Key="Headline4_MulishRegular" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="FontSize" Value="{StaticResource Headline4FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Headline4_MulishBold" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Bold" />
+        <Setter Property="FontSize" Value="{StaticResource Headline4FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Headline4_MulishBlack" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Black" />
+        <Setter Property="FontSize" Value="{StaticResource Headline4FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <Style x:Key="Subtitle1_MulishRegular" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="FontSize" Value="{StaticResource Subtitle1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Subtitle1_MulishBold" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Bold" />
+        <Setter Property="FontSize" Value="{StaticResource Subtitle1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Subtitle1_MulishBlack" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Black" />
+        <Setter Property="FontSize" Value="{StaticResource Subtitle1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Subtitle1_MulishExtraBold" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_ExtraBold" />
+        <Setter Property="FontSize" Value="{StaticResource Subtitle1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <Style x:Key="Body1_MulishRegular" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="FontSize" Value="{StaticResource Body1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Body1_MulishSemiBold" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="FontSize" Value="{StaticResource Body1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Body1_MulishBold" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Bold" />
+        <Setter Property="FontSize" Value="{StaticResource Body1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    <Style x:Key="Body1_MulishBlack" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Black" />
+        <Setter Property="FontSize" Value="{StaticResource Body1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+    
+    <Style x:Key="Body2_MulishRegular" TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="FontSize" Value="{StaticResource Body2FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <!--#endregion-->
+    
+    <!--#region Links-->
+
+    <Style  TargetType="Label">
+        <Setter Property="FontFamily" Value="Mulish_Bold" />
+        <Setter Property="TextDecorations" Value="Underline" />
+        <Setter Property="FontSize" Value="{StaticResource Body1FontSize}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region Frames-->
+    
+    <Style  TargetType="Frame">
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="10, 0" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource LightEntryBorderColor}, Dark={StaticResource DarkEntryBorderColor}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}" />
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region Entry-->
+
+    <Style  TargetType="Entry">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource LightPlaceholderTextColor}, Dark={StaticResource DarkPlaceholderTextColor}}" />
+    </Style>
+
+    <Style x:Key="Error_Entry" TargetType="Entry">
+        <Setter Property="FontFamily" Value="Mulish_Bold" />
+        <Setter Property="TextColor" Value="{StaticResource FailColor}" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource LightPlaceholderTextColor}, Dark={StaticResource DarkPlaceholderTextColor}}" />
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region Picker-->
+
+    <Style  TargetType="Picker">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region Date Picker-->
+
+    <Style  TargetType="DatePicker">
+        <Setter Property="FontFamily" Value="Mulish_Regular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region Buttons-->
+    
+    <Style x:Key="Base_Button" TargetType="Button">
+        <Setter Property="CornerRadius" Value="30" />
+        <Setter Property="FontFamily" Value="Mulish_ExtraBold" />
+        <Setter Property="Padding" Value="20" />
+        <Setter Property="FontSize" Value="{StaticResource ButtonFontSize}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}" />
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightCardDisabledBackgroundColor}, Dark={StaticResource DarkCardDisabledBackgroundColor}}" />
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    
+    
+    
+    <!--#endregion-->
+
+</ResourceDictionary>

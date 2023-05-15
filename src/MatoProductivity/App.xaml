@@ -11,8 +11,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<style:DarkTheme />-->
-                <style:LightTheme />
+                <style:Theme></style:Theme>
+
                 <style:CommonResourceDictionary />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

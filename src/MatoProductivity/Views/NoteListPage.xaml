@@ -14,12 +14,12 @@
                         <SwipeItems>
                             <SwipeItem Text="删除"
                                        Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
-                                       CommandParameter="{TemplateBinding}"
+                                       CommandParameter="{TemplateBinding Path= BindingContext}"
                                        IconImageSource="delete.png"
                                        BackgroundColor="Red" />
                             <SwipeItem Text="编辑"
                                        Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
-                                       CommandParameter="{TemplateBinding}"
+                                       CommandParameter="{TemplateBinding Path= BindingContext}"
                                        IconImageSource="delete.png"
                                        BackgroundColor="Red" />
                         </SwipeItems>
@@ -84,15 +84,15 @@
         </Grid.RowDefinitions>
         <HorizontalStackLayout>
             <Button Text="新建"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     Command="{Binding Create}"></Button>
             <Button Text="删除选中"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     IsVisible="{Binding IsEditing}"
                     Command="{Binding RemoveSelected}"></Button>
 
             <Button Text="全选"
-                    Style="{StaticResource TextButton}"
+                    Style="{StaticResource Base_Button}"
                     IsVisible="{Binding IsEditing}"
                     Command="{Binding SelectAll}"></Button>
             <Button Command="{Binding SwitchState}" Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
@@ -153,13 +153,8 @@
                                        FontSize="Small"
                                        FontAttributes="Bold" />
                             </Grid>
-
-
                         </Grid>
-
                     </ContentView>
-
-
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
