@@ -42,8 +42,24 @@
                         IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
             <TimePicker Time="{Binding TimeOffset}"
                         IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
-            <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
-            <Switch IsToggled="{Binding IsShowFromNow, Mode=TwoWay}"></Switch>
+
+            <Grid RowDefinitions="*,*">
+                
+                <StackLayout Orientation="Horizontal">
+                    <Label  Style="{StaticResource Body1_MulishRegular}"
+                            Text="自动获取"></Label>
+
+                    <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Grid.Row="1">
+                    <Label  Style="{StaticResource Body1_MulishRegular}"
+                            Text="显示倒计时"></Label>
+
+                    <Switch IsToggled="{Binding IsShowFromNow, Mode=TwoWay}"></Switch>
+                </StackLayout>
+
+            </Grid>
+
         </VerticalStackLayout>
     </Grid>
 </ContentView>

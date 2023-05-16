@@ -18,7 +18,7 @@
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate>
                     <Label Text="{Binding Category}"
-                           BackgroundColor="LightGray"
+                           BackgroundColor="Transparent"
                            FontSize="18"
                            FontAttributes="Bold" />
                 </DataTemplate>

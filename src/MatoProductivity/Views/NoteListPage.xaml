@@ -12,21 +12,36 @@
         <ControlTemplate x:Key="NoteCardViewPhone">
             <Grid>
                 <SwipeView>
-                    <SwipeView.LeftItems>
+                    <SwipeView.RightItems>
                         <SwipeItems>
-                            <SwipeItem Text="删除"
-                                       Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
-                                       CommandParameter="{TemplateBinding Path= BindingContext}"
-                                       IconImageSource="delete.png"
-                                       BackgroundColor="Red" />
-                            <SwipeItem Text="编辑"
-                                       Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
-                                       CommandParameter="{TemplateBinding Path= BindingContext}"
-                                       IconImageSource="delete.png"
-                                       BackgroundColor="Red" />
+                            <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
+                                           CommandParameter="{TemplateBinding Path= BindingContext}">
+                                <Frame BackgroundColor="Transparent"
+                                       Padding="15, 0">
+                                    <Label Text="&#xf2ed;"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                           FontSize="{StaticResource Headline4FontSize}"
+                                           FontFamily="FontAwesome_Solid"
+                                           VerticalTextAlignment="Center">
+                                    </Label>
+                                </Frame>
+                            </SwipeItemView>
+                            <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                           CommandParameter="{TemplateBinding Path= BindingContext}">
+                                <Frame BackgroundColor="Transparent"
+                                       Padding="25, 0, 15, 0">
+                                    <Label Text="&#xf303;"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                           FontSize="{StaticResource Headline4FontSize}"
+                                           FontFamily="FontAwesome_Solid"
+                                           VerticalTextAlignment="Center">
+                                    </Label>
+                                </Frame>
+                            </SwipeItemView>
                         </SwipeItems>
-                    </SwipeView.LeftItems>
-                    <Frame  HasShadow="True"
+                    </SwipeView.RightItems>
+
+                    <Frame  HasShadow="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
                             Margin="0,10,0,10"
                             CornerRadius="5"
                             Padding="8">
@@ -39,7 +54,7 @@
         </ControlTemplate>
 
         <ControlTemplate x:Key="NoteCardViewDesktop">
-            <Frame HasShadow="True"
+            <Frame  HasShadow="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
                    Margin="0,10,0,10"
                    CornerRadius="5"
                    Padding="8">
@@ -62,21 +77,7 @@
             </Frame>
 
         </ControlTemplate>
-        <Style TargetType="ContentView">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="LightSkyBlue" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
+
     </mato:ContentPageBase.Resources>
 
 
@@ -119,8 +120,7 @@
                                    Grid.Row="0"
                                    Grid.RowSpan="2"
                                    VerticalOptions="Center"
-                                   Margin="0, 0, 10, 0"
-                                 >
+                                   Margin="0, 0, 10, 0">
 
                 <Button Text="删除选中"
                         TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
@@ -174,7 +174,7 @@
               Grid.Row="2"
               ColumnDefinitions="*, *, *, *, *, *"
               BindableLayout.ItemsSource="{Binding DaysList}"
-              HeightRequest="35"
+              HeightRequest="55"
               Margin="15, 0">
             <BindableLayout.ItemTemplate>
                 <DataTemplate>
@@ -307,6 +307,7 @@
 
 
         <CollectionView Grid.Row="5"
+                        Margin="15, 0"
                         ItemsLayout="VerticalList"
                         x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteGroups}"
@@ -322,7 +323,7 @@
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate>
                     <Label Text="{Binding TimeCategory}"
-                           BackgroundColor="LightGray"
+                           BackgroundColor="Transparent"
                            FontSize="18"
                            FontAttributes="Bold" />
                 </DataTemplate>
@@ -366,14 +367,13 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Frame  Grid.RowSpan="6"
-               BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-               VerticalOptions="End"
-               HorizontalOptions="End"
-               CornerRadius="20"
-               TranslationY="-20"
-               TranslationX="-20"
-               Padding="20"
-               >
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                CornerRadius="20"
+                TranslationY="-20"
+                TranslationX="-20"
+                Padding="20">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding Create}"></TapGestureRecognizer>
             </Frame.GestureRecognizers>
@@ -385,6 +385,6 @@
                    VerticalOptions="Center"></Label>
         </Frame>
 
-       
+
     </Grid>
 </mato:ContentPageBase>

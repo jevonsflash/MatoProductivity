@@ -9,6 +9,38 @@
         <styles:Fonts></styles:Fonts>
     </ResourceDictionary.MergedDictionaries>
 
+    <Style TargetType="ContentView">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="Transparent" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Grid">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="Transparent" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
     <!--#region Labels-->
 
     <Style x:Key="Headline2_FontAwesome"
@@ -159,6 +191,8 @@
                 Value="10" />
         <Setter Property="Padding"
                 Value="10, 0" />
+        <Setter Property="HasShadow"
+                Value="False" />
         <Setter Property="BorderColor"
                 Value="{AppThemeBinding Light={StaticResource LightEntryBorderColor}, Dark={StaticResource DarkEntryBorderColor}}" />
         <Setter Property="BackgroundColor"

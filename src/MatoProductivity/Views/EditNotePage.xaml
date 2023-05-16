@@ -4,20 +4,30 @@
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                       xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
                       NavigationPage.HasNavigationBar="False"
+                      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       x:Name="MainPage"
                       x:Class="MatoProductivity.Views.EditNotePage">
     <ContentPage.Resources>
         <ControlTemplate x:Key="NoteSegmentCardViewPhone">
             <Grid>
                 <SwipeView>
-                    <SwipeView.LeftItems>
+                    <SwipeView.RightItems>
                         <SwipeItems>
-                            <SwipeItem Text="删除"
-                                       Command="{TemplateBinding BindingContext.Remove}"
-                                       IconImageSource="delete.png"
-                                       BackgroundColor="Red" />
+                            <SwipeItemView  Command="{TemplateBinding BindingContext.Remove}">
+                                <Frame BackgroundColor="Transparent"
+                                       Padding="15, 0">
+                                    <Label Text="&#xf2ed;"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                           FontSize="{StaticResource Headline4FontSize}"
+                                           FontFamily="FontAwesome_Solid"
+                                           VerticalTextAlignment="Center">
+                                    </Label>
+                                </Frame>
+                            </SwipeItemView>
+                            
                         </SwipeItems>
-                    </SwipeView.LeftItems>
+                    </SwipeView.RightItems>
+                  
                     <Frame  HasShadow="True"
                             Margin="0,10,0,10"
                             CornerRadius="5"
@@ -132,21 +142,7 @@
 
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                               ResourcesContainer="{x:Reference MainPage}" />
-        <Style TargetType="Grid">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="LightSkyBlue" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
+
     </ContentPage.Resources>
     <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
           RowDefinitions="Auto, Auto, *, Auto"
@@ -188,7 +184,7 @@
                         Command="{Binding Remove}"></Button>
 
 
-                <Button Text="删除选中"
+                <!--<Button Text="删除选中"
                         Style="{StaticResource Text_Button}"
                         TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                         IsVisible="{Binding IsConfiguratingNoteSegment}"
@@ -198,15 +194,13 @@
                         Style="{StaticResource Text_Button}"
                         TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                         IsVisible="{Binding IsConfiguratingNoteSegment}"
-                        Command="{Binding SelectAllSegment}"></Button>
+                        Command="{Binding SelectAllSegment}"></Button>-->
 
 
                 <Button Command="{Binding SwitchState}"
                         Style="{StaticResource Text_Button}"
                         TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                         Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
-
-
 
 
             </HorizontalStackLayout>
@@ -227,40 +221,46 @@
 
             <CollectionView.Header>
                 <Grid>
-                    <TableView Intent="Form"
-                               IsVisible="{Binding IsConfiguratingNoteSegment}">
-                        <TableRoot>
-                            <TableSection>
-                                <EntryCell Label="标题"
-                                           Text="{Binding Title}"
-                                           Placeholder="请输入标题"></EntryCell>
-                                <EntryCell Label="描述"
-                                           Text="{Binding Desc}"
-                                           Placeholder="请输入描述"></EntryCell>
-                            </TableSection>
-                        </TableRoot>
-                    </TableView>
-                    <TableView Intent="Form"
-                               IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
-                        <TableRoot>
-                            <TableSection>
-                                <TextCell Text="{Binding Title}" />
-                                <TextCell Text="{Binding Desc}" />
-                            </TableSection>
-                        </TableRoot>
-                    </TableView>
-
-
+                    <Grid RowDefinitions="auto,auto"
+                          IsVisible="{Binding IsConfiguratingNoteSegment}">
+                    <StackLayout Spacing="5">
+                        <Label Text="标题"
+                               Style="{StaticResource Body1_MulishSemiBold}"></Label>
+                        <Frame 
+                               Style="{StaticResource Base_FrameEntry}">
+                            <Entry Placeholder="请输入标题"
+                                   Text="{Binding Title}"
+                                   Style="{StaticResource Base_Entry}">
+                            </Entry>
+                        </Frame>
+                    </StackLayout>
+                    <StackLayout Spacing="5" Grid.Row="1">
+                        <Label Text="描述"
+                               Style="{StaticResource Body1_MulishSemiBold}"></Label>
+                        <Frame 
+                               Style="{StaticResource Base_FrameEntry}">
+                            <Entry Placeholder="请输入描述"
+                                   Text="{Binding Desc}"
+                                   Style="{StaticResource Base_Entry}">
+                            </Entry>
+                        </Frame>
+                    </StackLayout>
+                </Grid>
+                    <Grid IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
+                        <Label Text="{Binding Desc}" />
+                    </Grid>
                 </Grid>
             </CollectionView.Header>
             <CollectionView.Footer>
                 <VerticalStackLayout>
                     <Frame  HasShadow="True"
+                            IsVisible="{Binding IsConfiguratingNoteSegment}"
                             Margin="0,10,0,10"
                             CornerRadius="5"
                             Padding="8">
                         <Button Text="添加片段"
-                                Style="{StaticResource Base_Button}"
+                                TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                                Style="{StaticResource Text_Button}"
                                 Command="{Binding CreateSegmentFromStore}"
                                 CommandParameter="DateTimeSegment"></Button>
                     </Frame>
