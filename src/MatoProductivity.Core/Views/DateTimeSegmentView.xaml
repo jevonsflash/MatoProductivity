@@ -29,30 +29,38 @@
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
             <Label Text="{Binding Title}"></Label>
-            <DatePicker Date="{Binding Time}"
-                        IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-            <TimePicker Time="{Binding TimeOffset}"
-                        IsVisible="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+            <Grid ColumnDefinitions="*,*">
+                <DatePicker Date="{Binding Time}"
+                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
+                <TimePicker Time="{Binding TimeOffset}"
+                            Grid.Column="1"
+                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+            </Grid>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
             <Entry  Text="{Binding Title}"
                     Placeholder="请输入标题" />
-            <DatePicker Date="{Binding Time}"
-                        IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-            <TimePicker Time="{Binding TimeOffset}"
-                        IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+            <Grid ColumnDefinitions="*,*">
+                <DatePicker Date="{Binding Time}"
+                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
+                <TimePicker Time="{Binding TimeOffset}" Grid.Column="1"
+                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+            </Grid>
 
-            <Grid RowDefinitions="*,*">
-                
+            <Grid ColumnDefinitions="*,*">
+
                 <StackLayout Orientation="Horizontal">
                     <Label  Style="{StaticResource Body1_MulishRegular}"
+                            VerticalOptions="Center"
                             Text="自动获取"></Label>
 
                     <Switch IsToggled="{Binding IsAutoSet, Mode=TwoWay}"></Switch>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" Grid.Row="1">
+                <StackLayout Orientation="Horizontal"
+                             Grid.Column="1">
                     <Label  Style="{StaticResource Body1_MulishRegular}"
+                            VerticalOptions="Center"
                             Text="显示倒计时"></Label>
 
                     <Switch IsToggled="{Binding IsShowFromNow, Mode=TwoWay}"></Switch>
