@@ -1,45 +1,218 @@
 ﻿<mato:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
-             xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
-             Appearing="ContentPageBase_Appearing"
-             Title="NoteTemplateListPage"
-            x:Class="MatoProductivity.NoteTemplateListPage">
-    <Grid RowSpacing="0">
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                      xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
+                      Appearing="ContentPageBase_Appearing"
+                      Title="NoteTemplateListPage"
+                      x:Class="MatoProductivity.NoteTemplateListPage">
 
-        <CollectionView  ItemsLayout="VerticalList"
-                         ItemsSource="{Binding NoteTemplates}"
-                         SelectionMode="Single"
-                         SelectedItem="{Binding SelectedNoteTemplate}">
+    <mato:ContentPageBase.Resources>
+        <ControlTemplate x:Key="NoteTemplateViewPhone">
+            <Grid>
+                <SwipeView>
+                    <SwipeView.RightItems>
+                        <SwipeItems>
+                            <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
+                                           CommandParameter="{TemplateBinding Path= BindingContext}">
+                                <Frame BackgroundColor="Transparent"
+                                       Padding="15, 0">
+                                    <Label Text="&#xf2ed;"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                           FontSize="{StaticResource Headline4FontSize}"
+                                           FontFamily="FontAwesome_Solid"
+                                           VerticalTextAlignment="Center">
+                                    </Label>
+                                </Frame>
+                            </SwipeItemView>
+                            <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                           CommandParameter="{TemplateBinding Path= BindingContext}">
+                                <Frame BackgroundColor="Transparent"
+                                       Padding="25, 0, 15, 0">
+                                    <Label Text="&#xf303;"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                           FontSize="{StaticResource Headline4FontSize}"
+                                           FontFamily="FontAwesome_Solid"
+                                           VerticalTextAlignment="Center">
+                                    </Label>
+                                </Frame>
+                            </SwipeItemView>
+                        </SwipeItems>
+                    </SwipeView.RightItems>
+
+                    <Frame  HasShadow="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
+                            Margin="0,10,0,10"
+                            CornerRadius="5"
+                            Padding="8">
+                        <Grid>
+                            <ContentPresenter Grid.Column="1" />
+                        </Grid>
+                    </Frame>
+                </SwipeView>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="NoteTemplateViewDesktop">
+            <Frame  HasShadow="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
+                    Margin="0,10,0,10"
+                    CornerRadius="5"
+                    Padding="8">
+                <Grid>
+                    <ContentPresenter Grid.Column="1" />
+                </Grid>
+            </Frame>
+
+        </ControlTemplate>
+
+    </mato:ContentPageBase.Resources>
+
+
+
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+          RowDefinitions="Auto,Auto, *">
+
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto, *, Auto"
+              RowDefinitions="Auto, Auto"
+              RowSpacing="0"
+              Margin="10, 10, 10, 0">
+            <Label Grid.Column="0"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+                   Text="&#xf2bd;"
+                   TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                   FontSize="{StaticResource Headline2FontSize}"
+                   FontFamily="FontAwesome_Solid"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Margin="5, 0, 5, 0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ProfileCommand}"></TapGestureRecognizer>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1"
+                   Grid.Row="0"
+                   Style="{StaticResource Body1_MulishBold}"
+                   Text="Hello"
+                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"></Label>
+            <Label Grid.Column="1"
+                   Grid.Row="1"
+                   Margin="0, -2, 0, 0"
+                   Style="{StaticResource Subtitle1_MulishBlack}"
+                   Text="Name"
+                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
+
+            <HorizontalStackLayout Grid.Column="2"
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   VerticalOptions="Center"
+                                   Margin="0, 0, 10, 0">
+
+
+                <Button Command="{Binding SwitchState}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
+                        Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
+
+            </HorizontalStackLayout>
+        </Grid>
+
+
+        <CollectionView Grid.Row="2"
+                        Margin="15, 0"
+                        x:Name="MainCollectionView"
+                        ItemsSource="{Binding NoteTemplates}"
+                        ItemSizingStrategy="MeasureAllItems"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedNoteTemplate}"
+                        IsGrouped="False">
+            <CollectionView.Header>
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span>共</Span>
+                            <Span Text="{Binding NoteTemplates.Count}"></Span>
+                            <Span>个场景</Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </CollectionView.Header>
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 VerticalItemSpacing="10"
+                                 HorizontalItemSpacing="10">
+                    <GridItemsLayout.Span>
+                        <OnIdiom Phone="3"
+                                 Tablet="5"
+                                 Desktop="5">
+                        </OnIdiom>
+                    </GridItemsLayout.Span>
+
+                </GridItemsLayout>
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!--<SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItems>
-                                <SwipeItem Text="Favorite"
-                                           IconImageSource="favorite.png"
-                                           BackgroundColor="LightGreen"
-                                           Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.FavoriteCommand}"
-                                           CommandParameter="{Binding}" />
-                                <SwipeItem Text="Delete"
-                                           IconImageSource="delete.png"
-                                           BackgroundColor="LightPink"
-                                           Command="{Binding Source={x:Reference collectionView}, Path=BindingContext.DeleteCommand}"
-                                           CommandParameter="{Binding}" />
-                            </SwipeItems>
-                        </SwipeView.RightItems>
-                        <Grid
-                              Padding="10">
-                            <Label Text="{Binding Title}"></Label>
+                    <ContentView 
+                                 HeightRequest="90">
+                        <ContentView.ControlTemplate>
+                            <OnIdiom Phone="{StaticResource NoteTemplateViewPhone}"
+                                     Tablet="{StaticResource NoteTemplateViewDesktop}"
+                                     Desktop="{StaticResource NoteTemplateViewDesktop}">
+                            </OnIdiom>
+                        </ContentView.ControlTemplate>
+                        <Grid>
+                            <FlyoutBase.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="编辑"
+                                                    Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                                    CommandParameter="{Binding}" />
+                                    <MenuFlyoutItem Text="删除"
+                                                    Command="{Binding  Source={x:Reference MainCollectionView}, Path=BindingContext.Remove}"
+                                                    CommandParameter="{Binding}" />
+                                </MenuFlyout>
+                            </FlyoutBase.ContextFlyout>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Label Text="{Binding Title}"
+                                       VerticalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       Grid.Row="1"
+                                       FontSize="{StaticResource Subtitle1FontSize}"
+                                       FontAttributes="Bold"
+                                       ></Label>
+                            </Grid>
                         </Grid>
-                    </SwipeView>-->
-                    <Grid Padding="10">
-                        <Label Text="{Binding Title}"></Label>
-                    </Grid>
+                    </ContentView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Frame  Grid.RowSpan="3"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                CornerRadius="20"
+                TranslationY="-20"
+                TranslationX="-20"
+                Padding="20">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding Create}"></TapGestureRecognizer>
+            </Frame.GestureRecognizers>
+            <Label FontSize="{StaticResource Headline3FontSize}"
+                   TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="&#xf067;"
+                              FontFamily="FontAwesome_Solid"></Span>
+                        <Span>场景</Span>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Frame>
+
 
     </Grid>
-
 </mato:ContentPageBase>

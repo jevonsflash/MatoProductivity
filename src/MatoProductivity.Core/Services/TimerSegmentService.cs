@@ -18,7 +18,7 @@ namespace MatoProductivity.Core.Services
         private readonly AbpAsyncTimer timer;
         private readonly IBackgroundJobManager backgroundJobManager;
         private NoteSegmentPayload DefaultIsShowFromNowNoteSegmentPayload => new NoteSegmentPayload(nameof(IsShowFromNow), false.ToString());
-        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), DateTime.Now.ToString());
+        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), (DateTime.Now+new TimeSpan(5, 0, 0)).ToString());
         public TimerSegmentService(
              AbpAsyncTimer timer,
             IBackgroundJobManager backgroundJobManager,
@@ -44,7 +44,7 @@ namespace MatoProductivity.Core.Services
                 var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
                 var isAutoSet = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
 
-                var defaultNotificationContentString = NoteSegment.Title + "时间已到!";
+                var defaultNotificationContentString = NoteSegment.Title;
 
                 var defaultNotificationContent = new NoteSegmentPayload(nameof(NotificationContent), defaultNotificationContentString);
                 var notificationContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(NotificationContent), defaultNotificationContent);

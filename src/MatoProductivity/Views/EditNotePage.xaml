@@ -200,7 +200,7 @@
                 <Button Command="{Binding SwitchState}"
                         Style="{StaticResource Text_Button}"
                         TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                        Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
+                        Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成编辑|编辑笔记}"></Button>
 
 
             </HorizontalStackLayout>
@@ -276,7 +276,7 @@
                 Grid.Row="3"
                 Margin="0, 0, 0, 15"
                 Style="{StaticResource Base_Button}"
-                Text="完成"
+                Text="保存"
                 VerticalOptions="End">
         </Button>
 

@@ -50,17 +50,21 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label FontSize="Large"
+                   Margin="10, 10, 10, 0"
                    FontAttributes="Bold"
                    Text="{Binding Title}"></Label>
-            <HorizontalStackLayout Grid.Column="1">
+            <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
                 <Button Text="删除"
-                        Style="{StaticResource Base_Button}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
                         Command="{Binding Remove}"></Button>
                 <Button Text="编辑"
-                        Style="{StaticResource Base_Button}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
                         Command="{Binding Edit}"></Button>
                 <Button Text="分享"
-                        Style="{StaticResource Base_Button}"
+                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        Style="{StaticResource Text_Button}"
                         Command="{Binding Share}"></Button>
             </HorizontalStackLayout>
         </Grid>

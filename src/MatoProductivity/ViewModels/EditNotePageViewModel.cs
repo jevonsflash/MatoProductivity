@@ -53,7 +53,7 @@ namespace MatoProductivity.ViewModels
             Back=new Command(BackAction);
             SwitchState=new Command(SwitchStateAction);
 
-            IsConfiguratingNoteSegment = true;
+            IsConfiguratingNoteSegment = false;
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.templateRepository = templateRepository;
@@ -270,7 +270,7 @@ namespace MatoProductivity.ViewModels
                 this.noteId = note.Id;
                 this.NoteSegments = noteSegments != null
                     ? new ObservableCollection<INoteSegmentService>(
-                  noteSegments.Select(noteSegmentServiceFactory.GetNoteSegmentService))
+                  noteSegments.Select(GetNoteSegmentViewModel))
                     : new ObservableCollection<INoteSegmentService>();
                 Title = note.Title;
                 Desc = note.Desc;
@@ -280,14 +280,17 @@ namespace MatoProductivity.ViewModels
                 PreViewContent = note.PreViewContent;
                 IsEditable = note.IsEditable;
 
-                foreach (var noteSegment in NoteSegments)
-                {
-                    noteSegment.Container = this;
-                }
             }
 
         }
+        private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)
+        {
+            var result = noteSegmentServiceFactory.GetNoteSegmentService(c);
+            result.NoteSegmentState = NoteSegmentState.Edit;
+            result.Container = this;
 
+            return result;
+        }
 
 
         private long noteId;

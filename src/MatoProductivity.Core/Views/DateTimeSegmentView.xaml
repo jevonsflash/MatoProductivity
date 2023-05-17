@@ -44,7 +44,8 @@
             <Grid ColumnDefinitions="*,*">
                 <DatePicker Date="{Binding Time}"
                             IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-                <TimePicker Time="{Binding TimeOffset}" Grid.Column="1"
+                <TimePicker Time="{Binding TimeOffset}"
+                            Grid.Column="1"
                             IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
             </Grid>
 

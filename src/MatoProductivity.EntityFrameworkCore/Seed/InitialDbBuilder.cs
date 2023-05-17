@@ -1,6 +1,7 @@
 ﻿using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Infrastructure.Common;
 using System;
+using System.Drawing;
 
 namespace MatoProductivity.EntityFrameworkCore.Seed
 {
@@ -23,16 +24,21 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             CreateNoteSegmentStore("闹钟", "时间/提醒", "ClockSegment", "闹钟片段，到指定时间将提醒您", "#A07DA0");
 
 
-            NoteTemplate noteTemplateEntity = CreateNoteTemplate("给孩子喂奶", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity = CreateNoteTemplate("宝宝喂奶", null, "#000000", "#FFFFFF");
             NoteTemplate noteTemplateEntity2 = CreateNoteTemplate("灵感", null, "#000000", "#FFFFFF");
             var noteTemplateId = noteTemplateEntity.Id;
             var noteTemplateId2 = noteTemplateEntity2.Id;
 
 
-            CreateNoteSegmentTemplate(noteTemplateId, "开始时间", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
-            CreateNoteSegmentTemplate(noteTemplateId, "结束时间", FaIcons.IconClockO, "DateTimeSegment", "喂奶结束时间", "#000000");
-            CreateNoteSegmentTemplate(noteTemplateId, "计时器", FaIcons.IconClockO, "TimerSegment", "", "#000000");
+           var noteSegmentTemplate1= CreateNoteSegmentTemplate(noteTemplateId, "开始", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId, "结束", FaIcons.IconClockO, "DateTimeSegment", "喂奶结束时间", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId, "宝宝饿啦", FaIcons.IconClockO, "TimerSegment", "", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId2, "备注", FaIcons.IconClockO, "TextSegment", "备注信息", "#000000");
+
+            var noteSegmentTemplateId1 = noteSegmentTemplate1.Id;
+
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplateId1, "IsAutoSet", "True");
+
         }
 
         private NoteTemplate CreateNoteTemplate(string title, string icon, string color = "#000000", string backgroundColor = "#FFFFFF")
@@ -70,6 +76,26 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
                     Icon=icon,
                     Color=color
                 });
+                this.context.SaveChanges();
+                noteSegmentTemplateEntity = noteSegmentTemplateEntityEntry.Entity;
+            }
+
+            return noteSegmentTemplateEntity;
+        }
+
+        private NoteSegmentTemplatePayload CreateNoteSegmentTemplatePayload(long noteSegmentTemplateId, string key, string value)
+        {
+            var noteSegmentTemplateEntity = this.context.Set<NoteSegmentTemplatePayload>().FirstOrDefault(c => c.NoteSegmentTemplateId == noteSegmentTemplateId && c.Key==key);
+            if (noteSegmentTemplateEntity == null)
+            {
+                var item = new NoteSegmentTemplatePayload()
+                {
+                    NoteSegmentTemplateId = noteSegmentTemplateId,
+                    Key=key
+                };
+                item.SetStringValue(value);
+
+                var noteSegmentTemplateEntityEntry = this.context.Set<NoteSegmentTemplatePayload>().Add(item);
                 this.context.SaveChanges();
                 noteSegmentTemplateEntity = noteSegmentTemplateEntityEntry.Entity;
             }

@@ -25,15 +25,22 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
-            <DatePicker Date="{Binding Time}"></DatePicker>
-            <TimePicker Time="{Binding TimeOffset}"></TimePicker>
+            <Label Text="{Binding NotificationContent}"></Label>
+            <Grid ColumnDefinitions="*,*">
+                <DatePicker Date="{Binding Time}"></DatePicker>
+                <TimePicker Grid.Column="1"
+                            Time="{Binding TimeOffset}"></TimePicker>
+            </Grid>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
             <Entry  Text="{Binding NotificationContent}"
                     Placeholder="请输入通知内容" />
-            <DatePicker Date="{Binding Time}"></DatePicker>
-            <TimePicker Time="{Binding TimeOffset}"></TimePicker>
+            <Grid ColumnDefinitions="*,*">
+                <DatePicker Date="{Binding Time}"></DatePicker>
+                <TimePicker Grid.Column="1"
+                            Time="{Binding TimeOffset}"></TimePicker>
+            </Grid>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

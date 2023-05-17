@@ -21,13 +21,53 @@ namespace MatoProductivity.ViewModels
 
             )
         {
+            this.Create = new Command(CreateActionAsync);
+            Remove = new Command(RemoveAction);
+            Edit = new Command(EditAction);
+            this.SwitchState=new Command(SwitchStateAction);
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
             this.PropertyChanged += NoteTemplatePageViewModel_PropertyChangedAsync;
             //Init();
         }
-    
+        private async void CreateActionAsync(object obj)
+        {
+
+            //using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
+            //{
+            //    (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+
+            //    await navigationService.PushAsync(objWrapper.Object);
+            //}
+        }
+
+        private void RemoveAction(object obj)
+        {
+            var note = (NoteTemplate)obj;
+
+            var delete = NoteTemplates.FirstOrDefault(c => c.Id == note.Id);
+            NoteTemplates.Remove(delete);
+
+
+        }
+
+        private async void EditAction(object obj)
+        {
+            var note = (NoteTemplate)obj;
+
+            //using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = note.Id }))
+            //{
+            //    await navigationService.PushAsync(objWrapper.Object);
+            //}
+        }
+
+        private void SwitchStateAction(object obj)
+        {
+            this.IsEditing= !this.IsEditing;
+        }
+
+
         public void Init()
         {
             var noteTemplates = this.repository.GetAllList();
@@ -40,11 +80,11 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNoteTemplate != default)
                 {
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId= SelectedNoteTemplate.Id }))
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = SelectedNoteTemplate.Id }))
                     {
                         await navigationService.PushAsync(objWrapper.Object);
                     }
-    
+
                     SelectedNoteTemplate = default;
                 }
             }
@@ -74,8 +114,26 @@ namespace MatoProductivity.ViewModels
             }
         }
 
+        private bool _isEditing;
 
+        public bool IsEditing
+        {
+            get { return _isEditing; }
+            set
+            {
+                _isEditing = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(SelectionMode));
 
+            }
+        }
+        public SelectionMode SelectionMode => IsEditing ? SelectionMode.Multiple : SelectionMode.Single;
+
+        public Command SwitchState { get; set; }
+        public Command Create { get; set; }
+
+        public Command Remove { get; set; }
+        public Command Edit { get; set; }
     }
 
 
