@@ -6,7 +6,6 @@ using Castle.MicroKernel.Registration;
 using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.Services;
-using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Services;
 using MatoProductivity.Views;

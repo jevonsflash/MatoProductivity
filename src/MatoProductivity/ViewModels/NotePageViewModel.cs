@@ -4,13 +4,12 @@ using Abp.Domain.Uow;
 using System.Reflection;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.Services;
-using MatoProductivity.Core.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
-using MatoProductivity.Core.ViewModels;
 using System.Drawing;
+using MatoProductivity.Core.ViewModels;
 
 namespace MatoProductivity.ViewModels
 {

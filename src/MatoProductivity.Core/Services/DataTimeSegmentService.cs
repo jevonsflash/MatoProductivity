@@ -2,7 +2,7 @@
 using Abp.Domain.Repositories;
 using Abp.Threading.Timers;
 using MatoProductivity.Core.Models.Entities;
-using MatoProductivity.Core.ViewModel;
+using MatoProductivity.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

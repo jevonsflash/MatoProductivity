@@ -7,7 +7,7 @@ using Abp.Localization;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Xaml;
 
-namespace MatoProductivity.Core
+namespace MatoProductivity.Core.Localization
 {
     // You exclude the 'Extension' suffix when using in Xaml markup
     [ContentProperty("Text")]

@@ -1,7 +1,7 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
 using MatoProductivity.Core.Models.Entities;
-using MatoProductivity.Core.ViewModel;
+using MatoProductivity.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

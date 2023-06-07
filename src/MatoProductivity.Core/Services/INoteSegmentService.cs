@@ -1,5 +1,4 @@
 ﻿using MatoProductivity.Core.Models.Entities;
-using MatoProductivity.Core.ViewModels;
 
 namespace MatoProductivity.Core.Services
 {

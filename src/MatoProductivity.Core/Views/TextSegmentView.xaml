@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity.Core"
+             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity.Core"
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
@@ -18,19 +19,27 @@
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
             <Label Text="{Binding Title}"></Label>
-            <Editor Text="{Binding Content}"
-                    Placeholder="{Binding PlaceHolder}"></Editor>
+            <controls:RichTextEditor Text="{Binding Content}"
+                                     Placeholder="{Binding PlaceHolder}"></controls:RichTextEditor>
 
-   
+
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Entry  Text="{Binding Title}"
-                    Placeholder="请输入标题" />
-            <Entry  Text="{Binding PlaceHolder}"
-                    Placeholder="请输入PlaceHolder" />
-            <Editor Text="{Binding Content}"
-                    Placeholder="{Binding PlaceHolder}"></Editor>
+            <Frame Style="{StaticResource Base_FrameEntry}">
+                <Entry  Text="{Binding Title}"
+                        Placeholder="请输入标题" />
+            </Frame>
+            <Frame Style="{StaticResource Base_FrameEntry}">
+
+                <Entry  Text="{Binding PlaceHolder}"
+                        Placeholder="请输入PlaceHolder" />
+            </Frame>
+            <Frame Style="{StaticResource Base_FrameEntry}">
+
+                <Editor Text="{Binding Content}"
+                        Placeholder="{Binding PlaceHolder}"></Editor>
+            </Frame>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

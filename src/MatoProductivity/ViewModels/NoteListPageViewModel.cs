@@ -4,7 +4,6 @@ using Abp.Domain.Repositories;
 using Castle.MicroKernel.Registration;
 using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
-using MatoProductivity.Core.ViewModel;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Infrastructure.Helper;
 using MatoProductivity.Models;

@@ -10,7 +10,7 @@ using Abp;
 using Abp.Dependency;
 using Abp.Domain.Services;
 
-namespace MatoProductivity.Core.ViewModel
+namespace MatoProductivity.Core.ViewModels
 {
     public abstract class ViewModelBase : AbpServiceBase, INotifyPropertyChanged
     {

@@ -12,28 +12,8 @@ public partial class EditNotePage : ContentPageBase, ITransientDependency
     {
         InitializeComponent();
         this.BindingContext = editNotePageViewModel;
-        Loaded+=EditNotePage_Loaded;
     }
 
-    private void EditNotePage_Loaded(object sender, EventArgs e)
-    {
-        EntryHandler.Mapper.AppendToMapping("Background", (handler, view) =>
-        {
-#if ANDROID
-	var shape = new Android.Graphics.Drawables.ShapeDrawable(new Android.Graphics.Drawables.Shapes.RectShape());
-
-	if (shape.Paint is not null)
-	{
-		shape.Paint.Color = Android.Graphics.Color.Transparent;
-		shape.Paint.StrokeWidth = 0;
-		shape.Paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
-	}
-	handler.PlatformView.Background = shape;
-#elif IOS || MACCATALYST
-            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
-#endif
-        });
-    }
 
     public EditNotePage(EditNotePageViewModel editNotePageViewModel, long NoteId) : this(editNotePageViewModel)
     {

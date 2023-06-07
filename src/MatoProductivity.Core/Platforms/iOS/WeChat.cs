@@ -1,4 +1,5 @@
-﻿using WXApi_Api;
+﻿using MatoProductivity.Core.WeChat;
+using WXApi_Api;
 using WXApiObject_Api;
 using WXApiObject_Scene = WXApiObject_Structs.WXScene;
 

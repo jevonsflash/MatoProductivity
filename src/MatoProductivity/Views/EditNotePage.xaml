@@ -254,7 +254,6 @@
             <CollectionView.Footer>
                 <VerticalStackLayout>
                     <Frame  HasShadow="True"
-                            IsVisible="{Binding IsConfiguratingNoteSegment}"
                             Margin="0,10,0,10"
                             CornerRadius="5"
                             Padding="8">

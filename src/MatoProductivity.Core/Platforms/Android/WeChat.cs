@@ -1,5 +1,6 @@
 ﻿using Com.Tencent.MM.Opensdk.Modelmsg;
 using Com.Tencent.MM.Opensdk.Openapi;
+using MatoProductivity.Core.WeChat;
 using static Com.Tencent.MM.Opensdk.Modelmsg.WXMediaMessage;
 
 namespace MatoProductivity.Core.Platforms.Android

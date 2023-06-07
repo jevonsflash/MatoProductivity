@@ -1,6 +1,6 @@
 ﻿using Abp.Dependency;
 
-namespace MatoProductivity.Core
+namespace MatoProductivity.Core.WeChat
 {
     public interface IWeChat : ISingletonDependency
     {

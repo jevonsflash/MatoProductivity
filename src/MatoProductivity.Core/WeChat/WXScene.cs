@@ -1,4 +1,4 @@
-﻿namespace MatoProductivity.Core
+﻿namespace MatoProductivity.Core.WeChat
 {
     public enum WXScene
     {
