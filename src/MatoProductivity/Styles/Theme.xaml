@@ -185,17 +185,21 @@
 
     <!--#region Frames-->
 
+    <Style TargetType="Border">
+        <Setter Property="StrokeShape"
+                Value="RoundRectangle 5" />
+
+    </Style>
+
     <Style x:Key="Base_FrameEntry"
-           TargetType="Frame">
-        <Setter Property="CornerRadius"
-                Value="10" />
+           TargetType="Border">
+        <Setter Property="StrokeShape"
+                Value="RoundRectangle 10" />
         <Setter Property="Margin"
                 Value="0,0,0,5" />
         <Setter Property="Padding"
                 Value="10, 0" />
-        <Setter Property="HasShadow"
-                Value="False" />
-        <Setter Property="BorderColor"
+        <Setter Property="Stroke"
                 Value="{AppThemeBinding Light={StaticResource LightEntryBorderColor}, Dark={StaticResource DarkEntryBorderColor}}" />
         <Setter Property="BackgroundColor"
                 Value="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}" />

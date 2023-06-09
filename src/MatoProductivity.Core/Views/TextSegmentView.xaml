@@ -26,20 +26,20 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Frame Style="{StaticResource Base_FrameEntry}">
+            <Border Style="{StaticResource Base_FrameEntry}">
                 <Entry  Text="{Binding Title}"
                         Placeholder="请输入标题" />
-            </Frame>
-            <Frame Style="{StaticResource Base_FrameEntry}">
+            </Border>
+            <Border Style="{StaticResource Base_FrameEntry}">
 
                 <Entry  Text="{Binding PlaceHolder}"
                         Placeholder="请输入PlaceHolder" />
-            </Frame>
-            <Frame Style="{StaticResource Base_FrameEntry}">
+            </Border>
+            <Border Style="{StaticResource Base_FrameEntry}">
 
                 <Editor Text="{Binding Content}"
                         Placeholder="{Binding PlaceHolder}"></Editor>
-            </Frame>
+            </Border>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

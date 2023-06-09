@@ -1,10 +1,46 @@
+using System.Collections.ObjectModel;
+
 namespace MatoProductivity.Core.Controls;
+
+public class TextSize
+{
+    public string Name { get; set; }
+    public double Value { get; set; }
+}
 
 public partial class RichTextEditor : ContentView
 {
+    public static List<Color> DefaultTextColorList = new List<Color>() {
+            Color.FromArgb("#F9371C"),
+            Color.FromArgb("#F97C1C"),
+            Color.FromArgb("#F9C81C"),
+            Color.FromArgb("#41D0B6"),
+            Color.FromArgb("#2CADF6"),
+            Color.FromArgb("#6562FC")
+        };
+
+    public static List<TextSize> DefaultTextSizeList = new List<TextSize>() {
+          new TextSize(){Name="Large", Value=22},
+          new TextSize(){Name="Middle", Value=18},
+          new TextSize(){Name="Small", Value=12},
+        };
+
     public RichTextEditor()
     {
         InitializeComponent();
+        PropertyChanged+=RichTextEditor_PropertyChanged;
+
+        this.ColorCollectionView.ItemsSource=DefaultTextColorList;
+        //this.ColorCollectionView.SelectedItem=DefaultTextColorList[0];
+        this.TextSizeCollectionView.ItemsSource=DefaultTextSizeList;
+        //this.TextSizeCollectionView.SelectedItem=DefaultTextSizeList[0];
+
+
+    }
+
+    private void RichTextEditor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+
     }
 
     public static readonly BindableProperty TextProperty =
@@ -19,6 +55,39 @@ public partial class RichTextEditor : ContentView
         get { return (string)GetValue(TextProperty); }
         set { SetValue(TextProperty, value); }
     }
+
+
+    public static readonly BindableProperty TextColorSelectorSourceProperty =
+      BindableProperty.Create("TextColorSelectorSource", typeof(IEnumerable<Color>), typeof(RichTextEditor), DefaultTextColorList, propertyChanged: (bindable, oldValue, newValue) =>
+      {
+          var obj = (RichTextEditor)bindable;
+          obj.TextColorSelectorSource=newValue as IEnumerable<Color>;
+          obj.ColorCollectionView.ItemsSource=obj.TextColorSelectorSource;
+      });
+
+    public IEnumerable<Color> TextColorSelectorSource
+    {
+        get { return (IEnumerable<Color>)GetValue(TextColorSelectorSourceProperty); }
+        set { SetValue(TextColorSelectorSourceProperty, value); }
+    }
+
+
+
+    public static readonly BindableProperty TextSizeSelectorSourceProperty =
+      BindableProperty.Create("TextSizeSelectorSource", typeof(IEnumerable<TextSize>), typeof(RichTextEditor), DefaultTextSizeList, propertyChanged: (bindable, oldValue, newValue) =>
+      {
+          var obj = (RichTextEditor)bindable;
+          obj.TextSizeSelectorSource=newValue as IEnumerable<Color>;
+          obj.ColorCollectionView.ItemsSource=obj.TextSizeSelectorSource;
+      });
+
+    public IEnumerable<Color> TextSizeSelectorSource
+    {
+        get { return (IEnumerable<Color>)GetValue(TextSizeSelectorSourceProperty); }
+        set { SetValue(TextSizeSelectorSourceProperty, value); }
+    }
+
+
 
     public static readonly BindableProperty PlaceholderProperty =
       BindableProperty.Create("Placeholder", typeof(string), typeof(RichTextEditor), default, propertyChanged: (bindable, oldValue, newValue) =>
@@ -47,6 +116,34 @@ public partial class RichTextEditor : ContentView
     private void UnderLineButton_Clicked(object sender, EventArgs e)
     {
         this.MainEditor.UnderlineChanged();
+
+    }
+
+    private void ColorCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var currentColor = this.ColorCollectionView.SelectedItem as Color;
+        this.MainEditor.ColorChanged(currentColor.ToArgbHex());
+
+    }
+
+    private void TextSizeButton_Clicked(object sender, EventArgs e)
+    {
+        ColorCollectionView.IsVisible = false;
+        TextSizeCollectionView.IsVisible =  !TextSizeCollectionView.IsVisible;
+    }
+
+    private void TextColorButton_Clicked(object sender, EventArgs e)
+    {
+        TextSizeCollectionView.IsVisible = false;
+        ColorCollectionView.IsVisible =  !ColorCollectionView.IsVisible;
+
+    }
+
+    private void TextSizeCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var textSize = (TextSize)this.TextSizeCollectionView.SelectedItem ;
+        this.MainEditor.TextSizeChanged(textSize.Value.ToString("0"));
+
 
     }
 }

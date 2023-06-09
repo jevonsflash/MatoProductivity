@@ -3,6 +3,8 @@ using Android.Graphics;
 using Android.Text.Style;
 using Android.Text;
 using AndroidX.AppCompat.Widget;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+
 # endif
 #if IOS|| MACCATALYST
 using Foundation;
@@ -13,7 +15,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using Microsoft.Maui.Graphics.Text;
-
 
 namespace MatoProductivity.Core.Controls
 {
@@ -140,7 +141,7 @@ namespace MatoProductivity.Core.Controls
                     bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
 
-                    foreach (UnderlineSpan span in underlineSpans)
+                    foreach (var span in underlineSpans)
                     {
                         hasFlag = true;
 
@@ -184,25 +185,150 @@ namespace MatoProductivity.Core.Controls
                     platformView.SetSelection((int)selectionStart, (int)selectionEnd);
                 }
 
+                void UpdateForegroundColorSpans(IEditable EditableText, Microsoft.Maui.Graphics.Color color)
+                {
+
+                    var foregroundColorSpans = EditableText.GetSpans((int)selectionStart, (int)selectionEnd, Java.Lang.Class.FromType(typeof(ForegroundColorSpan)));
+
+                    bool hasFlag = false;
+                    var spanType = SpanTypes.InclusiveInclusive;
+
+                    foreach (var span in foregroundColorSpans)
+                    {
+                        hasFlag = true;
+
+                        var spanStart = EditableText.GetSpanStart(span);
+                        var spanEnd = EditableText.GetSpanEnd(span);
+                        var newStart = spanStart;
+                        var newEnd = spanEnd;
+                        var startsBefore = false;
+                        var endsAfter = false;
+
+                        if (spanStart < selectionStart)
+                        {
+                            newStart = selectionStart;
+                            startsBefore = true;
+                        }
+                        if (spanEnd > selectionEnd)
+                        {
+                            newEnd = selectionEnd;
+                            endsAfter = true;
+                        }
+
+                        EditableText.RemoveSpan(span);
+
+                        if (startsBefore)
+                        {
+                            EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), spanStart, newStart, SpanTypes.ExclusiveExclusive);
+                        }
+                        if (endsAfter)
+                        {
+                            EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), newEnd, spanEnd, SpanTypes.ExclusiveExclusive);
+                        }
+                    }
+
+                    if (!hasFlag)
+                    {
+                        EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), (int)selectionStart, (int)selectionEnd, spanType);
+                    }
+
+                    platformView.TextFormatted = EditableText;
+                    platformView.RequestFocus();
+                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+                }
+
+                void UpdateBackgroundColorSpans(IEditable EditableText, Microsoft.Maui.Graphics.Color color)
+                {
+
+                    var foregroundColorSpans = EditableText.GetSpans((int)selectionStart, (int)selectionEnd, Java.Lang.Class.FromType(typeof(BackgroundColorSpan)));
+
+                    bool hasFlag = false;
+                    var spanType = SpanTypes.InclusiveInclusive;
+
+                    foreach (var span in foregroundColorSpans)
+                    {
+                        hasFlag = true;
+
+                        var spanStart = EditableText.GetSpanStart(span);
+                        var spanEnd = EditableText.GetSpanEnd(span);
+                        var newStart = spanStart;
+                        var newEnd = spanEnd;
+                        var startsBefore = false;
+                        var endsAfter = false;
+
+                        if (spanStart < selectionStart)
+                        {
+                            newStart = selectionStart;
+                            startsBefore = true;
+                        }
+                        if (spanEnd > selectionEnd)
+                        {
+                            newEnd = selectionEnd;
+                            endsAfter = true;
+                        }
+
+                        EditableText.RemoveSpan(span);
+
+                        if (startsBefore)
+                        {
+                            EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), spanStart, newStart, SpanTypes.ExclusiveExclusive);
+                        }
+                        if (endsAfter)
+                        {
+                            EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), newEnd, spanEnd, SpanTypes.ExclusiveExclusive);
+                        }
+                    }
+
+                    if (!hasFlag)
+                    {
+                        EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), (int)selectionStart, (int)selectionEnd, spanType);
+                    }
+
+                    platformView.TextFormatted = EditableText;
+                    platformView.RequestFocus();
+                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+                }
+
+                void UpdateAbsoluteSizeSpanSpans(IEditable EditableText, int size)
+                {
+
+                    var spanType = SpanTypes.InclusiveInclusive;
+
+                    EditableText.SetSpan(new AbsoluteSizeSpan(size), (int)selectionStart, (int)selectionEnd, spanType);
+
+                    platformView.TextFormatted = EditableText;
+                    platformView.RequestFocus();
+                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+                }
+
                 StyleChangeRequested =new EventHandler<StyleArgs>(
                     (object sender, StyleArgs e) =>
 
                     {
                         var EditableText = platformView.EditableText;
 
-                        if (e.Style == "bold")
+                        switch (e.Style)
                         {
-                            var flag = TypefaceStyle.Bold;
-                            UpdateStyleSpans(flag, EditableText);
-                        }
-                        else if (e.Style == "italic")
-                        {
-                            var flag = TypefaceStyle.Italic;
-                            UpdateStyleSpans(flag, EditableText);
-                        }
-                        else if (e.Style == "underline")
-                        {
-                            UpdateUnderlineSpans(EditableText);
+                            case StyleType.underline:
+                                UpdateUnderlineSpans(EditableText);
+                                break;
+                            case StyleType.italic:
+                                UpdateStyleSpans(TypefaceStyle.Italic, EditableText);
+                                break;
+                            case StyleType.bold:
+                                UpdateStyleSpans(TypefaceStyle.Bold, EditableText);
+                                break;
+                            case StyleType.backgoundColor:
+                                UpdateBackgroundColorSpans(EditableText, Microsoft.Maui.Graphics.Color.FromArgb(e.Params));
+                                break;
+                            case StyleType.foregroundColor:
+                                UpdateForegroundColorSpans(EditableText, Microsoft.Maui.Graphics.Color.FromArgb(e.Params));
+                                break;
+                            case StyleType.size:
+                                UpdateAbsoluteSizeSpanSpans(EditableText, int.Parse(e.Params));
+                                break;
+                            default:
+                                break;
                         }
 
 
@@ -324,21 +450,31 @@ namespace MatoProductivity.Core.Controls
                           }
                           System.Diagnostics.Debug.WriteLine("Rendering Style Change: " + e.Style);
 
-                          if (e.Style == "bold")
+
+                          switch (e.Style)
                           {
-                              var fontAttr = UIFontDescriptorSymbolicTraits.Bold;
-                              UpdateStyleAttributes(fontAttr);
+                              case StyleType.underline:
+                                  var underlineAttr = UIStringAttributeKey.UnderlineStyle;
+                                  UpdateUnderlineAttributes();
+                                  break;
+                              case StyleType.italic:
+                                  UpdateStyleAttributes(UIFontDescriptorSymbolicTraits.Italic);
+                                  break;
+                              case StyleType.bold:
+                                  UpdateStyleAttributes(UIFontDescriptorSymbolicTraits.Bold);
+                                  break;
+                              case StyleType.backgoundColor:
+                                  break;
+                              case StyleType.foregroundColor:
+                                  break;
+                              case StyleType.size:
+                                  break;
+                              default:
+                                  break;
                           }
-                          else if (e.Style == "italic")
-                          {
-                              var fontAttr = UIFontDescriptorSymbolicTraits.Italic;
-                              UpdateStyleAttributes(fontAttr);
-                          }
-                          else if (e.Style == "underline")
-                          {
-                              var underlineAttr = UIStringAttributeKey.UnderlineStyle;
-                              UpdateUnderlineAttributes();
-                          }
+                     
+
+
 
                       });
 
@@ -410,33 +546,42 @@ namespace MatoProductivity.Core.Controls
 
         public virtual void BoldChanged()
         {
-            StyleChangeRequested(this, new StyleArgs("bold"));
+            StyleChangeRequested(this, new StyleArgs(StyleType.bold));
         }
 
         public virtual void ItalicChanged()
         {
-            StyleChangeRequested(this, new StyleArgs("italic"));
+            StyleChangeRequested(this, new StyleArgs(StyleType.italic));
         }
 
         public virtual void UnderlineChanged()
         {
-            StyleChangeRequested(this, new StyleArgs("underline"));
+            StyleChangeRequested(this, new StyleArgs(StyleType.underline));
         }
 
+        public virtual void ColorChanged(string color)
+        {
+            StyleChangeRequested(this, new StyleArgs(StyleType.foregroundColor, color));
+        }
+        public virtual void TextSizeChanged(string size)
+        {
+            StyleChangeRequested(this, new StyleArgs(StyleType.size, size));
+        }
         public class StyleArgs : EventArgs
         {
-            public string Style;
-            public StyleArgs(string style)
+            public StyleType Style;
+
+            public string Params;
+            public StyleArgs(StyleType style, string @params = null)
             {
                 Style = style;
+                Params=@params;
             }
         }
-        /*
-		bool CanPaste()
-		{
-			return false;
-		}*/
 
-
+        public enum StyleType
+        {
+            underline, italic, bold, backgoundColor, foregroundColor, size
+        }
     }
 }
