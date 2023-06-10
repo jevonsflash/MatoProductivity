@@ -42,16 +42,19 @@ namespace MatoProductivity.Core.Controls
 #if WINDOWS
 #endif
 #if ANDROID
-                int selectionStart = 0;
-                int selectionEnd = 0;
-
                 var platformView = handler.PlatformView as AppCompatEditText;
 
-                PropertyChanged+=(sender, e) =>
+                int getSelectionStart() => platformView.SelectionStart;
+                int getSelectionEnd() => platformView.SelectionEnd;
+
+                void SetEditableText(IEditable EditableText, AppCompatEditText platformView)
                 {
-                    selectionStart= platformView.SelectionStart;
-                    selectionEnd= platformView.SelectionEnd;
-                };
+                    var orginSelectionStart = (int)getSelectionStart();
+                    var orginSelectionEnd = (int)getSelectionEnd();
+                    platformView.TextFormatted = EditableText;
+                    this.Focus();
+                    platformView.SetSelection(orginSelectionStart, orginSelectionEnd);
+                }
 
 
                 HtmlRequested = new EventHandler(
@@ -72,7 +75,7 @@ namespace MatoProductivity.Core.Controls
 
                 void UpdateStyleSpans(TypefaceStyle flagStyle, IEditable EditableText)
                 {
-                    var styleSpans = EditableText.GetSpans(selectionStart, selectionEnd, Java.Lang.Class.FromType(typeof(StyleSpan)));
+                    var styleSpans = EditableText.GetSpans(getSelectionStart(), getSelectionEnd(), Java.Lang.Class.FromType(typeof(StyleSpan)));
                     bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
 
@@ -85,14 +88,14 @@ namespace MatoProductivity.Core.Controls
                         var startsBefore = false;
                         var endsAfter = false;
 
-                        if (spanStart < selectionStart)
+                        if (spanStart < getSelectionStart())
                         {
-                            newStart = selectionStart;
+                            newStart = getSelectionStart();
                             startsBefore = true;
                         }
-                        if (spanEnd > selectionEnd)
+                        if (spanEnd > getSelectionEnd())
                         {
-                            newEnd = selectionEnd;
+                            newEnd = getSelectionEnd();
                             endsAfter = true;
                         }
 
@@ -126,17 +129,15 @@ namespace MatoProductivity.Core.Controls
                     }
                     if (!hasFlag)
                     {
-                        EditableText.SetSpan(new StyleSpan(flagStyle), selectionStart, selectionEnd, spanType);
+                        EditableText.SetSpan(new StyleSpan(flagStyle), getSelectionStart(), getSelectionEnd(), spanType);
                     }
 
-                    platformView.TextFormatted = EditableText;
-                    platformView.RequestFocus();
-                    platformView.SetSelection(selectionStart, selectionEnd);
+                    SetEditableText(EditableText, platformView);
                 }
                 void UpdateUnderlineSpans(IEditable EditableText)
                 {
 
-                    var underlineSpans = EditableText.GetSpans((int)selectionStart, (int)selectionEnd, Java.Lang.Class.FromType(typeof(UnderlineSpan)));
+                    var underlineSpans = EditableText.GetSpans((int)getSelectionStart(), (int)getSelectionEnd(), Java.Lang.Class.FromType(typeof(UnderlineSpan)));
 
                     bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
@@ -152,14 +153,14 @@ namespace MatoProductivity.Core.Controls
                         var startsBefore = false;
                         var endsAfter = false;
 
-                        if (spanStart < selectionStart)
+                        if (spanStart < getSelectionStart())
                         {
-                            newStart = selectionStart;
+                            newStart = getSelectionStart();
                             startsBefore = true;
                         }
-                        if (spanEnd > selectionEnd)
+                        if (spanEnd > getSelectionEnd())
                         {
-                            newEnd = selectionEnd;
+                            newEnd = getSelectionEnd();
                             endsAfter = true;
                         }
 
@@ -177,70 +178,29 @@ namespace MatoProductivity.Core.Controls
 
                     if (!hasFlag)
                     {
-                        EditableText.SetSpan(new UnderlineSpan(), (int)selectionStart, (int)selectionEnd, spanType);
+                        EditableText.SetSpan(new UnderlineSpan(), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
                     }
-
-                    platformView.TextFormatted = EditableText;
-                    platformView.RequestFocus();
-                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+                    SetEditableText(EditableText, platformView);
                 }
+
+
 
                 void UpdateForegroundColorSpans(IEditable EditableText, Microsoft.Maui.Graphics.Color color)
                 {
 
-                    var foregroundColorSpans = EditableText.GetSpans((int)selectionStart, (int)selectionEnd, Java.Lang.Class.FromType(typeof(ForegroundColorSpan)));
 
-                    bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
 
-                    foreach (var span in foregroundColorSpans)
-                    {
-                        hasFlag = true;
+                    EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
+                    SetEditableText(EditableText, platformView);
 
-                        var spanStart = EditableText.GetSpanStart(span);
-                        var spanEnd = EditableText.GetSpanEnd(span);
-                        var newStart = spanStart;
-                        var newEnd = spanEnd;
-                        var startsBefore = false;
-                        var endsAfter = false;
-
-                        if (spanStart < selectionStart)
-                        {
-                            newStart = selectionStart;
-                            startsBefore = true;
-                        }
-                        if (spanEnd > selectionEnd)
-                        {
-                            newEnd = selectionEnd;
-                            endsAfter = true;
-                        }
-
-                        EditableText.RemoveSpan(span);
-
-                        if (startsBefore)
-                        {
-                            EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), spanStart, newStart, SpanTypes.ExclusiveExclusive);
-                        }
-                        if (endsAfter)
-                        {
-                            EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), newEnd, spanEnd, SpanTypes.ExclusiveExclusive);
-                        }
-                    }
-
-                    if (!hasFlag)
-                    {
-                        EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), (int)selectionStart, (int)selectionEnd, spanType);
-                    }
-
-                    platformView.TextFormatted = EditableText;
-                    platformView.RequestFocus();
-                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+              
                 }
 
                 void UpdateBackgroundColorSpans(IEditable EditableText, Microsoft.Maui.Graphics.Color color)
                 {
 
-                    var foregroundColorSpans = EditableText.GetSpans((int)selectionStart, (int)selectionEnd, Java.Lang.Class.FromType(typeof(BackgroundColorSpan)));
+                    var foregroundColorSpans = EditableText.GetSpans((int)getSelectionStart(), (int)getSelectionEnd(), Java.Lang.Class.FromType(typeof(BackgroundColorSpan)));
 
                     bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
@@ -256,14 +216,14 @@ namespace MatoProductivity.Core.Controls
                         var startsBefore = false;
                         var endsAfter = false;
 
-                        if (spanStart < selectionStart)
+                        if (spanStart < getSelectionStart())
                         {
-                            newStart = selectionStart;
+                            newStart = getSelectionStart();
                             startsBefore = true;
                         }
-                        if (spanEnd > selectionEnd)
+                        if (spanEnd > getSelectionEnd())
                         {
-                            newEnd = selectionEnd;
+                            newEnd = getSelectionEnd();
                             endsAfter = true;
                         }
 
@@ -281,12 +241,9 @@ namespace MatoProductivity.Core.Controls
 
                     if (!hasFlag)
                     {
-                        EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), (int)selectionStart, (int)selectionEnd, spanType);
+                        EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
                     }
-
-                    platformView.TextFormatted = EditableText;
-                    platformView.RequestFocus();
-                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+                    SetEditableText(EditableText, platformView);
                 }
 
                 void UpdateAbsoluteSizeSpanSpans(IEditable EditableText, int size)
@@ -294,11 +251,8 @@ namespace MatoProductivity.Core.Controls
 
                     var spanType = SpanTypes.InclusiveInclusive;
 
-                    EditableText.SetSpan(new AbsoluteSizeSpan(size), (int)selectionStart, (int)selectionEnd, spanType);
-
-                    platformView.TextFormatted = EditableText;
-                    platformView.RequestFocus();
-                    platformView.SetSelection((int)selectionStart, (int)selectionEnd);
+                    EditableText.SetSpan(new AbsoluteSizeSpan(size, true), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
+                    SetEditableText(EditableText, platformView);
                 }
 
                 StyleChangeRequested =new EventHandler<StyleArgs>(

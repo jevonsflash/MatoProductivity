@@ -49,8 +49,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 
-	<key>XSLaunchImageAssets</key>
-	<string>Assets.xcassets/LaunchImage.launchimage</string>
 	<key>CFBundleExecutable</key>
 	<string></string>
 	<key>CFBundleVersion</key>
