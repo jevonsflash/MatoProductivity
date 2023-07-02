@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace MatoProductivity.Core.Controls;
 
@@ -11,6 +12,7 @@ public class TextSize
 public partial class RichTextEditor : ContentView
 {
     public static List<Color> DefaultTextColorList = new List<Color>() {
+            Color.FromArgb("#000000"),
             Color.FromArgb("#F9371C"),
             Color.FromArgb("#F97C1C"),
             Color.FromArgb("#F9C81C"),
@@ -20,22 +22,32 @@ public partial class RichTextEditor : ContentView
         };
 
     public static List<TextSize> DefaultTextSizeList = new List<TextSize>() {
-          new TextSize(){Name="Large", Value=22},
-          new TextSize(){Name="Middle", Value=18},
-          new TextSize(){Name="Small", Value=12},
+          new TextSize(){Name="Header", Value=24},
+          new TextSize(){Name="Subtitle", Value=20},
+          new TextSize(){Name="Body", Value=16},
         };
 
     public RichTextEditor()
     {
         InitializeComponent();
         PropertyChanged+=RichTextEditor_PropertyChanged;
-
+        this.Loaded+=RichTextEditor_Loaded; ;
         this.ColorCollectionView.ItemsSource=DefaultTextColorList;
-        //this.ColorCollectionView.SelectedItem=DefaultTextColorList[0];
         this.TextSizeCollectionView.ItemsSource=DefaultTextSizeList;
-        //this.TextSizeCollectionView.SelectedItem=DefaultTextSizeList[0];
+        HideCollectionViews();
+        this.MainEditor.TextChanged +=MainEditor_TextChanged;
 
+    }
 
+    private void MainEditor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        this.Text=MainEditor.GetHtmlText();
+    }
+
+    private void RichTextEditor_Loaded(object sender, EventArgs e)
+    {
+        //this.ColorCollectionView.SelectedItem=DefaultTextColorList[0];
+        //this.TextSizeCollectionView.SelectedItem=DefaultTextSizeList[1];
     }
 
     private void RichTextEditor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -47,7 +59,12 @@ public partial class RichTextEditor : ContentView
       BindableProperty.Create("Text", typeof(string), typeof(RichTextEditor), default, propertyChanged: (bindable, oldValue, newValue) =>
       {
           var obj = (RichTextEditor)bindable;
-          obj.MainEditor.Text=newValue as string;
+          var newText = newValue as string;
+          if (obj.Text!=newText)
+          {
+              obj.MainEditor.SetHtmlText(newText);
+
+          }
       });
 
     public string Text
@@ -102,19 +119,32 @@ public partial class RichTextEditor : ContentView
         set { SetValue(PlaceholderProperty, value); }
     }
 
+    public string GetHtmlText()
+    {
+        return this.MainEditor.GetHtmlText();
+    }
+
+    public void SetHtmlText(string html)
+    {
+        this.MainEditor.SetHtmlText(html);
+    }
+
     private void BoldButton_Clicked(object sender, EventArgs e)
     {
+        HideCollectionViews();
         this.MainEditor.BoldChanged();
     }
 
     private void ItalicButton_Clicked(object sender, EventArgs e)
     {
+        HideCollectionViews();
         this.MainEditor.ItalicChanged();
 
     }
 
     private void UnderLineButton_Clicked(object sender, EventArgs e)
     {
+        HideCollectionViews();
         this.MainEditor.UnderlineChanged();
 
     }
@@ -139,9 +169,16 @@ public partial class RichTextEditor : ContentView
 
     }
 
+    private void HideCollectionViews()
+    {
+        ColorCollectionView.IsVisible = false;
+        TextSizeCollectionView.IsVisible = false;
+    }
+
+
     private void TextSizeCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var textSize = (TextSize)this.TextSizeCollectionView.SelectedItem ;
+        var textSize = (TextSize)this.TextSizeCollectionView.SelectedItem;
         this.MainEditor.TextSizeChanged(textSize.Value.ToString("0"));
 
 

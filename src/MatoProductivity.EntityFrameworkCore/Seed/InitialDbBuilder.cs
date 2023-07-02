@@ -17,11 +17,11 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
         internal void Create()
         {
 
-            CreateNoteSegmentStore("时间戳", "时间/提醒", "DateTimeSegment", "时间戳片段，记录一个瞬时时间，保存在您的笔记中", "#D8292B");
-            CreateNoteSegmentStore("笔记", "文本", "TextSegment", "笔记片段，随时用文本记录您的想法", "#E1A08B");
-            CreateNoteSegmentStore("Todo", "文本", "TodoSegment", "笔记片段，随时用文本记录您的想法", "#C7C3E3");
-            CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "计时器片段，计时器结束后将提醒您", "#AD9CC2");
-            CreateNoteSegmentStore("闹钟", "时间/提醒", "ClockSegment", "闹钟片段，到指定时间将提醒您", "#A07DA0");
+            CreateNoteSegmentStore("时间戳", "时间/提醒", "DateTimeSegment", "时间戳片段，记录一个瞬时时间，保存在您的笔记中", FaIcons.IconClockO, "#D8292B");
+            CreateNoteSegmentStore("笔记", "文本", "TextSegment", "笔记片段，随时用文本记录您的想法", FaIcons.IconStickyNoteO, "#E1A08B");
+            CreateNoteSegmentStore("Todo", "文本", "TodoSegment", "笔记片段，随时用文本记录您的想法", FaIcons.IconCheckSquareO, "#C7C3E3");
+            CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "计时器片段，计时器结束后将提醒您", FaIcons.IconClockO, "#AD9CC2");
+            CreateNoteSegmentStore("闹钟", "时间/提醒", "ClockSegment", "闹钟片段，到指定时间将提醒您", FaIcons.IconClockO, "#A07DA0");
 
 
             NoteTemplate noteTemplateEntity = CreateNoteTemplate("宝宝喂奶", null, "#000000", "#FFFFFF");
@@ -105,7 +105,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
 
 
-        private NoteSegmentStore CreateNoteSegmentStore(string title, string category, string type, string desc, string color = "#000000")
+        private NoteSegmentStore CreateNoteSegmentStore(string title, string category, string type, string desc, string icon, string color = "#000000")
         {
             var noteSegmentStoreEntity = this.context.Set<NoteSegmentStore>().FirstOrDefault(c => c.Title == title);
             if (noteSegmentStoreEntity == null)
@@ -117,6 +117,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
                     Type = type,
                     Desc = desc,
                     Color = color,
+                    Icon =icon
 
                 });
                 this.context.SaveChanges();

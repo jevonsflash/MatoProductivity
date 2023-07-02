@@ -6,9 +6,10 @@ using AndroidX.AppCompat.Widget;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 
 # endif
-#if IOS|| MACCATALYST
+#if IOS
 using Foundation;
 using UIKit;
+using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 # endif
 
 using System;
@@ -18,24 +19,23 @@ using Microsoft.Maui.Graphics.Text;
 
 namespace MatoProductivity.Core.Controls
 {
-    public class HtmlEditor : Editor, INotifyPropertyChanged
+    public partial class WysiwygContentEditor : Editor, INotifyPropertyChanged
     {
-        public HtmlEditor()
+        public WysiwygContentEditor()
         {
-            HandlerChanged+=HtmlEditor_HandlerChanged;
-            HandlerChanging+=HtmlEditor_HandlerChanging;
-            PropertyChanged+=HtmlEditor_PropertyChanged;
+            HandlerChanged+=WysiwygContentEditor_HandlerChanged;
+            HandlerChanging+=WysiwygContentEditor_HandlerChanging;
+            PropertyChanged+=WysiwygContentEditor_PropertyChanged;
         }
 
-        private void HtmlEditor_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void WysiwygContentEditor_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             InvalidateMeasure();
 
         }
 
-        private void HtmlEditor_HandlerChanged(object sender, EventArgs e)
+        private void WysiwygContentEditor_HandlerChanged(object sender, EventArgs e)
         {
-
             var handler = Handler;
             if (handler != null)
             {
@@ -49,28 +49,27 @@ namespace MatoProductivity.Core.Controls
 
                 void SetEditableText(IEditable EditableText, AppCompatEditText platformView)
                 {
-                    var orginSelectionStart = (int)getSelectionStart();
-                    var orginSelectionEnd = (int)getSelectionEnd();
+                    var orginSelectionStart = getSelectionStart();
+                    var orginSelectionEnd = getSelectionEnd();
                     platformView.TextFormatted = EditableText;
-                    this.Focus();
+                    Focus();
                     platformView.SetSelection(orginSelectionStart, orginSelectionEnd);
                 }
 
 
-                HtmlRequested = new EventHandler(
-                   (object sender, EventArgs e) =>
+                GetHtmlRequest = new EventHandler(
+                   (sender, e) =>
                         {
-                            var editor = (HtmlEditor)sender;
-                            editor.SetHtmlText(HtmlParser_Android.SpannedToHtml(platformView.EditableText));
+                            var editor = (WysiwygContentEditor)sender;
+                            HtmlString=HtmlParser_Android.SpannedToHtml(platformView.EditableText);
                         }
                     );
-                HtmlSet =new EventHandler<HtmlArgs>(
+                SetHtmlRequest =new EventHandler<string>(
 
-                     (object sender, HtmlArgs e) =>
-    {
-        var htmlString = e.HtmlToPass;
-        platformView.TextFormatted = HtmlParser_Android.HtmlToSpanned(htmlString);
-    }
+                     (sender, htmlString) =>
+                        {
+                            platformView.TextFormatted = HtmlParser_Android.HtmlToSpanned(htmlString);
+                        }
                     );
 
                 void UpdateStyleSpans(TypefaceStyle flagStyle, IEditable EditableText)
@@ -137,7 +136,7 @@ namespace MatoProductivity.Core.Controls
                 void UpdateUnderlineSpans(IEditable EditableText)
                 {
 
-                    var underlineSpans = EditableText.GetSpans((int)getSelectionStart(), (int)getSelectionEnd(), Java.Lang.Class.FromType(typeof(UnderlineSpan)));
+                    var underlineSpans = EditableText.GetSpans(getSelectionStart(), getSelectionEnd(), Java.Lang.Class.FromType(typeof(UnderlineSpan)));
 
                     bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
@@ -178,7 +177,7 @@ namespace MatoProductivity.Core.Controls
 
                     if (!hasFlag)
                     {
-                        EditableText.SetSpan(new UnderlineSpan(), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
+                        EditableText.SetSpan(new UnderlineSpan(), getSelectionStart(), getSelectionEnd(), spanType);
                     }
                     SetEditableText(EditableText, platformView);
                 }
@@ -187,62 +186,15 @@ namespace MatoProductivity.Core.Controls
 
                 void UpdateForegroundColorSpans(IEditable EditableText, Microsoft.Maui.Graphics.Color color)
                 {
-
-
                     var spanType = SpanTypes.InclusiveInclusive;
-
-                    EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
+                    EditableText.SetSpan(new ForegroundColorSpan(color.ToAndroid()), getSelectionStart(), getSelectionEnd(), spanType);
                     SetEditableText(EditableText, platformView);
-
-              
                 }
 
                 void UpdateBackgroundColorSpans(IEditable EditableText, Microsoft.Maui.Graphics.Color color)
                 {
-
-                    var foregroundColorSpans = EditableText.GetSpans((int)getSelectionStart(), (int)getSelectionEnd(), Java.Lang.Class.FromType(typeof(BackgroundColorSpan)));
-
-                    bool hasFlag = false;
                     var spanType = SpanTypes.InclusiveInclusive;
-
-                    foreach (var span in foregroundColorSpans)
-                    {
-                        hasFlag = true;
-
-                        var spanStart = EditableText.GetSpanStart(span);
-                        var spanEnd = EditableText.GetSpanEnd(span);
-                        var newStart = spanStart;
-                        var newEnd = spanEnd;
-                        var startsBefore = false;
-                        var endsAfter = false;
-
-                        if (spanStart < getSelectionStart())
-                        {
-                            newStart = getSelectionStart();
-                            startsBefore = true;
-                        }
-                        if (spanEnd > getSelectionEnd())
-                        {
-                            newEnd = getSelectionEnd();
-                            endsAfter = true;
-                        }
-
-                        EditableText.RemoveSpan(span);
-
-                        if (startsBefore)
-                        {
-                            EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), spanStart, newStart, SpanTypes.ExclusiveExclusive);
-                        }
-                        if (endsAfter)
-                        {
-                            EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), newEnd, spanEnd, SpanTypes.ExclusiveExclusive);
-                        }
-                    }
-
-                    if (!hasFlag)
-                    {
-                        EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
-                    }
+                    EditableText.SetSpan(new BackgroundColorSpan(color.ToAndroid()), getSelectionStart(), getSelectionEnd(), spanType);
                     SetEditableText(EditableText, platformView);
                 }
 
@@ -251,12 +203,12 @@ namespace MatoProductivity.Core.Controls
 
                     var spanType = SpanTypes.InclusiveInclusive;
 
-                    EditableText.SetSpan(new AbsoluteSizeSpan(size, true), (int)getSelectionStart(), (int)getSelectionEnd(), spanType);
+                    EditableText.SetSpan(new AbsoluteSizeSpan(size, true), getSelectionStart(), getSelectionEnd(), spanType);
                     SetEditableText(EditableText, platformView);
                 }
 
                 StyleChangeRequested =new EventHandler<StyleArgs>(
-                    (object sender, StyleArgs e) =>
+                    (sender, e) =>
 
                     {
                         var EditableText = platformView.EditableText;
@@ -290,31 +242,33 @@ namespace MatoProductivity.Core.Controls
 
 #endif
 
-#if IOS|| MACCATALYST
+#if IOS
                 var platformView = handler.PlatformView as UITextView;
+                NSRange getSelectionRange() => platformView.SelectedRange;
+
                 NSMutableAttributedString AttributedText;
-                UIFont CurrentFont;
-                bool CurrentUnderline;
-                bool ChangeUnderline;
+                UIFont CurrentFont = null;
+                bool CurrentUnderline = default;
+                bool ChangeUnderline = default;
                 NSMutableDictionary CurrentTypingAttributes = new NSMutableDictionary();
 
-                HtmlRequested = new EventHandler(
-                                      (object sender, EventArgs e) => {
-                                          var editor = (HtmlEditor)sender;
-                                          editor.SetHtmlText(HtmlParser_iOS.AttributedStringToHtml(platformView.AttributedText));
+                GetHtmlRequest = new EventHandler(
+                                      (sender, e) =>
+                                      {
+                                          var editor = (WysiwygContentEditor)sender;
+                                          HtmlString=HtmlParser_iOS.AttributedStringToHtml(platformView.AttributedText);
 
                                       });
 
-                HtmlSet =new EventHandler<HtmlArgs>((object sender, HtmlArgs e) =>
+                SetHtmlRequest =new EventHandler<string>((sender, htmlString) =>
                 {
-                    var htmlString = e.HtmlToPass;
                     platformView.AttributedText = HtmlParser_iOS.HtmlToAttributedString(htmlString);
                 });
 
                 void UpdateStyleAttributes(UIFontDescriptorSymbolicTraits fontAttr)
                 {
-                    var selectionRange = platformView.SelectedRange;
                     bool hasFlag = false;
+                    var selectionRange = getSelectionRange();
 
                     AttributedText.EnumerateAttribute(UIStringAttributeKey.Font, selectionRange, NSAttributedStringEnumeration.LongestEffectiveRangeNotRequired, (NSObject value, NSRange range, ref bool stop) =>
                     {
@@ -366,7 +320,7 @@ namespace MatoProductivity.Core.Controls
 
                 void UpdateUnderlineAttributes()
                 {
-                    var selectionRange = platformView.SelectedRange;
+                    var selectionRange = getSelectionRange();
                     bool hasFlag = false;
 
                     AttributedText.EnumerateAttribute(UIStringAttributeKey.UnderlineStyle, selectionRange, NSAttributedStringEnumeration.LongestEffectiveRangeNotRequired, (NSObject value, NSRange range, ref bool stop) =>
@@ -391,10 +345,39 @@ namespace MatoProductivity.Core.Controls
                     ChangeUnderline = true;
                 }
 
+                void UpdateForegroundColorAttributes(Color color)
+                {
+                    var selectionRange = getSelectionRange();
+                    AttributedText.AddAttribute(UIStringAttributeKey.ForegroundColor, color.ToUIColor(), selectionRange);
+                }
+
+                void UpdateBackgroundColorAttributes(Color color)
+                {
+                    var selectionRange = getSelectionRange();
+                    AttributedText.AddAttribute(UIStringAttributeKey.BackgroundColor, color.ToUIColor(), selectionRange);
+                }
+
+                void UpdateFontSizeSpanAttributes(int size)
+                {
+                    UIFont newFont;
+                    if (CurrentFont!=null)
+                    {
+                        newFont =  CurrentFont.WithSize((float)size);
+                    }
+                    else
+                    {
+                        newFont = UIFont.SystemFontOfSize((float)size);
+
+                    }
+                    var selectionRange = getSelectionRange();
+                    AttributedText.AddAttribute(UIStringAttributeKey.Font, newFont, selectionRange);
+                    CurrentFont=newFont;
+                }
+
 
 
                 StyleChangeRequested =new EventHandler<StyleArgs>(
-                      (object sender, StyleArgs e) =>
+                      (sender, e) =>
 
                       {
                           AttributedText = new NSMutableAttributedString(platformView.AttributedText);
@@ -402,7 +385,7 @@ namespace MatoProductivity.Core.Controls
                           {
                               CurrentTypingAttributes = new NSMutableDictionary(platformView.TypingAttributes);
                           }
-                          System.Diagnostics.Debug.WriteLine("Rendering Style Change: " + e.Style);
+                          Debug.WriteLine("Rendering Style Change: " + e.Style);
 
 
                           switch (e.Style)
@@ -418,15 +401,41 @@ namespace MatoProductivity.Core.Controls
                                   UpdateStyleAttributes(UIFontDescriptorSymbolicTraits.Bold);
                                   break;
                               case StyleType.backgoundColor:
+                                  UpdateBackgroundColorAttributes(Color.FromArgb(e.Params));
+
                                   break;
                               case StyleType.foregroundColor:
+                                  UpdateForegroundColorAttributes(Color.FromArgb(e.Params));
                                   break;
                               case StyleType.size:
+                                  UpdateFontSizeSpanAttributes(int.Parse(e.Params));
+
                                   break;
                               default:
                                   break;
                           }
-                     
+
+                          platformView.AttributedText = AttributedText;
+                          Focus();
+
+                          if (CurrentFont != null)
+                          {
+                              var name = CurrentFont.Name;
+                              CurrentTypingAttributes[UIStringAttributeKey.Font] = CurrentFont;
+                              if (ChangeUnderline)
+                              {
+                                  if (CurrentUnderline)
+                                  {
+                                      CurrentTypingAttributes[UIStringAttributeKey.UnderlineStyle] = (NSNumber)1;
+                                  }
+                                  else
+                                  {
+                                      CurrentTypingAttributes[UIStringAttributeKey.UnderlineStyle] = (NSNumber)0;
+                                  }
+                                  ChangeUnderline = false;
+                              }
+                              platformView.TypingAttributes = CurrentTypingAttributes;
+                          }
 
 
 
@@ -438,36 +447,22 @@ namespace MatoProductivity.Core.Controls
 
         }
 
-        private void HtmlEditor_HandlerChanging(object sender, HandlerChangingEventArgs e)
+        private void WysiwygContentEditor_HandlerChanging(object sender, HandlerChangingEventArgs e)
         {
             if (e.OldHandler != null)
             {
-                HtmlRequested =null;
-                HtmlSet =null;
+                GetHtmlRequest =null;
+                SetHtmlRequest =null;
                 StyleChangeRequested =null;
             }
         }
 
-        public event EventHandler HtmlRequested;
-        public event EventHandler<HtmlArgs> HtmlSet;
+        public event EventHandler GetHtmlRequest;
+        public event EventHandler<string> SetHtmlRequest;
         public event EventHandler<StyleArgs> StyleChangeRequested;
         public event EventHandler<SelectionArgs> SelectionChangeHandler;
 
-        string HtmlString;
-
-
-
-
-        public class SelectionArgs : EventArgs
-        {
-            public int Start;
-            public int End;
-            public SelectionArgs(int start, int end)
-            {
-                Start = start;
-                End = end;
-            }
-        }
+        public string HtmlString { get; set; }
 
         public void SetSelection(int start, int end)
         {
@@ -478,64 +473,40 @@ namespace MatoProductivity.Core.Controls
         public void SetHtmlText(string htmlString)
         {
             HtmlString = htmlString;
-            var args = new HtmlArgs(htmlString);
-            HtmlSet(this, args);
+            SetHtmlRequest?.Invoke(this, htmlString);
         }
 
-        public class HtmlArgs : EventArgs
-        {
-            public string HtmlToPass;
-            public HtmlArgs(string htmlToPass)
-            {
-                HtmlToPass = htmlToPass;
-            }
-        }
+
 
         public string GetHtmlText()
         {
 
-            HtmlRequested(this, new EventArgs());
+            GetHtmlRequest?.Invoke(this, new EventArgs());
             return HtmlString;
         }
 
         public virtual void BoldChanged()
         {
-            StyleChangeRequested(this, new StyleArgs(StyleType.bold));
+            StyleChangeRequested?.Invoke(this, new StyleArgs(StyleType.bold));
         }
 
         public virtual void ItalicChanged()
         {
-            StyleChangeRequested(this, new StyleArgs(StyleType.italic));
+            StyleChangeRequested?.Invoke(this, new StyleArgs(StyleType.italic));
         }
 
         public virtual void UnderlineChanged()
         {
-            StyleChangeRequested(this, new StyleArgs(StyleType.underline));
+            StyleChangeRequested?.Invoke(this, new StyleArgs(StyleType.underline));
         }
 
         public virtual void ColorChanged(string color)
         {
-            StyleChangeRequested(this, new StyleArgs(StyleType.foregroundColor, color));
+            StyleChangeRequested?.Invoke(this, new StyleArgs(StyleType.foregroundColor, color));
         }
         public virtual void TextSizeChanged(string size)
         {
-            StyleChangeRequested(this, new StyleArgs(StyleType.size, size));
-        }
-        public class StyleArgs : EventArgs
-        {
-            public StyleType Style;
-
-            public string Params;
-            public StyleArgs(StyleType style, string @params = null)
-            {
-                Style = style;
-                Params=@params;
-            }
-        }
-
-        public enum StyleType
-        {
-            underline, italic, bold, backgoundColor, foregroundColor, size
+            StyleChangeRequested?.Invoke(this, new StyleArgs(StyleType.size, size));
         }
     }
 }

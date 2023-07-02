@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MatoProductivity.Views.NoteSegmentStoreListPage"
-             xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity">
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                x:Class="MatoProductivity.Views.NoteSegmentStoreListPage"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity">
     <Grid VerticalOptions="Center"
           Padding="20,10"
           HorizontalOptions="FillAndExpand">
@@ -26,12 +26,20 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                        <Image Grid.RowSpan="2"
-                               Source="{Binding Icon}"
-                               Aspect="AspectFill"
-                               HeightRequest="60"
-                               WidthRequest="60" />
+                        <Label Grid.RowSpan="2"
+                               VerticalOptions="Center"
+                               Text="{Binding Icon}"
+                               FontFamily="FontAwesome"></Label>
+
                         <Label Grid.Column="1"
                                TextColor="{Binding Color}"
                                Text="{Binding Title}"

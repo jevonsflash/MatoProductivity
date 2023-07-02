@@ -17,7 +17,7 @@
                             <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
                                 <Border BackgroundColor="Transparent"
-                                       Padding="15, 0">
+                                        Padding="15, 0">
                                     <Label Text="&#xf2ed;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                                            FontSize="{StaticResource Headline4FontSize}"
@@ -29,7 +29,7 @@
                             <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
                                 <Border BackgroundColor="Transparent"
-                                       Padding="25, 0, 15, 0">
+                                        Padding="25, 0, 15, 0">
                                     <Label Text="&#xf303;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                                            FontSize="{StaticResource Headline4FontSize}"
@@ -41,9 +41,8 @@
                         </SwipeItems>
                     </SwipeView.RightItems>
 
-                    <Border
-                            Margin="0,10,0,10"
-                            
+                    <Border x:Name="ContentLayout"
+                            Margin="0"
                             Padding="8">
                         <Grid>
                             <ContentPresenter Grid.Column="1" />
@@ -54,10 +53,8 @@
         </ControlTemplate>
 
         <ControlTemplate x:Key="NoteCardViewDesktop">
-            <Border
-                   Margin="0,10,0,10"
-                   
-                   Padding="8">
+            <Border Margin="0"
+                    Padding="8">
                 <!--https://github.com/dotnet/maui/issues/5382-->
                 <!--<FlyoutBase.ContextFlyout>
                     <MenuFlyout>
@@ -179,7 +176,7 @@
             <BindableLayout.ItemTemplate>
                 <DataTemplate>
                     <Border Grid.Column="{Binding Column}"
-                           Padding="4, 8, 4, 8"
+                            Padding="4, 8, 4, 8"
                             StrokeShape="RoundRectangle 15">
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BindingContext.DayCommand, Source={x:Reference daysList}}"
@@ -324,7 +321,7 @@
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ContentView>
+                    <ContentView Margin="0,5">
                         <ContentView.ControlTemplate>
                             <OnIdiom Phone="{StaticResource NoteCardViewPhone}"
                                      Tablet="{StaticResource NoteCardViewDesktop}"
@@ -361,13 +358,13 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         <Border  Grid.RowSpan="6"
-                BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                VerticalOptions="End"
-                HorizontalOptions="End"
-                StrokeShape="RoundRectangle 20"
-                TranslationY="-20"
-                TranslationX="-20"
-                Padding="20">
+                 BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                 VerticalOptions="End"
+                 HorizontalOptions="End"
+                 StrokeShape="RoundRectangle 20"
+                 TranslationY="-20"
+                 TranslationX="-20"
+                 Padding="20">
             <Border.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding Create}"></TapGestureRecognizer>
             </Border.GestureRecognizers>

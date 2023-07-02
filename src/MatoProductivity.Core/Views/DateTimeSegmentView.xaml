@@ -5,9 +5,6 @@
              x:Class="MatoProductivity.Core.Views.DateTimeSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
-            <Label  FontSize="Large"
-                    Text="{Binding Title}"></Label>
-
             <Label FontSize="Large">
                 <Label.FormattedText>
                     <FormattedString>
@@ -28,7 +25,6 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
-            <Label Text="{Binding Title}"></Label>
             <Grid ColumnDefinitions="*,*">
                 <DatePicker Date="{Binding Time}"
                             IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>

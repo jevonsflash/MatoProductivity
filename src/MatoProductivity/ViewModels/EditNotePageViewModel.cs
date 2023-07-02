@@ -23,6 +23,7 @@ namespace MatoProductivity.ViewModels
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
         private readonly IRepository<NoteTemplate, long> templateRepository;
         private readonly IRepository<NoteSegment, long> noteSegmentRepository;
+        private readonly IRepository<NoteSegmentStore, long> noteSegmentStoreRepository;
         private readonly IRepository<Note, long> repository;
         private readonly IUnitOfWorkManager unitOfWorkManager;
         private readonly IIocResolver iocResolver;
@@ -33,6 +34,8 @@ namespace MatoProductivity.ViewModels
             INoteSegmentServiceFactory noteSegmentServiceFactory,
             IRepository<NoteTemplate, long> templateRepository,
             IRepository<NoteSegment, long> noteSegmentRepository,
+            IRepository<NoteSegmentStore, long> noteSegmentStoreRepository,
+
             IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
         {
             Submit = new Command(SubmitAction);
@@ -57,6 +60,7 @@ namespace MatoProductivity.ViewModels
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.templateRepository = templateRepository;
             this.noteSegmentRepository = noteSegmentRepository;
+            this.noteSegmentStoreRepository=noteSegmentStoreRepository;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
@@ -181,20 +185,34 @@ namespace MatoProductivity.ViewModels
         private async void CreateSegmentAction(object obj)
         {
             var type = obj as string;
-            var noteSegment = new NoteSegment()
+            NoteSegment note = default;
+            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                NoteId = this.NoteId,
-                Title = "Add " + type + " Test",
-                Type = type,
-                Desc = "TestDescDesc",
-                NoteSegmentPayloads = new List<NoteSegmentPayload>()
+                var noteTemplate = await noteSegmentStoreRepository.GetAll()
+                              .Where(c => c.Type == type).FirstOrDefaultAsync();
+                note = ObjectMapper.Map<NoteSegment>(noteTemplate);
 
-            };
-            var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegment);
-            if (newModel != null)
+            });
+            if (note!=default)
             {
-                newModel.Create.Execute(null);
-                this.NoteSegments.Add(newModel);
+                var noteSegment = new NoteSegment()
+                {
+                    NoteId = this.NoteId,
+                    Title = note.Title,
+                    Type = type,
+                    Desc = note.Desc,
+                    Icon=note.Icon,
+                    NoteSegmentPayloads = note.NoteSegmentPayloads
+
+                };
+                var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegment);
+                if (newModel != null)
+                {
+                    newModel.Create.Execute(null);
+                    newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
+                    newModel.Container = this;
+                    this.NoteSegments.Add(newModel);
+                }
             }
         }
 
@@ -207,15 +225,24 @@ namespace MatoProductivity.ViewModels
             if (newModel != null)
             {
                 newModel.Create.Execute(null);
+                newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
+                newModel.Container = this;
                 this.NoteSegments.Add(newModel);
             }
            (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
             await navigationService.HidePopupAsync(noteSegmentStoreListPage);
+            noteSegmentStoreListPage=null;
         }
 
 
         private async void CreateSegmentFromStoreAction(object obj)
         {
+            if (noteSegmentStoreListPage!=null)
+            {
+                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
+                noteSegmentStoreListPage=null;
+            }
+
             using (var objWrapper = iocResolver.ResolveAsDisposable<NoteSegmentStoreListPage>())
             {
                 noteSegmentStoreListPage = objWrapper.Object;

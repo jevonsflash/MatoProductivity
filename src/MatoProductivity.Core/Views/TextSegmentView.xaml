@@ -6,19 +6,16 @@
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <Label>
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{Binding Title}"></Span>
-
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+            <WebView >
+                <WebView.Source>
+                    <HtmlWebViewSource Html="{Binding Content}"></HtmlWebViewSource>
+                </WebView.Source>
+            </WebView>
+            
             <Label Text="{Binding Content}"></Label>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            <Label Text="{Binding Title}"></Label>
             <controls:RichTextEditor Text="{Binding Content}"
                                      Placeholder="{Binding PlaceHolder}"></controls:RichTextEditor>
 

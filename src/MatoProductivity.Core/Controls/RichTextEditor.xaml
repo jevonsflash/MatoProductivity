@@ -4,6 +4,21 @@
              xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity.Core"
              x:Class="MatoProductivity.Core.Controls.RichTextEditor">
     <ContentView.Resources>
+        <Style TargetType="Button"
+               BasedOn="{StaticResource Base_Button}"
+               x:Key="RichTextButtonStyle">
+            <Setter Property="FontFamily"
+                    Value="FontAwesome_Solid"></Setter>
+            <Setter Property="BackgroundColor"
+                    Value="Transparent" />
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                    >
+                
+            </Setter>
+            <Setter Property="BorderWidth"
+                    Value="0" />
+        </Style>
         <Style TargetType="Border"
                x:Key="SelectableLayoutStyle">
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -30,7 +45,7 @@
             </Setter>
         </Style>
     </ContentView.Resources>
-    <Border Style="{StaticResource Base_FrameEntry}">
+    <Border>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"></RowDefinition>
@@ -39,16 +54,16 @@
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <controls:HtmlEditor MinimumHeightRequest="150"
-                                 AutoSize="TextChanges"
-                                 x:Name="MainEditor"></controls:HtmlEditor>
-            <BoxView Grid.Row="1"
-                     Color="LightGray"></BoxView>
+            <controls:WysiwygContentEditor MinimumHeightRequest="150"
+                                           AutoSize="TextChanges"
+                                           IsSpellCheckEnabled="false"
+                                           x:Name="MainEditor"></controls:WysiwygContentEditor>
 
             <VerticalStackLayout x:Name="OptionsLayout"
                                  Grid.Row="2"
                                  Spacing="5">
                 <CollectionView x:Name="TextSizeCollectionView"
+                                Background="Transparent"
                                 SelectionChanged="TextSizeCollectionView_SelectionChanged"
                                 SelectionMode="Single"
                                 HeightRequest="45">
@@ -85,7 +100,7 @@
                         <DataTemplate>
 
                             <Border x:Name="TargetElement"
-                                    Style="{x:StaticResource SelectableLayoutStyle}"
+                                    Style="{StaticResource SelectableLayoutStyle}"
                                     BackgroundColor="{Binding}"
                                     WidthRequest="40"
                                     HeightRequest="40"
@@ -102,21 +117,27 @@
             <HorizontalStackLayout Grid.Row="3"
                                    Spacing="5"
                                    Margin="0,10">
-                <Button Text="A"
+                <!--<Button Text="{Binding Source={x:Reference TextSizeCollectionView}, Path=SelectedItem.Name, FallbackValue=Auto}"
+                        Style="{StaticResource RichTextButtonStyle}"
                         Clicked="TextSizeButton_Clicked"
                         x:Name="TextSizeButton"></Button>
-                <Button Text="C"
+                <Button Text="Color"
+                        TextColor="{Binding Source={x:Reference ColorCollectionView}, Path=SelectedItem}"
+                        Style="{StaticResource RichTextButtonStyle}"
                         Clicked="TextColorButton_Clicked"
-                        x:Name="TextColorButton"></Button>
-                <Button Text="B"
+                        x:Name="TextColorButton"></Button>-->
+                <Button  Text="&#xf032;"
+                        Style="{StaticResource RichTextButtonStyle}"
                         FontAttributes="Bold"
                         x:Name="BoldButton"
                         Clicked="BoldButton_Clicked"></Button>
-                <Button Text="I"
+                <Button  Text="&#xf033;"
+                        Style="{StaticResource RichTextButtonStyle}"
                         FontAttributes="Italic"
                         x:Name="ItalicButton"
                         Clicked="ItalicButton_Clicked"></Button>
-                <Button Text="U"
+                <Button  Text="&#xf0cd;"
+                        Style="{StaticResource RichTextButtonStyle}"
                         FontAttributes="None"
                         x:Name="UnderLineButton"
                         Clicked="UnderLineButton_Clicked"></Button>

@@ -9,13 +9,13 @@
                       x:Class="MatoProductivity.Views.EditNotePage">
     <ContentPage.Resources>
         <ControlTemplate x:Key="NoteSegmentCardViewPhone">
-            <Grid>
+            <ContentView>
                 <SwipeView>
                     <SwipeView.RightItems>
                         <SwipeItems>
                             <SwipeItemView  Command="{TemplateBinding BindingContext.Remove}">
                                 <Border BackgroundColor="Transparent"
-                                       Padding="15, 0">
+                                        Padding="15, 0">
                                     <Label Text="&#xf2ed;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                                            FontSize="{StaticResource Headline4FontSize}"
@@ -24,13 +24,12 @@
                                     </Label>
                                 </Border>
                             </SwipeItemView>
-                            
+
                         </SwipeItems>
                     </SwipeView.RightItems>
-                  
-                    <Border 
-                            Margin="0,10,0,10"
-                            
+
+                    <Border x:Name="ContentLayout"
+                            Margin="0"
                             Padding="8">
                         <Border.GestureRecognizers>
                             <DropGestureRecognizer AllowDrop="True"
@@ -42,6 +41,10 @@
                                                    DropCommandParameter="{TemplateBinding}" />
                         </Border.GestureRecognizers>
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="20"></ColumnDefinition>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -53,20 +56,26 @@
                                                        DragStartingCommandParameter="{TemplateBinding}" />
                             </Grid.GestureRecognizers>
 
-                            <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+                            <Label Grid.Column="0"
+                                   VerticalOptions="Center"
+                                   Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
                                    FontFamily="FontAwesome"></Label>
-                            <ContentPresenter Grid.Column="1" />
+                            <Label Grid.Column="1"
+                                   VerticalOptions="Center"
+                                   Text="{TemplateBinding BindingContext.NoteSegment.Title}">
+
+                            </Label>
+                            <ContentPresenter Grid.Row="1"
+                                              Grid.ColumnSpan="2" />
                         </Grid>
                     </Border>
                 </SwipeView>
-            </Grid>
+            </ContentView>
         </ControlTemplate>
 
         <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
-            <Border
-                   Margin="0,10,0,10"
-                   
-                   Padding="8">
+            <Border Margin="0"
+                    Padding="8">
                 <Border.GestureRecognizers>
                     <DropGestureRecognizer AllowDrop="True"
                                            DragLeaveCommand="{TemplateBinding BindingContext.DragLeave}"
@@ -85,6 +94,10 @@
                 </FlyoutBase.ContextFlyout>
 
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -95,16 +108,25 @@
                                                DragStartingCommand="{TemplateBinding BindingContext.Dragged}"
                                                DragStartingCommandParameter="{TemplateBinding}" />
                     </Grid.GestureRecognizers>
-                    <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+
+                    <Label Grid.Column="0"
+                           VerticalOptions="Center"
+                           Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
                            FontFamily="FontAwesome"></Label>
-                    <ContentPresenter Grid.Column="1" />
+                    <Label Grid.Column="1"
+                           VerticalOptions="Center"
+                           Text="{TemplateBinding BindingContext.NoteSegment.Title}">
+
+                    </Label>
+                    <ContentPresenter Grid.Row="1"
+                                      Grid.ColumnSpan="2" />
                 </Grid>
             </Border>
 
         </ControlTemplate>
 
         <DataTemplate x:Key="DateTimeSegment">
-            <core:DateTimeSegmentView>
+            <core:DateTimeSegmentView  Margin="0,5">
                 <core:DateTimeSegmentView.ControlTemplate>
                     <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
                              Tablet="{StaticResource NoteSegmentCardViewDesktop}"
@@ -114,7 +136,7 @@
             </core:DateTimeSegmentView>
         </DataTemplate>
         <DataTemplate x:Key="TextSegment">
-            <core:TextSegmentView>
+            <core:TextSegmentView Margin="0,5">
                 <core:TextSegmentView.ControlTemplate>
 
                     <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
@@ -126,7 +148,7 @@
             </core:TextSegmentView>
         </DataTemplate>
         <DataTemplate x:Key="TimerSegment">
-            <core:TimerSegmentView>
+            <core:TimerSegmentView Margin="0,5">
                 <core:TimerSegmentView.ControlTemplate>
 
                     <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
@@ -143,8 +165,8 @@
 
     </ContentPage.Resources>
     <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
-          RowDefinitions="Auto, Auto, *, Auto"
-          Padding="20, 20, 20, 0">
+          RowDefinitions="Auto, *, Auto"
+          Padding="20, 10, 20, 0">
         <Grid Grid.Row="0"
               Margin="0, 0, 0, 10">
             <Grid.ColumnDefinitions>
@@ -169,7 +191,7 @@
                    VerticalOptions="Center" />
 
             <HorizontalStackLayout Grid.Column="2"
-                                   HeightRequest="100"
+                                   HeightRequest="60"
                                    VerticalOptions="Center"
                                    HorizontalOptions="End"
                                    Margin="0, 0, 10, 0">
@@ -208,7 +230,7 @@
 
 
 
-        <CollectionView Grid.Row="2"
+        <CollectionView Grid.Row="1"
                         x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteSegments}"
                         SelectedItems="{Binding SelectedNoteSegments}"
@@ -218,65 +240,140 @@
 
 
             <CollectionView.Header>
-                <Grid>
-                    <Grid RowDefinitions="auto,auto"
-                          IsVisible="{Binding IsConfiguratingNoteSegment}">
-                    <StackLayout Spacing="5">
-                        <Label Text="标题"
-                               Style="{StaticResource Body1_MulishSemiBold}"></Label>
-                        <Border 
-                               Style="{StaticResource Base_FrameEntry}">
-                            <Entry Placeholder="请输入标题"
-                                   Text="{Binding Title}"
-                                   Style="{StaticResource Base_Entry}">
-                            </Entry>
-                        </Border>
-                    </StackLayout>
-                    <StackLayout Spacing="5" Grid.Row="1">
-                        <Label Text="描述"
-                               Style="{StaticResource Body1_MulishSemiBold}"></Label>
-                        <Border 
-                               Style="{StaticResource Base_FrameEntry}">
-                            <Entry Placeholder="请输入描述"
-                                   Text="{Binding Desc}"
-                                   Style="{StaticResource Base_Entry}">
-                            </Entry>
-                        </Border>
-                    </StackLayout>
-                </Grid>
-                    <Grid IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
-                        <Label Text="{Binding Desc}" />
+                <VerticalStackLayout>
+                    <Grid>
+                        <Grid RowDefinitions="auto,auto"
+                              IsVisible="{Binding IsConfiguratingNoteSegment}">
+                            <StackLayout Spacing="5">
+                                <Label Text="标题"
+                                       Style="{StaticResource Body1_MulishSemiBold}"></Label>
+                                <Border Style="{StaticResource Base_FrameEntry}">
+                                    <Entry Placeholder="请输入标题"
+                                           Text="{Binding Title}"
+                                           Style="{StaticResource Base_Entry}">
+                                    </Entry>
+                                </Border>
+                            </StackLayout>
+                            <StackLayout Spacing="5"
+                                         Grid.Row="1">
+                                <Label Text="描述"
+                                       Style="{StaticResource Body1_MulishSemiBold}"></Label>
+                                <Border Style="{StaticResource Base_FrameEntry}">
+                                    <Entry Placeholder="请输入描述"
+                                           Text="{Binding Desc}"
+                                           Style="{StaticResource Base_Entry}">
+                                    </Entry>
+                                </Border>
+                            </StackLayout>
+                        </Grid>
+                        <Grid IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
+                            <Label Text="{Binding Desc}" />
+                        </Grid>
                     </Grid>
-                </Grid>
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span>共</Span>
+                                <Span Text="{Binding NoteSegments.Count}"></Span>
+                                <Span>个片段</Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                </VerticalStackLayout>
             </CollectionView.Header>
             <CollectionView.Footer>
                 <VerticalStackLayout>
-                    <Border 
-                            Margin="0,10,0,10"
+
+                    <HorizontalStackLayout Margin="0,5">
+                        <Border Padding="8">
+                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome"
+                                              Text="&#xf24a;"></Span>
+                                        <Span Text=" 笔记"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegment}"
+                                                      CommandParameter="TextSegment">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border Padding="8">
+                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome"
+                                              Text="&#xf046;"></Span>
+                                        <Span Text=" Todo"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegment}"
+                                                      CommandParameter="TodoSegment">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Border Padding="8">
+                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome"
+                                              Text="&#xf017;"></Span>
+                                        <Span Text=" 时间戳"> </Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegment}"
+                                                      CommandParameter="DateTimeSegment">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border Padding="8">
                             
-                            Padding="8">
-                        <Button Text="添加片段"
-                                TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                                Style="{StaticResource Text_Button}"
-                                Command="{Binding CreateSegmentFromStore}"
-                                CommandParameter="DateTimeSegment"></Button>
-                    </Border>
+                            
+                            <Label 
+                                   TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf141;"></Span>
+                                        <Span Text=" 更多片段"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
 
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegmentFromStore}">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </HorizontalStackLayout>
 
-                    <Label Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
+                    <Label HorizontalTextAlignment="Center"
+                           Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
 
                 </VerticalStackLayout>
             </CollectionView.Footer>
         </CollectionView>
         <Button x:Name="AddButton"
                 Command="{Binding Submit}"
-                Grid.Row="3"
+                Grid.Row="2"
                 Margin="0, 0, 0, 15"
                 Style="{StaticResource Base_Button}"
                 Text="保存"
                 VerticalOptions="End">
         </Button>
-
 
     </Grid>
 </mato:ContentPageBase>

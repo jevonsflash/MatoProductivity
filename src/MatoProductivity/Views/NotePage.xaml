@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
         <Grid.Resources>
             <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
-                <Grid Margin="0,10,0,10"
+                <Grid Margin="0"
                       Padding="8">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -29,15 +29,18 @@
             </ControlTemplate>
 
             <DataTemplate x:Key="DateTimeSegment">
-                <core:DateTimeSegmentView ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                <core:DateTimeSegmentView Margin="0,5"
+                                          ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
                 </core:DateTimeSegmentView>
             </DataTemplate>
             <DataTemplate x:Key="TextSegment">
-                <core:TextSegmentView ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                <core:TextSegmentView  Margin="0,5"
+                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
                 </core:TextSegmentView>
             </DataTemplate>
             <DataTemplate x:Key="TimerSegment">
-                <core:TimerSegmentView ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                <core:TimerSegmentView Margin="0,5"
+                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
                 </core:TimerSegmentView>
             </DataTemplate>
 
@@ -53,7 +56,8 @@
                    Margin="10, 10, 10, 0"
                    FontAttributes="Bold"
                    Text="{Binding Title}"></Label>
-            <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End">
+            <HorizontalStackLayout Grid.Column="1"
+                                   HorizontalOptions="End">
                 <Button Text="删除"
                         TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                         Style="{StaticResource Text_Button}"
