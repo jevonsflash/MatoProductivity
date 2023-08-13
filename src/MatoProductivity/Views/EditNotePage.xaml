@@ -10,6 +10,7 @@
     <ContentPage.Resources>
         <ControlTemplate x:Key="NoteSegmentCardViewPhone">
             <ContentView>
+
                 <SwipeView>
                     <SwipeView.RightItems>
                         <SwipeItems>
@@ -27,11 +28,8 @@
 
                         </SwipeItems>
                     </SwipeView.RightItems>
-
-                    <Border x:Name="ContentLayout"
-                            Margin="0"
-                            Padding="8">
-                        <Border.GestureRecognizers>
+                    <StackLayout>
+                        <StackLayout.GestureRecognizers>
                             <DropGestureRecognizer AllowDrop="True"
                                                    DragLeaveCommand="{TemplateBinding BindingContext.DragLeave}"
                                                    DragLeaveCommandParameter="{TemplateBinding}"
@@ -39,37 +37,60 @@
                                                    DragOverCommandParameter="{TemplateBinding}"
                                                    DropCommand="{TemplateBinding BindingContext.Dropped}"
                                                    DropCommandParameter="{TemplateBinding}" />
-                        </Border.GestureRecognizers>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20"></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.GestureRecognizers>
-                                <DragGestureRecognizer CanDrag="True"
-                                                       DragStarting="DragGestureRecognizer_DragStarting_Collection"
-                                                       DragStartingCommand="{TemplateBinding BindingContext.Dragged}"
-                                                       DragStartingCommandParameter="{TemplateBinding}" />
-                            </Grid.GestureRecognizers>
+                        </StackLayout.GestureRecognizers>
+                        <Border StrokeThickness="4"
+                               StrokeDashArray="2 2"
+                                StrokeDashOffset="6"
+                                Stroke="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}"
+                                HorizontalOptions="Center"
+                                IsVisible="{TemplateBinding BindingContext.IsBeingDraggedOver}">
+                            <Grid 
+                                  HeightRequest="{TemplateBinding BindingContext.DropPlaceHolderItem.Height}"
+                                  WidthRequest="{TemplateBinding BindingContext.DropPlaceHolderItem.Width}"
+                               >
+                                <Label HorizontalTextAlignment="Center"
+                                       VerticalOptions="Center" Text="松开手指将放置条目至此处"></Label>
 
-                            <Label Grid.Column="0"
-                                   VerticalOptions="Center"
-                                   Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
-                                   FontFamily="FontAwesome"></Label>
-                            <Label Grid.Column="1"
-                                   VerticalOptions="Center"
-                                   Text="{TemplateBinding BindingContext.NoteSegment.Title}">
 
-                            </Label>
-                            <ContentPresenter Grid.Row="1"
-                                              Grid.ColumnSpan="2" />
-                        </Grid>
-                    </Border>
+                            </Grid>
+                        </Border>
+
+                        <Border x:Name="ContentLayout"
+                                Margin="0"
+                                Padding="8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.GestureRecognizers>
+                                    <DragGestureRecognizer CanDrag="True"
+                                                           DragStarting="DragGestureRecognizer_DragStarting_Collection"
+                                                           DragStartingCommand="{TemplateBinding BindingContext.Dragged}"
+                                                           DragStartingCommandParameter="{TemplateBinding}" />
+                                </Grid.GestureRecognizers>
+
+                                <Label Grid.Column="0"
+                                       VerticalOptions="Center"
+                                       Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+                                       FontFamily="FontAwesome"></Label>
+                                <Label Grid.Column="1"
+                                       VerticalOptions="Center"
+                                       Text="{TemplateBinding BindingContext.NoteSegment.Title}">
+
+                                </Label>
+                                <ContentPresenter Grid.Row="1"
+                                                  Grid.ColumnSpan="2" />
+                            </Grid>
+                        </Border>
+                    </StackLayout>
                 </SwipeView>
+
+
             </ContentView>
         </ControlTemplate>
 
@@ -327,7 +348,7 @@
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome"
                                               Text="&#xf017;"></Span>
-                                        <Span Text=" 时间戳"> </Span>
+                                        <Span Text=" 时间戳"></Span>
                                     </FormattedString>
                                 </Label.FormattedText>
 
@@ -340,10 +361,9 @@
                         </Border>
 
                         <Border Padding="8">
-                            
-                            
-                            <Label 
-                                   TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+
+
+                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome_Solid"

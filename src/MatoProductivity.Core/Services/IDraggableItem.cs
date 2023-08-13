@@ -10,5 +10,8 @@
         Command DragLeave { get; set; }
 
         Command Dropped { get; set; }
+
+        object DraggedItem { get; set; }
+
     }
 }
