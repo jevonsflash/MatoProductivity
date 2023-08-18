@@ -44,15 +44,48 @@ namespace MatoProductivity.Core.Services
         private void OnDragged(object item)
         {
             IsBeingDragged=true;
+            this.DraggedItem=item;
         }
 
         private void OnDraggedOver(object item)
         {
-            if (!IsBeingDragged)
+            if (!IsBeingDragged && item!=null)
             {
                 IsBeingDraggedOver=true;
+
+                var itemToMove = Container.NoteSegments.First(i => i.IsBeingDragged);
+                if (itemToMove.DraggedItem!=null)
+                {
+                    DropPlaceHolderItem=itemToMove.DraggedItem;
+
+                }
             }
 
+        }
+
+
+        private object _draggedItem;
+
+        public object DraggedItem
+        {
+            get { return _draggedItem; }
+            set
+            {
+                _draggedItem = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private object _dropPlaceHolderItem;
+
+        public object DropPlaceHolderItem
+        {
+            get { return _dropPlaceHolderItem; }
+            set
+            {
+                _dropPlaceHolderItem = value;
+                RaisePropertyChanged();
+            }
         }
 
         private void OnDragLeave(object item)
@@ -77,7 +110,7 @@ namespace MatoProductivity.Core.Services
             Container.NoteSegments.Insert(insertAtIndex, itemToMove);
             itemToMove.IsBeingDragged = false;
             this.IsBeingDraggedOver = false;
-
+            this.DraggedItem=null;
 
         }
 
