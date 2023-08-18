@@ -202,9 +202,11 @@ namespace MatoProductivity.ViewModels
                     Type = type,
                     Desc = note.Desc,
                     Icon=note.Icon,
-                    NoteSegmentPayloads = note.NoteSegmentPayloads
+                    NoteSegmentPayloads = new List<NoteSegmentPayload>()
 
-                };
+            };
+
+
                 var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegment);
                 if (newModel != null)
                 {

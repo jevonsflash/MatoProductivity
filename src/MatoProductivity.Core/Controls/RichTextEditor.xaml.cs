@@ -41,7 +41,7 @@ public partial class RichTextEditor : ContentView
 
     private void MainEditor_TextChanged(object sender, TextChangedEventArgs e)
     {
-        this.Text=MainEditor.GetHtmlText();
+        this.Text=GetHtmlText();
     }
 
     private void RichTextEditor_Loaded(object sender, EventArgs e)
@@ -62,7 +62,7 @@ public partial class RichTextEditor : ContentView
           var newText = newValue as string;
           if (obj.Text!=newText)
           {
-              obj.MainEditor.SetHtmlText(newText);
+              obj.SetHtmlText(newText);
 
           }
       });
@@ -110,7 +110,7 @@ public partial class RichTextEditor : ContentView
       BindableProperty.Create("Placeholder", typeof(string), typeof(RichTextEditor), default, propertyChanged: (bindable, oldValue, newValue) =>
       {
           var obj = (RichTextEditor)bindable;
-          obj.MainEditor.Placeholder=newValue as string;
+          obj.SetPlaceholder(newValue as string);
       });
 
     public string Placeholder
@@ -118,6 +118,8 @@ public partial class RichTextEditor : ContentView
         get { return (string)GetValue(PlaceholderProperty); }
         set { SetValue(PlaceholderProperty, value); }
     }
+
+
 
     public string GetHtmlText()
     {
@@ -127,6 +129,11 @@ public partial class RichTextEditor : ContentView
     public void SetHtmlText(string html)
     {
         this.MainEditor.SetHtmlText(html);
+    }
+
+    public void SetPlaceholder(string placeholderText)
+    {
+        this.MainEditor.Placeholder= placeholderText;
     }
 
     private void BoldButton_Clicked(object sender, EventArgs e)

@@ -41,7 +41,11 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(Content))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
+                if (!string.IsNullOrEmpty(Content))
+                {
+                    NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
+
+                }
             }
 
             else if (e.PropertyName == nameof(PlaceHolder))
