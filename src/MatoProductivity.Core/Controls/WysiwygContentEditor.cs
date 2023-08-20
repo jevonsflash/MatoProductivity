@@ -21,6 +21,8 @@ namespace MatoProductivity.Core.Controls
 {
     public partial class WysiwygContentEditor : Editor, INotifyPropertyChanged
     {
+        public event EventHandler OnHandlerChangedFinished;
+
         public WysiwygContentEditor()
         {
             HandlerChanged+=WysiwygContentEditor_HandlerChanged;
@@ -443,6 +445,8 @@ namespace MatoProductivity.Core.Controls
 
 
 #endif
+
+                OnHandlerChangedFinished?.Invoke(this, EventArgs.Empty);
             }
 
         }

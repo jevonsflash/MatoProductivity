@@ -36,7 +36,16 @@ public partial class RichTextEditor : ContentView
         this.TextSizeCollectionView.ItemsSource=DefaultTextSizeList;
         HideCollectionViews();
         this.MainEditor.TextChanged +=MainEditor_TextChanged;
+        this.MainEditor.OnHandlerChangedFinished+=MainEditor_OnHandlerChangedFinished;
 
+    }
+
+    private void MainEditor_OnHandlerChangedFinished(object sender, EventArgs e)
+    {
+        if (!string.IsNullOrEmpty(this.Text))
+        {
+            SetHtmlText(this.Text);
+        }
     }
 
     private void MainEditor_TextChanged(object sender, TextChangedEventArgs e)
@@ -60,11 +69,14 @@ public partial class RichTextEditor : ContentView
       {
           var obj = (RichTextEditor)bindable;
           var newText = newValue as string;
+
           if (obj.Text!=newText)
           {
               obj.SetHtmlText(newText);
 
           }
+
+
       });
 
     public string Text
