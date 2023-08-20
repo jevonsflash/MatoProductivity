@@ -477,7 +477,7 @@ namespace MatoProductivity.Core.Controls
         public void SetHtmlText(string htmlString)
         {
             HtmlString = htmlString;
-            SetHtmlRequest?.Invoke(this, htmlString);
+             SetHtmlRequest?.Invoke(this, htmlString);
         }
 
 
