@@ -25,12 +25,20 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
+            <Label  Style="{StaticResource Body1_MulishRegular}"
+                    IsVisible="{Binding IsAutoSet}"
+                    Text="将在保存时自动获取时间"></Label>
             <Grid ColumnDefinitions="*,*">
-                <DatePicker Date="{Binding Time}"
-                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-                <TimePicker Time="{Binding TimeOffset}"
-                            Grid.Column="1"
-                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+
+                <Border Style="{StaticResource Base_FrameEntry}">
+                    <DatePicker Date="{Binding Time}"
+                                IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
+                </Border>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        Grid.Column="1">
+                    <TimePicker Time="{Binding TimeOffset}"
+                                IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+                </Border>
             </Grid>
         </VerticalStackLayout>
 
@@ -38,11 +46,15 @@
             <Entry  Text="{Binding Title}"
                     Placeholder="请输入标题" />
             <Grid ColumnDefinitions="*,*">
-                <DatePicker Date="{Binding Time}"
-                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-                <TimePicker Time="{Binding TimeOffset}"
-                            Grid.Column="1"
-                            IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+                <Border Style="{StaticResource Base_FrameEntry}">
+                    <DatePicker Date="{Binding Time}"
+                                IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
+                </Border>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        Grid.Column="1">
+                    <TimePicker Time="{Binding TimeOffset}"
+                                IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
+                </Border>
             </Grid>
 
             <Grid ColumnDefinitions="*,*">

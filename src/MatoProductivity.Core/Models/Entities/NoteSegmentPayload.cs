@@ -24,8 +24,27 @@ namespace MatoProductivity.Core.Models.Entities
 
 
 
-        public NoteSegmentPayload(string key, object value, string valuetype = null):this(key,value.ToString(),valuetype)
+ 
+
+        public NoteSegmentPayload(string key, bool value, string valuetype = null)
         {
+            this.Key = key;
+            this.ValueType = valuetype;
+            this.SetStringValue(value.ToString());
+        }
+
+        public NoteSegmentPayload(string key, DateTime value, string valuetype = null)
+        {
+            this.Key = key;
+            this.ValueType = valuetype;
+            this.SetStringValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
+        }
+
+        public NoteSegmentPayload(string key, byte[] value, string valuetype = null)
+        {
+            this.Key = key;
+            this.ValueType = valuetype;
+            this.Value = value;
         }
 
         public NoteSegmentPayload(string key, string value, string valuetype = null)

@@ -18,7 +18,7 @@
     </converter:SliderMaxValueConverter>
     <converter:SecondsToTimeSpanConverter x:Key="SecondsToTimeSpanConverter">
     </converter:SecondsToTimeSpanConverter>
-    <converter:IsValid2BoolConverter x:Key="IsNotEmpty2BoolConverter">
+    <converter:IsValid2BoolConverter x:Key="IsValid2BoolConverter">
     </converter:IsValid2BoolConverter>
     <converter:AlbumArtConverter x:Key="AlbumArtConverter">
     </converter:AlbumArtConverter>
@@ -30,5 +30,11 @@
     </converter:DateTimeToFormatTimeStringConverter>
     <converter:TimeSpanToFormatStringConverter x:Key="TimeSpanToFormatStringConverter">
     </converter:TimeSpanToFormatStringConverter>
+    <converter:AllTrueMultiConverter x:Key="AllTrueMultiConverter">
+    </converter:AllTrueMultiConverter>
+    <converter:AnyTrueMultiConverter x:Key="AnyTrueMultiConverter">
+    </converter:AnyTrueMultiConverter>
     <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+    <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter" />
+    <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
 </ResourceDictionary>

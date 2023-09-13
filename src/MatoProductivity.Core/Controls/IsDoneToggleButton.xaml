@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity.Core"
+             x:Class="MatoProductivity.Core.Controls.IsDoneToggleButton">
+
+    <Border StrokeThickness="2"
+            StrokeShape="Ellipse"
+            x:Name="MainBorder"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped"></TapGestureRecognizer>
+        </Border.GestureRecognizers>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CheckedStates">
+                    <VisualState x:Name="Unchecked">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
+
+                            <Setter Property="Stroke"
+                                    Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
+                            <Setter TargetName="CheckMark"
+                                    Property="Label.TextColor"
+                                    Value="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}" />
+
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Checked">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="green" />
+                            <Setter Property="Stroke"
+                                    Value="green" />
+                            <Setter TargetName="CheckMark"
+                                    Property="Label.TextColor"
+                                    Value="white" />
+
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </VisualStateManager.VisualStateGroups>
+        <Grid Padding="0"
+              HeightRequest="30"
+              WidthRequest="30"
+              VerticalOptions="CenterAndExpand">
+
+            <Label Margin="0"
+                   x:Name="CheckMark"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Text="X">
+
+            </Label>
+        </Grid>
+    </Border>
+
+</ContentView>

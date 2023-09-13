@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity.Core"
+             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity.Core"
+             x:Class="MatoProductivity.Core.Views.TodoSegmentView">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="5"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <controls:IsDoneToggleButton IsToggled="{Binding IsDone, Mode=TwoWay}" 
+                                             Toggled="IsDoneToggleButton_Toggled"
+                                             ></controls:IsDoneToggleButton>
+
+
+                <Label  Grid.Column="2">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Title}"></Span>
+
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label   Grid.Column="2"
+                         Grid.Row="1"
+                         Text="{Binding Content}"></Label>
+            </Grid>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout>
+            <VerticalStackLayout.IsVisible>
+                <MultiBinding Converter="{StaticResource AnyTrueMultiConverter}">
+                    <Binding Path="NoteSegmentState"
+                             Converter="{StaticResource EnumToBoolConverter}"  
+                             ConverterParameter="{x:Static service:NoteSegmentState.Edit}" />
+                    <Binding Path="NoteSegmentState"
+                             Converter="{StaticResource EnumToBoolConverter}"
+                             ConverterParameter="{x:Static service:NoteSegmentState.Config}" />
+                </MultiBinding>
+            </VerticalStackLayout.IsVisible>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="5"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <controls:IsDoneToggleButton IsToggled="{Binding IsDone}"></controls:IsDoneToggleButton>
+
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        Grid.Column="2">
+
+                    <Entry  Text="{Binding Title}"
+                            Placeholder="Todo" />
+                </Border>
+                <StackLayout Grid.Column="2"
+                             Grid.Row="1">
+                    
+                    <Border 
+                            x:Name="ContentButton">
+                        <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span FontFamily="FontAwesome"
+                                          Text="&#xf141;"></Span>
+                                    <Span Text=" 备注(可选)"></Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+
+                        </Label>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped">
+                            </TapGestureRecognizer>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Style="{StaticResource Base_FrameEntry}" 
+                            x:Name="ContentFrame" IsVisible="false">
+
+                        <Editor Text="{Binding Content}"
+                                MinimumHeightRequest="150"
+                                AutoSize="TextChanges"
+                                Placeholder="请输入备注"></Editor>
+                    </Border>
+                </StackLayout>
+            </Grid>
+
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentView>

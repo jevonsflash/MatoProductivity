@@ -43,6 +43,21 @@
                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
                 </core:TimerSegmentView>
             </DataTemplate>
+            <DataTemplate x:Key="TodoSegment">
+                <core:TodoSegmentView Margin="0,5"
+                                      ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:TodoSegmentView>
+            </DataTemplate>
+            <DataTemplate x:Key="KeyValueSegment">
+                <core:KeyValueSegmentView Margin="0,5"
+                                          ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:KeyValueSegmentView>
+            </DataTemplate>
+            <DataTemplate x:Key="FileSegment">
+                <core:FileSegmentView Margin="0,5"
+                                      ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:FileSegmentView>
+            </DataTemplate>
 
             <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                                   ResourcesContainer="{x:Reference MainPage}" />

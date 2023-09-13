@@ -32,11 +32,16 @@ namespace MatoProductivity.Converter
                     result = true;
                 }
             }
-            else
+
+            if (parameter!=null)
             {
-                result = false;
+                var isInvert = bool.Parse(parameter as string);
+                if (isInvert)
+                {
+                    result=!result;
+                }
             }
-            return !result;
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

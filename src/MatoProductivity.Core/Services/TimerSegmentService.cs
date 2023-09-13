@@ -26,7 +26,10 @@ namespace MatoProductivity.Core.Services
             IRepository<NoteSegmentPayload, long> payloadRepository,
             NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
+
             PropertyChanged += TimerSegmentViewModel_PropertyChanged;
+            //Relative Absolute
+            this.CountdownMode="Relative";
             this.timer = timer;
             this.timer.Period = 1000;
             this.timer.Elapsed = async (timer) =>
@@ -42,7 +45,7 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
-                var isAutoSet = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
+                var isShowFromNow = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
 
                 var defaultNotificationContentString = NoteSegment.Title;
 
@@ -58,7 +61,7 @@ namespace MatoProductivity.Core.Services
                 }
 
                 bool parsedIsShowFromNow;
-                if (bool.TryParse(isAutoSet.GetStringValue(), out parsedIsShowFromNow))
+                if (bool.TryParse(isShowFromNow.GetStringValue(), out parsedIsShowFromNow))
                 {
                     IsShowFromNow = parsedIsShowFromNow;
                 }
@@ -77,6 +80,44 @@ namespace MatoProductivity.Core.Services
             else if (e.PropertyName == nameof(NotificationContent))
             {
                 NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(NotificationContent), NotificationContent));
+            }
+            else if (e.PropertyName == nameof(Day) ||e.PropertyName == nameof(Hour)||e.PropertyName == nameof(Minute))
+            {
+
+                //var targetTime = DateTime.Now.Date.AddDays(this.Day);
+                //var targetTimeOffset = new TimeSpan(0, Hour, Minute, 0);
+                //if (targetTime!=this.Time)
+                //{
+                //    this.Time= targetTime;
+                //}
+                //if (targetTimeOffset!=this.TimeOffset)
+                //{
+                //    this.TimeOffset= targetTimeOffset;
+                //}
+
+            }
+            else if (e.PropertyName == nameof(Time)||e.PropertyName == nameof(TimeOffset))
+            {
+                var exactTime = Time + TimeOffset;
+
+                var timeToNow = exactTime-DateTime.Now;
+
+                var targetDay = timeToNow.Days;
+                var targetHour = timeToNow.Hours;
+                var targetMinute = timeToNow.Minutes;
+                if (targetDay!=this.Day)
+                {
+                    this.Day= targetDay;
+                }
+                if (targetHour!=this.Hour)
+                {
+                    this.Hour= targetHour;
+                }
+                if (targetMinute!=this.Minute)
+                {
+                    this.Minute= targetMinute;
+                }
+
             }
 
         }
@@ -117,6 +158,45 @@ namespace MatoProductivity.Core.Services
             }
         }
 
+
+        private int _day;
+
+        public int Day
+        {
+            get { return _day; }
+            set
+            {
+                _day = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _hour;
+
+        public int Hour
+        {
+            get { return _hour; }
+            set
+            {
+                _hour = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _minute;
+
+        public int Minute
+        {
+            get { return _minute; }
+            set
+            {
+                _minute = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
         public DateTime ExactTime => Time + TimeOffset;
 
         public TimeSpan TimeFromNow => DateTime.Now - ExactTime;
@@ -133,6 +213,17 @@ namespace MatoProductivity.Core.Services
             }
         }
 
+        private string _countdownMode;
+
+        public string CountdownMode
+        {
+            get { return _countdownMode; }
+            set
+            {
+                _countdownMode = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private bool _isShowFromNow;
 
@@ -152,11 +243,27 @@ namespace MatoProductivity.Core.Services
         public override async void SubmitAction(object obj)
         {
             base.SubmitAction(obj);
-            var delay = ExactTime - DateTime.Now;
-            var notificationJobArgs = new NotificationJobArgs("提醒", this.NotificationContent);
-            var result = await backgroundJobManager.EnqueueAsync<NotificationJob, NotificationJobArgs>(notificationJobArgs, BackgroundJobPriority.Normal, delay);
-            Debug.WriteLine($"已添加一条通知任务,任务ID: {result},触发延时: {delay}");
+            TimeSpan delay = TimeSpan.Zero;
+            if (this.CountdownMode=="Absolute")
+            {
+                var targetTime = Time;
+                var targetTimeOffset = TimeOffset;
+                delay = targetTime + targetTimeOffset - DateTime.Now;
 
+            }
+            else if (this.CountdownMode=="Relative")
+            {
+                var targetTime = DateTime.Now.Date.AddDays(this.Day);
+                var targetTimeOffset = new TimeSpan(0, Hour, Minute, 0);
+                delay = targetTime + targetTimeOffset - DateTime.Now;
+
+            }
+            if (delay>TimeSpan.Zero)
+            {
+                var notificationJobArgs = new NotificationJobArgs("提醒", this.NotificationContent);
+                var result = await backgroundJobManager.EnqueueAsync<NotificationJob, NotificationJobArgs>(notificationJobArgs, BackgroundJobPriority.Normal, delay);
+                Debug.WriteLine($"已添加一条通知任务,任务ID: {result},触发延时: {delay}");
+            }
 
 
         }

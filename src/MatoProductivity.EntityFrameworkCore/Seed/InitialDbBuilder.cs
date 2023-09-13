@@ -20,8 +20,9 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             CreateNoteSegmentStore("时间戳", "时间/提醒", "DateTimeSegment", "时间戳片段，记录一个瞬时时间，保存在您的笔记中", FaIcons.IconClockO, "#D8292B");
             CreateNoteSegmentStore("笔记", "文本", "TextSegment", "笔记片段，随时用文本记录您的想法", FaIcons.IconStickyNoteO, "#E1A08B");
             CreateNoteSegmentStore("Todo", "文本", "TodoSegment", "笔记片段，随时用文本记录您的想法", FaIcons.IconCheckSquareO, "#C7C3E3");
+            CreateNoteSegmentStore("记录值", "文本", "KeyValueSegment", "记录值片段，通过回答对应问题以记录数值", FaIcons.IconCheckSquareO, "#C7C3E3");
             CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "计时器片段，计时器结束后将提醒您", FaIcons.IconClockO, "#AD9CC2");
-            CreateNoteSegmentStore("闹钟", "时间/提醒", "ClockSegment", "闹钟片段，到指定时间将提醒您", FaIcons.IconClockO, "#A07DA0");
+            CreateNoteSegmentStore("文档", "文件", "FileSegment", "文档片段，计时器结束后将提醒您", FaIcons.IconClockO, "#AD9CC2");
 
 
             NoteTemplate noteTemplateEntity = CreateNoteTemplate("宝宝喂奶", null, "#000000", "#FFFFFF");

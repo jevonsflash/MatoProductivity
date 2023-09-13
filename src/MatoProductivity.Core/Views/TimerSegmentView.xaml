@@ -3,6 +3,51 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:core="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity.Core"
              x:Class="MatoProductivity.Core.Views.TimerSegmentView">
+    <ContentView.Resources>
+        <ControlTemplate x:Key="RadioButtonTemplate">
+            <Border StrokeThickness="2"
+                    StrokeShape="RoundRectangle 10"
+                    WidthRequest="90"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CheckedStates">
+                            <VisualState x:Name="Checked">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
+
+                                    <Setter Property="Stroke"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
+
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Unchecked">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
+                                    <Setter Property="Stroke"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
+
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+                <Grid Margin="4"
+                      WidthRequest="90">
+
+                    <ContentPresenter />
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
+        <Style TargetType="RadioButton">
+            <Setter Property="ControlTemplate"
+                    Value="{StaticResource RadioButtonTemplate}" />
+        </Style>
+    </ContentView.Resources>
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
             <Label FontSize="Large">
@@ -25,12 +70,64 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
-            <Label Text="{Binding NotificationContent}"></Label>
-            <Grid ColumnDefinitions="*,*">
-                <DatePicker Date="{Binding Time}"></DatePicker>
-                <TimePicker Grid.Column="1"
-                            Time="{Binding TimeOffset}"></TimePicker>
+            <StackLayout RadioButtonGroup.GroupName="CountdownMode"
+                         RadioButtonGroup.SelectedValue="{Binding CountdownMode}"
+                         Orientation="Horizontal">
+                <RadioButton Value="Relative">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="计时"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton Value="Absolute">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="时间点"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+
+            </StackLayout>
+            <Grid ColumnDefinitions="*,*"
+                  IsVisible="{Binding CountdownMode, Converter={StaticResource IsEqualConverter}, ConverterParameter=Relative}">
+                <Border Style="{StaticResource Base_FrameEntry}">
+                    <DatePicker Date="{Binding Time}"></DatePicker>
+                </Border>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        Grid.Column="1">
+                    <TimePicker Time="{Binding TimeOffset}"></TimePicker>
+                </Border>
             </Grid>
+            <Grid ColumnDefinitions="*,*,*"
+                  IsVisible="{Binding CountdownMode, Converter={StaticResource IsEqualConverter}, ConverterParameter=Absolute}">
+                <Border Style="{StaticResource Base_FrameEntry}">
+                    <Entry Keyboard="Numeric"
+                           Text="{Binding Day}"></Entry>
+                </Border>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        Grid.Column="1">
+                    <Entry Keyboard="Numeric"
+                           Text="{Binding Hour}"></Entry>
+                </Border>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        Grid.Column="2">
+
+                    <Entry Keyboard="Numeric"
+                           Text="{Binding Minute}"></Entry>
+                </Border>
+
+            </Grid>
+            <Label Text="通知消息："></Label>
+            <Label  Style="{StaticResource Body1_MulishRegular}"
+                    Text="{Binding NotificationContent}"></Label>
+
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">

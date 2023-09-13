@@ -1,5 +1,6 @@
 ﻿using Abp.Dependency;
 using MatoProductivity.Core.Models.Entities;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class NoteSegmentServiceFactory :  INoteSegmentServiceFactory
+    public class NoteSegmentServiceFactory : INoteSegmentServiceFactory
     {
         private readonly IIocResolver iocResolver;
 
@@ -37,6 +38,25 @@ namespace MatoProductivity.Core.Services
                     break;
                 case "TimerSegment":
                     using (var objWrapper = iocResolver.ResolveAsDisposable<TimerSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+
+                case "TodoSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<TodoSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                case "KeyValueSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<KeyValueSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                case "FileSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<FileSegmentService>(new { noteSegment }))
                     {
                         newModel = objWrapper.Object;
                     }

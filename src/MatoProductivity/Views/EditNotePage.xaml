@@ -180,7 +180,43 @@
                 </core:TimerSegmentView.ControlTemplate>
             </core:TimerSegmentView>
         </DataTemplate>
+        <DataTemplate x:Key="TodoSegment">
+            <core:TodoSegmentView Margin="0,5">
+                <core:TodoSegmentView.ControlTemplate>
 
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:TodoSegmentView.ControlTemplate>
+            </core:TodoSegmentView>
+        </DataTemplate>
+
+        <DataTemplate x:Key="KeyValueSegment">
+            <core:KeyValueSegmentView Margin="0,5">
+                <core:KeyValueSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:KeyValueSegmentView.ControlTemplate>
+            </core:KeyValueSegmentView>
+        </DataTemplate>
+    <DataTemplate x:Key="FileSegment">
+            <core:FileSegmentView Margin="0,5">
+                <core:FileSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:FileSegmentView.ControlTemplate>
+            </core:FileSegmentView>
+        </DataTemplate>
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                               ResourcesContainer="{x:Reference MainPage}" />
 
