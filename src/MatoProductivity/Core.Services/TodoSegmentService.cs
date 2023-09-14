@@ -66,12 +66,6 @@ namespace MatoProductivity.Core.Services
 
         }
 
-        public override void SubmitAction(object obj)
-        {
-            base.SubmitAction(obj);
-            Console.WriteLine( "!");
-        }
-
         private string _content;
 
         public string Content

@@ -154,40 +154,8 @@ namespace MatoProductivity.Core.Services
         }
 
         [UnitOfWork]
-        public virtual async void SubmitAction(object obj)
+        public virtual void SubmitAction(object obj)
         {
-
-            var entity = await repository.GetAsync(this.NoteSegment.Id);
-
-            ObjectMapper.Map(this.NoteSegment, entity);
-
-
-            var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == this.NoteSegment.Id);
-            foreach (var item in this.NoteSegment.NoteSegmentPayloads)
-            {
-                if (!payloadEntities.Any(c => c.Key == item.Key))
-                {
-                    await payloadRepository.InsertAsync(item);
-
-                }
-            }
-
-
-            foreach (var payloadEntity in payloadEntities)
-            {
-                var currentPayload = this.NoteSegment.GetNoteSegmentPayload(payloadEntity.Key);
-                if (currentPayload == null)
-                {
-                    await payloadRepository.DeleteAsync(payloadEntity);
-                }
-                else
-                {
-                    payloadEntity.Value = currentPayload.Value;
-                    payloadEntity.ValueType = currentPayload.ValueType;
-                    await payloadRepository.UpdateAsync(payloadEntity);
-                }
-            }
-            UnitOfWorkManager.Current.SaveChanges();
 
         }
 

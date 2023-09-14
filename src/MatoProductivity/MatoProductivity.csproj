@@ -72,6 +72,33 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Core.Views\DateTimeSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\DocumentSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\KeyValueSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\MediaSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\ScriptSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\TextSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\TimerSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\TodoSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\VoiceSegmentView.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
 	  <Compile Update="Platforms\iOS\LocalNotification.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
@@ -87,6 +114,33 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Core.Views\DateTimeSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\DocumentSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\KeyValueSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\MediaSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\ScriptSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\TextSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\TimerSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\TodoSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\VoiceSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Styles\Colors.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -9,14 +9,10 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class FileSegmentService : NoteSegmentService, ITransientDependency
+    public abstract class FileSegmentService : NoteSegmentService
     {
 
         private NoteSegmentPayload DefaultFileContentSegmentPayload => new NoteSegmentPayload(nameof(FileContent), "");
-        public Command CapturePhoto { get; set; }
-        public Command PickPhoto { get; set; }
-        public Command RemovePhoto { get; set; }
-
 
         public FileSegmentService(
             IRepository<NoteSegment, long> repository,
@@ -24,17 +20,9 @@ namespace MatoProductivity.Core.Services
             NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += FileSegmentViewModel_PropertyChanged;
-            this.CapturePhoto = new Command(CapturePhotoAction);
-            this.PickPhoto = new Command(PickPhotoAction);
-            this.RemovePhoto = new Command(RemovePhotoAction);
 
         }
 
-        public override void SubmitAction(object obj)
-        {
-            base.SubmitAction(obj);
-            Console.WriteLine("!");
-        }
 
 
         private void FileSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -53,10 +41,14 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(FileContent))
             {
-                if (FileContent!=null)
+                if (FileContent!=null&& FileContent.Length>0)
                 {
                     NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(FileContent), FileContent));
 
+                }
+                else
+                {
+                    //NoteSegment?.RemoveNoteSegmentPayloads(nameof(FileContent));
                 }
             }
 
@@ -73,41 +65,16 @@ namespace MatoProductivity.Core.Services
         }
 
 
-        public async void CapturePhotoAction()
-        {
-            if (MediaPicker.Default.IsCaptureSupported)
-            {
-                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
-                await SaveFile(photo);
-
-            }
-        }
-
-
-        public async void PickPhotoAction()
-        {
-            FileResult photo = await MediaPicker.Default.PickPhotoAsync();
-
-            await SaveFile(photo);
-
-        }
-        public void RemovePhotoAction()
-        {
-            FileContent=null;
-
-        }
-        private async Task SaveFile(FileResult photo)
+        protected virtual async Task SaveFile(FileResult photo)
         {
             if (photo != null)
             {
-                using Stream sourceStream = await photo.OpenReadAsync();
-                using MemoryStream fileStream = new MemoryStream();
-
-                await sourceStream.CopyToAsync(fileStream);
-
-                this.FileContent=  fileStream.ToArray();
-                await sourceStream.DisposeAsync();
-                await fileStream.DisposeAsync();
+                using (Stream sourceStream = await photo.OpenReadAsync())
+                using (MemoryStream fileStream = new MemoryStream())
+                {
+                    await sourceStream.CopyToAsync(fileStream);
+                    this.FileContent=  fileStream.ToArray();
+                }
 
             }
         }
@@ -121,11 +88,9 @@ namespace MatoProductivity.Core.Services
             {
                 _fileContent = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(PreviewImage));
             }
         }
 
-        public ImageSource PreviewImage => ImageSource.FromStream(() => new MemoryStream(FileContent));
 
 
         private string _title;
@@ -139,10 +104,6 @@ namespace MatoProductivity.Core.Services
                 RaisePropertyChanged();
             }
         }
-
-
-
-
 
     }
 }

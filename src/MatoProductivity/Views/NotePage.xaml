@@ -2,7 +2,7 @@
 <mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
-                xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
+                xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity"
                 x:Class="MatoProductivity.Views.NotePage">
 
     <Grid  x:Name="MainPage">
@@ -53,11 +53,29 @@
                                           ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
                 </core:KeyValueSegmentView>
             </DataTemplate>
-            <DataTemplate x:Key="FileSegment">
-                <core:FileSegmentView Margin="0,5"
+            <DataTemplate x:Key="MediaSegment">
+                <core:MediaSegmentView Margin="0,5"
                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:FileSegmentView>
+                </core:MediaSegmentView>
             </DataTemplate>
+            <DataTemplate x:Key="DocumentSegment">
+                <core:DocumentSegmentView Margin="0,5"
+                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:DocumentSegmentView>
+            </DataTemplate>
+
+            <DataTemplate x:Key="VoiceSegment">
+                <core:VoiceSegmentView Margin="0,5"
+                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:VoiceSegmentView>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ScriptSegment">
+                <core:ScriptSegmentView Margin="0,5"
+                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:ScriptSegmentView>
+            </DataTemplate>
+
 
             <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                                   ResourcesContainer="{x:Reference MainPage}" />

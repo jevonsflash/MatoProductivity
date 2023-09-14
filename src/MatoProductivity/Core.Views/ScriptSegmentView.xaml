@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
+             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity.Core"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MatoProductivity.Core.Views.ScriptSegmentView">
+    <Grid>
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
+          
+        </VerticalStackLayout>
+
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
+
+            <toolkit:DrawingView x:Name="DrawingViewControl"
+                                 Lines="{Binding ScriptLines}"
+                                 LineColor="Red"
+                                 LineWidth="5"
+                                 ShouldClearOnFinish="false" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Text="PickPhoto"
+                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
+                        Command="{Binding PickPhoto}"></Button>
+                <Button Text="CapturePhoto"
+                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
+                        Grid.Column="1"
+                        Command="{Binding CapturePhoto}"></Button>
+                <!--<Button Text="RemovePhoto"
+                        Grid.Column="2"
+                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
+                        Command="{Binding RemovePhoto}"></Button>-->
+            </Grid>
+       
+
+
+        </VerticalStackLayout>
+
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
+            <Border Style="{StaticResource Base_FrameEntry}">
+                <Entry  Text="{Binding Title}"
+                        Placeholder="请输入标题" />
+            </Border>
+ 
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

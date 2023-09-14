@@ -47,7 +47,6 @@
 		<PackageReference Include="Abp.Castle.Log4Net" Version="8.1.0" />
 		<PackageReference Include="Abp.EntityFrameworkCore" Version="8.1.0" />
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.4.0" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.PinYinConverter" Version="1.0.0" />
@@ -73,22 +72,6 @@
 		<Compile Update="Controls\IsDoneToggleButton.xaml.cs">
 		  <DependentUpon>IsDoneToggleButton.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="Views\KeyValueSegmentView.xaml.cs">
-		  <DependentUpon>KeyValueSegmentView.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\FileSegmentView.xaml.cs">
-		  <DependentUpon>FileSegmentView.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\TodoSegmentView.xaml.cs">
-		  <DependentUpon>TodoSegmentView.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\TimerSegmentView.xaml.cs">
-		  <DependentUpon>TimerSegmentView.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\TextSegmentView.xaml.cs">
-			<SubType>Code</SubType>
-			<DependentUpon>TextSegmentView.xaml</DependentUpon>
-		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -97,25 +80,6 @@
 		</MauiXaml>
 		<MauiXaml Update="Controls\RichTextEditor.xaml">
 		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\KeyValueSegmentView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\FileSegmentView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\TodoSegmentView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\TimerSegmentView.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\TextSegmentView.xaml">
-			<SubType>Designer</SubType>
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\DateTimeSegmentView.xaml">
-			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 

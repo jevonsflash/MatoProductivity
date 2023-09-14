@@ -55,8 +55,26 @@ namespace MatoProductivity.Core.Services
                         newModel = objWrapper.Object;
                     }
                     break;
-                case "FileSegment":
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<FileSegmentService>(new { noteSegment }))
+                case "MediaSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<MediaSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                case "DocumentSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<DocumentSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                case "VoiceSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<VoiceSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+                case "ScriptSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<ScriptSegmentService>(new { noteSegment }))
                     {
                         newModel = objWrapper.Object;
                     }

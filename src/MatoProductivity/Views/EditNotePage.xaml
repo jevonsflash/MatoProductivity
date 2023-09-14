@@ -2,7 +2,7 @@
 <mato:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
-                      xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
+                      xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity"
                       NavigationPage.HasNavigationBar="False"
                       xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       x:Name="MainPage"
@@ -39,17 +39,16 @@
                                                    DropCommandParameter="{TemplateBinding}" />
                         </StackLayout.GestureRecognizers>
                         <Border StrokeThickness="4"
-                               StrokeDashArray="2 2"
+                                StrokeDashArray="2 2"
                                 StrokeDashOffset="6"
                                 Stroke="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}"
                                 HorizontalOptions="Center"
                                 IsVisible="{TemplateBinding BindingContext.IsBeingDraggedOver}">
-                            <Grid 
-                                  HeightRequest="{TemplateBinding BindingContext.DropPlaceHolderItem.Height}"
-                                  WidthRequest="{TemplateBinding BindingContext.DropPlaceHolderItem.Width}"
-                               >
+                            <Grid HeightRequest="{TemplateBinding BindingContext.DropPlaceHolderItem.Height}"
+                                  WidthRequest="{TemplateBinding BindingContext.DropPlaceHolderItem.Width}">
                                 <Label HorizontalTextAlignment="Center"
-                                       VerticalOptions="Center" Text="松开手指将放置条目至此处"></Label>
+                                       VerticalOptions="Center"
+                                       Text="松开手指将放置条目至此处"></Label>
 
 
                             </Grid>
@@ -205,17 +204,53 @@
                 </core:KeyValueSegmentView.ControlTemplate>
             </core:KeyValueSegmentView>
         </DataTemplate>
-    <DataTemplate x:Key="FileSegment">
-            <core:FileSegmentView Margin="0,5">
-                <core:FileSegmentView.ControlTemplate>
+        <DataTemplate x:Key="MediaSegment">
+            <core:MediaSegmentView Margin="0,5">
+                <core:MediaSegmentView.ControlTemplate>
 
                     <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
                              Tablet="{StaticResource NoteSegmentCardViewDesktop}"
                              Desktop="{StaticResource NoteSegmentCardViewDesktop}">
                     </OnIdiom>
 
-                </core:FileSegmentView.ControlTemplate>
-            </core:FileSegmentView>
+                </core:MediaSegmentView.ControlTemplate>
+            </core:MediaSegmentView>
+        </DataTemplate>
+        <DataTemplate x:Key="VoiceSegment">
+            <core:VoiceSegmentView Margin="0,5">
+                <core:VoiceSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:VoiceSegmentView.ControlTemplate>
+            </core:VoiceSegmentView>
+        </DataTemplate>
+        <DataTemplate x:Key="DocumentSegment">
+            <core:DocumentSegmentView Margin="0,5">
+                <core:DocumentSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:DocumentSegmentView.ControlTemplate>
+            </core:DocumentSegmentView>
+        </DataTemplate>
+        <DataTemplate x:Key="ScriptSegment">
+            <core:ScriptSegmentView Margin="0,5">
+                <core:ScriptSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:ScriptSegmentView.ControlTemplate>
+            </core:ScriptSegmentView>
         </DataTemplate>
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                               ResourcesContainer="{x:Reference MainPage}" />
@@ -415,7 +450,6 @@
                             </Border.GestureRecognizers>
                         </Border>
                     </HorizontalStackLayout>
-
                     <Label HorizontalTextAlignment="Center"
                            Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
 
