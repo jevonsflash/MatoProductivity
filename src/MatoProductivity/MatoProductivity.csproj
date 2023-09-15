@@ -53,6 +53,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Platforms\iOS\HtmlParser.iOS.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Images\cd2.png" />
 	  <None Remove="Resources\Images\headphone.png" />
 	  <None Remove="Resources\Images\microphone2.png" />
@@ -72,6 +76,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Controls\IsDoneToggleButton.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Controls\RichTextEditor.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
 	  <Compile Update="Core.Views\DateTimeSegmentView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
@@ -102,6 +112,9 @@
 	  <Compile Update="Platforms\iOS\LocalNotification.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
+	  <Compile Update="Views\StatisticPage.xaml.cs">
+	    <DependentUpon>StatisticPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\NotePage.xaml.cs">
 	    <DependentUpon>NotePage.xaml</DependentUpon>
 	  </Compile>
@@ -114,6 +127,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\IsDoneToggleButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\RichTextEditor.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Core.Views\DateTimeSegmentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -150,6 +169,9 @@
 	  <MauiXaml Update="Styles\Theme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\StatisticPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\NotePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -166,6 +188,11 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\Styles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Platforms\Android\HtmlParser.Android.cs" />
+	  <None Include="Platforms\iOS\HtmlParser.iOS.cs" />
 	</ItemGroup>
 
 </Project>

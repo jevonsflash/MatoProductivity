@@ -2,40 +2,159 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
-             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity.Core"
+             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MatoProductivity.Core.Views.ScriptSegmentView">
+    <ContentView.Resources>
+        <Style TargetType="Button"
+               BasedOn="{StaticResource Base_Button}"
+               x:Key="ScriptButtonStyle">
+            <Setter Property="FontFamily"
+                    Value="FontAwesome_Solid"></Setter>
+            <Setter Property="BackgroundColor"
+                    Value="Transparent" />
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+
+            </Setter>
+            <Setter Property="BorderWidth"
+                    Value="0" />
+        </Style>
+        <Style TargetType="Border"
+               x:Key="SelectableLayoutStyle">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup Name="CommonStates">
+                        <VisualState Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
+                                <Setter Property="Stroke"
+                                        Value="{AppThemeBinding Light={StaticResource LightPrimaryLineColor}, Dark={StaticResource DarkPrimaryLineColor}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
+                                <Setter Property="Stroke"
+                                        Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentView.Resources>
+
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-          
+            <Image Source="{Binding PreviewImage}"></Image>
+
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
 
-            <toolkit:DrawingView x:Name="DrawingViewControl"
+            <Image Source="{Binding PreviewImage}"
+                   IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}"></Image>
+
+            <toolkit:DrawingView x:Name="MainEditor"
+                                 IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                                  Lines="{Binding ScriptLines}"
-                                 LineColor="Red"
-                                 LineWidth="5"
+                                 LineColor="{Binding LineColor}"
+                                 LineWidth="{Binding DrawingLineSize.Value}"
+                                 HeightRequest="300"
+                                 IsMultiLineModeEnabled="true"
                                  ShouldClearOnFinish="false" />
-            <Grid>
+
+
+            <VerticalStackLayout x:Name="OptionsLayout"
+                                 Grid.Row="2"
+                                 Spacing="5">
+                <CollectionView x:Name="DrawingLineSizeCollectionView"
+                                Background="Transparent"
+                                ItemsSource="{Binding DrawingLineSizeSelectorSource}"
+                                SelectedItem="{Binding DrawingLineSize}"
+                                SelectionMode="Single"
+                                HeightRequest="45">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"
+                                           ItemSpacing="5"></LinearItemsLayout>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border x:Name="TargetElement"
+                                    Style="{x:StaticResource SelectableLayoutStyle}"
+                                    Padding="5,0">
+                                <Label Text="{Binding Name}"
+                                       VerticalOptions="Center"
+                                       FontSize="{Binding Value}"></Label>
+                            </Border>
+
+
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <CollectionView x:Name="ColorCollectionView"
+                                ItemsSource="{Binding LineColorSelectorSource}"
+                                SelectedItem="{Binding LineColor}"
+                                SelectionMode="Single"
+                                HeightRequest="45">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal"
+                                           ItemSpacing="5"></LinearItemsLayout>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border x:Name="TargetElement"
+                                    Style="{StaticResource SelectableLayoutStyle}"
+                                    BackgroundColor="{Binding}"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    StrokeShape="RoundRectangle 40">
+
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+            <Grid  IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}">
+                <Button Text="重新绘制" Command="{Binding RemovePhoto}"
+                        
+                        ></Button>
+            </Grid>
+            <Grid  IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="PickPhoto"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
-                        Command="{Binding PickPhoto}"></Button>
-                <Button Text="CapturePhoto"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
-                        Grid.Column="1"
-                        Command="{Binding CapturePhoto}"></Button>
-                <!--<Button Text="RemovePhoto"
+
+                <HorizontalStackLayout
+                                       Spacing="5"
+                                       Margin="0,10">
+                    <Button Text="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.Name, FallbackValue=Auto}"
+                            Style="{StaticResource ScriptButtonStyle}"
+                            Clicked="DrawingLineSizeButton_Clicked"
+                            x:Name="DrawingLineSizeButton"></Button>
+                    <Button Text="Color"
+                            TextColor="{Binding Source={x:Reference ColorCollectionView}, Path=SelectedItem}"
+                            Style="{StaticResource ScriptButtonStyle}"
+                            Clicked="LineColorButton_Clicked"
+                            x:Name="LineColorButton"></Button>
+                </HorizontalStackLayout>
+
+               
+                <Button Text="Clean"
                         Grid.Column="2"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
-                        Command="{Binding RemovePhoto}"></Button>-->
+                        Clicked="Button_Clicked"
+                        Command="{Binding Clear}"></Button>
             </Grid>
-       
+
 
 
         </VerticalStackLayout>
@@ -45,7 +164,7 @@
                 <Entry  Text="{Binding Title}"
                         Placeholder="请输入标题" />
             </Border>
- 
+
         </VerticalStackLayout>
     </Grid>
 </ContentView>

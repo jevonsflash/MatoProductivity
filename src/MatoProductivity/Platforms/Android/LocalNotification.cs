@@ -86,8 +86,6 @@ namespace MatoProductivity.Core.Platforms.Android
                 .SetContentIntent(pendingIntent)
                 .SetContentTitle(title)
                 .SetContentText(message)
-                .SetLargeIcon(BitmapFactory.DecodeResource(AndroidApp.Context.Resources, Resource.Drawable.navigation_empty_icon))
-                .SetSmallIcon(Resource.Drawable.navigation_empty_icon)
                 .SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
 
             Notification notification = builder.Build();

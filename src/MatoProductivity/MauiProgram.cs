@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls.Compatibility;
 using Microsoft.Maui.Controls.Hosting;
 using MatoProductivity.Core;
 using CommunityToolkit.Maui;
+using Abp.Modules;
 
 namespace MatoProductivity
 {
@@ -33,5 +34,7 @@ namespace MatoProductivity
 				});
 			return builder.Build();
 		}
-	}
+
+
+    }
 }

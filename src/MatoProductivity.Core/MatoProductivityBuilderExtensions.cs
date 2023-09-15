@@ -15,8 +15,6 @@ using Castle.Facilities.Logging;
 using Castle.Windsor.MsDependencyInjection;
 using MatoProductivity.Infrastructure.Helper;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
 
 namespace MatoProductivity.Core
 {
@@ -24,7 +22,7 @@ namespace MatoProductivity.Core
     public static class MatoProductivityBuilderExtensions
     {
 
-        public static MauiAppBuilder UseMatoProductivity<TStartupModule>(this MauiAppBuilder builder) where TStartupModule : AbpModule
+        public static IServiceCollection AddMatoProductivityService<TStartupModule>(this IServiceCollection serviceCollection) where TStartupModule : AbpModule
         {
             var logCfgName = "log4net.config";
             var appCfgName = "appsettings.json";
@@ -43,9 +41,9 @@ namespace MatoProductivity.Core
             });
             _bootstrapper.IocManager.IocContainer.AddFacility<LoggingFacility>(f => f.UseAbpLog4Net().WithConfig(documentsPath));
 
-            builder.Services.AddSingleton(_bootstrapper);
-            WindsorRegistrationHelper.CreateServiceProvider(_bootstrapper.IocManager.IocContainer, builder.Services);
-            return builder;
+            serviceCollection.AddSingleton(_bootstrapper);
+            WindsorRegistrationHelper.CreateServiceProvider(_bootstrapper.IocManager.IocContainer, serviceCollection);
+            return serviceCollection;
         }
 
         private static void InitConfig(string logCfgName, string documentsPath)

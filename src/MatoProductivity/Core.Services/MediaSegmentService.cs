@@ -62,7 +62,7 @@ namespace MatoProductivity.Core.Services
         }
         public void RemovePhotoAction()
         {
-            FileContent=null;
+            FileContent = null;
 
         }
 

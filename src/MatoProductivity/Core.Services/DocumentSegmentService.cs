@@ -100,7 +100,7 @@ namespace MatoProductivity.Core.Services
 
         public void RemoveDocumentAction()
         {
-            FileContent=null;
+            FileContent = null;
         }
     }
 }

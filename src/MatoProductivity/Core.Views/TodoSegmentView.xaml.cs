@@ -21,6 +21,6 @@ public partial class TodoSegmentView : ContentView, ITransientDependency
 
     private void IsDoneToggleButton_Toggled(object sender, ToggledEventArgs e)
     {
-        (this.BindingContext as TodoSegmentService).Submit.Execute(null);
+        (this.BindingContext as TodoSegmentService).SwitchDone.Execute(e.Value);
     }
 }

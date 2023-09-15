@@ -23,6 +23,7 @@ namespace MatoProductivity.ViewModels
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
         private readonly IRepository<NoteTemplate, long> templateRepository;
         private readonly IRepository<NoteSegment, long> noteSegmentRepository;
+        private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
         private readonly IRepository<NoteSegmentStore, long> noteSegmentStoreRepository;
         private readonly IRepository<Note, long> repository;
         private readonly IUnitOfWorkManager unitOfWorkManager;
@@ -34,6 +35,7 @@ namespace MatoProductivity.ViewModels
             INoteSegmentServiceFactory noteSegmentServiceFactory,
             IRepository<NoteTemplate, long> templateRepository,
             IRepository<NoteSegment, long> noteSegmentRepository,
+            IRepository<NoteSegmentPayload, long> payloadRepository,
             IRepository<NoteSegmentStore, long> noteSegmentStoreRepository,
 
             IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
@@ -60,6 +62,7 @@ namespace MatoProductivity.ViewModels
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.templateRepository = templateRepository;
             this.noteSegmentRepository = noteSegmentRepository;
+            this.payloadRepository=payloadRepository;
             this.noteSegmentStoreRepository=noteSegmentStoreRepository;
             this.repository = repository;
             this.unitOfWorkManager = unitOfWorkManager;
@@ -204,7 +207,7 @@ namespace MatoProductivity.ViewModels
                     Icon=note.Icon,
                     NoteSegmentPayloads = new List<NoteSegmentPayload>()
 
-            };
+                };
 
 
                 var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegment);
@@ -496,37 +499,119 @@ namespace MatoProductivity.ViewModels
             return false;
         }
 
-        [UnitOfWork]
         private async void SubmitAction(object obj)
         {
-            await this.repository.UpdateAsync(this.NoteId, (note) =>
-            {
-                note.Title = this.Title;
-                note.Desc = this.Desc;
-                note.Icon = this.Icon;
-                note.Color = this.Color;
-                note.BackgroundColor = this.BackgroundColor;
-                note.PreViewContent = this.PreViewContent;
-                note.IsEditable = this.IsEditable;
-                return Task.FromResult(note);
-            });
-
-            var noteSegments = await noteSegmentRepository.GetAllListAsync(c => c.NoteId == this.NoteId);
-            foreach (var noteSegment in noteSegments)
-            {
-                if (!NoteSegments.Select(c => c.NoteSegment)
-                      .Where(c => !c.IsTransient())
-                      .Any(c => c.Id == noteSegment.Id))
-                {
-                    await noteSegmentRepository.DeleteAsync(noteSegment.Id);
-                }
-            }
-
             foreach (var noteSegment in NoteSegments)
             {
-                await noteSegmentRepository.InsertOrUpdateAsync(noteSegment.NoteSegment);
                 noteSegment.Submit.Execute(null);
+
             }
+            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+            {
+                await this.repository.UpdateAsync(this.NoteId, (note) =>
+                {
+                    note.Title = this.Title;
+                    note.Desc = this.Desc;
+                    note.Icon = this.Icon;
+                    note.Color = this.Color;
+                    note.BackgroundColor = this.BackgroundColor;
+                    note.PreViewContent = this.PreViewContent;
+                    note.IsEditable = this.IsEditable;
+                    return Task.FromResult(note);
+                });
+
+                var noteSegments = await noteSegmentRepository.GetAllListAsync(c => c.NoteId == this.NoteId);
+
+                foreach (var noteSegmentService in NoteSegments)
+                {
+                    var noteSegment = noteSegmentService.NoteSegment;
+                    if (!noteSegments.Any(c => c.Id == noteSegment.Id))
+                    {
+                        var newNoteSegment = new NoteSegment();
+                        newNoteSegment.Id = noteSegment.Id;
+                        newNoteSegment.NoteId = noteSegment.NoteId;
+                        newNoteSegment.Title = noteSegment.Title;
+                        newNoteSegment.Type=noteSegment.Type;
+                        newNoteSegment.Status=noteSegment.Status;
+                        newNoteSegment.Desc=noteSegment.Desc;
+                        newNoteSegment.Icon=noteSegment.Icon;
+                        newNoteSegment.Color=noteSegment.Color;
+                        newNoteSegment.Rank=noteSegment.Rank;
+                        newNoteSegment.IsHidden=noteSegment.IsHidden;
+                        newNoteSegment.IsRemovable=noteSegment.IsRemovable;
+
+                        newNoteSegment.NoteSegmentPayloads= noteSegment.NoteSegmentPayloads.Select(c => new NoteSegmentPayload()
+                        {
+                            NoteSegmentId=newNoteSegment.Id,
+                            Key=c.Key,
+                            Value=c.Value,
+                            ValueType=c.ValueType
+
+                        }).ToList();
+                        var entity = await noteSegmentRepository.InsertAsync(newNoteSegment);
+                    }
+                }
+
+                foreach (var noteSegment in noteSegments)
+                {
+                    if (!NoteSegments.Select(c => c.NoteSegment)
+                          .Where(c => !c.IsTransient())
+                          .Any(c => c.Id == noteSegment.Id))
+                    {
+                        await noteSegmentRepository.DeleteAsync(noteSegment.Id);
+                    }
+                    else
+                    {
+                        var newNoteSegment = NoteSegments.Select(c => c.NoteSegment).FirstOrDefault(c => c.Id==noteSegment.Id);
+                        noteSegment.Id = newNoteSegment.Id;
+                        noteSegment.NoteId = newNoteSegment.NoteId;
+                        noteSegment.Title = newNoteSegment.Title;
+                        noteSegment.Type=newNoteSegment.Type;
+                        noteSegment.Status=newNoteSegment.Status;
+                        noteSegment.Desc=newNoteSegment.Desc;
+                        noteSegment.Icon=newNoteSegment.Icon;
+                        noteSegment.Color=newNoteSegment.Color;
+                        noteSegment.Rank=newNoteSegment.Rank;
+                        noteSegment.IsHidden=newNoteSegment.IsHidden;
+                        noteSegment.IsRemovable=newNoteSegment.IsRemovable;
+
+
+                        var entity = await noteSegmentRepository.UpdateAsync(noteSegment);
+
+
+                        var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == entity.Id);
+                        foreach (var item in entity.NoteSegmentPayloads)
+                        {
+                            if (!payloadEntities.Any(c => c.Key == item.Key))
+                            {
+                                item.NoteSegmentId=entity.Id;
+                                await payloadRepository.InsertAsync(item);
+
+                            }
+                        }
+
+
+                        foreach (var payloadEntity in payloadEntities)
+                        {
+                            var currentPayload = newNoteSegment.GetNoteSegmentPayload(payloadEntity.Key);
+                            if (currentPayload == null)
+                            {
+                                await payloadRepository.DeleteAsync(payloadEntity);
+                            }
+                            else
+                            {
+                                payloadEntity.Value = currentPayload.Value;
+                                payloadEntity.ValueType = currentPayload.ValueType;
+                                await payloadRepository.UpdateAsync(payloadEntity);
+                            }
+                        }
+
+                    }
+                }
+                UnitOfWorkManager.Current.SaveChanges();
+
+
+            });
 
             await navigationService.PopAsync();
 

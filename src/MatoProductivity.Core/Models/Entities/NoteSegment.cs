@@ -88,6 +88,10 @@ namespace MatoProductivity.Core.Models.Entities
                 {
                     NoteSegmentPayloads.Remove(currentPayload);
                 }
+                if (!this.IsTransient())
+                {
+                    noteSegmentPayload.NoteSegmentId=this.Id;
+                }
                 NoteSegmentPayloads.Add(noteSegmentPayload);
             }
         }
@@ -103,6 +107,10 @@ namespace MatoProductivity.Core.Models.Entities
                 }
                 if (noteSegmentPayload != null)
                 {
+                    if (!this.IsTransient())
+                    {
+                        noteSegmentPayload.NoteSegmentId=this.Id;
+                    }
                     NoteSegmentPayloads.Add(noteSegmentPayload);
                 }
                 return noteSegmentPayload;

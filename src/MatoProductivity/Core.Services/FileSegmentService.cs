@@ -65,11 +65,11 @@ namespace MatoProductivity.Core.Services
         }
 
 
-        protected virtual async Task SaveFile(FileResult photo)
+        protected virtual async Task SaveFile(FileResult fileResult)
         {
-            if (photo != null)
+            if (fileResult != null)
             {
-                using (Stream sourceStream = await photo.OpenReadAsync())
+                Stream sourceStream = await fileResult.OpenReadAsync();
                 using (MemoryStream fileStream = new MemoryStream())
                 {
                     await sourceStream.CopyToAsync(fileStream);
@@ -78,6 +78,7 @@ namespace MatoProductivity.Core.Services
 
             }
         }
+
 
         private byte[] _fileContent;
 

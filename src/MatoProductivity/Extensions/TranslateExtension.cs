@@ -4,8 +4,6 @@ using System.Reflection;
 using System.Resources;
 using Abp.Domain.Services;
 using Abp.Localization;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
 
 namespace MatoProductivity.Core.Localization
 {

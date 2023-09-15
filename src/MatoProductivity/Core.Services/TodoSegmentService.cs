@@ -11,6 +11,7 @@ namespace MatoProductivity.Core.Services
 {
     public class TodoSegmentService : NoteSegmentService, ITransientDependency
     {
+        public Command SwitchDone { get; set; }
 
         private NoteSegmentPayload DefaultContentSegmentPayload => new NoteSegmentPayload(nameof(Content), "");
 
@@ -22,6 +23,32 @@ namespace MatoProductivity.Core.Services
             NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += TodoSegmentViewModel_PropertyChanged;
+            SwitchDone=new Command(SwitchDoneAction);
+            this.payloadRepository=payloadRepository;
+        }
+
+        private async void SwitchDoneAction(object obj)
+        {
+            var isdone = this.NoteSegment.GetNoteSegmentPayload(nameof(IsDone));
+            isdone.SetStringValue(((bool)obj).ToString());
+           
+            var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == this.NoteSegment.Id);
+
+
+            foreach (var payloadEntity in payloadEntities)
+            {
+                var currentPayload = this.NoteSegment.GetNoteSegmentPayload(payloadEntity.Key);
+                if (currentPayload == null)
+                {
+                    await payloadRepository.DeleteAsync(payloadEntity);
+                }
+                else
+                {
+                    payloadEntity.Value = currentPayload.Value;
+                    payloadEntity.ValueType = currentPayload.ValueType;
+                    await payloadRepository.UpdateAsync(payloadEntity);
+                }
+            }
         }
 
         private void TodoSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -91,6 +118,7 @@ namespace MatoProductivity.Core.Services
         }
 
         private bool _isDone;
+        private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
 
         public bool IsDone
         {
