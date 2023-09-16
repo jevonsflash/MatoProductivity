@@ -97,6 +97,15 @@
 	  <Compile Update="Core.Views\ScriptSegmentView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
+	  <Compile Update="Core.Views\LocationSegmentView.xaml.cs">
+	    <DependentUpon>LocationSegmentView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\WeatherSegmentView.xaml.cs">
+	    <DependentUpon>WeatherSegmentView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Core.Views\ContactSegmentView.xaml.cs">
+	    <DependentUpon>ContactSegmentView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Core.Views\TextSegmentView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
@@ -146,6 +155,15 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Core.Views\ScriptSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\LocationSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\WeatherSegmentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Core.Views\ContactSegmentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Core.Views\TextSegmentView.xaml">
