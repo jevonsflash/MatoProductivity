@@ -70,7 +70,7 @@ namespace MatoProductivity.Core
                     options => options.MapFrom(input => input.NoteSegmentTemplatePayloads))
                  .ForMember(
                     c => c.NoteId,
-                    options => options.MapFrom(input => input.NoteTemplateId))
+                    options => options.Ignore())
                   .ForMember(
                     c => c.Id,
                     options => options.Ignore()));
@@ -86,7 +86,7 @@ namespace MatoProductivity.Core
                     options => options.MapFrom(input => input.Note))
                    .ForMember(
                     c => c.NoteTemplateId,
-                    options => options.MapFrom(input => input.NoteId))
+                    options => options.Ignore())
                    .ForMember(
                        c => c.NoteSegmentTemplatePayloads,
                        options => options.MapFrom(input => input.NoteSegmentPayloads))
@@ -100,7 +100,7 @@ namespace MatoProductivity.Core
                        options => options.MapFrom(input => input.NoteSegmentTemplate))
                    .ForMember(
                     c => c.NoteSegmentId,
-                    options => options.MapFrom(input => input.NoteSegmentTemplateId))
+                    options => options.Ignore())
 
                   .ForMember(
                     c => c.Id,
@@ -113,7 +113,7 @@ namespace MatoProductivity.Core
                        options => options.MapFrom(input => input.NoteSegment))
                    .ForMember(
                     c => c.NoteSegmentTemplateId,
-                    options => options.MapFrom(input => input.NoteSegmentId)));
+                    options => options.Ignore()));
 
 
 

@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    [AutoMap(typeof(NoteSegment))]
     public class NoteSegment : FullAuditedEntity<long>
     {
         public NoteSegment()
@@ -54,29 +53,7 @@ namespace MatoProductivity.Core.Models.Entities
             return default;
         }
 
-        public void RemoveNoteSegmentPayloads(string noteSegmentPayloadKey)
-        {
-            if (NoteSegmentPayloads != null)
-            {
-                var currentPayload = NoteSegmentPayloads.FirstOrDefault(c => c.Key == noteSegmentPayloadKey);
-                if (currentPayload != null)
-                {
-                    NoteSegmentPayloads.Remove(currentPayload);
-                }
-            }
-        }
-
-        public void RemoveNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)
-        {
-            if (NoteSegmentPayloads != null)
-            {
-                var currentPayload = NoteSegmentPayloads.FirstOrDefault(c => c.Key == noteSegmentPayload.Key);
-                if (currentPayload != null)
-                {
-                    NoteSegmentPayloads.Remove(currentPayload);
-                }
-            }
-        }
+  
 
 
         public void SetNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)
