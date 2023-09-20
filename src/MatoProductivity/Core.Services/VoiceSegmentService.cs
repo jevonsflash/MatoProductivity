@@ -20,7 +20,7 @@ namespace MatoProductivity.Core.Services
         public VoiceSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += VoiceSegmentViewModel_PropertyChanged;
             this.CapturePhoto = new Command(CapturePhotoAction);

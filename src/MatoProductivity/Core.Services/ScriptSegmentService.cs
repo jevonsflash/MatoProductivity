@@ -43,7 +43,7 @@ namespace MatoProductivity.Core.Services
         public ScriptSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += ScriptSegmentViewModel_PropertyChanged;
             this.Undo = new Command(UndoAction);

@@ -19,7 +19,7 @@ namespace MatoProductivity.Core.Services
              AbpAsyncTimer timer,
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += DataTimeSegmentViewModel_PropertyChanged;
             this.timer = timer;
@@ -35,12 +35,12 @@ namespace MatoProductivity.Core.Services
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
-                var isAutoSet = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
+                var time = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
+                var isAutoSet = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
 
 
                 var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
                 DateTime parsedTime;
@@ -59,26 +59,25 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(IsAutoSet))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
             }
 
             else if (e.PropertyName == nameof(ExactTime))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), ExactTime));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), ExactTime));
             }
 
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
             }
 
         }
 
-
         public override void CreateAction(object obj)
         {
-            NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
-            NoteSegment?.SetNoteSegmentPayloads(DefaultIsAutoSetNoteSegmentPayload);
+            (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
+            (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(DefaultIsAutoSetNoteSegmentPayload);
         }
 
         private bool _isShowFromNow;

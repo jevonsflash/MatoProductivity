@@ -10,6 +10,8 @@
         <ControlTemplate x:Key="NoteTemplateViewPhone">
             <Grid>
                 <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.CreateNote}"
+                                          CommandParameter="{TemplateBinding Path= BindingContext}"></TapGestureRecognizer>
                     <DropGestureRecognizer AllowDrop="True"
                                            DragLeaveCommand="{TemplateBinding BindingContext.DragLeave}"
                                            DragLeaveCommandParameter="{TemplateBinding BindingContext}"

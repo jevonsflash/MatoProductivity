@@ -24,7 +24,7 @@ namespace MatoProductivity.Core.Services
         public NoteSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment)
+            INoteSegment noteSegment)
         {
             Submit = new Command(SubmitAction);
             Create = new Command(CreateAction);
@@ -127,9 +127,9 @@ namespace MatoProductivity.Core.Services
         public IReadOnlyNoteSegmentServiceContainer Container { get; set; }
 
 
-        private NoteSegment noteSegment;
+        protected INoteSegment noteSegment;
 
-        public NoteSegment NoteSegment
+        public INoteSegment NoteSegment
         {
             get { return noteSegment; }
             set

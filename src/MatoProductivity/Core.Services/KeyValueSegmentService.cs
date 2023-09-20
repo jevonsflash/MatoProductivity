@@ -16,7 +16,7 @@ namespace MatoProductivity.Core.Services
         public KeyValueSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += KeyValueSegmentViewModel_PropertyChanged;
         }
@@ -26,11 +26,11 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                var content = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
                 Content = content.GetStringValue();
             }
 
@@ -38,7 +38,7 @@ namespace MatoProductivity.Core.Services
             {
                 if (!string.IsNullOrEmpty(Content))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
+                    (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
 
                 }
             }
@@ -46,11 +46,11 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
                 this.PlaceHolder= "请输入" + Title;
             }
         }
-
+  
         public override void CreateAction(object obj)
         {
 

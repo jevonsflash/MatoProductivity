@@ -17,7 +17,7 @@ namespace MatoProductivity.Core.Services
         public FileSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += FileSegmentViewModel_PropertyChanged;
 
@@ -30,11 +30,11 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
 
-                var fileContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(FileContent), DefaultFileContentSegmentPayload);
+                var fileContent = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(FileContent), DefaultFileContentSegmentPayload);
                 FileContent = fileContent.Value;
 
             }
@@ -43,22 +43,22 @@ namespace MatoProductivity.Core.Services
             {
                 if (FileContent!=null&& FileContent.Length>0)
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(FileContent), FileContent));
+                    (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(FileContent), FileContent));
 
                 }
                 else
                 {
-                    //NoteSegment?.RemoveNoteSegmentPayloads(nameof(FileContent));
+                    //(NoteSegment as NoteSegment)?.RemoveNoteSegmentPayloads(nameof(FileContent));
                 }
             }
 
 
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
             }
         }
-
+  
         public override void CreateAction(object obj)
         {
 

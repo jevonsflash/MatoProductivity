@@ -20,7 +20,5 @@ namespace MatoProductivity
         {
             NoteTemplateListPageViewModel.Init();
         }
-
-
     }
 }

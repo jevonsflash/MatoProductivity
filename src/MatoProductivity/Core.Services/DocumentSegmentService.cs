@@ -25,7 +25,7 @@ namespace MatoProductivity.Core.Services
         public DocumentSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += DocumentSegmentViewModel_PropertyChanged;
             this.PickDocument = new Command(PickDocumentAction);

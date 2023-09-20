@@ -24,6 +24,7 @@ namespace MatoProductivity.ViewModels
             this.Create = new Command(CreateActionAsync);
             Remove = new Command(RemoveAction);
             Edit = new Command(EditAction);
+            CreateNote = new Command(CreateNoteAction);
             this.SwitchState = new Command(SwitchStateAction);
             this.repository = repository;
             this.iocResolver = iocResolver;
@@ -57,6 +58,18 @@ namespace MatoProductivity.ViewModels
             var noteTemplateWrapper = (NoteTemplateWrapper)obj;
             var note = noteTemplateWrapper.NoteTemplate;
             using (var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = note.Id }))
+            {
+                await navigationService.PushAsync(objWrapper.Object);
+            }
+        }
+
+        private async void CreateNoteAction(object obj)
+        {
+            var noteTemplateWrapper = (NoteTemplateWrapper)obj;
+            var note = noteTemplateWrapper.NoteTemplate;
+       
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id }))
             {
                 await navigationService.PushAsync(objWrapper.Object);
             }
@@ -131,6 +144,7 @@ namespace MatoProductivity.ViewModels
 
         public Command SwitchState { get; set; }
         public Command Create { get; set; }
+        public Command CreateNote { get; set; }
 
         public Command Remove { get; set; }
         public Command Edit { get; set; }

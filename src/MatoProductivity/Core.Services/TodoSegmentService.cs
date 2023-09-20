@@ -20,7 +20,7 @@ namespace MatoProductivity.Core.Services
         public TodoSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            NoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += TodoSegmentViewModel_PropertyChanged;
             SwitchDone=new Command(SwitchDoneAction);
@@ -29,15 +29,15 @@ namespace MatoProductivity.Core.Services
 
         private async void SwitchDoneAction(object obj)
         {
-            var isdone = this.NoteSegment.GetNoteSegmentPayload(nameof(IsDone));
+            var isdone = (NoteSegment as NoteSegment)?.GetNoteSegmentPayload(nameof(IsDone));
             isdone.SetStringValue(((bool)obj).ToString());
            
-            var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == this.NoteSegment.Id);
+            var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == (NoteSegment as NoteSegment).Id);
 
 
             foreach (var payloadEntity in payloadEntities)
             {
-                var currentPayload = this.NoteSegment.GetNoteSegmentPayload(payloadEntity.Key);
+                var currentPayload = (NoteSegment as NoteSegment)?.GetNoteSegmentPayload(payloadEntity.Key);
                 if (currentPayload == null)
                 {
                     await payloadRepository.DeleteAsync(payloadEntity);
@@ -56,11 +56,11 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                var content = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
                 Content = content.GetStringValue();
-                var isDone = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsDone), DefaultIsDoneSegmentPayload);
+                var isDone = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(IsDone), DefaultIsDoneSegmentPayload);
                 bool parsedIsDone;
                 if (bool.TryParse(isDone.GetStringValue(), out parsedIsDone))
                 {
@@ -72,19 +72,19 @@ namespace MatoProductivity.Core.Services
             {
                 if (!string.IsNullOrEmpty(Content))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
+                    (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Content), Content));
 
                 }
             }
 
             else if (e.PropertyName == nameof(IsDone))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsDone), IsDone));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsDone), IsDone));
 
             }
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
             }
         }
 
