@@ -15,7 +15,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class NoteSegmentPayload : FullAuditedEntity<long>
+    public class NoteSegmentPayload : FullAuditedEntity<long>, INoteSegmentPayload
     {
         public NoteSegmentPayload()
         {

@@ -24,7 +24,7 @@ namespace MatoProductivity.ViewModels
             this.Create = new Command(CreateActionAsync);
             Remove = new Command(RemoveAction);
             Edit = new Command(EditAction);
-            this.SwitchState=new Command(SwitchStateAction);
+            this.SwitchState = new Command(SwitchStateAction);
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -44,9 +44,9 @@ namespace MatoProductivity.ViewModels
 
         private void RemoveAction(object obj)
         {
-            var note = (NoteTemplate)obj;
+            var note = (NoteTemplateWrapper)obj;
 
-            var delete = NoteTemplates.FirstOrDefault(c => c.Id == note.Id);
+            var delete = NoteTemplates.FirstOrDefault(c => c.NoteTemplate.Id == note.NoteTemplate.Id);
             NoteTemplates.Remove(delete);
 
 
@@ -54,24 +54,24 @@ namespace MatoProductivity.ViewModels
 
         private async void EditAction(object obj)
         {
-            var note = (NoteTemplate)obj;
-
-            //using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = note.Id }))
-            //{
-            //    await navigationService.PushAsync(objWrapper.Object);
-            //}
+            var noteTemplateWrapper = (NoteTemplateWrapper)obj;
+            var note = noteTemplateWrapper.NoteTemplate;
+            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = note.Id }))
+            {
+                await navigationService.PushAsync(objWrapper.Object);
+            }
         }
 
         private void SwitchStateAction(object obj)
         {
-            this.IsEditing= !this.IsEditing;
+            this.IsEditing = !this.IsEditing;
         }
 
 
         public void Init()
         {
             var noteTemplates = this.repository.GetAllList();
-            this.NoteTemplates = new ObservableCollection<NoteTemplate>(noteTemplates);
+            this.NoteTemplates = new ObservableCollection<NoteTemplateWrapper>(noteTemplates.Select(c => new NoteTemplateWrapper(c) { Container = this }));
         }
 
         private async void NoteTemplatePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -80,7 +80,7 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNoteTemplate != default)
                 {
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = SelectedNoteTemplate.Id }))
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = SelectedNoteTemplate.NoteTemplate.Id }))
                     {
                         await navigationService.PushAsync(objWrapper.Object);
                     }
@@ -89,9 +89,9 @@ namespace MatoProductivity.ViewModels
                 }
             }
         }
-        private ObservableCollection<NoteTemplate> _noteTemplates;
+        private ObservableCollection<NoteTemplateWrapper> _noteTemplates;
 
-        public ObservableCollection<NoteTemplate> NoteTemplates
+        public ObservableCollection<NoteTemplateWrapper> NoteTemplates
         {
             get { return _noteTemplates; }
             set
@@ -101,9 +101,9 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private NoteTemplate _selectedNoteTemplate;
+        private NoteTemplateWrapper _selectedNoteTemplate;
 
-        public NoteTemplate SelectedNoteTemplate
+        public NoteTemplateWrapper SelectedNoteTemplate
         {
             get { return _selectedNoteTemplate; }
             set

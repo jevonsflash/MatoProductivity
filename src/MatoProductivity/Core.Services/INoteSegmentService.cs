@@ -4,7 +4,7 @@ namespace MatoProductivity.Core.Services
 {
     public interface INoteSegmentService:IDraggableItem
     {
-        NoteSegment NoteSegment { get; set; }
+        INoteSegment NoteSegment { get; set; }
         Command Submit { get; set; }
         Command Create { get; set; }
         NoteSegmentState NoteSegmentState { get; set; }

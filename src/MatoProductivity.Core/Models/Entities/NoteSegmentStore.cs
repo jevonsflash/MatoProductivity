@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    [AutoMapTo(typeof(NoteSegment))]
+    [AutoMapTo(typeof(NoteSegment), typeof(NoteSegmentTemplate))]
 
     public class NoteSegmentStore : Entity<long>
     {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace MatoProductivity.Core.Models.Entities
 {
     [AutoMap(typeof(NoteSegment))]
-    public class NoteSegmentTemplate : FullAuditedEntity<long>
+    public class NoteSegmentTemplate : FullAuditedEntity<long>, INoteSegment
     {
         public NoteSegmentTemplate()
         {
@@ -21,7 +21,7 @@ namespace MatoProductivity.Core.Models.Entities
         }
 
 
-        
+
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public override long Id { get; set; }
 
@@ -44,6 +44,15 @@ namespace MatoProductivity.Core.Models.Entities
 
         public bool IsRemovable { get; set; }
 
+
+        public NoteSegmentTemplatePayload GetNoteSegmentTemplatePayload(string key)
+        {
+            if (NoteSegmentTemplatePayloads != null)
+            {
+                return NoteSegmentTemplatePayloads.FirstOrDefault(c => c.Key == key);
+            }
+            return default;
+        }
 
         public void SetNoteSegmentTemplatePayloads(NoteSegmentTemplatePayload noteSegmentPayload)
         {

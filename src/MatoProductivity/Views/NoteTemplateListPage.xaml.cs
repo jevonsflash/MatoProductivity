@@ -21,6 +21,6 @@ namespace MatoProductivity
             NoteTemplateListPageViewModel.Init();
         }
 
-      
+
     }
 }

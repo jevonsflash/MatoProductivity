@@ -17,7 +17,7 @@ namespace MatoProductivity.ViewModels
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
 
-        public event EventHandler<NoteSegment> OnFinishedChooise;
+        public event EventHandler<NoteSegmentStore> OnFinishedChooise;
 
         public NoteSegmentStoreListPageViewModel(
             IRepository<NoteSegmentStore, long> repository,
@@ -56,9 +56,8 @@ namespace MatoProductivity.ViewModels
                 if (SelectedNoteSegmentStore != default)
                 {
 
-                    var noteSegment = ObjectMapper.Map<NoteSegment>(this.SelectedNoteSegmentStore);
 
-                    OnFinishedChooise?.Invoke(this, noteSegment);
+                    OnFinishedChooise?.Invoke(this, this.SelectedNoteSegmentStore);
 
                     SelectedNoteSegmentStore = default;
                 }

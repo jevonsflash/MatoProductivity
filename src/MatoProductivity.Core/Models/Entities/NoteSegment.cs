@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Models.Entities
 {
-    public class NoteSegment : FullAuditedEntity<long>
+    public class NoteSegment : FullAuditedEntity<long>, INoteSegment
     {
         public NoteSegment()
         {
@@ -48,12 +48,12 @@ namespace MatoProductivity.Core.Models.Entities
         {
             if (NoteSegmentPayloads != null)
             {
-                return NoteSegmentPayloads.FirstOrDefault(c => c.Key==key);
+                return NoteSegmentPayloads.FirstOrDefault(c => c.Key == key);
             }
             return default;
         }
 
-  
+
 
 
         public void SetNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)
@@ -67,7 +67,7 @@ namespace MatoProductivity.Core.Models.Entities
                 }
                 if (!this.IsTransient())
                 {
-                    noteSegmentPayload.NoteSegmentId=this.Id;
+                    noteSegmentPayload.NoteSegmentId = this.Id;
                 }
                 NoteSegmentPayloads.Add(noteSegmentPayload);
             }
@@ -86,7 +86,7 @@ namespace MatoProductivity.Core.Models.Entities
                 {
                     if (!this.IsTransient())
                     {
-                        noteSegmentPayload.NoteSegmentId=this.Id;
+                        noteSegmentPayload.NoteSegmentId = this.Id;
                     }
                     NoteSegmentPayloads.Add(noteSegmentPayload);
                 }
