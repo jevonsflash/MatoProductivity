@@ -45,7 +45,7 @@ namespace MatoProductivity.Core.Models.Entities
         public bool IsRemovable { get; set; }
 
 
-        public NoteSegmentTemplatePayload GetNoteSegmentTemplatePayload(string key)
+        public INoteSegmentPayload GetNoteSegmentPayload(string key)
         {
             if (NoteSegmentTemplatePayloads != null)
             {
@@ -54,7 +54,7 @@ namespace MatoProductivity.Core.Models.Entities
             return default;
         }
 
-        public void SetNoteSegmentTemplatePayloads(NoteSegmentTemplatePayload noteSegmentPayload)
+        public void SetNoteSegmentPayloads(INoteSegmentPayload noteSegmentPayload)
         {
             if (NoteSegmentTemplatePayloads != null)
             {
@@ -63,11 +63,15 @@ namespace MatoProductivity.Core.Models.Entities
                 {
                     NoteSegmentTemplatePayloads.Remove(currentPayload);
                 }
-                NoteSegmentTemplatePayloads.Add(noteSegmentPayload);
+                if (!this.IsTransient())
+                {
+                    (noteSegmentPayload as NoteSegmentTemplatePayload).NoteSegmentTemplateId = this.Id;
+                }
+                NoteSegmentTemplatePayloads.Add((noteSegmentPayload as NoteSegmentTemplatePayload));
             }
         }
 
-        public NoteSegmentTemplatePayload GetOrSetNoteSegmentTemplatePayloads(string key, NoteSegmentTemplatePayload noteSegmentPayload)
+        public INoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, INoteSegmentPayload noteSegmentPayload)
         {
             if (NoteSegmentTemplatePayloads != null)
             {
@@ -78,7 +82,11 @@ namespace MatoProductivity.Core.Models.Entities
                 }
                 if (noteSegmentPayload != null)
                 {
-                    NoteSegmentTemplatePayloads.Add(noteSegmentPayload);
+                    if (!this.IsTransient())
+                    {
+                        (noteSegmentPayload as NoteSegmentTemplatePayload).NoteSegmentTemplateId = this.Id;
+                    }
+                    NoteSegmentTemplatePayloads.Add((noteSegmentPayload as NoteSegmentTemplatePayload));
                 }
                 return noteSegmentPayload;
             }

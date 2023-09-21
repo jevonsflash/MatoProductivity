@@ -17,8 +17,8 @@ namespace MatoProductivity.Core.Services
     {
         private readonly AbpAsyncTimer timer;
         private readonly IBackgroundJobManager backgroundJobManager;
-        private NoteSegmentPayload DefaultIsShowFromNowNoteSegmentPayload => new NoteSegmentPayload(nameof(IsShowFromNow), false.ToString());
-        private NoteSegmentPayload DefaultTimeNoteSegmentPayload => new NoteSegmentPayload(nameof(Time), (DateTime.Now+new TimeSpan(5, 0, 0)).ToString());
+        private INoteSegmentPayload DefaultIsShowFromNowNoteSegmentPayload => this.CreateNoteSegmentPayload(nameof(IsShowFromNow), false.ToString());
+        private INoteSegmentPayload DefaultTimeNoteSegmentPayload => this.CreateNoteSegmentPayload(nameof(Time), (DateTime.Now+new TimeSpan(5, 0, 0)).ToString());
         public TimerSegmentService(
              AbpAsyncTimer timer,
             IBackgroundJobManager backgroundJobManager,
@@ -44,13 +44,13 @@ namespace MatoProductivity.Core.Services
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var time = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
-                var isShowFromNow = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
+                var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
+                var isShowFromNow = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
 
                 var defaultNotificationContentString = NoteSegment.Title;
 
-                var defaultNotificationContent = new NoteSegmentPayload(nameof(NotificationContent), defaultNotificationContentString);
-                var notificationContent = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(NotificationContent), defaultNotificationContent);
+                var defaultNotificationContent = this.CreateNoteSegmentPayload(nameof(NotificationContent), defaultNotificationContentString);
+                var notificationContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(NotificationContent), defaultNotificationContent);
                 NotificationContent = notificationContent.GetStringValue();
 
                 DateTime parsedTime;
@@ -69,17 +69,17 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(IsShowFromNow))
             {
-                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(IsShowFromNow), IsShowFromNow));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(IsShowFromNow), IsShowFromNow));
             }
 
             else if (e.PropertyName == nameof(ExactTime))
             {
-                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Time), ExactTime));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Time), ExactTime));
             }
 
             else if (e.PropertyName == nameof(NotificationContent))
             {
-                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(NotificationContent), NotificationContent));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(NotificationContent), NotificationContent));
             }
             else if (e.PropertyName == nameof(Day) ||e.PropertyName == nameof(Hour)||e.PropertyName == nameof(Minute))
             {
@@ -124,8 +124,8 @@ namespace MatoProductivity.Core.Services
 
         public override void CreateAction(object obj)
         {
-            (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
-            (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(DefaultIsShowFromNowNoteSegmentPayload);
+            NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
+            NoteSegment?.SetNoteSegmentPayloads(DefaultIsShowFromNowNoteSegmentPayload);
         }
 
 

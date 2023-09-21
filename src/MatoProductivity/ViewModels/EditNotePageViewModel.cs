@@ -543,7 +543,7 @@ namespace MatoProductivity.ViewModels
                         newNoteSegment.IsHidden=noteSegment.IsHidden;
                         newNoteSegment.IsRemovable=noteSegment.IsRemovable;
 
-                        newNoteSegment.NoteSegmentPayloads= (noteSegment as NoteSegment).NoteSegmentPayloads.Select(c => new NoteSegmentPayload()
+                        newNoteSegment.NoteSegmentPayloads= (noteSegment as NoteSegment).NoteSegmentPayloads.Select(c => new NoteSegmentPayload ()
                         {
                             NoteSegmentId=newNoteSegment.Id,
                             Key=c.Key,
@@ -596,7 +596,7 @@ namespace MatoProductivity.ViewModels
 
                         foreach (var payloadEntity in payloadEntities)
                         {
-                            var currentPayload = (newNoteSegment as NoteSegment).GetNoteSegmentPayload(payloadEntity.Key);
+                            var currentPayload = newNoteSegment.GetNoteSegmentPayload(payloadEntity.Key);
                             if (currentPayload == null)
                             {
                                 await payloadRepository.DeleteAsync(payloadEntity);

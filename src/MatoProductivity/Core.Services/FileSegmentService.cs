@@ -12,7 +12,7 @@ namespace MatoProductivity.Core.Services
     public abstract class FileSegmentService : NoteSegmentService
     {
 
-        private NoteSegmentPayload DefaultFileContentSegmentPayload => new NoteSegmentPayload(nameof(FileContent), "");
+        private INoteSegmentPayload DefaultFileContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(FileContent), "");
 
         public FileSegmentService(
             IRepository<NoteSegment, long> repository,
@@ -29,12 +29,12 @@ namespace MatoProductivity.Core.Services
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var defaultTitle = new NoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
 
-                var fileContent = (NoteSegment as NoteSegment)?.GetOrSetNoteSegmentPayloads(nameof(FileContent), DefaultFileContentSegmentPayload);
+                var fileContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(FileContent), DefaultFileContentSegmentPayload);
                 FileContent = fileContent.Value;
 
             }
@@ -43,19 +43,19 @@ namespace MatoProductivity.Core.Services
             {
                 if (FileContent!=null&& FileContent.Length>0)
                 {
-                    (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(FileContent), FileContent));
+                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(FileContent), FileContent));
 
                 }
                 else
                 {
-                    //(NoteSegment as NoteSegment)?.RemoveNoteSegmentPayloads(nameof(FileContent));
+                    //NoteSegment?.RemoveNoteSegmentPayloads(nameof(FileContent));
                 }
             }
 
 
             else if (e.PropertyName == nameof(Title))
             {
-                (NoteSegment as NoteSegment)?.SetNoteSegmentPayloads(new NoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
         }
   

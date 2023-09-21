@@ -44,7 +44,7 @@ namespace MatoProductivity.Core.Models.Entities
         public bool IsRemovable { get; set; }
 
 
-        public NoteSegmentPayload GetNoteSegmentPayload(string key)
+        public INoteSegmentPayload GetNoteSegmentPayload(string key)
         {
             if (NoteSegmentPayloads != null)
             {
@@ -56,7 +56,7 @@ namespace MatoProductivity.Core.Models.Entities
 
 
 
-        public void SetNoteSegmentPayloads(NoteSegmentPayload noteSegmentPayload)
+        public void SetNoteSegmentPayloads(INoteSegmentPayload noteSegmentPayload)
         {
             if (NoteSegmentPayloads != null)
             {
@@ -67,13 +67,13 @@ namespace MatoProductivity.Core.Models.Entities
                 }
                 if (!this.IsTransient())
                 {
-                    noteSegmentPayload.NoteSegmentId = this.Id;
+                    (noteSegmentPayload as NoteSegmentPayload).NoteSegmentId = this.Id;
                 }
-                NoteSegmentPayloads.Add(noteSegmentPayload);
+                NoteSegmentPayloads.Add((noteSegmentPayload as NoteSegmentPayload));
             }
         }
 
-        public NoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, NoteSegmentPayload noteSegmentPayload)
+        public INoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, INoteSegmentPayload noteSegmentPayload)
         {
             if (NoteSegmentPayloads != null)
             {
@@ -86,9 +86,9 @@ namespace MatoProductivity.Core.Models.Entities
                 {
                     if (!this.IsTransient())
                     {
-                        noteSegmentPayload.NoteSegmentId = this.Id;
+                        (noteSegmentPayload as NoteSegmentPayload).NoteSegmentId = this.Id;
                     }
-                    NoteSegmentPayloads.Add(noteSegmentPayload);
+                    NoteSegmentPayloads.Add((noteSegmentPayload as NoteSegmentPayload));
                 }
                 return noteSegmentPayload;
             }

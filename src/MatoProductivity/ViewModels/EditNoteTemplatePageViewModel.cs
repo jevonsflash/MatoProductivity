@@ -594,7 +594,7 @@ namespace MatoProductivity.ViewModels
 
                         foreach (var payloadEntity in payloadEntities)
                         {
-                            var currentPayload = (newNoteSegmentTemplate as NoteSegmentTemplate).GetNoteSegmentTemplatePayload(payloadEntity.Key);
+                            var currentPayload = newNoteSegmentTemplate.GetNoteSegmentPayload(payloadEntity.Key);
                             if (currentPayload == null)
                             {
                                 await payloadRepository.DeleteAsync(payloadEntity);
