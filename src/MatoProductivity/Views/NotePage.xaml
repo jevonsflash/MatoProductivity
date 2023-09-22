@@ -76,6 +76,24 @@
                 </core:ScriptSegmentView>
             </DataTemplate>
 
+            <DataTemplate x:Key="WeatherSegment">
+                <core:WeatherSegmentView Margin="0,5"
+                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:WeatherSegmentView>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ContactSegment">
+                <core:ContactSegmentView Margin="0,5"
+                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:ContactSegmentView>
+            </DataTemplate>
+
+            <DataTemplate x:Key="LocationSegment">
+                <core:LocationSegmentView Margin="0,5"
+                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                </core:LocationSegmentView>
+            </DataTemplate>
+
 
             <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                                   ResourcesContainer="{x:Reference MainPage}" />

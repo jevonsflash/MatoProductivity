@@ -14,5 +14,9 @@
         <Tab  Title="笔记" Icon="microphone2.png"  >
             <ShellContent x:Name="NoteContent"/>
         </Tab>
+        <Tab  Title="统计"
+              Icon="microphone2.png">
+            <ShellContent x:Name="StatisticContent" />
+        </Tab>
     </TabBar>
 </Shell>

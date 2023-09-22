@@ -4,11 +4,12 @@
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                       xmlns:vm="clr-namespace:MatoProductivity.ViewModels;assembly=MatoProductivity"
                       xmlns:model="clr-namespace:MatoProductivity.Models;assembly=MatoProductivity"
+                      xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
                       x:Class="MatoProductivity.Views.StatisticPage"
                       xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       Appearing="ContentPageBase_Appearing">
 
-
-
-
+    <mato:ContentPageBase.Content>
+        <controls:AMap></controls:AMap>
+    </mato:ContentPageBase.Content>
 </mato:ContentPageBase>

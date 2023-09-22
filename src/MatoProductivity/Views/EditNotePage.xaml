@@ -252,6 +252,45 @@
                 </core:ScriptSegmentView.ControlTemplate>
             </core:ScriptSegmentView>
         </DataTemplate>
+
+        <DataTemplate x:Key="WeatherSegment">
+            <core:WeatherSegmentView Margin="0,5">
+                <core:WeatherSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:WeatherSegmentView.ControlTemplate>
+            </core:WeatherSegmentView>
+        </DataTemplate>
+        <DataTemplate x:Key="LocationSegment">
+            <core:LocationSegmentView Margin="0,5">
+                <core:LocationSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:LocationSegmentView.ControlTemplate>
+            </core:LocationSegmentView>
+        </DataTemplate>
+        <DataTemplate x:Key="ContactSegment">
+            <core:ContactSegmentView Margin="0,5">
+                <core:ContactSegmentView.ControlTemplate>
+
+                    <OnIdiom Phone="{StaticResource NoteSegmentCardViewPhone}"
+                             Tablet="{StaticResource NoteSegmentCardViewDesktop}"
+                             Desktop="{StaticResource NoteSegmentCardViewDesktop}">
+                    </OnIdiom>
+
+                </core:ContactSegmentView.ControlTemplate>
+            </core:ContactSegmentView>
+        </DataTemplate>
+
+
         <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
                                               ResourcesContainer="{x:Reference MainPage}" />
 

@@ -5,6 +5,7 @@ using Microsoft.Maui.Controls.Hosting;
 using MatoProductivity.Core;
 using CommunityToolkit.Maui;
 using Abp.Modules;
+using MatoProductivity.Controls;
 
 namespace MatoProductivity
 {
@@ -17,6 +18,7 @@ namespace MatoProductivity
 				.UseMatoProductivity<MatoProductivityModule>()
 				.UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseMauiMaps()
 				.ConfigureFonts(fonts =>
 				{
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -31,7 +33,12 @@ namespace MatoProductivity
 					fonts.AddFont("Mulish-Medium.ttf", "Mulish_Medium");
 					fonts.AddFont("Mulish-Regular.ttf", "Mulish_Regular");
 					fonts.AddFont("Mulish-SemiBold.ttf", "Mulish_SemiBold");
-				});
+				})
+                .ConfigureMauiHandlers(handlers =>
+                {
+                    handlers.AddHandler(typeof(MatoProductivity.Core.Controls.AMap), typeof(AMapHandler));
+                })
+                ;
 			return builder.Build();
 		}
 

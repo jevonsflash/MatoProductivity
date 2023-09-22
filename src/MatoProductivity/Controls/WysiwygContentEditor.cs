@@ -45,7 +45,15 @@ namespace MatoProductivity.Core.Controls
 #endif
 #if ANDROID
                 var platformView = handler.PlatformView as AppCompatEditText;
+                var shape = new Android.Graphics.Drawables.ShapeDrawable(new Android.Graphics.Drawables.Shapes.RectShape());
 
+                if (shape.Paint is not null)
+                {
+                    shape.Paint.Color = Android.Graphics.Color.Transparent;
+                    shape.Paint.StrokeWidth = 0;
+                    shape.Paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
+                }
+                platformView.Background = shape;
                 int getSelectionStart() => platformView.SelectionStart;
                 int getSelectionEnd() => platformView.SelectionEnd;
 

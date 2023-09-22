@@ -79,6 +79,29 @@ namespace MatoProductivity.Core.Services
                         newModel = objWrapper.Object;
                     }
                     break;
+
+                case "LocationSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<LocationSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+
+
+                case "ContactSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<ContactSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+
+                case "WeatherSegment":
+                    using (var objWrapper = iocResolver.ResolveAsDisposable<WeatherSegmentService>(new { noteSegment }))
+                    {
+                        newModel = objWrapper.Object;
+                    }
+                    break;
+
                 default:
                     newModel = null;
                     break;

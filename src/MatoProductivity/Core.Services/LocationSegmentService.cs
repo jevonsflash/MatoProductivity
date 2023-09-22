@@ -1,7 +1,11 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Core.Views;
+using MatoProductivity.Services;
+using MatoProductivity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +16,19 @@ namespace MatoProductivity.Core.Services
     public class LocationSegmentService : NoteSegmentService, ITransientDependency
     {
 
+        public Command PickFromMap { get; set; }
+        private ContentPage locationSelectingPage;
         private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
         public LocationSegmentService(
+            NavigationService navigationService,
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment, IIocResolver iocResolver) : base(repository, payloadRepository, noteSegment)
         {
             PropertyChanged += LocationSegmentViewModel_PropertyChanged;
+            PickFromMap = new Command(PickFromMapAction);
+            this.navigationService=navigationService;
+            this.iocResolver=iocResolver;
         }
 
         private void LocationSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -58,7 +68,31 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-   
+        private async void PickFromMapAction(object obj)
+        {
+            if (locationSelectingPage!=null)
+            {
+                (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
+                locationSelectingPage=null;
+            }
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<LocationSelectingPage>())
+            {
+                locationSelectingPage = objWrapper.Object;
+                (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise += LocationSelectingPageViewModel_OnFinishedChooise;
+                await navigationService.PushAsync(locationSelectingPage);
+            }
+        }
+
+        private async void LocationSelectingPageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
+        {
+
+          
+   (sender as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
+            await navigationService.PopAsync();
+            locationSelectingPage=null;
+        }
+
         public override void CreateAction(object obj)
         {
 
@@ -89,6 +123,8 @@ namespace MatoProductivity.Core.Services
         }
 
         private string _placeHolder;
+        private readonly NavigationService navigationService;
+        private readonly IIocResolver iocResolver;
 
         public string PlaceHolder
         {

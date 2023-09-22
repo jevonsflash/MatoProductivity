@@ -42,6 +42,9 @@ public partial class MainPage : Shell, ITransientDependency
 
         var notePage = iocManager.Resolve<NoteListPage>();
         this.NoteContent.Content = notePage;
+
+        var statisticPage = iocManager.Resolve<StatisticPage>();
+        this.StatisticContent.Content = statisticPage;
     }
 
 }

@@ -24,6 +24,57 @@ namespace MatoProductivity
             InitializeComponent();
             _abpBootstrapper.Initialize();
             this.MainPage = abpBootstrapper.IocManager.Resolve(typeof(MainPage)) as MainPage;
+            
+            
+            
+            EditorHandler.Mapper.AppendToMapping("Background", (handler, view) =>
+            {
+#if ANDROID
+                var shape = new Android.Graphics.Drawables.ShapeDrawable(new Android.Graphics.Drawables.Shapes.RectShape());
+
+                if (shape.Paint is not null)
+                {
+                    shape.Paint.Color = Android.Graphics.Color.Transparent;
+                    shape.Paint.StrokeWidth = 0;
+                    shape.Paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
+                }
+                handler.PlatformView.Background = shape;
+#elif IOS || MACCATALYST
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
+            TimePickerHandler.Mapper.AppendToMapping("Background", (handler, view) =>
+            {
+#if ANDROID
+                var shape = new Android.Graphics.Drawables.ShapeDrawable(new Android.Graphics.Drawables.Shapes.RectShape());
+
+                if (shape.Paint is not null)
+                {
+                    shape.Paint.Color = Android.Graphics.Color.Transparent;
+                    shape.Paint.StrokeWidth = 0;
+                    shape.Paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
+                }
+                handler.PlatformView.Background = shape;
+#elif IOS || MACCATALYST
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
+            DatePickerHandler.Mapper.AppendToMapping("Background", (handler, view) =>
+            {
+#if ANDROID
+                var shape = new Android.Graphics.Drawables.ShapeDrawable(new Android.Graphics.Drawables.Shapes.RectShape());
+
+                if (shape.Paint is not null)
+                {
+                    shape.Paint.Color = Android.Graphics.Color.Transparent;
+                    shape.Paint.StrokeWidth = 0;
+                    shape.Paint.SetStyle(Android.Graphics.Paint.Style.Stroke);
+                }
+                handler.PlatformView.Background = shape;
+#elif IOS || MACCATALYST
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
             EntryHandler.Mapper.AppendToMapping("Background", (handler, view) =>
             {
 #if ANDROID

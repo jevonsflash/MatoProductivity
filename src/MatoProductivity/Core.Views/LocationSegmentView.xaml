@@ -2,7 +2,6 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
-             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
              x:Class="MatoProductivity.Core.Views.LocationSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
@@ -10,7 +9,10 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-      
+            <Grid HeightRequest="300">
+                <Button Text="从地图选取"
+                        Command="{Binding PickFromMap}"></Button>
+            </Grid>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
