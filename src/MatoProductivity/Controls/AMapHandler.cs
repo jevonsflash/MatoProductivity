@@ -3,13 +3,22 @@
 namespace MatoProductivity.Controls;
 public interface IAMap : IView
 {
+    string Address { get; set; }
+    MatoProductivity.Core.Location.Location Location { get; set; }    
 }
 partial class AMapHandler
 {
-    public static IPropertyMapper<IAMap, AMapHandler> MapMapper = new PropertyMapper<IAMap, AMapHandler>(ViewHandler.ViewMapper)
-    { };
+    public static IPropertyMapper<IAMap, AMapHandler> PropertyMapper = new PropertyMapper<IAMap, AMapHandler>(ViewHandler.ViewMapper)
+    {
+        [nameof(IAMap.Address)] = MapAddress,
+        [nameof(IAMap.Location)] = MapLocation
+    };
 
-    public AMapHandler() : base(MapMapper)
+    public static CommandMapper<IAMap, AMapHandler> CommandMapper = new(ViewCommandMapper)
+    {
+    };
+
+    public AMapHandler() : base(PropertyMapper, CommandMapper)
     { }
 }
 

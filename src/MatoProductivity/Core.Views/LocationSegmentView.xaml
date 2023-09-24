@@ -5,12 +5,20 @@
              x:Class="MatoProductivity.Core.Views.LocationSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-         
+
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            <Grid HeightRequest="300">
-                <Button Text="从地图选取"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label   Style="{StaticResource Body1_MulishRegular}"
+                         Text="{Binding Address}"></Label>
+                <Button
+                    Grid.Row="1"
+                    Text="从地图选取"
                         Command="{Binding PickFromMap}"></Button>
             </Grid>
         </VerticalStackLayout>

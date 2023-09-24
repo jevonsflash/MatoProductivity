@@ -1,6 +1,8 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
 using CommunityToolkit.Maui.Views;
+using MatoProductivity.Core.Amap;
+using MatoProductivity.Core.Helper;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Core.Views;
@@ -16,10 +18,13 @@ namespace MatoProductivity.Core.Services
     public class LocationSegmentService : NoteSegmentService, ITransientDependency
     {
 
+        private readonly AmapHttpRequestClient amapHttpRequestClient;
+        private readonly NavigationService navigationService;
+        private readonly IIocResolver iocResolver;
         public Command PickFromMap { get; set; }
         private ContentPage locationSelectingPage;
-        private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
         public LocationSegmentService(
+            AmapHttpRequestClient amapHttpRequestClient,
             NavigationService navigationService,
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
@@ -27,40 +32,55 @@ namespace MatoProductivity.Core.Services
         {
             PropertyChanged += LocationSegmentViewModel_PropertyChanged;
             PickFromMap = new Command(PickFromMapAction);
+            this.amapHttpRequestClient=amapHttpRequestClient;
             this.navigationService=navigationService;
             this.iocResolver=iocResolver;
         }
 
-        private void LocationSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void LocationSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
+                var location = await GetNativePosition();
+                var amapLocation = new Core.Location.Location()
+                {
+                    Latitude=location.Latitude,
+                    Longitude=location.Longitude
+                };
+                var amapInverseHttpRequestParamter = new AmapInverseHttpRequestParamter()
+                {
+                    Locations=new Location.Location[]
+                    {
+                        amapLocation
+                   }
+                };
+                var reGeocodeLocation = await amapHttpRequestClient.InverseAsync(amapInverseHttpRequestParamter);
+               var address = reGeocodeLocation.Address;
+
+                var defaultLocationSegmentPayload = this.CreateNoteSegmentPayload(nameof(Location), amapLocation.ToString());
+                this.Location = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Location), defaultLocationSegmentPayload)?.GetStringValue();
 
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
-                Content = content.GetStringValue();
+                var defaultAddressSegmentPayload = this.CreateNoteSegmentPayload(nameof(Address), address);
+                this.Address = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Address), defaultAddressSegmentPayload)?.GetStringValue();
 
-                var defaultPlaceHolderSegmentPayload = this.CreateNoteSegmentPayload(nameof(PlaceHolder), "请输入" + Title);
-
-                var placeHolder = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
-                PlaceHolder = placeHolder.GetStringValue();
             }
 
-            else if (e.PropertyName == nameof(Content))
+            else if (e.PropertyName == nameof(Address))
             {
-                if (!string.IsNullOrEmpty(Content))
+                if (!string.IsNullOrEmpty(Address))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Content), Content));
+                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Address), Address));
 
                 }
             }
 
-            else if (e.PropertyName == nameof(PlaceHolder))
+            else if (e.PropertyName == nameof(Location))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Location), Location));
             }
             else if (e.PropertyName == nameof(Title))
             {
@@ -87,8 +107,8 @@ namespace MatoProductivity.Core.Services
         private async void LocationSelectingPageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
         {
 
-          
-   (sender as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
+
+            (sender as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
             await navigationService.PopAsync();
             locationSelectingPage=null;
         }
@@ -98,14 +118,14 @@ namespace MatoProductivity.Core.Services
 
         }
 
-        private string _content;
+        private string _address;
 
-        public string Content
+        public string Address
         {
-            get { return _content; }
+            get { return _address; }
             set
             {
-                _content = value;
+                _address = value;
                 RaisePropertyChanged();
             }
         }
@@ -123,10 +143,8 @@ namespace MatoProductivity.Core.Services
         }
 
         private string _placeHolder;
-        private readonly NavigationService navigationService;
-        private readonly IIocResolver iocResolver;
 
-        public string PlaceHolder
+        public string Location
         {
             get { return _placeHolder; }
             set
@@ -137,6 +155,39 @@ namespace MatoProductivity.Core.Services
         }
 
 
+        private async Task<Microsoft.Maui.Devices.Sensors.Location> GetNativePosition()
+        {
+
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+                var location = await Geolocation.Default.GetLocationAsync(request);
+
+                if (location != null)
+                {
+                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
+                    return location;
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                CommonHelper.ShowMsg("请在设置中开启位置的访问权限", "位置无权限");
+            }
+            catch (FeatureNotEnabledException fneEx)
+            {
+                CommonHelper.ShowMsg("当您的网络信号或GPS信号弱的时候，我们无法获取您的位置信息", "无法获取位置信息");
+            }
+            catch (PermissionException pEx)
+            {
+                CommonHelper.ShowMsg("请在设置中开启位置的访问权限", "位置无权限");
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+            }
+            return null;
+
+        }
 
 
     }

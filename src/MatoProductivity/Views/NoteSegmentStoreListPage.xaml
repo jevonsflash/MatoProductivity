@@ -8,6 +8,7 @@
           HorizontalOptions="FillAndExpand">
         <CollectionView  ItemsSource="{Binding NoteSegmentStoreGroups}"
                          SelectedItem="{Binding SelectedNoteSegmentStore}"
+                         HeightRequest="500"
                          SelectionMode="Single"
                          IsGrouped="true">
             <CollectionView.Header>

@@ -15,6 +15,12 @@ namespace MatoProductivity.Core.Helper
             Application.Current.MainPage.DisplayAlert("提示", msg, "好");
         }
 
+        public static void ShowMsg( string msg, string title)
+        {
+
+            Application.Current.MainPage.DisplayAlert(title, msg, "好");
+        }
+
         public static void ShowNoAuthorized()
         {
             Application.Current.MainPage.DisplayAlert("需要权限", "MatoPlayer需要您媒体库的权限，劳烦至「设置」「隐私权」「媒体与AppleMusic」 打开权限,谢谢", "好");

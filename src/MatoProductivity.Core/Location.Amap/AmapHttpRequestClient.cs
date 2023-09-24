@@ -19,7 +19,7 @@ namespace MatoProductivity.Core.Amap
     public class AmapHttpRequestClient : ISingletonDependency
     {
         protected HttpClient HttpClient { get; }
-        public string ApiKey => "51928e0fa1fca144f45868b232048736";
+        public string ApiKey => "a9f4856244b203aea3012964a4664436";
 
         public AmapHttpRequestClient()
         {
@@ -145,12 +145,12 @@ namespace MatoProductivity.Core.Amap
                 Street = amapResponse.Regeocode.AddressComponent.StreetNumber.Street,
                 AdCode = amapResponse.Regeocode.AddressComponent.AdCode,
                 Address = amapResponse.Regeocode.Address,
-                City = amapResponse.Regeocode.AddressComponent.City.JoinAsString(","),
+                City = amapResponse.Regeocode.AddressComponent.City,
                 Country = amapResponse.Regeocode.AddressComponent.Country,
                 District = amapResponse.Regeocode.AddressComponent.District,
                 Number = amapResponse.Regeocode.AddressComponent.StreetNumber.Number,
                 Province = amapResponse.Regeocode.AddressComponent.Province,
-                Town = amapResponse.Regeocode.AddressComponent.TownShip.JoinAsString(" ")
+                Town = amapResponse.Regeocode.AddressComponent.TownShip
             };
             return inverseLocation;
         }

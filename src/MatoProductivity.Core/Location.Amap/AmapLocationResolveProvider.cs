@@ -16,13 +16,9 @@ namespace MatoProductivity.Core.Amap
         public async Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 50)
         {
             var inverseRequestPramter = new AmapInverseHttpRequestParamter();
-            inverseRequestPramter.Locations = new MatoProductivity.Core.Location.Location[1]
+            inverseRequestPramter.Locations = new Location.Location[1]
             {
-                new MatoProductivity.Core.Location.Location
-                {
-                    Latitude = lat,
-                    Longitude = lng
-                }
+                new Location.Location(lat, lng)
             };
             return await AmapHttpRequestClient.InverseAsync(inverseRequestPramter);
         }

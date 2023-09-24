@@ -61,7 +61,7 @@ namespace MatoProductivity.Core.Amap
         /// 坐标点所在城市名称
         /// 请注意：当城市是省直辖县时返回为空，以及城市为北京、上海、天津、重庆四个直辖市时，该字段返回为空
         /// </summary>
-        public string[] City { get; set; }
+        public string City { get; set; }
 
         /// <summary>
         /// 城市编码
@@ -85,7 +85,7 @@ namespace MatoProductivity.Core.Amap
         /// 坐标点所在乡镇/街道（此街道为社区街道，不是道路信息）
         /// 例如：燕园街道
         /// </summary>
-        public string[] TownShip { get; set; }
+        public string TownShip { get; set; }
 
         /// <summary>
         /// 乡镇街道编码

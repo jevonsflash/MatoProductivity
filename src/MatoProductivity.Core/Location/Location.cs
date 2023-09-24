@@ -4,6 +4,22 @@ namespace MatoProductivity.Core.Location
 {
     public class Location
     {
+        public Location()
+        {
+
+        }
+        public Location(double latitude, double longitude)
+        {
+            Latitude=latitude;
+            Longitude=longitude;
+        }
+
+        public Location(string location)
+        {
+            var locationArray = location.Split(',');
+            Latitude=double.Parse(locationArray[0]);
+            Longitude=double.Parse(locationArray[1]);
+        }
         /// <summary>
         /// 地球半径（米）
         /// </summary>
@@ -92,6 +108,11 @@ namespace MatoProductivity.Core.Location
         public static double Deg(double d)
         {
             return d * (180 / Math.PI);
+        }
+
+        public override string ToString()
+        {
+            return $"{Latitude},{Longitude}";
         }
     }
 }
