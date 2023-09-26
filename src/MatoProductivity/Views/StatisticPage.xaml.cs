@@ -18,6 +18,7 @@ public partial class StatisticPage : ContentPageBase, ITransientDependency
     private void ContentPageBase_Appearing(object sender, EventArgs e)
     {
         noteListPageViewModel.Init();
+        this.test.InitLocation = new Core.Location.Location();
     }
 
     private async void Button_Clicked(object sender, EventArgs e)

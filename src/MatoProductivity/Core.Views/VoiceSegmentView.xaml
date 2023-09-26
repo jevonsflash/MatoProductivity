@@ -18,13 +18,25 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="PickPhoto"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
-                        Command="{Binding PickPhoto}"></Button>
-                <Button Text="CapturePhoto"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
-                        Grid.Column="1"
-                        Command="{Binding CapturePhoto}"></Button>
+                <VerticalStackLayout HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+
+                    <Button Text="Start"
+                            Command="{Binding RecordAudio}" />
+
+                    <Button Text="Stop"
+                            Command="{Binding StopRecordAudio}" />
+
+                    <Button Text="Play"
+                            Command="{Binding PlayAudio}" />
+
+                    <Button Text="StopPlay"
+                            Command="{Binding StopPlayAudio}" />
+
+                    <Label Text="{Binding RecordingTime, Converter={StaticResource TimeSpanToFormatTimeStringConverter}}" />
+                </VerticalStackLayout>
+
+
                 <!--<Button Text="RemovePhoto"
                         Grid.Column="2"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"

@@ -1,11 +1,13 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using MatoProductivity.Core.Helper;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace MatoProductivity.Core.Services
 {
@@ -123,6 +125,31 @@ namespace MatoProductivity.Core.Services
         }
 
         public abstract void CreateAction(object obj);
+
+        public static async Task<bool> CheckPermissionIsGrantedAsync<TPermission>(string explain = "此功能需要相应的权限，请在设置中开启权限") where TPermission : BasePermission, new()
+        {
+            PermissionStatus status = await Permissions.CheckStatusAsync<TPermission>();
+
+            if (status == PermissionStatus.Granted)
+            {
+                return true;
+            }
+
+            if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                return false;
+            }
+
+            if (Permissions.ShouldShowRationale<TPermission>())
+            {
+                CommonHelper.ShowMsg(explain, "需要权限");
+            }
+
+            status = await Permissions.RequestAsync<TPermission>();
+
+            return status == PermissionStatus.Granted;
+        }
+
 
         public IReadOnlyNoteSegmentServiceContainer Container { get; set; }
 

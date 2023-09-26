@@ -4,6 +4,8 @@ using Microsoft.Maui.Handlers;
 namespace MatoProductivity.Core.Controls;
 public class AMap : View, IAMap
 {
+    public Location.Location InitLocation { get; set; }
+
     public static readonly BindableProperty AddressProperty =
       BindableProperty.Create("Address", typeof(string), typeof(AMap), default, propertyChanged: (bindable, oldValue, newValue) =>
       {

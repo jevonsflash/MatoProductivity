@@ -10,6 +10,6 @@
                       Appearing="ContentPageBase_Appearing">
 
     <mato:ContentPageBase.Content>
-        <controls:AMap></controls:AMap>
+        <controls:AMap x:Name="test"></controls:AMap>
     </mato:ContentPageBase.Content>
 </mato:ContentPageBase>

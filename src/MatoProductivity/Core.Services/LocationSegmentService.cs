@@ -142,14 +142,14 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private string _placeHolder;
+        private string _location;
 
         public string Location
         {
-            get { return _placeHolder; }
+            get { return _location; }
             set
             {
-                _placeHolder = value;
+                _location = value;
                 RaisePropertyChanged();
             }
         }

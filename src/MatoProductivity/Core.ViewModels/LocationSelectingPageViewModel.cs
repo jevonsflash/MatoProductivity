@@ -55,6 +55,18 @@ namespace MatoProductivity.ViewModels
 
         }
 
+        private Core.Location.Location _currentLocation;
+
+        public Core.Location.Location CurrentLocation
+        {
+            get { return _currentLocation; }
+            set
+            {
+                _currentLocation = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ObservableCollection<NoteSegmentStoreGroup> _noteSegmentStoreGroups;
 
         public ObservableCollection<NoteSegmentStoreGroup> NoteSegmentStoreGroups

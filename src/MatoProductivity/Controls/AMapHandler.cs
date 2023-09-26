@@ -4,7 +4,8 @@ namespace MatoProductivity.Controls;
 public interface IAMap : IView
 {
     string Address { get; set; }
-    MatoProductivity.Core.Location.Location Location { get; set; }    
+    MatoProductivity.Core.Location.Location Location { get; set; }
+    Core.Location.Location InitLocation { get; set; }
 }
 partial class AMapHandler
 {

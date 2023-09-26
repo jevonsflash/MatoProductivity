@@ -59,7 +59,9 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <controls:AMap Grid.Row="1"></controls:AMap>
+        <controls:AMap Grid.Row="1"
+                       x:Name="MainMap"
+                       Location="{Binding CurrentLocation}"></controls:AMap>
 
     </Grid>
 

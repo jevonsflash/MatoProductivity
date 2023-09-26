@@ -12,5 +12,6 @@ public partial class LocationSelectingPage : ContentPageBase, ITransientDependen
     {
         InitializeComponent();
         this.BindingContext = locationSelectingPageViewModel;
+
     }
 }

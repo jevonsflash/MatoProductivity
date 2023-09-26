@@ -22,38 +22,48 @@ namespace MatoProductivity.Controls
 
         public static void MapAddress(AMapHandler handler, IAMap video)
         {
-  
+
         }
         public static void MapLocation(AMapHandler handler, IAMap video)
         {
-            var lat = video.Location.Latitude;
-            var lot = video.Location.Longitude;
+            if (video.Location != null)
+            {
+                var lat = video.Location.Latitude;
+                var lot = video.Location.Longitude;
 
-            CameraPosition cp = new CameraPosition(new LatLng(lat, lot), 18, 30, 0);
-            var mCameraUpdate = CameraUpdateFactory.NewCameraPosition(cp);
-            handler.PlatformView?.Map.AnimateCamera(mCameraUpdate);
+                CameraPosition cp = new CameraPosition(new LatLng(lat, lot), 18, 30, 0);
+                var mCameraUpdate = CameraUpdateFactory.NewCameraPosition(cp);
+                handler.PlatformView?.Map.AnimateCamera(mCameraUpdate);
+            }
+
         }
         protected override MapView CreatePlatformView()
         {
-            MyLocationStyle myLocationStyle;
-            myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-            aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-                                                     //aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
-            aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+            var location = VirtualView.InitLocation;
 
             //AMapLocationClient.UpdatePrivacyAgree(Context, true);
             //AMapLocationClient.UpdatePrivacyShow(Context, true, true);
 
             //mapView.OnCreate(Bundle);
             AMapOptions aOptions = new AMapOptions();
-            aOptions.InvokeRotateGesturesEnabled(true);
-            aOptions.ScrollGesturesEnabled(false);// 禁止通过手势移动地图
-            aOptions.tiltGesturesEnabled(false);// 禁止通过手势倾斜地图
-            CameraPosition LUJIAZUI = new CameraPosition.Builder()
-            .Target(Constants.SHANGHAI).Zoom(18).Bearing(0).Tilt(30).Build();
-            aOptions.Camera (LUJIAZUI);
+            aOptions.InvokeScrollGesturesEnabled(false);// 禁止通过手势移动地图
+            aOptions.InvokeTiltGesturesEnabled(false);// 禁止通过手势倾斜地图
+            if (location != null)
+            {
+                CameraPosition initPos = new CameraPosition.Builder()
+                    .Target(new LatLng(location.Latitude, location.Longitude))
+                    .Zoom(18)
+                    .Build();
+                aOptions.InvokeCamera(initPos);
+            }
 
-            mapView = new Com.Amap.Api.Maps.MapView(Context,aOptions);
+
+            mapView = new Com.Amap.Api.Maps.MapView(Context, aOptions);
+            var myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+            myLocationStyle.InvokeMyLocationType(MyLocationStyle.LocationTypeShow);
+            mapView.Map.MyLocationStyle = myLocationStyle;//设置定位蓝点的Style                                                         //aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
+            mapView.Map.MyLocationEnabled = true;// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+
             //mapView.OnCreate(savedInstanceState);
             //SetContentView(mapView);
             return mapView;
