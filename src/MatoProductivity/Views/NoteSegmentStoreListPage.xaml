@@ -3,9 +3,11 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
                 x:Class="MatoProductivity.Views.NoteSegmentStoreListPage"
+                Opened="PopupBase_Opened"
                 xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity">
     <Grid VerticalOptions="Center"
           Padding="20,10"
+          WidthRequest="1000"
           HorizontalOptions="FillAndExpand">
         <CollectionView  ItemsSource="{Binding NoteSegmentStoreGroups}"
                          SelectedItem="{Binding SelectedNoteSegmentStore}"
@@ -59,7 +61,7 @@
         <Border  Grid.RowSpan="6"
                  IsVisible="{Binding Loading}"
                  BackgroundColor="#55000000">
-            <Grid  HorizontalOptions="Center"
+            <Grid
                    VerticalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>

@@ -159,7 +159,7 @@ namespace MatoProductivity.Core.Services
         public INoteSegment NoteSegment
         {
             get { return noteSegment; }
-            protected set
+            set
             {
                 noteSegment = value;
                 RaisePropertyChanged();

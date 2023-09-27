@@ -13,4 +13,10 @@ public partial class NoteSegmentStoreListPage : PopupBase, ITransientDependency
         InitializeComponent();
         this.BindingContext = noteSegmentStoreListPageViewModel;
     }
+
+    private async void PopupBase_Opened(object sender, CommunityToolkit.Maui.Core.PopupOpenedEventArgs e)
+    {
+        await NoteSegmentStoreListPageViewModel.Init();
+
+    }
 }
