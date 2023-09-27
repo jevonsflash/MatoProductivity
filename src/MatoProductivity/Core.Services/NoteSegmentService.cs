@@ -45,20 +45,20 @@ namespace MatoProductivity.Core.Services
 
         private void OnDragged(object item)
         {
-            IsBeingDragged=true;
-            this.DraggedItem=item;
+            IsBeingDragged = true;
+            this.DraggedItem = item;
         }
 
         private void OnDraggedOver(object item)
         {
-            if (!IsBeingDragged && item!=null)
+            if (!IsBeingDragged && item != null)
             {
-                IsBeingDraggedOver=true;
+                IsBeingDraggedOver = true;
 
                 var itemToMove = Container.NoteSegments.First(i => i.IsBeingDragged);
-                if (itemToMove.DraggedItem!=null)
+                if (itemToMove.DraggedItem != null)
                 {
-                    DropPlaceHolderItem=itemToMove.DraggedItem;
+                    DropPlaceHolderItem = itemToMove.DraggedItem;
 
                 }
             }
@@ -101,7 +101,7 @@ namespace MatoProductivity.Core.Services
         {
             var itemToMove = Container.NoteSegments.First(i => i.IsBeingDragged);
 
-            if (itemToMove == null ||  itemToMove == this)
+            if (itemToMove == null || itemToMove == this)
                 return;
 
 
@@ -112,7 +112,7 @@ namespace MatoProductivity.Core.Services
             Container.NoteSegments.Insert(insertAtIndex, itemToMove);
             itemToMove.IsBeingDragged = false;
             this.IsBeingDraggedOver = false;
-            this.DraggedItem=null;
+            this.DraggedItem = null;
 
         }
 
@@ -159,7 +159,7 @@ namespace MatoProductivity.Core.Services
         public INoteSegment NoteSegment
         {
             get { return noteSegment; }
-            set
+            protected set
             {
                 noteSegment = value;
                 RaisePropertyChanged();

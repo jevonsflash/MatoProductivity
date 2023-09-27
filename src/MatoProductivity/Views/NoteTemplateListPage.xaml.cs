@@ -16,9 +16,9 @@ namespace MatoProductivity
             this.BindingContext = noteTemplateListPageViewModel;
         }
 
-        private void ContentPageBase_Appearing(object sender, EventArgs e)
+        private async void ContentPageBase_Appearing(object sender, EventArgs e)
         {
-            NoteTemplateListPageViewModel.Init();
+           await NoteTemplateListPageViewModel.Init();
         }
     }
 }

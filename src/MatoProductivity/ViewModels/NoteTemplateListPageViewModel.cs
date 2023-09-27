@@ -67,7 +67,7 @@ namespace MatoProductivity.ViewModels
         {
             var noteTemplateWrapper = (NoteTemplateWrapper)obj;
             var note = noteTemplateWrapper.NoteTemplate;
-       
+
 
             using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id }))
             {
@@ -81,10 +81,15 @@ namespace MatoProductivity.ViewModels
         }
 
 
-        public void Init()
+        public async Task Init()
         {
-            var noteTemplates = this.repository.GetAllList();
-            this.NoteTemplates = new ObservableCollection<NoteTemplateWrapper>(noteTemplates.Select(c => new NoteTemplateWrapper(c) { Container = this }));
+            Loading = true;
+            await Task.Delay(300);
+            await Task.Run(() =>
+            {
+                var noteTemplates = this.repository.GetAllList();
+                this.NoteTemplates = new ObservableCollection<NoteTemplateWrapper>(noteTemplates.Select(c => new NoteTemplateWrapper(c) { Container = this }));
+            }).ContinueWith((e) => { Loading = false; });
         }
 
         private async void NoteTemplatePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -102,6 +107,22 @@ namespace MatoProductivity.ViewModels
                 }
             }
         }
+
+        private bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                _loading = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
+
         private ObservableCollection<NoteTemplateWrapper> _noteTemplates;
 
         public ObservableCollection<NoteTemplateWrapper> NoteTemplates

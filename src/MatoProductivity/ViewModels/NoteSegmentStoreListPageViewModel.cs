@@ -8,6 +8,7 @@ using MatoProductivity.Services;
 using MatoProductivity.Views;
 using System;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace MatoProductivity.ViewModels
 {
@@ -32,21 +33,26 @@ namespace MatoProductivity.ViewModels
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
             this.PropertyChanged += NoteSegmentStorePageViewModel_PropertyChangedAsync;
-            Init();
         }
 
-        private void SearchAction(object obj)
+        private async void SearchAction(object obj)
         {
-            this.Init();
+            await this.Init();
         }
 
-        public void Init()
+        public async Task Init()
         {
-            var noteSegmentStores = this.repository.GetAllList()
+            Loading = true;
+            await Task.Delay(300);
+            await Task.Run(() =>
+            {
+                var noteSegmentStores = this.repository.GetAllList()
                 .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
 
-            var noteSegmentStoreGroups = noteSegmentStores.GroupBy(c => c.Category).Select(c => new NoteSegmentStoreGroup(c.Key, c));
-            this.NoteSegmentStoreGroups = new ObservableCollection<NoteSegmentStoreGroup>(noteSegmentStoreGroups);
+                var noteSegmentStoreGroups = noteSegmentStores.GroupBy(c => c.Category).Select(c => new NoteSegmentStoreGroup(c.Key, c));
+                this.NoteSegmentStoreGroups = new ObservableCollection<NoteSegmentStoreGroup>(noteSegmentStoreGroups);
+            }).ContinueWith((e) => { Loading = false; });
+
         }
 
         private async void NoteSegmentStorePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -67,10 +73,25 @@ namespace MatoProductivity.ViewModels
             {
                 if (string.IsNullOrEmpty(SearchKeywords))
                 {
-                    Init();
+                    await Init();
                 }
             }
         }
+
+        private bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                _loading = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
         private ObservableCollection<NoteSegmentStoreGroup> _noteSegmentStoreGroups;
 
         public ObservableCollection<NoteSegmentStoreGroup> NoteSegmentStoreGroups

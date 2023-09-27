@@ -2,6 +2,7 @@
 <mato:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                      xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
                       xmlns:vm="clr-namespace:MatoProductivity.ViewModels;assembly=MatoProductivity"
                       xmlns:model="clr-namespace:MatoProductivity.Models;assembly=MatoProductivity"
                       x:Class="MatoProductivity.Views.NoteListPage"
@@ -299,6 +300,7 @@
 
         <CollectionView Grid.Row="5"
                         Margin="15, 0"
+                        IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
                         ItemsLayout="VerticalList"
                         x:Name="MainCollectionView"
                         ItemsSource="{Binding NoteGroups}"
@@ -375,7 +377,25 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"></Label>
         </Border>
-
+        <Border  Grid.RowSpan="6"
+                 IsVisible="{Binding Loading}"
+                 BackgroundColor="#55000000">
+            <Grid  HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <controls:PlayingMotionView HorizontalOptions="Center"
+                                            VerticalOptions="Center"></controls:PlayingMotionView>
+                <Label Text="Loading.."
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="1"
+                       TextColor="White"
+                       Style="{StaticResource Body1_MulishBold}"></Label>
+            </Grid>
+        </Border>
 
     </Grid>
 </mato:ContentPageBase>

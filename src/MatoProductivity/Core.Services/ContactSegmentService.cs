@@ -6,55 +6,93 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.Maui.ApplicationModel.Permissions;
+using Communication = Microsoft.Maui.ApplicationModel.Communication;
 
 namespace MatoProductivity.Core.Services
 {
     public class ContactSegmentService : NoteSegmentService, ITransientDependency
     {
 
-        private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
+        public Command PickContact { get; set; }
+        private INoteSegmentPayload DefaultContactNameSegmentPayload => this.CreateNoteSegmentPayload(nameof(ContactName), "");
+        private INoteSegmentPayload DefaultContactEmailSegmentPayload => this.CreateNoteSegmentPayload(nameof(ContactEmail), "");
+        private INoteSegmentPayload DefaultContactPhoneSegmentPayload => this.CreateNoteSegmentPayload(nameof(ContactPhone), "");
         public ContactSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
         {
+            this.PickContact = new Command(PickContactAction);
             PropertyChanged += ContactSegmentViewModel_PropertyChanged;
         }
+
 
         private void ContactSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
-                Title = title.GetStringValue();
+                var contactName = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(ContactName), DefaultContactNameSegmentPayload);
+                ContactName = contactName.GetStringValue();
 
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
-                Content = content.GetStringValue();
+                var contactPhone = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(ContactPhone), DefaultContactPhoneSegmentPayload);
+                ContactPhone = contactPhone.GetStringValue();
 
-                var defaultPlaceHolderSegmentPayload = this.CreateNoteSegmentPayload(nameof(PlaceHolder), "请输入" + Title);
 
-                var placeHolder = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
-                PlaceHolder = placeHolder.GetStringValue();
+                var contactEmail = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(ContactEmail), DefaultContactEmailSegmentPayload);
+                ContactEmail = contactEmail.GetStringValue();
             }
 
-            else if (e.PropertyName == nameof(Content))
+            else if (e.PropertyName == nameof(ContactPhone))
             {
-                if (!string.IsNullOrEmpty(Content))
+                if (!string.IsNullOrEmpty(ContactPhone))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Content), Content));
+                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(ContactPhone), ContactPhone));
 
                 }
             }
 
-            else if (e.PropertyName == nameof(PlaceHolder))
+            else if (e.PropertyName == nameof(ContactEmail))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(ContactEmail), ContactEmail));
             }
-            else if (e.PropertyName == nameof(Title))
+            else if (e.PropertyName == nameof(ContactName))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(ContactName), ContactName));
+            }
+        }
+
+
+        private async void PickContactAction(object obj)
+        {
+            if (await CheckPermissionIsGrantedAsync<ContactsRead>("此功能需要读取联系人列表，请在设置中开启权限"))
+            {
+                try
+                {
+                    var contact = await Communication.Contacts.Default.PickContactAsync();
+
+                    if (contact == null)
+                        return;
+
+                    string id = contact.Id;
+                    string namePrefix = contact.NamePrefix;
+                    string givenName = contact.GivenName;
+                    string middleName = contact.MiddleName;
+                    string familyName = contact.FamilyName;
+                    string nameSuffix = contact.NameSuffix;
+                    string displayName = contact.DisplayName;
+                    List<ContactPhone> phones = contact.Phones;
+                    List<ContactEmail> emails = contact.Emails;
+                    this.ContactName = displayName;
+                    this.ContactPhone = string.Join(',', phones);
+                    this.ContactEmail = string.Join(',', emails);
+
+                }
+                catch (Exception ex)
+                {
+                    // Most likely permission denied
+                }
             }
         }
 
@@ -64,38 +102,38 @@ namespace MatoProductivity.Core.Services
 
         }
 
-        private string _content;
+        private string _contactPhone;
 
-        public string Content
+        public string ContactPhone
         {
-            get { return _content; }
+            get { return _contactPhone; }
             set
             {
-                _content = value;
+                _contactPhone = value;
                 RaisePropertyChanged();
             }
         }
 
-        private string _title;
+        private string _contactName;
 
-        public string Title
+        public string ContactName
         {
-            get { return _title; }
+            get { return _contactName; }
             set
             {
-                _title = value;
+                _contactName = value;
                 RaisePropertyChanged();
             }
         }
 
-        private string _placeHolder;
+        private string _contactEmail;
 
-        public string PlaceHolder
+        public string ContactEmail
         {
-            get { return _placeHolder; }
+            get { return _contactEmail; }
             set
             {
-                _placeHolder = value;
+                _contactEmail = value;
                 RaisePropertyChanged();
             }
         }

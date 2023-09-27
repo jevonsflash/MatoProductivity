@@ -31,7 +31,7 @@ namespace MatoProductivity.ViewModels
             IIocResolver iocResolver,
             NavigationService navigationService)
         {
-            this._dateService=dateService;
+            this._dateService = dateService;
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -42,7 +42,7 @@ namespace MatoProductivity.ViewModels
             this.RemoveSelected = new Command(RemoveSelectedAction);
             this.SelectAll = new Command(SelectAllAction);
             this.Search = new Command(SearchAction);
-            this.SwitchState=new Command(SwitchStateAction);
+            this.SwitchState = new Command(SwitchStateAction);
             PreviousWeekCommand = new Command<DateTime>(PreviousWeekCommandHandler);
             NextWeekCommand = new Command<DateTime>(NextWeekCommandHandler);
             DayCommand = new Command<DayModel>(DayCommandHandler);
@@ -80,6 +80,20 @@ namespace MatoProductivity.ViewModels
 
             }
         }
+
+        private bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                _loading = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
 
 
 
@@ -133,12 +147,12 @@ namespace MatoProductivity.ViewModels
 
         private void SwitchStateAction(object obj)
         {
-            this.IsEditing= !this.IsEditing;
+            this.IsEditing = !this.IsEditing;
         }
 
-        private void SearchAction(object obj)
+        private async void SearchAction(object obj)
         {
-            this.Init();
+            await this.Init();
         }
 
         private void SelectAllAction(object obj)
@@ -194,21 +208,34 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        public void Init()
+        public async Task Init()
         {
-            Week = _dateService.GetWeek(DateTime.Now);
-            DaysList = new ObservableCollection<DayModel>(_dateService.GetDayList(Week.StartDay, Week.LastDay));
-            _selectedDay = new DayModel() { Date = DateTime.Today };
-
-            var notes = this.repository.GetAllList()
-                .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
-            var notegroupedlist = notes.OrderByDescending(c => c.CreationTime).GroupBy(c => CommonHelper.FormatTimeString(c.LastModificationTime==null ? c.CreationTime : c.LastModificationTime.Value)).Select(c => new NoteTimeLineGroup(c.Key, c));
-            this.NoteGroups = new ObservableCollection<NoteTimeLineGroup>(notegroupedlist);
-
-            foreach (var noteGroups in this.NoteGroups)
+            Loading = true;
+            await Task.Delay(300);
+            await Task.Run(() =>
             {
-                noteGroups.CollectionChanged += Notes_CollectionChanged;
-            }
+                if (Week==null)
+                {
+                    Week = _dateService.GetWeek(DateTime.Now);
+                }
+                if (DaysList==null)
+                {
+                    DaysList = new ObservableCollection<DayModel>(_dateService.GetDayList(Week.StartDay, Week.LastDay));
+                }
+                _selectedDay = new DayModel() { Date = DateTime.Today };
+
+                var notes = this.repository.GetAllList()
+                    .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
+                var notegroupedlist = notes.OrderByDescending(c => c.CreationTime).GroupBy(c => CommonHelper.FormatTimeString(c.LastModificationTime == null ? c.CreationTime : c.LastModificationTime.Value)).Select(c => new NoteTimeLineGroup(c.Key, c));
+                this.NoteGroups = new ObservableCollection<NoteTimeLineGroup>(notegroupedlist);
+
+                foreach (var noteGroups in this.NoteGroups)
+                {
+                    noteGroups.CollectionChanged += Notes_CollectionChanged;
+                }
+
+            }).ContinueWith((e) => { Loading = false; });
+
         }
 
         private async void Notes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -244,7 +271,7 @@ namespace MatoProductivity.ViewModels
             {
                 if (string.IsNullOrEmpty(SearchKeywords))
                 {
-                    Init();
+                    await Init();
                 }
             }
         }
@@ -252,7 +279,7 @@ namespace MatoProductivity.ViewModels
         private async void NoteListPageViewModel_OnDone(object sender, EventArgs e)
         {
             await navigationService.HidePopupAsync(notePagePage);
-            this.Init();
+            await this.Init();
 
         }
 

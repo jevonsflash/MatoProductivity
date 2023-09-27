@@ -15,9 +15,9 @@ public partial class NoteListPage : ContentPageBase, ITransientDependency
 
     }
 
-    private void ContentPageBase_Appearing(object sender, EventArgs e)
+    private async void ContentPageBase_Appearing(object sender, EventArgs e)
     {
-        noteListPageViewModel.Init();
+       await noteListPageViewModel.Init();
     }
 
     private async void Button_Clicked(object sender, EventArgs e)

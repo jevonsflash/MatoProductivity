@@ -154,6 +154,9 @@
 	  <MauiXaml Update="Controls\IsDoneToggleButton.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Controls\PlayingMotionView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Controls\RichTextEditor.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
