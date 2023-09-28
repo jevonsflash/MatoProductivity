@@ -10,6 +10,7 @@ using MatoProductivity.Services;
 using MatoProductivity.Views;
 using System.Drawing;
 using MatoProductivity.Core.ViewModels;
+using System.Runtime.CompilerServices;
 
 namespace MatoProductivity.ViewModels
 {
@@ -77,7 +78,7 @@ namespace MatoProductivity.ViewModels
                             .Include(c => c.NoteSegments)
                             .ThenInclude(c => c.NoteSegmentPayloads)
                             .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
-                        Init(note);
+                        await Init(note);
 
                     });
                 }
@@ -88,25 +89,31 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private void Init(Note note)
+        private async Task Init(Note note)
         {
-            var noteSegments = note.NoteSegments;
-            this.NoteSegments = new ObservableCollection<INoteSegmentService>(
-
-              noteSegments.Select(GetNoteSegmentViewModel)
-              );
-            Title = note.Title;
-            Desc = note.Desc;
-            Icon = note.Icon;
-            Color = note.Color;
-            BackgroundColor = note.BackgroundColor;
-            PreViewContent = note.PreViewContent;
-            IsEditable = note.IsEditable;
-
-            foreach (var noteSegment in NoteSegments)
+            Loading = true;
+            await Task.Delay(300);
+            await Task.Run(() =>
             {
-                noteSegment.Container = this;
-            }
+
+                var noteSegments = note.NoteSegments;
+                this.NoteSegments = new ObservableCollection<INoteSegmentService>(
+                  noteSegments.Select(GetNoteSegmentViewModel)
+                  );
+                Title = note.Title;
+                Desc = note.Desc;
+                Icon = note.Icon;
+                Color = note.Color;
+                BackgroundColor = note.BackgroundColor;
+                PreViewContent = note.PreViewContent;
+                IsEditable = note.IsEditable;
+
+                foreach (var noteSegment in NoteSegments)
+                {
+                    noteSegment.Container = this;
+                }
+            }).ContinueWith((e) => { Loading = false; });
+
         }
 
         private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)
@@ -115,6 +122,20 @@ namespace MatoProductivity.ViewModels
             result.NoteSegmentState = NoteSegmentState.PreView;
             return result;
         }
+
+        private bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                _loading = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
 
         private long noteId;
 

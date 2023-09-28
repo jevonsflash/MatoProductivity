@@ -7,11 +7,11 @@
                 xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity">
     <Grid VerticalOptions="Center"
           Padding="20,10"
+          HeightRequest="500"
           WidthRequest="1000"
           HorizontalOptions="FillAndExpand">
         <CollectionView  ItemsSource="{Binding NoteSegmentStoreGroups}"
                          SelectedItem="{Binding SelectedNoteSegmentStore}"
-                         HeightRequest="500"
                          IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
                          SelectionMode="Single"
                          IsGrouped="true">

@@ -5,7 +5,12 @@
                 xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity"
                 x:Class="MatoProductivity.Views.NotePage">
 
-    <Grid  x:Name="MainPage">
+    <Grid  x:Name="MainPage"
+           VerticalOptions="Center"
+           Padding="20,10"
+           HeightRequest="500"
+           WidthRequest="1000"
+           HorizontalOptions="FillAndExpand">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
