@@ -2,10 +2,10 @@
 using Abp.Domain.Repositories;
 using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Amap;
-using MatoProductivity.Core.Helper;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Core.Views;
+using MatoProductivity.Helper;
 using MatoProductivity.Services;
 using MatoProductivity.ViewModels;
 using System;
@@ -44,7 +44,7 @@ namespace MatoProductivity.Core.Services
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
-                var location = await GetNativePosition();
+                var location = await GeoLocationHelper.GetNativePosition();
                 var amapLocation = new Core.Location.Location()
                 {
                     Latitude=location.Latitude,
@@ -155,39 +155,6 @@ namespace MatoProductivity.Core.Services
         }
 
 
-        private async Task<Microsoft.Maui.Devices.Sensors.Location> GetNativePosition()
-        {
-
-            try
-            {
-                var request = new GeolocationRequest(GeolocationAccuracy.Medium);
-                var location = await Geolocation.Default.GetLocationAsync(request);
-
-                if (location != null)
-                {
-                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-                    return location;
-                }
-            }
-            catch (FeatureNotSupportedException fnsEx)
-            {
-                CommonHelper.ShowMsg("请在设置中开启位置的访问权限", "位置无权限");
-            }
-            catch (FeatureNotEnabledException fneEx)
-            {
-                CommonHelper.ShowMsg("当您的网络信号或GPS信号弱的时候，我们无法获取您的位置信息", "无法获取位置信息");
-            }
-            catch (PermissionException pEx)
-            {
-                CommonHelper.ShowMsg("请在设置中开启位置的访问权限", "位置无权限");
-            }
-            catch (Exception ex)
-            {
-                // Unable to get location
-            }
-            return null;
-
-        }
 
 
     }

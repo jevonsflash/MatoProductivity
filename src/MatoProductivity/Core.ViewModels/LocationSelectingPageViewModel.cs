@@ -5,6 +5,7 @@ using Abp.Extensions;
 using MatoProductivity.Core.Amap;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Helper;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using System;
@@ -50,7 +51,20 @@ namespace MatoProductivity.ViewModels
 
         private async void Init()
         {
-            var reGeocodeLocation = await amapHttpRequestClient.InverseAsync(new AmapInverseHttpRequestParamter());
+            var location = await GeoLocationHelper.GetNativePosition();
+            var amapLocation = new Core.Location.Location()
+            {
+                Latitude=location.Latitude,
+                Longitude=location.Longitude
+            };
+            var amapInverseHttpRequestParamter = new AmapInverseHttpRequestParamter()
+            {
+                Locations=new MatoProductivity.Core.Location.Location[]
+                {
+                        amapLocation
+               }
+            };
+            var reGeocodeLocation = await amapHttpRequestClient.InverseAsync(amapInverseHttpRequestParamter);
 
 
         }
