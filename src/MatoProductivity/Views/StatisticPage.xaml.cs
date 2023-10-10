@@ -1,6 +1,7 @@
 using Abp.Dependency;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.ViewModels;
+using Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace MatoProductivity.Views;
 
@@ -17,12 +18,12 @@ public partial class StatisticPage : ContentPageBase, ITransientDependency
 
     private void ContentPageBase_Appearing(object sender, EventArgs e)
     {
-        noteListPageViewModel.Init();
-        this.test.InitLocation = new Core.Location.Location();
+        rootComponent.Parameters =
+    new Dictionary<string, object>
+    {
+            { "StatisticPageViewModel", noteListPageViewModel }
+    };
     }
 
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-       await navigationService.ShowPopupAsync((this.Resources["PopupMenu"] as PopupBase));
-    }
+
 }

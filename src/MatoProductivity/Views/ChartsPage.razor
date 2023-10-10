@@ -1,0 +1,57 @@
+﻿@using MatoProductivity.ViewModels
+@inject IJSRuntime JSRuntime
+
+<h3>天气温度图表</h3>
+
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id=@weatherChartId style="width:100%;height:400px;"></div>
+
+
+
+@code {
+    [Parameter]
+    public StatisticPageViewModel StatisticPageViewModel { get; set; }
+
+    public readonly string weatherChartId = "weatherChartId";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await StatisticPageViewModel.Init();
+    }
+
+    //获取天气温度数据
+    private object GetDailyWeather()
+    {
+        var forecasts = StatisticPageViewModel.KeyValueStatisticGroups.FirstOrDefault();
+        var days = forecasts.Select(x => $"{x.CreationTime:M}").ToArray();
+        var temperatures = forecasts.Select(x => x.GetNoteSegmentPayload("Content")).ToArray();
+        var dailyWeather = new
+        {
+            Days = days,
+            Temperatures = temperatures,
+        };
+
+        return dailyWeather;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        //等到网页渲染完成之后，再初始化ECharts绘图
+        try
+        {
+            //获取天气温度数据
+            var dailyWeather = GetDailyWeather();
+
+            //绘制天气温度图表
+            await JSRuntime.InvokeVoidAsync("weatherWin.DrawCharts", weatherChartId, dailyWeather);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"天气温度绘图错误, {ex}");
+        }
+    }
+}

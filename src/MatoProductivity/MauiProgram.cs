@@ -6,6 +6,7 @@ using MatoProductivity.Core;
 using CommunityToolkit.Maui;
 using Abp.Modules;
 using MatoProductivity.Controls;
+using Microsoft.Extensions.Logging;
 
 namespace MatoProductivity
 {
@@ -39,7 +40,14 @@ namespace MatoProductivity
                     handlers.AddHandler(typeof(MatoProductivity.Core.Controls.AMap), typeof(AMapHandler));
                 })
                 ;
-			return builder.Build();
+
+            builder.Services.AddMauiBlazorWebView();
+
+#if DEBUG
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddDebug();
+#endif
+            return builder.Build();
 		}
 
 
