@@ -1,6 +1,7 @@
 ﻿using Abp.Collections.Extensions;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Castle.MicroKernel.Registration;
 using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
@@ -9,6 +10,7 @@ using MatoProductivity.Infrastructure.Helper;
 using MatoProductivity.Models;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Data.Common;
@@ -20,15 +22,18 @@ namespace MatoProductivity.ViewModels
 {
     public class StatisticPageViewModel : ViewModelBase, ISingletonDependency
     {
+        private readonly IUnitOfWorkManager unitOfWorkManager;
         private readonly IRepository<NoteSegment, long> repository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
 
         public StatisticPageViewModel(
+            IUnitOfWorkManager unitOfWorkManager,
             IRepository<NoteSegment, long> repository,
             IIocResolver iocResolver,
             NavigationService navigationService)
         {
+            this.unitOfWorkManager=unitOfWorkManager;
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -39,7 +44,7 @@ namespace MatoProductivity.ViewModels
 
             //Init();
         }
-  
+
 
         private async void SearchAction(object obj)
         {
@@ -47,29 +52,43 @@ namespace MatoProductivity.ViewModels
         }
 
 
-
+        [UnitOfWork]
         public async Task Init()
         {
             Loading = true;
             await Task.Delay(300);
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                var notes = this.repository.GetAllList()
-                .Where(c => c.Type == "KeyValueSegment")
-                .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords));
-                var notegroupedlist = notes.OrderByDescending(c => c.CreationTime)
-                .GroupBy(c => c.Title.Trim()
-                ).Select(c => new KeyValueStatisticGroup(c.Key, c));
-                this.KeyValueStatisticGroups = new ObservableCollection<KeyValueStatisticGroup>(notegroupedlist);
 
-                foreach (var keyValueStatisticGroups in this.KeyValueStatisticGroups)
+                await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
                 {
-                    keyValueStatisticGroups.CollectionChanged += Notes_CollectionChanged;
-                }
+
+
+                    var notes = this.repository.GetAll().Include(c => c.NoteSegmentPayloads)
+                    .Where(c => c.Type == "KeyValueSegment")
+                     .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords))
+                     .OrderByDescending(c => c.CreationTime)
+                     .ToList();
+                    var notegroupedlist = notes
+                    .GroupBy(c => GetTitle(c)
+                    ).Select(c => new KeyValueStatisticGroup(c.Key, c));
+                    this.KeyValueStatisticGroups = new ObservableCollection<KeyValueStatisticGroup>(notegroupedlist);
+                });
+
             }).ContinueWith((e) => { Loading = false; });
 
         }
 
+        private static string GetTitle(NoteSegment c)
+        {
+            var result = c.GetNoteSegmentPayload("Title")?.StringValue;
+            if (string.IsNullOrEmpty(result))
+            {
+                result="未分组";
+
+            }
+            return result;
+        }
 
         private bool _loading;
 
@@ -85,17 +104,6 @@ namespace MatoProductivity.ViewModels
         }
 
 
-        private async void Notes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    await this.repository.DeleteAsync((item as Note).Id);
-
-                }
-            }
-        }
 
         private async void NotePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
