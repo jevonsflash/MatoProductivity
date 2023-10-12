@@ -9,12 +9,102 @@
                       x:Class="MatoProductivity.Views.StatisticPage"
                       xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       Appearing="ContentPageBase_Appearing">
-    <BlazorWebView x:Name="blazorWebView"
-                   HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app"
-                           x:Name="rootComponent"
-                           ComponentType="{x:Type views:ChartsPage}" />
-        </BlazorWebView.RootComponents>
-    </BlazorWebView>
+    <mato:ContentPageBase.Resources>
+        <ControlTemplate x:Key="RadioButtonTemplate">
+            <Border StrokeThickness="2"
+                    StrokeShape="RoundRectangle 10"
+                    WidthRequest="90"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start">
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CheckedStates">
+                            <VisualState x:Name="Checked">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
+
+                                    <Setter Property="Stroke"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
+
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Unchecked">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
+                                    <Setter Property="Stroke"
+                                            Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
+
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+                <Grid Margin="4"
+                      WidthRequest="90">
+
+                    <ContentPresenter />
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
+        <Style TargetType="RadioButton">
+            <Setter Property="ControlTemplate"
+                    Value="{StaticResource RadioButtonTemplate}" />
+        </Style>
+    </mato:ContentPageBase.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <SearchBar Placeholder="查找内容"
+                   Text="{Binding SearchKeywords}"
+                   SearchCommand="{Binding Search}" />
+        <Grid Grid.Row="1">
+            <StackLayout RadioButtonGroup.GroupName="ViewState"
+                         RadioButtonGroup.SelectedValue="{Binding ViewState}"
+                         Orientation="Horizontal">
+                <RadioButton Value="Charts">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="趋势图"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton Value="Tables">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="数据"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+
+            </StackLayout>
+
+        </Grid>
+        <Grid Grid.Row="2">
+            <BlazorWebView x:Name="blazorWebView"
+                           IsVisible="{Binding KeyValueStatisticGroups, Converter={StaticResource IsValid2BoolConverter}}"
+                           HostPage="wwwroot/index.html">
+                <BlazorWebView.RootComponents>
+                    <RootComponent Selector="#app"
+                                   x:Name="rootComponent"
+                                   ComponentType="{x:Type views:ChartsPage}" />
+                </BlazorWebView.RootComponents>
+            </BlazorWebView>
+            <Label Text="您还没有创建数据"
+                   IsVisible="{Binding KeyValueStatisticGroups, Converter={StaticResource IsValid2BoolConverter}, ConverterParameter=true}"></Label>
+        </Grid>
+
+    </Grid>
 </mato:ContentPageBase>

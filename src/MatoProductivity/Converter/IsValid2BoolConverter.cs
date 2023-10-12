@@ -22,10 +22,10 @@ namespace MatoProductivity.Converter
                     result =
                     !string.IsNullOrEmpty(value as string);
                 }
-                else if (value is IList)
+                else if (value is ICollection)
                 {
                     result =
-                        (value as IList).Count != 0;
+                        (value as ICollection).Count != 0;
                 }
                 else
                 {

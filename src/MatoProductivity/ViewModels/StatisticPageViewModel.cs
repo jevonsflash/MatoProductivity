@@ -39,11 +39,13 @@ namespace MatoProductivity.ViewModels
             this.navigationService = navigationService;
             this.PropertyChanged += NotePageViewModel_PropertyChangedAsync;
             this.Search = new Command(SearchAction);
-
+            this.KeyValueStatisticGroups=new ObservableCollection<KeyValueStatisticGroup>();
             SelectedNotes = new ObservableCollection<object>();
+            ViewState="Charts";
 
             //Init();
         }
+
 
 
         private async void SearchAction(object obj)
@@ -66,12 +68,14 @@ namespace MatoProductivity.ViewModels
 
                     var notes = this.repository.GetAll().Include(c => c.NoteSegmentPayloads)
                     .Where(c => c.Type == "KeyValueSegment")
-                     .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords))
                      .OrderByDescending(c => c.CreationTime)
                      .ToList();
                     var notegroupedlist = notes
                     .GroupBy(c => GetTitle(c)
-                    ).Select(c => new KeyValueStatisticGroup(c.Key, c));
+                    )
+                    .Select(c => new KeyValueStatisticGroup(c.Key, c))
+                     .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords))
+                    ;
                     this.KeyValueStatisticGroups = new ObservableCollection<KeyValueStatisticGroup>(notegroupedlist);
                 });
 
@@ -185,6 +189,18 @@ namespace MatoProductivity.ViewModels
                 _searchKeywords = value;
                 RaisePropertyChanged();
 
+            }
+        }
+
+        private string _viewState;
+
+        public string ViewState
+        {
+            get { return _viewState; }
+            set
+            {
+                _viewState = value;
+                RaisePropertyChanged();
             }
         }
 

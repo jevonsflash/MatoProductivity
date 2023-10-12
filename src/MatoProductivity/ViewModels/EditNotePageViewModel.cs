@@ -196,13 +196,32 @@ namespace MatoProductivity.ViewModels
                 note = ObjectMapper.Map<NoteSegment>(noteTemplate);
 
             });
+            _CreateSegment(note);
+        }
+
+
+        private async void EditNotePageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
+        {
+
+            var note = ObjectMapper.Map<NoteSegment>(noteSegmentStore);
+
+            _CreateSegment(note);
+
+            (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
+            await navigationService.HidePopupAsync(noteSegmentStoreListPage);
+            noteSegmentStoreListPage=null;
+        }
+
+
+        private void _CreateSegment(NoteSegment note)
+        {
             if (note!=default)
             {
                 var noteSegment = new NoteSegment()
                 {
                     NoteId = this.NoteId,
                     Title = note.Title,
-                    Type = type,
+                    Type = note.Type,
                     Desc = note.Desc,
                     Icon=note.Icon,
                     NoteSegmentPayloads = new List<NoteSegmentPayload>()
@@ -219,27 +238,6 @@ namespace MatoProductivity.ViewModels
                     this.NoteSegments.Add(newModel);
                 }
             }
-        }
-
-        private async void EditNotePageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
-        {
-
-            var noteSegment = ObjectMapper.Map<NoteSegment>(noteSegmentStore);
-
-            noteSegment.NoteId = this.NoteId;
-            noteSegment.NoteSegmentPayloads = new List<NoteSegmentPayload>();
-
-            var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegment);
-            if (newModel != null)
-            {
-                newModel.Create.Execute(null);
-                newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
-                newModel.Container = this;
-                this.NoteSegments.Add(newModel);
-            }
-           (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
-            await navigationService.HidePopupAsync(noteSegmentStoreListPage);
-            noteSegmentStoreListPage=null;
         }
 
 

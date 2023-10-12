@@ -241,7 +241,6 @@
 	  <None Include="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
 	  <None Include="wwwroot\css\open-iconic\ICON-LICENSE" />
 	  <None Include="wwwroot\css\open-iconic\README.md" />
-	  <None Include="wwwroot\js\weather.js" />
 	  <None Include="wwwroot\lib\echarts\echarts.min.js" />
 	</ItemGroup>
 

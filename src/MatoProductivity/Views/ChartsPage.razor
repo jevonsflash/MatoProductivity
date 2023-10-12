@@ -1,65 +1,240 @@
 ﻿@using MatoProductivity.ViewModels
 @inject IJSRuntime JSRuntime
 
-<h3>天气温度图表</h3>
 
 <button @onclick=Refresh>刷新</button>
-<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-<div id=@weatherChartId style="width:100%;height:400px;"></div>
 
+
+<div class="list-group" style="overflow:auto">
+    @if (@StatisticPageViewModel.ViewState=="Charts")
+    {
+        <Virtualize Context="keyValueStatisticGroup"
+                    Items="@StatisticPageViewModel.KeyValueStatisticGroups"
+                    ItemSize="400">
+            <div id=@keyValueStatisticGroup.Title style="width:100%;height:400px;"></div>
+
+        </Virtualize>
+    }
+    else if (@StatisticPageViewModel.ViewState=="Tables")
+    {
+        <Virtualize Context="keyValueStatisticGroup"
+                    Items="@StatisticPageViewModel.KeyValueStatisticGroups"
+                    ItemSize="400">
+            <div style="width:100%;">
+                <h3 style="color: rgba(70,70,70);font-size:16px;text-align:center">@keyValueStatisticGroup.Title</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">日期</th>
+                            <th scope="col">值</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+                            var data = GetTableDataValue(keyValueStatisticGroup);
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <th>@data[i].Day</th>
+                                    <th>@data[i].Value</th>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </Virtualize>
+    }
+</div>
+<script lang="ts">
+
+    window.dataValueCharts = []
+
+    window.dataValueChartsService = {
+        //绘制天气温度图表
+        DrawCharts: function (chartId, dailyDataValue,) {
+
+            this.InitCharts(chartId);
+
+            this.FillCharts(dailyDataValue, chartId);
+
+            window.dataValueCharts.push(this.dataValueChart);
+
+        },
+
+        //初始化图表
+        InitCharts: function (chartId) {
+
+            var dataValueChartElement = document.getElementById(chartId);
+            if (dataValueChartElement == null)
+                return;
+
+            // 基于准备好的dom，初始化echarts实例
+            var dataValueChart = echarts.init(dataValueChartElement);
+
+            dataValueChart.showLoading();
+
+            window.dataValueChartsService.dataValueChart = dataValueChart;
+        },
+
+        //填充图表的数据
+        FillCharts: function (dailyDataValue, title) {
+
+            if (this.dataValueChart == null)
+                return;
+
+            const days = dailyDataValue.days;
+            const value = dailyDataValue.value;
+
+            var dataValueLineOption = {
+                title: {
+                    text: title,
+                    left: 'center'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+
+                        magicType: { type: ['line', 'bar'] },
+
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    name: '日期',
+                    data: days,
+                },
+                yAxis: {
+                    type: 'value',
+                    name: title,
+                },
+
+                series: [
+                    {
+                        type: 'line',
+                        label: {
+                            show: true,
+                            position: 'bottom',
+                        },
+                        data: value,
+                    },
+                ],
+                dataZoom: [
+                    {
+                        show: true,
+                        realtime: true,
+                        start: 0,
+                        end: 100,
+                        handleIcon:
+                            'path://M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                        handleSize: '80%',
+                        xAxisIndex: [0, 1]
+                    },
+
+
+
+
+                ],
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            this.dataValueChart.setOption(dataValueLineOption);
+
+            this.dataValueChart.hideLoading();
+        },
+        DisposeCharts: function () {
+            while (window.dataValueCharts.length > 0) {
+                var current = window.dataValueCharts.pop();
+                current.dispose();
+            }
+        }
+
+    };
+
+
+
+</script>
 
 
 @code {
     [Parameter]
     public StatisticPageViewModel StatisticPageViewModel { get; set; }
 
-    public readonly string weatherChartId = "weatherChartId";
+    public readonly string dataValueChartId = "";
 
-    private async void Refresh()
+    private async Task Refresh()
     {
-        await StatisticPageViewModel.Init().ContinueWith(async(t) => 
+        await StatisticPageViewModel.Init();
+
+        try
         {
-
-            try
+            foreach (var keyValueStatisticGroup in StatisticPageViewModel.KeyValueStatisticGroups)
             {
-                //获取天气温度数据
-                var dailyWeather = GetDailyWeather();
-
-                //绘制天气温度图表
-                await JSRuntime.InvokeVoidAsync("weatherWin.DrawCharts", weatherChartId, dailyWeather);
+                var dailyDataValue = GetChartsDataValue(keyValueStatisticGroup);
+                var key = dataValueChartId + keyValueStatisticGroup.Title;
+                await JSRuntime.InvokeVoidAsync("dataValueChartsService.DrawCharts", key, dailyDataValue);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"天气温度绘图错误, {ex}");
-            }
-
-
-        });
-
-
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"天气温度绘图错误, {ex}");
+        }
     }
 
 
 
     protected override async Task OnInitializedAsync()
     {
-        await StatisticPageViewModel.Init();
+        StatisticPageViewModel.PropertyChanged +=  async (o, e) =>
+        {
+
+            await InvokeAsync(() => StateHasChanged());
+            if (e.PropertyName==nameof(StatisticPageViewModel.ViewState))
+            {
+                if (StatisticPageViewModel.ViewState=="Charts")
+                {
+                    await Refresh();
+                }
+                else if (StatisticPageViewModel.ViewState=="Tables")
+                {
+                    await JSRuntime.InvokeVoidAsync("dataValueChartsService.DisposeCharts");
+
+                }
+            }
+
+        };
 
     }
 
-    //获取天气温度数据
-    private object GetDailyWeather()
+
+
+
+    private object GetChartsDataValue(KeyValueStatisticGroup keyValueStatistic)
     {
-        var forecasts = StatisticPageViewModel.KeyValueStatisticGroups.FirstOrDefault();
-        var days = forecasts.Select(x => $"{x.CreationTime:M}").ToArray();
-        var temperatures = forecasts.Select(x => x.GetNoteSegmentPayload("Content")?.GetStringValue()).ToArray();
-        var dailyWeather = new
+        var days = keyValueStatistic.Select(x => x.CreationTime.ToString("MM-dd HH:mm")).ToArray();
+        var value = keyValueStatistic.Select(x => x.GetNoteSegmentPayload("Content")?.GetStringValue()).ToArray();
+        var dailyDataValue = new
         {
             Days = days,
-            Temperatures = temperatures,
+            Value = value,
         };
 
-        return dailyWeather;
+        return dailyDataValue;
+    }
+
+    private dynamic[] GetTableDataValue(KeyValueStatisticGroup keyValueStatistic)
+    {
+        var dailyDataValue = keyValueStatistic.Select(x => new { Day = x.CreationTime.ToString("MM-dd HH:mm"), Value = x.GetNoteSegmentPayload("Content")?.GetStringValue() }).ToArray();
+
+        return dailyDataValue;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -67,18 +242,6 @@
         if (!firstRender)
             return;
 
-        //等到网页渲染完成之后，再初始化ECharts绘图
-        try
-        {
-            //获取天气温度数据
-            var dailyWeather = GetDailyWeather();
-
-            //绘制天气温度图表
-            await JSRuntime.InvokeVoidAsync("weatherWin.DrawCharts", weatherChartId, dailyWeather);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"天气温度绘图错误, {ex}");
-        }
+        await Refresh();
     }
 }

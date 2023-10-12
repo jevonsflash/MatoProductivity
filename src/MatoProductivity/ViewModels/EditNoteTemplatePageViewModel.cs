@@ -196,13 +196,29 @@ namespace MatoProductivity.ViewModels
                 note = ObjectMapper.Map<NoteSegmentTemplate>(noteTemplate);
 
             });
+            _CreateSegment(note);
+
+        }
+
+        private async void EditNoteTemplatePageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
+        {
+            var note = ObjectMapper.Map<NoteSegmentTemplate>(noteSegmentStore);
+            _CreateSegment(note);
+
+            (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;
+            await navigationService.HidePopupAsync(noteSegmentStoreListPage);
+            noteSegmentStoreListPage = null;
+        }
+
+        private void _CreateSegment(NoteSegmentTemplate note)
+        {
             if (note != default)
             {
                 var noteSegmentTemplate = new NoteSegmentTemplate()
                 {
                     NoteTemplateId = this.NoteTemplateId,
                     Title = note.Title,
-                    Type = type,
+                    Type = note.Type,
                     Desc = note.Desc,
                     Icon = note.Icon,
                     NoteSegmentTemplatePayloads = new List<NoteSegmentTemplatePayload>()
@@ -220,26 +236,6 @@ namespace MatoProductivity.ViewModels
                 }
             }
         }
-
-        private async void EditNoteTemplatePageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
-        {
-            var noteSegmentTemplate = ObjectMapper.Map<NoteSegmentTemplate>(noteSegmentStore);
-            noteSegmentTemplate.NoteTemplateId = this.NoteTemplateId;
-            noteSegmentTemplate.NoteSegmentTemplatePayloads = new List<NoteSegmentTemplatePayload>();
-
-            var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegmentTemplate);
-            if (newModel != null)
-            {
-                newModel.Create.Execute(null);
-                newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
-                newModel.Container = this;
-                this.NoteSegments.Add(newModel);
-            }
-           (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;
-            await navigationService.HidePopupAsync(noteSegmentStoreListPage);
-            noteSegmentStoreListPage = null;
-        }
-
 
         private async void CreateSegmentFromStoreAction(object obj)
         {
@@ -564,20 +560,23 @@ namespace MatoProductivity.ViewModels
                     else
                     {
                         var newNoteSegmentTemplate = NoteSegments.Select(c => c.NoteSegment).FirstOrDefault(c => (c as NoteSegmentTemplate).Id == noteSegmentTemplate.Id);
-                        noteSegmentTemplate.Id = (newNoteSegmentTemplate as NoteSegmentTemplate).Id;
-                        noteSegmentTemplate.NoteTemplateId = (newNoteSegmentTemplate as NoteSegmentTemplate).NoteTemplateId;
-                        noteSegmentTemplate.Title = newNoteSegmentTemplate.Title;
-                        noteSegmentTemplate.Type = newNoteSegmentTemplate.Type;
-                        noteSegmentTemplate.Status = newNoteSegmentTemplate.Status;
-                        noteSegmentTemplate.Desc = newNoteSegmentTemplate.Desc;
-                        noteSegmentTemplate.Icon = newNoteSegmentTemplate.Icon;
-                        noteSegmentTemplate.Color = newNoteSegmentTemplate.Color;
-                        noteSegmentTemplate.Rank = newNoteSegmentTemplate.Rank;
-                        noteSegmentTemplate.IsHidden = newNoteSegmentTemplate.IsHidden;
-                        noteSegmentTemplate.IsRemovable = newNoteSegmentTemplate.IsRemovable;
 
+                        var entity = await noteSegmentTemplateRepository.UpdateAsync((newNoteSegmentTemplate as NoteSegmentTemplate).Id, async (noteSegmentTemplate) =>
+                        {
+                            await Task.Run(() =>
+                            {
+                                noteSegmentTemplate.Title = newNoteSegmentTemplate.Title;
+                                noteSegmentTemplate.Type = newNoteSegmentTemplate.Type;
+                                noteSegmentTemplate.Status = newNoteSegmentTemplate.Status;
+                                noteSegmentTemplate.Desc = newNoteSegmentTemplate.Desc;
+                                noteSegmentTemplate.Icon = newNoteSegmentTemplate.Icon;
+                                noteSegmentTemplate.Color = newNoteSegmentTemplate.Color;
+                                noteSegmentTemplate.Rank = newNoteSegmentTemplate.Rank;
+                                noteSegmentTemplate.IsHidden = newNoteSegmentTemplate.IsHidden;
+                                noteSegmentTemplate.IsRemovable = newNoteSegmentTemplate.IsRemovable;
+                            });
 
-                        var entity = await noteSegmentTemplateRepository.UpdateAsync(noteSegmentTemplate);
+                        });
 
 
                         var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentTemplateId == entity.Id);
