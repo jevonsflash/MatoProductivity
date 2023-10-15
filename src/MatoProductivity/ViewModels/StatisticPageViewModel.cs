@@ -11,10 +11,13 @@ using MatoProductivity.Models;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -39,7 +42,7 @@ namespace MatoProductivity.ViewModels
             this.navigationService = navigationService;
             this.PropertyChanged += NotePageViewModel_PropertyChangedAsync;
             this.Search = new Command(SearchAction);
-            this.KeyValueStatisticGroups=new ObservableCollection<KeyValueStatisticGroup>();
+            this.NoteStatistices=new ObservableCollection<NoteStatistic>();
             SelectedNotes = new ObservableCollection<object>();
             ViewState="Charts";
 
@@ -66,17 +69,27 @@ namespace MatoProductivity.ViewModels
                 {
 
 
-                    var notes = this.repository.GetAll().Include(c => c.NoteSegmentPayloads)
+                    var notes = this.repository.GetAll()
+                    .Include(c => c.NoteSegmentPayloads)
+                    .Include(c => c.Note)
                     .Where(c => c.Type == "KeyValueSegment")
                      .OrderByDescending(c => c.CreationTime)
                      .ToList();
                     var notegroupedlist = notes
-                    .GroupBy(c => GetTitle(c)
+                    .GroupByMany(c => c.Note.Title, c => GetTitle(c)
                     )
-                    .Select(c => new KeyValueStatisticGroup(c.Key, c))
+                    .Select(c => new NoteStatistic()
+                    {
+                        Title= c.Key,
+                        CreationTimes=(c.Items as IEnumerable<NoteSegment>).Select(c=>c.CreationTime).ToList(),
+                        KeyValueStatisticGroups= c.Subgroups.Select(
+
+                       d => new KeyValueStatisticGroup(d.Key, d.Items as IEnumerable<NoteSegment>)
+                        ).ToList()
+                    })
                      .WhereIf(!string.IsNullOrEmpty(this.SearchKeywords), c => c.Title.Contains(this.SearchKeywords))
                     ;
-                    this.KeyValueStatisticGroups = new ObservableCollection<KeyValueStatisticGroup>(notegroupedlist);
+                    this.NoteStatistices =   new ObservableCollection<NoteStatistic>(notegroupedlist);
                 });
 
             }).ContinueWith((e) => { Loading = false; });
@@ -85,13 +98,14 @@ namespace MatoProductivity.ViewModels
 
         private static string GetTitle(NoteSegment c)
         {
-            var result = c.GetNoteSegmentPayload("Title")?.StringValue;
-            if (string.IsNullOrEmpty(result))
-            {
-                result="未分组";
+            var noteSegmentTitle = c.GetNoteSegmentPayload("Title")?.StringValue;
+            noteSegmentTitle=noteSegmentTitle??c.Title;
 
+            if (string.IsNullOrEmpty(noteSegmentTitle))
+            {
+                noteSegmentTitle="未分组";
             }
-            return result;
+            return noteSegmentTitle;
         }
 
         private bool _loading;
@@ -131,16 +145,15 @@ namespace MatoProductivity.ViewModels
 
 
 
-        private ObservableCollection<KeyValueStatisticGroup> _keyValueStatisticGroups;
+        private ObservableCollection<NoteStatistic> _noteStatistices;
 
-        public ObservableCollection<KeyValueStatisticGroup> KeyValueStatisticGroups
+        public ObservableCollection<NoteStatistic> NoteStatistices
         {
-            get { return _keyValueStatisticGroups; }
+            get { return _noteStatistices; }
             set
             {
-                _keyValueStatisticGroups = value;
+                _noteStatistices = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(keyValueStatistices));
             }
         }
 
@@ -148,7 +161,6 @@ namespace MatoProductivity.ViewModels
 
 
 
-        public IEnumerable<NoteSegment> keyValueStatistices => KeyValueStatisticGroups.SelectMany(c => c);
 
 
         private Note _selectedNote;

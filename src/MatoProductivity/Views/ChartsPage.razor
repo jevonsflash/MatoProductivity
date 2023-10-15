@@ -1,57 +1,62 @@
 ﻿@using MatoProductivity.ViewModels
 @inject IJSRuntime JSRuntime
 
-
 <button @onclick=Refresh>刷新</button>
 
 
 <div class="list-group" style="overflow:auto">
     @if (@StatisticPageViewModel.ViewState=="Charts")
     {
-        <Virtualize Context="keyValueStatisticGroup"
-                    Items="@StatisticPageViewModel.KeyValueStatisticGroups"
+        <Virtualize Context="noteStatistic"
+                    Items="@StatisticPageViewModel.NoteStatistices"
                     ItemSize="400">
-            <div id=@keyValueStatisticGroup.Title style="width:100%;height:400px;"></div>
+            <div id=@noteStatistic.Title style="width:100%;height:400px;"></div>
 
         </Virtualize>
     }
     else if (@StatisticPageViewModel.ViewState=="Tables")
     {
-        <Virtualize Context="keyValueStatisticGroup"
-                    Items="@StatisticPageViewModel.KeyValueStatisticGroups"
+        <Virtualize Context="noteStatistic"
+                    Items="@StatisticPageViewModel.NoteStatistices"
                     ItemSize="400">
             <div style="width:100%;">
-                <h3 style="color: rgba(70,70,70);font-size:16px;text-align:center">@keyValueStatisticGroup.Title</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">日期</th>
-                            <th scope="col">值</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <h3 style="color: rgba(70,70,70);font-size:16px;text-align:center">@noteStatistic.Title</h3>
+                <Virtualize Context="keyValueStatisticGroup"
+                            Items="@noteStatistic.KeyValueStatisticGroups"
+                            ItemSize="400">
 
-                        @{
-                            var data = GetTableDataValue(keyValueStatisticGroup);
-                            for (int i = 0; i < data.Length; i++)
-                            {
-                                <tr>
-                                    <th scope="row">@i</th>
-                                    <th>@data[i].Day</th>
-                                    <th>@data[i].Value</th>
-                                </tr>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">日期</th>
+                                <th scope="col">值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @{
+                                var data = GetTableDataValue(keyValueStatisticGroup);
+                                for (int i = 0; i < data.Length; i++)
+                                {
+                                    <tr>
+                                        <th scope="row">@i</th>
+                                        <th>@data[i].Day</th>
+                                        <th>@data[i].Value</th>
+                                    </tr>
+                                }
                             }
-                        }
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </Virtualize>
+
             </div>
 
         </Virtualize>
     }
 </div>
-<script lang="ts">
+<script type="text/javascript">
 
     window.dataValueCharts = []
 
@@ -89,8 +94,9 @@
                 return;
 
             const days = dailyDataValue.days;
-            const value = dailyDataValue.value;
-
+            const values = dailyDataValue.values;
+            if (values.length == 0)
+                return;
             var dataValueLineOption = {
                 title: {
                     text: title,
@@ -107,25 +113,14 @@
                 tooltip: {
                     trigger: 'axis'
                 },
-                xAxis: {
-                    type: 'category',
-                    name: '日期',
-                    data: days,
+                xAxis: [],
+                yAxis: [],
+                grid: [],
+                legend: {
+                    left: 10
                 },
-                yAxis: {
-                    type: 'value',
-                    name: title,
-                },
-
                 series: [
-                    {
-                        type: 'line',
-                        label: {
-                            show: true,
-                            position: 'bottom',
-                        },
-                        data: value,
-                    },
+
                 ],
                 dataZoom: [
                     {
@@ -144,6 +139,44 @@
 
                 ],
             };
+            var itemHeight = (100 - 10) / values.length;
+            for (var i = 0; i < values.length; i++) {
+                var itemTop = i * itemHeight;
+                var value = values[i].value;
+                var title = values[i].title;
+                dataValueLineOption.grid.push({
+
+                    left: 60,
+                    right: 50,
+                    top: (itemTop + 15) + '%',
+                    height: itemHeight * 0.6 + '%'
+
+                });
+
+                dataValueLineOption.xAxis.push({
+                    gridIndex: i,
+                    type: 'category',
+                    name: '日期',
+                    data: days,
+                });
+                dataValueLineOption.yAxis.push({
+                    gridIndex: i,
+                    type: 'value',
+                    name: title,
+                });
+                dataValueLineOption.series.push({
+                    name:title,
+                    type: 'line',
+                    label: {
+                        show: true,
+                        position: 'bottom',
+                    },
+                    data: value,
+                    xAxisIndex: i,
+                    yAxisIndex: i,
+
+                });
+            }
 
             // 使用刚指定的配置项和数据显示图表。
             this.dataValueChart.setOption(dataValueLineOption);
@@ -151,9 +184,11 @@
             this.dataValueChart.hideLoading();
         },
         DisposeCharts: function () {
-            while (window.dataValueCharts.length > 0) {
-                var current = window.dataValueCharts.pop();
-                current.dispose();
+            if (window.dataValueCharts) {
+                while (window.dataValueCharts.length > 0) {
+                    var current = window.dataValueCharts.pop();
+                    current.dispose();
+                }
             }
         }
 
@@ -176,10 +211,11 @@
 
         try
         {
-            foreach (var keyValueStatisticGroup in StatisticPageViewModel.KeyValueStatisticGroups)
+            foreach (var noteStatistic in StatisticPageViewModel.NoteStatistices)
             {
-                var dailyDataValue = GetChartsDataValue(keyValueStatisticGroup);
-                var key = dataValueChartId + keyValueStatisticGroup.Title;
+
+                var dailyDataValue = GetChartsDataValue(noteStatistic);
+                var key = dataValueChartId + noteStatistic.Title;
                 await JSRuntime.InvokeVoidAsync("dataValueChartsService.DrawCharts", key, dailyDataValue);
             }
         }
@@ -217,22 +253,32 @@
 
 
 
-    private object GetChartsDataValue(KeyValueStatisticGroup keyValueStatistic)
+    private object GetChartsDataValue(NoteStatistic keyValueStatistic)
     {
-        var days = keyValueStatistic.Select(x => x.CreationTime.ToString("MM-dd HH:mm")).ToArray();
-        var value = keyValueStatistic.Select(x => x.GetNoteSegmentPayload("Content")?.GetStringValue()).ToArray();
+        var days = keyValueStatistic.CreationTimes.Select(x => x.ToString("MM-dd HH:mm")).Distinct().ToArray();
+        var value = keyValueStatistic.KeyValueStatisticGroups.Select(c => new
+        {
+            title = c.Title,
+            value = c.Select(x => x.GetNoteSegmentPayload("Content")?.GetStringValue()).ToArray()
+        });
         var dailyDataValue = new
         {
             Days = days,
-            Value = value,
+            Values = value,
         };
 
+        var jsonstr = Newtonsoft.Json.JsonConvert.SerializeObject(dailyDataValue);
+        Console.WriteLine(jsonstr);
         return dailyDataValue;
     }
 
     private dynamic[] GetTableDataValue(KeyValueStatisticGroup keyValueStatistic)
     {
-        var dailyDataValue = keyValueStatistic.Select(x => new { Day = x.CreationTime.ToString("MM-dd HH:mm"), Value = x.GetNoteSegmentPayload("Content")?.GetStringValue() }).ToArray();
+        var dailyDataValue = keyValueStatistic.Select(x => new
+        {
+            Day = x.CreationTime.ToString("MM-dd HH:mm"),
+            Value = x.GetNoteSegmentPayload("Content")?.GetStringValue()
+        }).ToArray();
 
         return dailyDataValue;
     }
