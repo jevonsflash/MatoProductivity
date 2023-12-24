@@ -21,7 +21,7 @@
 		<text name="Edit">Edit</text>
 		<text name="EditPlaylist">Edit song list</text>
 		<text name="Feedback">Feedback</text>
-		<text name="FeedBackContent">If you think MatoPlayer is good, please support me!</text>
+		<text name="FeedBackContent">If you think MatoProductivity is good, please support me!</text>
 		<text name="FeedbackContent1">Likewise, I am very much looking forward to your comments and suggestions. Please send the feedback to the following address:</text>
 		<text name="FeedbackContent2">You can also Subscribe to my Sina Weibo</text>
 		<text name="FliperAlert1">Look around the music library</text>
@@ -39,7 +39,7 @@
 		<text name="LyricAlert">Please start a song to show the lyrics</text>
 		<text name="LyricAlert2">Auto lyrics have been closed</text>
 		<text name="LyricContent">Click here to load</text>
-		<text name="MatoPlayer">MatoPlayer</text>
+		<text name="MatoProductivity">MatoProductivity</text>
 		<text name="Msg_AddFailed">Add failed</text>
 		<text name="Msg_AlreadyExists">Existed</text>
 		<text name="Msg_EditFailed">Save failed</text>

@@ -23,7 +23,7 @@ namespace MatoProductivity.Helper
 
         public static void ShowNoAuthorized()
         {
-            Application.Current.MainPage.DisplayAlert("需要权限", "MatoPlayer需要您媒体库的权限，劳烦至「设置」「隐私权」「媒体与AppleMusic」 打开权限,谢谢", "好");
+            Application.Current.MainPage.DisplayAlert("需要权限", "MatoProductivity需要您媒体库的权限，劳烦至「设置」「隐私权」「媒体与AppleMusic」 打开权限,谢谢", "好");
         }
 
         public static async Task<string> PromptAsync(string title, string initialValue = null, string msg = null)

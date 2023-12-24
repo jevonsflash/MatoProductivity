@@ -39,6 +39,10 @@
 	  <AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+	  <MtouchLink>SdkOnly</MtouchLink>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -55,10 +59,6 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Platforms\iOS\HtmlParser.iOS.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -242,6 +242,24 @@
 	  <None Include="wwwroot\css\open-iconic\ICON-LICENSE" />
 	  <None Include="wwwroot\css\open-iconic\README.md" />
 	  <None Include="wwwroot\lib\echarts\echarts.min.js" />
+	</ItemGroup>
+
+	<!-- Android -->
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-android')) != true">
+		<Compile Remove="**\**\*.Android.cs" />
+		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+
+	<!-- iOS -->
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net8.0-ios')) != true">
+		<Compile Remove="**\**\*.iOS.cs" />
+		<None Include="**\**\*.iOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+
+	<!-- Windows -->
+	<ItemGroup Condition="$(TargetFramework.Contains('-windows')) != true">
+		<Compile Remove="**\**\*.Windows.cs" />
+		<None Include="**\**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
 
 </Project>

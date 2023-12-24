@@ -6,7 +6,7 @@ using UIKit;
 namespace MatoProductivity.Core.Controls
 {
 
-    public static class HtmlParser_iOS
+    public class HtmlParser_iOS
     {
         static nfloat defaultSize = UIFont.SystemFontSize;
         static UIFont defaultFont;

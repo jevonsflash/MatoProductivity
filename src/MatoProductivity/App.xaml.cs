@@ -40,7 +40,7 @@ namespace MatoProductivity
                 }
                 handler.PlatformView.Background = shape;
 #elif IOS || MACCATALYST
-                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+                handler.PlatformView.BorderStyle = UIKit.UITextViewBorderStyle.None;
 #endif
             });
             TimePickerHandler.Mapper.AppendToMapping("Background", (handler, view) =>

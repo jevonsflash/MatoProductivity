@@ -21,7 +21,7 @@
 		<text name="Edit">编辑</text>
 		<text name="EditPlaylist">编辑歌单</text>
 		<text name="Feedback">意见反馈</text>
-		<text name="FeedBackContent">如果您觉得MatoPlayer不错，请支持我！</text>
+		<text name="FeedBackContent">如果您觉得MatoProductivity不错，请支持我！</text>
 		<text name="FeedbackContent1">同样，我非常期待您的意见和建议。请将要反馈的内容发送到以下地址：</text>
 		<text name="FeedbackContent2">也可以关注我的新浪微博：</text>
 		<text name="FliperAlert1">去「音乐库」看看</text>
@@ -35,7 +35,7 @@
 		<text name="LyricAlert">请开始一首歌以显示歌词</text>
 		<text name="LyricAlert2">已关闭自动歌词</text>
 		<text name="LyricContent">点此加载</text>
-		<text name="MatoPlayer">番茄播放器</text>
+		<text name="MatoProductivity">番茄播放器</text>
 		<text name="Msg_AddFailed">添加失败</text>
 		<text name="Msg_AlreadyExists">已存在</text>
 		<text name="Msg_EditFailed">无法修改</text>

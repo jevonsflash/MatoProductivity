@@ -15,7 +15,6 @@ using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using Microsoft.Maui.Graphics.Text;
 
 namespace MatoProductivity.Core.Controls
 {

@@ -9,6 +9,10 @@ public interface IAMap : IView
 }
 partial class AMapHandler
 {
+
+#if WINDOWS
+#endif
+#if ANDROID
     public static IPropertyMapper<IAMap, AMapHandler> PropertyMapper = new PropertyMapper<IAMap, AMapHandler>(ViewHandler.ViewMapper)
     {
         [nameof(IAMap.Address)] = MapAddress,
@@ -20,6 +24,12 @@ partial class AMapHandler
     };
 
     public AMapHandler() : base(PropertyMapper, CommandMapper)
-    { }
+    { }         
+
+#endif
+
+#if IOS
+
+#endif
 }
 
