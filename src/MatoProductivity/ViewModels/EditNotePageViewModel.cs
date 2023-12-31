@@ -151,18 +151,23 @@ namespace MatoProductivity.ViewModels
 
         private async void CreateAction(object obj)
         {
+            Loading = true;
+            await Task.Delay(300);
+
             await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
                 var note = new Note() { Title = "未命名" };
                 var result = await repository.InsertAsync(note);
                 await unitOfWorkManager.Current.SaveChangesAsync();
 
-                Init(result);
+                await Init(result);
             });
         }
 
         private async void CloneAction(object obj)
         {
+            Loading = true;
+            await Task.Delay(300);
             var id = (long)obj;
             await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -174,7 +179,7 @@ namespace MatoProductivity.ViewModels
                 var result = await repository.InsertAsync(note);
                 await unitOfWorkManager.Current.SaveChangesAsync();
 
-                Init(result);
+                await Init(result);
             });
 
         }
@@ -261,6 +266,8 @@ namespace MatoProductivity.ViewModels
         {
             if (e.PropertyName == nameof(NoteId))
             {
+                Loading = true;
+                await Task.Delay(300);
                 if (NoteId != default)
                 {
                     await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
@@ -270,7 +277,7 @@ namespace MatoProductivity.ViewModels
                             .Include(c => c.NoteSegments)
                             .ThenInclude(c => c.NoteSegmentPayloads)
                             .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
-                        Init(note);
+                        await Init(note);
 
                     });
                 }
@@ -294,25 +301,30 @@ namespace MatoProductivity.ViewModels
 
         }
 
-        private void Init(Note note)
+        private async Task Init(Note note)
         {
-            if (note != null)
+            await Task.Run(() =>
             {
-                var noteSegments = note.NoteSegments;
-                this.noteId = note.Id;
-                this.NoteSegments = noteSegments != null
-                    ? new ObservableCollection<INoteSegmentService>(
-                  noteSegments.Select(GetNoteSegmentViewModel))
-                    : new ObservableCollection<INoteSegmentService>();
-                Title = note.Title;
-                Desc = note.Desc;
-                Icon = note.Icon;
-                Color = note.Color;
-                BackgroundColor = note.BackgroundColor;
-                PreViewContent = note.PreViewContent;
-                IsEditable = note.IsEditable;
 
-            }
+                if (note != null)
+                {
+                    var noteSegments = note.NoteSegments;
+                    this.noteId = note.Id;
+                    this.NoteSegments = noteSegments != null
+                        ? new ObservableCollection<INoteSegmentService>(
+                      noteSegments.Select(GetNoteSegmentViewModel))
+                        : new ObservableCollection<INoteSegmentService>();
+                    Title = note.Title;
+                    Desc = note.Desc;
+                    Icon = note.Icon;
+                    Color = note.Color;
+                    BackgroundColor = note.BackgroundColor;
+                    PreViewContent = note.PreViewContent;
+                    IsEditable = note.IsEditable;
+
+                }
+            }).ContinueWith((e) => { Loading = false; });
+
 
         }
         private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)
@@ -541,7 +553,7 @@ namespace MatoProductivity.ViewModels
                         newNoteSegment.IsHidden=noteSegment.IsHidden;
                         newNoteSegment.IsRemovable=noteSegment.IsRemovable;
 
-                        newNoteSegment.NoteSegmentPayloads= (noteSegment as NoteSegment).NoteSegmentPayloads.Select(c => new NoteSegmentPayload ()
+                        newNoteSegment.NoteSegmentPayloads= (noteSegment as NoteSegment).NoteSegmentPayloads.Select(c => new NoteSegmentPayload()
                         {
                             NoteSegmentId=newNoteSegment.Id,
                             Key=c.Key,

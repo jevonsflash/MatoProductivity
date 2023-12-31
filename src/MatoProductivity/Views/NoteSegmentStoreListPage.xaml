@@ -4,11 +4,12 @@
                 xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
                 x:Class="MatoProductivity.Views.NoteSegmentStoreListPage"
                 Opened="PopupBase_Opened"
+                Size="500,300"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
                 xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity">
     <Grid VerticalOptions="Center"
           Padding="20,10"
-          HeightRequest="500"
-          WidthRequest="1000"
           HorizontalOptions="FillAndExpand">
         <CollectionView  ItemsSource="{Binding NoteSegmentStoreGroups}"
                          SelectedItem="{Binding SelectedNoteSegmentStore}"
@@ -58,25 +59,8 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Border  Grid.RowSpan="6"
-                 IsVisible="{Binding Loading}"
-                 BackgroundColor="#55000000">
-            <Grid
-                   VerticalOptions="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <controls:PlayingMotionView HorizontalOptions="Center"
-                                            VerticalOptions="Center"></controls:PlayingMotionView>
-                <Label Text="Loading.."
-                       HorizontalTextAlignment="Center"
-                       VerticalOptions="Center"
-                       Grid.Row="1"
-                       TextColor="White"
-                       Style="{StaticResource Body1_MulishBold}"></Label>
-            </Grid>
-        </Border>
+        <ActivityIndicator Grid.RowSpan="6"
+                           IsRunning="{Binding Loading}"></ActivityIndicator>
 
     </Grid>
 

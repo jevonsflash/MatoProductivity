@@ -12,6 +12,7 @@ public partial class NotePage : PopupBase, ITransientDependency
         InitializeComponent();
         this.BindingContext = NotePageViewModel;
         this.NotePageViewModel.NoteId = NoteId;
+        
 
     }
 

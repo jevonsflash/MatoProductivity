@@ -71,7 +71,7 @@
 	  <PackageReference Include="Abp" Version="8.4.0" />
 	  <PackageReference Include="Abp.AutoMapper" Version="8.4.0" />
 	  <PackageReference Include="Abp.Castle.Log4Net" Version="8.4.0" />
-	  <PackageReference Include="CommunityToolkit.Maui" Version="7.0.0" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 	  <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="8.0.3" />
 	</ItemGroup>
 

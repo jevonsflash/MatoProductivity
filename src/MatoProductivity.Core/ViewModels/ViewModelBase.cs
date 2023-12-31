@@ -18,6 +18,7 @@ namespace MatoProductivity.Core.ViewModels
         public ViewModelBase()
         {
             LocalizationSourceName = MatoProductivityConsts.LocalizationSourceName;
+            Loading=false;
         }
 
         /// <summary>Occurs after a property value changes.</summary>
@@ -70,5 +71,17 @@ namespace MatoProductivity.Core.ViewModels
             return member.Name;
         }
 
+        private bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                _loading = value;
+                RaisePropertyChanged();
+
+            }
+        }
     }
 }

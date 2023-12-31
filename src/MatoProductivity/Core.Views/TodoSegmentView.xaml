@@ -71,7 +71,7 @@
                     
                     <Border 
                             x:Name="ContentButton">
-                        <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                        <Label >
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span FontFamily="FontAwesome"

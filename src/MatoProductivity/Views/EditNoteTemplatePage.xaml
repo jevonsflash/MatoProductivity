@@ -15,7 +15,7 @@
                     <SwipeView.RightItems>
                         <SwipeItems>
                             <SwipeItemView  Command="{TemplateBinding BindingContext.Remove}">
-                                <Border BackgroundColor="Transparent"
+                                <Border
                                         Padding="15, 0">
                                     <Label Text="&#xf2ed;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
@@ -330,27 +330,27 @@
 
                 <Button Text="删除"
                         Style="{StaticResource Text_Button}"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         IsVisible="{Binding IsConfiguratingNoteSegment ,Converter={StaticResource True2FalseConverter}}"
                         Command="{Binding Remove}"></Button>
 
 
                 <!--<Button Text="删除选中"
                         Style="{StaticResource Text_Button}"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         IsVisible="{Binding IsConfiguratingNoteSegment}"
                         Command="{Binding RemoveSelectedSegment}"></Button>
 
                 <Button Text="全选"
                         Style="{StaticResource Text_Button}"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         IsVisible="{Binding IsConfiguratingNoteSegment}"
                         Command="{Binding SelectAllSegment}"></Button>-->
 
 
                 <Button Command="{Binding SwitchState}"
                         Style="{StaticResource Text_Button}"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成编辑|编辑笔记}"></Button>
 
 
@@ -418,7 +418,7 @@
 
                     <HorizontalStackLayout Margin="0,5">
                         <Border Padding="8">
-                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                            <Label >
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome"
@@ -436,7 +436,7 @@
                         </Border>
 
                         <Border Padding="8">
-                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                            <Label >
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome"
@@ -453,7 +453,7 @@
                             </Border.GestureRecognizers>
                         </Border>
                         <Border Padding="8">
-                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                            <Label >
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome"
@@ -473,7 +473,7 @@
                         <Border Padding="8">
 
 
-                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+                            <Label >
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome_Solid"

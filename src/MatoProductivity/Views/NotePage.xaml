@@ -3,137 +3,142 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                 xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity"
-                x:Class="MatoProductivity.Views.NotePage">
-
-    <Grid  x:Name="MainPage"
-           VerticalOptions="Center"
-           Padding="20,10"
-           HeightRequest="500"
-           WidthRequest="1000"
-           HorizontalOptions="FillAndExpand">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.Resources>
-            <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
-                <Grid Margin="0"
-                      Padding="8">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
-                               FontFamily="FontAwesome"></Label>
-                        <ContentPresenter Grid.Column="1" />
+                xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
+                x:Class="MatoProductivity.Views.NotePage"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                VerticalOptions="End"
+                HorizontalOptions="Fill">
+    <Border StrokeShape="RoundRectangle 20">
+        <Grid  x:Name="MainPage"
+               Padding="20,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
+                    <Grid Margin="0"
+                          Padding="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+                                   FontFamily="FontAwesome"></Label>
+                            <ContentPresenter Grid.Column="1" />
+                        </Grid>
                     </Grid>
-                </Grid>
 
-            </ControlTemplate>
+                </ControlTemplate>
 
-            <DataTemplate x:Key="DateTimeSegment">
-                <core:DateTimeSegmentView Margin="0,5"
+                <DataTemplate x:Key="DateTimeSegment">
+                    <core:DateTimeSegmentView Margin="0,5"
+                                              ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:DateTimeSegmentView>
+                </DataTemplate>
+                <DataTemplate x:Key="TextSegment">
+                    <core:TextSegmentView  Margin="0,5"
+                                           ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:TextSegmentView>
+                </DataTemplate>
+                <DataTemplate x:Key="TimerSegment">
+                    <core:TimerSegmentView Margin="0,5"
+                                           ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:TimerSegmentView>
+                </DataTemplate>
+                <DataTemplate x:Key="TodoSegment">
+                    <core:TodoSegmentView Margin="0,5"
                                           ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:DateTimeSegmentView>
-            </DataTemplate>
-            <DataTemplate x:Key="TextSegment">
-                <core:TextSegmentView  Margin="0,5"
-                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:TextSegmentView>
-            </DataTemplate>
-            <DataTemplate x:Key="TimerSegment">
-                <core:TimerSegmentView Margin="0,5"
-                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:TimerSegmentView>
-            </DataTemplate>
-            <DataTemplate x:Key="TodoSegment">
-                <core:TodoSegmentView Margin="0,5"
-                                      ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:TodoSegmentView>
-            </DataTemplate>
-            <DataTemplate x:Key="KeyValueSegment">
-                <core:KeyValueSegmentView Margin="0,5"
-                                          ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:KeyValueSegmentView>
-            </DataTemplate>
-            <DataTemplate x:Key="MediaSegment">
-                <core:MediaSegmentView Margin="0,5"
-                                      ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:MediaSegmentView>
-            </DataTemplate>
-            <DataTemplate x:Key="DocumentSegment">
-                <core:DocumentSegmentView Margin="0,5"
-                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:DocumentSegmentView>
-            </DataTemplate>
+                    </core:TodoSegmentView>
+                </DataTemplate>
+                <DataTemplate x:Key="KeyValueSegment">
+                    <core:KeyValueSegmentView Margin="0,5"
+                                              ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:KeyValueSegmentView>
+                </DataTemplate>
+                <DataTemplate x:Key="MediaSegment">
+                    <core:MediaSegmentView Margin="0,5"
+                                           ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:MediaSegmentView>
+                </DataTemplate>
+                <DataTemplate x:Key="DocumentSegment">
+                    <core:DocumentSegmentView Margin="0,5"
+                                              ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:DocumentSegmentView>
+                </DataTemplate>
 
-            <DataTemplate x:Key="VoiceSegment">
-                <core:VoiceSegmentView Margin="0,5"
-                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:VoiceSegmentView>
-            </DataTemplate>
+                <DataTemplate x:Key="VoiceSegment">
+                    <core:VoiceSegmentView Margin="0,5"
+                                           ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:VoiceSegmentView>
+                </DataTemplate>
 
-            <DataTemplate x:Key="ScriptSegment">
-                <core:ScriptSegmentView Margin="0,5"
-                                       ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:ScriptSegmentView>
-            </DataTemplate>
+                <DataTemplate x:Key="ScriptSegment">
+                    <core:ScriptSegmentView Margin="0,5"
+                                            ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:ScriptSegmentView>
+                </DataTemplate>
 
-            <DataTemplate x:Key="WeatherSegment">
-                <core:WeatherSegmentView Margin="0,5"
-                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:WeatherSegmentView>
-            </DataTemplate>
+                <DataTemplate x:Key="WeatherSegment">
+                    <core:WeatherSegmentView Margin="0,5"
+                                             ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:WeatherSegmentView>
+                </DataTemplate>
 
-            <DataTemplate x:Key="ContactSegment">
-                <core:ContactSegmentView Margin="0,5"
-                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:ContactSegmentView>
-            </DataTemplate>
+                <DataTemplate x:Key="ContactSegment">
+                    <core:ContactSegmentView Margin="0,5"
+                                             ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:ContactSegmentView>
+                </DataTemplate>
 
-            <DataTemplate x:Key="LocationSegment">
-                <core:LocationSegmentView Margin="0,5"
-                                        ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
-                </core:LocationSegmentView>
-            </DataTemplate>
+                <DataTemplate x:Key="LocationSegment">
+                    <core:LocationSegmentView Margin="0,5"
+                                              ControlTemplate="{StaticResource NoteSegmentCardViewDesktop}">
+                    </core:LocationSegmentView>
+                </DataTemplate>
 
 
-            <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
-                                                  ResourcesContainer="{x:Reference MainPage}" />
-        </Grid.Resources>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label FontSize="Large"
-                   Margin="10, 10, 10, 0"
-                   FontAttributes="Bold"
-                   Text="{Binding Title}"></Label>
-            <HorizontalStackLayout Grid.Column="1"
-                                   HorizontalOptions="End">
-                <Button Text="删除"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                        Style="{StaticResource Text_Button}"
-                        Command="{Binding Remove}"></Button>
-                <Button Text="编辑"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                        Style="{StaticResource Text_Button}"
-                        Command="{Binding Edit}"></Button>
-                <Button Text="分享"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                        Style="{StaticResource Text_Button}"
-                        Command="{Binding Share}"></Button>
-            </HorizontalStackLayout>
+                <core:NoteSegmentDataTemplateSelector x:Key="NoteSegmentDataTemplateSelector"
+                                                      ResourcesContainer="{x:Reference MainPage}" />
+            </Grid.Resources>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label FontSize="Large"
+                       Margin="10, 10, 10, 0"
+                       FontAttributes="Bold"
+                       Text="{Binding Title}"></Label>
+                <HorizontalStackLayout Grid.Column="1"
+                                       HorizontalOptions="End">
+                    <Button Text="删除"
+                            
+                            Style="{StaticResource Text_Button}"
+                            Command="{Binding Remove}"></Button>
+                    <Button Text="编辑"
+                            
+                            Style="{StaticResource Text_Button}"
+                            Command="{Binding Edit}"></Button>
+                    <Button Text="分享"
+                            
+                            Style="{StaticResource Text_Button}"
+                            Command="{Binding Share}"></Button>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <CollectionView Grid.Row="1"
+                            x:Name="MainCollectionView"
+                            ItemsSource="{Binding NoteSegments}"
+                            SelectionMode="None"
+                            ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
+            </CollectionView>
+
+            <ActivityIndicator Grid.RowSpan="2"
+                               IsRunning="{Binding Loading}"></ActivityIndicator>
         </Grid>
-
-        <CollectionView Grid.Row="1"
-                        x:Name="MainCollectionView"
-                        ItemsSource="{Binding NoteSegments}"
-                        SelectionMode="None"
-                        ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
-        </CollectionView>
-    </Grid>
+    </Border>
 </mato:PopupBase>

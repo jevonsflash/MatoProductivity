@@ -59,6 +59,11 @@ namespace MatoProductivity.Services
             await mainPageNavigation.PopAsync(animated);
         }
 
+        public async Task PopModalAsync(bool animated = true)
+        {
+            await mainPageNavigation.PopModalAsync(animated);
+        }
+
 
         public async Task PopToRootAsync(bool animated = true)
         {

@@ -104,7 +104,7 @@
                    Grid.Row="0"
                    Grid.RowSpan="2"
                    Text="&#xf2bd;"
-                   TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                   
                    FontSize="{StaticResource Headline2FontSize}"
                    FontFamily="FontAwesome_Solid"
                    VerticalOptions="Center"
@@ -134,7 +134,7 @@
 
 
                 <Button Command="{Binding SwitchState}"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         Style="{StaticResource Text_Button}"
                         Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 

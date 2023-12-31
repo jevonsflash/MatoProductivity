@@ -35,12 +35,12 @@ namespace MatoProductivity.ViewModels
         private async void CreateActionAsync(object obj)
         {
 
-            //using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
-            //{
-            //    (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
+            {
+                (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
 
-            //    await navigationService.PushAsync(objWrapper.Object);
-            //}
+                await navigationService.PushAsync(objWrapper.Object);
+            }
         }
 
         private void RemoveAction(object obj)
@@ -105,19 +105,6 @@ namespace MatoProductivity.ViewModels
 
                     SelectedNoteTemplate = default;
                 }
-            }
-        }
-
-        private bool _loading;
-
-        public bool Loading
-        {
-            get { return _loading; }
-            set
-            {
-                _loading = value;
-                RaisePropertyChanged();
-
             }
         }
 

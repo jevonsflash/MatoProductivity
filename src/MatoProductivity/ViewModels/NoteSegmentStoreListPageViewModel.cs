@@ -78,19 +78,6 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private bool _loading;
-
-        public bool Loading
-        {
-            get { return _loading; }
-            set
-            {
-                _loading = value;
-                RaisePropertyChanged();
-
-            }
-        }
-
 
         private ObservableCollection<NoteSegmentStoreGroup> _noteSegmentStoreGroups;
 

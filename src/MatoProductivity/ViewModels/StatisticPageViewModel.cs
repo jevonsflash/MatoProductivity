@@ -108,21 +108,6 @@ namespace MatoProductivity.ViewModels
             return noteSegmentTitle;
         }
 
-        private bool _loading;
-
-        public bool Loading
-        {
-            get { return _loading; }
-            set
-            {
-                _loading = value;
-                RaisePropertyChanged();
-
-            }
-        }
-
-
-
         private async void NotePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SelectedNote))

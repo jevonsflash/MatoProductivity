@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NotePageViewModel : ViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer
+    public class NotePageViewModel : PopupViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
@@ -121,19 +121,6 @@ namespace MatoProductivity.ViewModels
             var result = noteSegmentServiceFactory.GetNoteSegmentService(c);
             result.NoteSegmentState = NoteSegmentState.PreView;
             return result;
-        }
-
-        private bool _loading;
-
-        public bool Loading
-        {
-            get { return _loading; }
-            set
-            {
-                _loading = value;
-                RaisePropertyChanged();
-
-            }
         }
 
 

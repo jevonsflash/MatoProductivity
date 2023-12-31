@@ -17,7 +17,7 @@
                         <SwipeItems>
                             <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
-                                <Border BackgroundColor="Transparent"
+                                <Border
                                         Padding="15, 0">
                                     <Label Text="&#xf2ed;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
@@ -29,7 +29,7 @@
                             </SwipeItemView>
                             <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
-                                <Border BackgroundColor="Transparent"
+                                <Border 
                                         Padding="25, 0, 15, 0">
                                     <Label Text="&#xf303;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
@@ -92,7 +92,7 @@
                    Grid.Row="0"
                    Grid.RowSpan="2"
                    Text="&#xf2bd;"
-                   TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                   
                    FontSize="{StaticResource Headline2FontSize}"
                    FontFamily="FontAwesome_Solid"
                    VerticalOptions="Center"
@@ -121,20 +121,20 @@
                                    Margin="0, 0, 10, 0">
 
                 <Button Text="删除选中"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         Style="{StaticResource Text_Button}"
                         IsVisible="{Binding IsEditing}"
                         Command="{Binding RemoveSelected}"></Button>
 
                 <Button Text="全选"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         Style="{StaticResource Text_Button}"
                         IsVisible="{Binding IsEditing}"
                         Command="{Binding SelectAll}"></Button>
 
 
                 <Button Command="{Binding SwitchState}"
-                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                        
                         Style="{StaticResource Text_Button}"
                         Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 
@@ -377,25 +377,8 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"></Label>
         </Border>
-        <Border  Grid.RowSpan="6"
-                 IsVisible="{Binding Loading}"
-                 BackgroundColor="#55000000">
-            <Grid  HorizontalOptions="Center"
-                   VerticalOptions="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <controls:PlayingMotionView HorizontalOptions="Center"
-                                            VerticalOptions="Center"></controls:PlayingMotionView>
-                <Label Text="Loading.."
-                       HorizontalTextAlignment="Center"
-                       VerticalOptions="Center"
-                       Grid.Row="1"
-                       TextColor="White"
-                       Style="{StaticResource Body1_MulishBold}"></Label>
-            </Grid>
-        </Border>
+        <ActivityIndicator Grid.RowSpan="6"
+                           IsRunning="{Binding Loading}"></ActivityIndicator>
 
     </Grid>
 </mato:ContentPageBase>
