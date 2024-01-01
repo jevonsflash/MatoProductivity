@@ -306,7 +306,7 @@
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding Back}"></TapGestureRecognizer>
+                <TapGestureRecognizer Command="{Binding SubmitBack}"></TapGestureRecognizer>
             </Grid.GestureRecognizers>
             <Label Grid.Column="0"
                    Text="&#xf060;"
@@ -413,8 +413,9 @@
             </CollectionView.Header>
             <CollectionView.Footer>
                 <VerticalStackLayout>
+                    <!--https://github.com/dotnet/maui/issues/17437-->
 
-                    <HorizontalStackLayout Margin="0,5">
+                    <!--<HorizontalStackLayout Margin="0,5">
                         <Border Padding="8">
                             <Label>
                                 <Label.FormattedText>
@@ -486,19 +487,37 @@
                                 </TapGestureRecognizer>
                             </Border.GestureRecognizers>
                         </Border>
-                    </HorizontalStackLayout>
+                    </HorizontalStackLayout>-->
                     <Label HorizontalTextAlignment="Center"
                            Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
 
                 </VerticalStackLayout>
             </CollectionView.Footer>
+            <CollectionView.EmptyView>
+
+                <Grid  HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Source="emptylist.svg"
+                        HorizontalOptions="Center"
+                                                VerticalOptions="Center"></Image>
+                    <Label Text="没有任何片段"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="1"
+                           Style="{StaticResource Body1_MulishBold}"></Label>
+                </Grid>
+            </CollectionView.EmptyView>
         </CollectionView>
         <Button x:Name="AddButton"
-                Command="{Binding Submit}"
+                Command="{Binding CreateSegmentFromStore}"
                 Grid.Row="2"
                 Margin="0, 0, 0, 15"
                 Style="{StaticResource Base_Button}"
-                Text="保存"
+                Text="+"
                 VerticalOptions="End">
         </Button>
 

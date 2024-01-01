@@ -2,66 +2,74 @@
 <mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                 x:Class="MatoProductivity.Views.NoteSegmentStoreListPage"
                 Opened="PopupBase_Opened"
-                Size="500,300"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity">
-    <Grid VerticalOptions="Center"
-          Padding="20,10"
-          HorizontalOptions="FillAndExpand">
-        <CollectionView  ItemsSource="{Binding NoteSegmentStoreGroups}"
-                         SelectedItem="{Binding SelectedNoteSegmentStore}"
-                         IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
-                         SelectionMode="Single"
-                         IsGrouped="true">
-            <CollectionView.Header>
-                <SearchBar Placeholder="查找"
-                           Text="{Binding SearchKeywords}"
-                           SearchCommand="{Binding  Search}" />
-            </CollectionView.Header>
-            <CollectionView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding Category}"
-                           BackgroundColor="Transparent"
-                           FontSize="18"
-                           FontAttributes="Bold" />
-                </DataTemplate>
-            </CollectionView.GroupHeaderTemplate>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.RowSpan="2"
-                               VerticalOptions="Center"
-                               Text="{Binding Icon}"
-                               FontFamily="FontAwesome"></Label>
-
-                        <Label Grid.Column="1"
-                               TextColor="{Binding Color}"
-                               Text="{Binding Title}"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                VerticalOptions="End"
+                HorizontalOptions="Fill">
+    <Border StrokeShape="RoundRectangle 20">
+        <Grid Padding="20,10">
+            <CollectionView  ItemsSource="{Binding NoteSegmentStoreGroups}"
+                             SelectedItem="{Binding SelectedNoteSegmentStore}"
+                             IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
+                             SelectionMode="Single"
+                             IsGrouped="true">
+                <CollectionView.Header>
+                    <SearchBar Placeholder="查找"
+                               Text="{Binding SearchKeywords}"
+                               SearchCommand="{Binding  Search}" />
+                </CollectionView.Header>
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Category}"
+                               BackgroundColor="Transparent"
+                               FontSize="18"
                                FontAttributes="Bold" />
-                        <Label Grid.Row="1"
-                               Grid.Column="1"
-                               Text="{Binding Desc}"
-                               FontAttributes="Italic"
-                               VerticalOptions="End" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <ActivityIndicator Grid.RowSpan="6"
-                           IsRunning="{Binding Loading}"></ActivityIndicator>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Grid.RowSpan="2"
+                                    WidthRequest="45"
+                                    HeightRequest="45"
+                                    BackgroundColor="{Binding Color}">
+                                <Label
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Text="{Binding Icon}"
+                                       TextColor="White"
+                                       FontFamily="FontAwesome"></Label>
+                            </Border>
+                            <Label Grid.Column="1"
+                                   Text="{Binding Title}"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                   FontAttributes="Bold" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Desc}"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
+                                   FontAttributes="Italic"
+                                   VerticalOptions="End" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <ActivityIndicator Grid.RowSpan="6"
+                               IsRunning="{Binding Loading}"></ActivityIndicator>
 
-    </Grid>
+        </Grid>
+    </Border>
 
 </mato:PopupBase>

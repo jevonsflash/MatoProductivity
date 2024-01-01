@@ -100,7 +100,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Subtitle1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
     <Style x:Key="Subtitle1_MulishBold"
            TargetType="Label">
@@ -109,7 +109,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Subtitle1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
     <Style x:Key="Subtitle1_MulishBlack"
            TargetType="Label">
@@ -118,7 +118,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Subtitle1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
     <Style x:Key="Subtitle1_MulishExtraBold"
            TargetType="Label">
@@ -127,7 +127,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Subtitle1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
 
     <Style x:Key="Body1_MulishRegular"
@@ -137,7 +137,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Body1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
     <Style x:Key="Body1_MulishSemiBold"
            TargetType="Label">
@@ -146,7 +146,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Body1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
     <Style x:Key="Body1_MulishBold"
            TargetType="Label">
@@ -155,7 +155,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Body1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
     <Style x:Key="Body1_MulishBlack"
            TargetType="Label">
@@ -164,7 +164,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Body1FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
 
     <Style x:Key="Body2_MulishRegular"
@@ -174,7 +174,7 @@
         <Setter Property="FontSize"
                 Value="{StaticResource Body2FontSize}" />
         <Setter Property="TextColor"
-                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
     </Style>
 
     <!--#endregion-->
@@ -350,10 +350,10 @@
                 Value="{StaticResource AccentColor}">
         </Setter>
         <Setter Property="HeightRequest"
-                Value="20">
+                Value="60">
         </Setter>
         <Setter Property="WidthRequest"
-                Value="20">
+                Value="60">
         </Setter>
     </Style>
     <!--#endregion-->

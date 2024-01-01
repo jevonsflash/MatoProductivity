@@ -166,9 +166,9 @@
                                  VerticalItemSpacing="6"
                                  HorizontalItemSpacing="6">
                     <GridItemsLayout.Span>
-                        <OnIdiom Phone="3"
-                                 Tablet="5"
-                                 Desktop="5">
+                        <OnIdiom Phone="2"
+                                 Tablet="4"
+                                 Desktop="4">
                         </OnIdiom>
                     </GridItemsLayout.Span>
 
@@ -176,7 +176,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ContentView HeightRequest="90">
+                    <ContentView HeightRequest="200">
                         <ContentView.ControlTemplate>
                             <OnIdiom Phone="{StaticResource NoteTemplateViewPhone}"
                                      Tablet="{StaticResource NoteTemplateViewDesktop}"
@@ -187,20 +187,60 @@
 
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
+                                <Image Source="baby.svg"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"></Image>
+
                                 <Label Text="{Binding NoteTemplate.Title}"
                                        VerticalOptions="Center"
-                                       HorizontalTextAlignment="Center"
+                                       HorizontalTextAlignment="Start"
                                        Grid.Row="1"
-                                       FontSize="{StaticResource Subtitle1FontSize}"
-                                       FontAttributes="Bold"></Label>
+                                       Style="{StaticResource Headline4_MulishBlack}"
+                                       ></Label>
+
+                                <Label
+                                       VerticalOptions="Center"
+                                       HorizontalTextAlignment="Start"
+                                       Grid.Row="2"
+                                       Style="{StaticResource Body1_MulishBold}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding NoteTemplate.NoteSegmentTemplates.Count}"></Span>
+                                            <Span>个片段</Span>
+                                            <Span Text="{Binding NoteTemplate.CanSimplified}"></Span>
+                                            
+                                        </FormattedString>
+                                    </Label.FormattedText>
+
+                                </Label>
                             </Grid>
                         </Grid>
                     </ContentView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+
+                <Grid  HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Source="emptylist.svg"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"></Image>
+                    <Label Text="您还没有创建场景"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="1"
+                           Style="{StaticResource Body1_MulishBold}"></Label>
+                </Grid>
+            </CollectionView.EmptyView>
+
         </CollectionView>
         <Border  Grid.RowSpan="3"
                  BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"

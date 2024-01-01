@@ -3,6 +3,7 @@ using System;
 using MatoProductivity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MatoProductivity.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(MatoProductivityDbContext))]
-    partial class MatoProductivityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240101114512_v0.1.3")]
+    partial class v013
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");

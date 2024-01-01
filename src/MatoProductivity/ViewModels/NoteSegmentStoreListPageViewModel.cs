@@ -12,7 +12,7 @@ using System.Runtime.CompilerServices;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NoteSegmentStoreListPageViewModel : ViewModelBase, ISingletonDependency, ISearchViewModel
+    public class NoteSegmentStoreListPageViewModel : PopupViewModelBase, ISingletonDependency, ISearchViewModel
     {
         private readonly IRepository<NoteSegmentStore, long> repository;
         private readonly IIocResolver iocResolver;
@@ -42,6 +42,10 @@ namespace MatoProductivity.ViewModels
 
         public async Task Init()
         {
+            if (this.NoteSegmentStoreGroups!=default)
+            {
+                return;
+            }
             Loading = true;
             await Task.Delay(300);
             await Task.Run(() =>

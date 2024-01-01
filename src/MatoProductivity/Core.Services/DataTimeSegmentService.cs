@@ -12,9 +12,13 @@ namespace MatoProductivity.Core.Services
 {
     public class DataTimeSegmentService : NoteSegmentService, ITransientDependency, IAutoSet, IHasTimer
     {
+        private readonly AbpAsyncTimer timer;
 
         private INoteSegmentPayload DefaultIsAutoSetNoteSegmentPayload => this.CreateNoteSegmentPayload(nameof(IsAutoSet), false.ToString());
         private INoteSegmentPayload DefaultTimeNoteSegmentPayload => this.CreateNoteSegmentPayload(nameof(Time), DateTime.Now.ToString());
+
+        public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
+
         public DataTimeSegmentService(
              AbpAsyncTimer timer,
             IRepository<NoteSegment, long> repository,
@@ -60,6 +64,7 @@ namespace MatoProductivity.Core.Services
             else if (e.PropertyName == nameof(IsAutoSet))
             {
                 NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(IsAutoSet), IsAutoSet));
+                OnAutoSetChanged?.Invoke(this, new AutoSetChangedEventArgs(this.IsAutoSet));
             }
 
             else if (e.PropertyName == nameof(ExactTime))
@@ -140,7 +145,6 @@ namespace MatoProductivity.Core.Services
 
 
         private bool _isAutoSet;
-        private readonly AbpAsyncTimer timer;
 
         public bool IsAutoSet
         {

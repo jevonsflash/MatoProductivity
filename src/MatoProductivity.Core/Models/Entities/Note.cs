@@ -45,6 +45,7 @@ namespace MatoProductivity.Core.Models.Entities
         public bool IsHidden { get; set; }
 
         public bool IsRemovable { get; set; }
+        public bool CanSimplified { get; set; }
 
     }
 }

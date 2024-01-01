@@ -47,5 +47,8 @@ namespace MatoProductivity.Core.Models.Entities
 
         public bool IsRemovable { get; set; }
 
+        public bool CanSimplified { get; set; }
+
+
     }
 }

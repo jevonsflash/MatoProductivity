@@ -1,9 +1,11 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
 namespace MatoProductivity.ViewModels
@@ -13,12 +15,13 @@ namespace MatoProductivity.ViewModels
         private readonly IRepository<NoteTemplate, long> repository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
+        private readonly IUnitOfWorkManager unitOfWorkManager;
 
         public NoteTemplateListPageViewModel(
             IRepository<NoteTemplate, long> repository,
             IIocResolver iocResolver,
-            NavigationService navigationService
-
+            NavigationService navigationService,
+            IUnitOfWorkManager unitOfWorkManager
             )
         {
             this.Create = new Command(CreateActionAsync);
@@ -29,6 +32,7 @@ namespace MatoProductivity.ViewModels
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
+            this.unitOfWorkManager=unitOfWorkManager;
             this.PropertyChanged += NoteTemplatePageViewModel_PropertyChangedAsync;
             //Init();
         }
@@ -85,11 +89,15 @@ namespace MatoProductivity.ViewModels
         {
             Loading = true;
             await Task.Delay(300);
-            await Task.Run(() =>
+            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                var noteTemplates = this.repository.GetAllList();
-                this.NoteTemplates = new ObservableCollection<NoteTemplateWrapper>(noteTemplates.Select(c => new NoteTemplateWrapper(c) { Container = this }));
-            }).ContinueWith((e) => { Loading = false; });
+                await Task.Run(async () =>
+                {
+
+                    var noteTemplates = await this.repository.GetAll().Include(c => c.NoteSegmentTemplates).ToListAsync();
+                    this.NoteTemplates = new ObservableCollection<NoteTemplateWrapper>(noteTemplates.Select(c => new NoteTemplateWrapper(c) { Container = this }));
+                }).ContinueWith((e) => { Loading = false; });
+            });
         }
 
         private async void NoteTemplatePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
