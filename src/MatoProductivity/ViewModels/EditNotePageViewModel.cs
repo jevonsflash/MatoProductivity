@@ -40,7 +40,9 @@ namespace MatoProductivity.ViewModels
             IRepository<NoteSegmentPayload, long> payloadRepository,
             IRepository<NoteSegmentStore, long> noteSegmentStoreRepository,
 
-            IRepository<Note, long> repository, IUnitOfWorkManager unitOfWorkManager, IIocResolver iocResolver)
+            IRepository<Note, long> repository, 
+            IUnitOfWorkManager unitOfWorkManager, 
+            IIocResolver iocResolver)
         {
             Submit = new Command(SubmitAction);
             Clone = new Command(CloneAction);
@@ -265,14 +267,9 @@ namespace MatoProductivity.ViewModels
 
         private async void EditNotePageViewModel_OnFinishedChooise(object sender, NoteSegmentStore noteSegmentStore)
         {
-
             var note = ObjectMapper.Map<NoteSegment>(noteSegmentStore);
-
             _CreateSegment(note);
-
-            (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
             await navigationService.HidePopupAsync(noteSegmentStoreListPage);
-            noteSegmentStoreListPage = null;
         }
 
 
@@ -316,8 +313,10 @@ namespace MatoProductivity.ViewModels
                     (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise += EditNotePageViewModel_OnFinishedChooise;
                 }
             });
-            await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith((e) =>
+            await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith(async (e) =>
             {
+                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
+                noteSegmentStoreListPage = null;
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;

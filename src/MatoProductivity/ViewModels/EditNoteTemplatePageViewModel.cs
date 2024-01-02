@@ -221,10 +221,7 @@ namespace MatoProductivity.ViewModels
         {
             var note = ObjectMapper.Map<NoteSegmentTemplate>(noteSegmentStore);
             _CreateSegment(note);
-
-            (sender as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;
             await navigationService.HidePopupAsync(noteSegmentStoreListPage);
-            noteSegmentStoreListPage = null;
         }
 
         private void _CreateSegment(NoteSegmentTemplate note)
@@ -268,6 +265,8 @@ namespace MatoProductivity.ViewModels
             });
             await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith((e) =>
             {
+                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;
+                noteSegmentStoreListPage = null;
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;

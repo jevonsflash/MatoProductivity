@@ -69,30 +69,35 @@
         </Grid>
         <StackLayout Grid.Row="2"
                      Padding="20, 0, 20, 0">
-            <StackLayout Orientation="Horizontal">
-                <Label Style="{StaticResource Body1_MulishRegular}"
-                       Text="Dark mode"
-                       TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"></Label>
-                <Switch IsToggled="{Binding IsDarkMode}"
-                        HorizontalOptions="EndAndExpand">
-
-                </Switch>
-            </StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label Style="{StaticResource Body1_MulishRegular}"
-                       Text="Hide done tasks"
-                       TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"></Label>
-                <Switch IsToggled="{Binding IsHideEnabled}"
-                        HorizontalOptions="EndAndExpand">
-
-                </Switch>
-            </StackLayout>
-            <Label Style="{StaticResource Base_Link}"
-                   Text="Log out">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding LogOutCommand}"></TapGestureRecognizer>
-                </Label.GestureRecognizers>
-            </Label>
+            <TableView Intent="Settings">
+                <TableRoot>
+                    <TableSection Title="设置"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}">
+                        <SwitchCell                           
+                            Text="暗黑模式">
+                            
+                        </SwitchCell>
+                        <TextCell Text="退出登录"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                        <TextCell Text="快捷方式设置"
+                                  Command="{Binding AppActionSetting}"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                    </TableSection>
+                    <TableSection Title="关于"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}">
+                      
+                        <TextCell Text="关于软件"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
+                                  />
+                        <TextCell Text="隐私政策"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                        <TextCell Text="开源信息"
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                    </TableSection>
+                </TableRoot>
+            </TableView>
+          
+           
         </StackLayout>
     </Grid>
 
