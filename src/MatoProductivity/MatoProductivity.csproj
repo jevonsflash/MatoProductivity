@@ -136,6 +136,9 @@
 	  <Compile Update="Platforms\iOS\LocalNotification.cs">
 	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
+	  <Compile Update="Views\UserProfilePage.xaml.cs">
+	    <DependentUpon>UserProfilePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\StatisticPage.xaml.cs">
 	    <DependentUpon>StatisticPage.xaml</DependentUpon>
 	  </Compile>
@@ -209,6 +212,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditNoteTemplatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\UserProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\StatisticPage.xaml">

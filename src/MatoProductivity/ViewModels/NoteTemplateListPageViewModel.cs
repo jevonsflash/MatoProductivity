@@ -3,6 +3,7 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Helper;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,7 @@ namespace MatoProductivity.ViewModels
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
-            this.unitOfWorkManager=unitOfWorkManager;
+            this.unitOfWorkManager = unitOfWorkManager;
             this.PropertyChanged += NoteTemplatePageViewModel_PropertyChangedAsync;
             //Init();
         }
@@ -47,9 +48,15 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private void RemoveAction(object obj)
+        private async void RemoveAction(object obj)
         {
             var note = (NoteTemplateWrapper)obj;
+
+            var confirmResult = await CommonHelper.Confirm($"是否删除场景「{note.NoteTemplate.Title}」?");
+            if (confirmResult == false)
+            {
+                return;
+            }
 
             var delete = NoteTemplates.FirstOrDefault(c => c.NoteTemplate.Id == note.NoteTemplate.Id);
             NoteTemplates.Remove(delete);
@@ -72,11 +79,25 @@ namespace MatoProductivity.ViewModels
             var noteTemplateWrapper = (NoteTemplateWrapper)obj;
             var note = noteTemplateWrapper.NoteTemplate;
 
-
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id }))
+            if (note.CanSimplified)
             {
-                await navigationService.PushAsync(objWrapper.Object);
+                using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePageViewModel>())
+                {
+                    var editNotePageViewModel = objWrapper.Object;
+                    editNotePageViewModel.SimplifiedClone.Execute(note.Id);
+
+                }
+
+                CommonHelper.Alert("已创建" + note.Title);
             }
+            else
+            {
+                using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id }))
+                {
+                    await navigationService.PushAsync(objWrapper.Object);
+                }
+            }
+
         }
 
         private void SwitchStateAction(object obj)

@@ -357,4 +357,18 @@
         </Setter>
     </Style>
     <!--#endregion-->
+
+    <!--#region Switch -->
+    <Style TargetType="Switch">
+        <Setter Property="ThumbColor"
+                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}">
+        </Setter>
+        <Setter Property="OnColor"
+                Value="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}">
+        </Setter>
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}">
+        </Setter>
+    </Style>
+    <!--#endregion-->
 </ResourceDictionary>

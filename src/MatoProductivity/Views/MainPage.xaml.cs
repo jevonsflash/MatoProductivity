@@ -45,6 +45,9 @@ public partial class MainPage : Shell, ITransientDependency
 
         var statisticPage = iocManager.Resolve<StatisticPage>();
         this.StatisticContent.Content = statisticPage;
+
+        var userProfilePage = iocManager.Resolve<UserProfilePage>();
+        this.UserProfileContent.Content = userProfilePage;
     }
 
 }

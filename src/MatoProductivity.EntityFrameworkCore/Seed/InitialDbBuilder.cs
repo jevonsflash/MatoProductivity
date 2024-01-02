@@ -32,7 +32,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
             #region 喂奶
 
-            NoteTemplate noteTemplateEntity = CreateNoteTemplate("喂奶", "宝宝成长", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity = CreateNoteTemplate("喂奶", "宝宝成长", "baby.png", "#000000", "#FFFFFF");
 
             var noteTemplateId = noteTemplateEntity.Id;
             var noteSegmentTemplate1 = CreateNoteSegmentTemplate(noteTemplateId, "开始", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
@@ -45,7 +45,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #region 打疫苗
 
 
-            NoteTemplate noteTemplateEntity3 = CreateNoteTemplate("打疫苗", "宝宝成长", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity3 = CreateNoteTemplate("打疫苗", "宝宝成长", "medicine.png", "#000000", "#FFFFFF");
             var noteTemplateId3 = noteTemplateEntity3.Id;
             CreateNoteSegmentTemplate(noteTemplateId3, "接种日期", FaIcons.IconClockO, "DateTimeSegment", "接种日期", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId3, "下次接种提醒", FaIcons.IconClockO, "TimerSegment", "下次接种提醒", "#000000");
@@ -54,7 +54,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #endregion
             #region 量体温
 
-            NoteTemplate noteTemplateEntity4 = CreateNoteTemplate("量体温", "宝宝成长", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity4 = CreateNoteTemplate("量体温", "宝宝成长", "speed_test.png", "#000000", "#FFFFFF");
             var noteTemplateId4 = noteTemplateEntity4.Id;
             var noteSegmentTemplate4 = CreateNoteSegmentTemplate(noteTemplateId4, "时间", FaIcons.IconClockO, "DateTimeSegment", "", "#000000");
             var noteSegmentTemplateId4 = noteSegmentTemplate4.Id;
@@ -65,7 +65,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #endregion
             #region 吃辅食
 
-            NoteTemplate noteTemplateEntity5 = CreateNoteTemplate("吃辅食", "宝宝成长", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity5 = CreateNoteTemplate("吃辅食", "宝宝成长", "diet.png", "#000000", "#FFFFFF");
             var noteTemplateId5 = noteTemplateEntity5.Id;
             CreateNoteSegmentTemplate(noteTemplateId5, "数量(ml)", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId5, "过敏备注", FaIcons.IconStickyNoteO, "TextSegment", "备注信息", "#000000");
@@ -75,7 +75,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #region 做儿保
 
 
-            NoteTemplate noteTemplateEntity7 = CreateNoteTemplate("做儿保", "宝宝成长", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity7 = CreateNoteTemplate("做儿保", "宝宝成长", "doctor.png", "#000000", "#FFFFFF");
             var noteTemplateId7 = noteTemplateEntity7.Id;
             var noteSegmentTemplate7_1 = CreateNoteSegmentTemplate(noteTemplateId7, "日期", FaIcons.IconClockO, "DateTimeSegment", "日期", "#000000");
 
@@ -88,7 +88,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #region 宝宝出行
 
 
-            NoteTemplate noteTemplateEntity8 = CreateNoteTemplate("宝宝出行", "宝宝成长", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity8 = CreateNoteTemplate("宝宝出行", "宝宝成长", "motherhood.png", "#000000", "#FFFFFF");
             var noteTemplateId8 = noteTemplateEntity8.Id;
             var noteSegmentTemplate8_1 = CreateNoteSegmentTemplate(noteTemplateId8, "棉柔巾", FaIcons.IconCheckSquareO, "TodoSegment", "", "#000000");
             var noteSegmentTemplate8_2 = CreateNoteSegmentTemplate(noteTemplateId8, "尿不湿", FaIcons.IconCheckSquareO, "TodoSegment", "", "#000000");
@@ -107,7 +107,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #region 灵感
 
 
-            NoteTemplate noteTemplateEntity2 = CreateNoteTemplate("灵感", "其它", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity2 = CreateNoteTemplate("灵感", "其它", "step_to_the_sun.png", "#000000", "#FFFFFF");
             var noteTemplateId2 = noteTemplateEntity2.Id;
             CreateNoteSegmentTemplate(noteTemplateId2, "记下想法", FaIcons.IconStickyNoteO, "TextSegment", "备注信息", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId2, "画出想法", FaIcons.IconPencilSquareO, "ScriptSegment", "备注信息", "#000000");
@@ -116,7 +116,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             #endregion
             #region 记油耗
 
-            NoteTemplate noteTemplateEntity6 = CreateNoteTemplate("记油耗", "其它", null, "#000000", "#FFFFFF");
+            NoteTemplate noteTemplateEntity6 = CreateNoteTemplate("记油耗", "其它", "automobile.png", "#000000", "#FFFFFF");
             var noteTemplateId6 = noteTemplateEntity6.Id;
             var noteSegmentTemplate6 = CreateNoteSegmentTemplate(noteTemplateId6, "里程", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
             var noteSegmentTemplate6_1 = CreateNoteSegmentTemplate(noteTemplateId6, "数量升", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");

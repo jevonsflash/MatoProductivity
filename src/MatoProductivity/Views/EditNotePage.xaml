@@ -399,15 +399,42 @@
                             <Label Text="{Binding Desc}" />
                         </Grid>
                     </Grid>
-                    <Label>
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span>共</Span>
-                                <Span Text="{Binding NoteSegments.Count}"></Span>
-                                <Span>个片段</Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span>共</Span>
+                                    <Span Text="{Binding NoteSegments.Count}"></Span>
+                                    <Span>个片段</Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Border StrokeShape="RoundRectangle 5"
+                                Stroke="Transparent"
+                                BackgroundColor="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=Green|Gray}"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                Grid.Column="1">
+                            <Label TextColor="White"
+                                   Margin="5,0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf069;"></Span>
+                                        <Span Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter= 支持快速创建|不支持快速创建}"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+
+                        </Border>
+
+                    </Grid>
+
 
                 </VerticalStackLayout>
             </CollectionView.Header>
@@ -488,8 +515,6 @@
                             </Border.GestureRecognizers>
                         </Border>
                     </HorizontalStackLayout>-->
-                    <Label HorizontalTextAlignment="Center"
-                           Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
 
                 </VerticalStackLayout>
             </CollectionView.Footer>

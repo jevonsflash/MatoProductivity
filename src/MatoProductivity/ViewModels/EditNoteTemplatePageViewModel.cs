@@ -7,6 +7,7 @@ using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.Services;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Helper;
 using MatoProductivity.Services;
 using MatoProductivity.Views;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,7 @@ namespace MatoProductivity.ViewModels
             Remove = new Command(RemoveAction);
             SelectAllSegment = new Command(SelectAllSegmentAction);
             RemoveSelectedSegment = new Command(RemoveSelectedSegmentAction);
-            SubmitBack= new Command(SubmitBackAction);
+            SubmitBack = new Command(SubmitBackAction);
             ItemDragged = new Command(OnItemDragged);
             ItemDraggedOver = new Command(OnItemDraggedOver);
             ItemDragLeave = new Command(OnItemDragLeave);
@@ -69,7 +70,7 @@ namespace MatoProductivity.ViewModels
             this.unitOfWorkManager = unitOfWorkManager;
             this.iocResolver = iocResolver;
             this.PropertyChanged += EditNoteTemplatePageViewModel_PropertyChanged;
-            SelectedNoteSegmentTemplates = new ObservableCollection<object>();
+            SelectedNoteSegments = new ObservableCollection<object>();
 
         }
 
@@ -137,13 +138,13 @@ namespace MatoProductivity.ViewModels
         {
             foreach (var noteSegmentTemplates in NoteSegments)
             {
-                SelectedNoteSegmentTemplates.Add(noteSegmentTemplates);
+                SelectedNoteSegments.Add(noteSegmentTemplates);
             }
         }
 
         private void RemoveSelectedSegmentAction(object obj)
         {
-            foreach (var noteSegmentTemplates in SelectedNoteSegmentTemplates.ToList())
+            foreach (var noteSegmentTemplates in SelectedNoteSegments.ToList())
             {
                 NoteSegments.Remove((INoteSegmentService)noteSegmentTemplates);
             }
@@ -151,6 +152,11 @@ namespace MatoProductivity.ViewModels
 
         private async void RemoveAction(object obj)
         {
+            var confirmResult = await CommonHelper.Confirm($"是否删除场景「{this.Title}」?");
+            if (confirmResult == false)
+            {
+                return;
+            }
             await repository.DeleteAsync(this.NoteTemplateId);
             await navigationService.PopAsync();
 
@@ -255,10 +261,10 @@ namespace MatoProductivity.ViewModels
             await Task.Run(() =>
             {
                 using (var objWrapper = iocResolver.ResolveAsDisposable<NoteSegmentStoreListPage>())
-            {
-                noteSegmentStoreListPage = objWrapper.Object;
-                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise += EditNoteTemplatePageViewModel_OnFinishedChooise;
-            }
+                {
+                    noteSegmentStoreListPage = objWrapper.Object;
+                    (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise += EditNoteTemplatePageViewModel_OnFinishedChooise;
+                }
             });
             await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith((e) =>
             {
@@ -323,24 +329,25 @@ namespace MatoProductivity.ViewModels
                         ? new ObservableCollection<INoteSegmentService>(
                       noteSegmentTemplates.Select(GetNoteSegmentTemplateViewModel))
                         : new ObservableCollection<INoteSegmentService>();
-                    NoteSegments.CollectionChanged+=(o, e) => {
+                    NoteSegments.CollectionChanged += (o, e) =>
+                    {
 
-                        if (e.Action==NotifyCollectionChangedAction.Add)
+                        if (e.Action == NotifyCollectionChangedAction.Add)
                         {
                             var result = e.NewItems[0];
                             if (result is IAutoSet)
                             {
-                                (result as IAutoSet).OnAutoSetChanged+=(o, e) => RaisePropertyChanged(nameof(CanSimplified));
+                                (result as IAutoSet).OnAutoSetChanged += (o, e) => RaisePropertyChanged(nameof(CanSimplified));
                             }
                             RaisePropertyChanged(nameof(CanSimplified));
 
                         }
-                        else if (e.Action==NotifyCollectionChangedAction.Remove)
+                        else if (e.Action == NotifyCollectionChangedAction.Remove)
                         {
                             var result = e.OldItems[0];
                             if (result is IAutoSet)
                             {
-                                (result as IAutoSet).OnAutoSetChanged-=(o, e) => RaisePropertyChanged(nameof(CanSimplified));
+                                (result as IAutoSet).OnAutoSetChanged -= (o, e) => RaisePropertyChanged(nameof(CanSimplified));
                             }
 
                             RaisePropertyChanged(nameof(CanSimplified));
@@ -366,7 +373,7 @@ namespace MatoProductivity.ViewModels
             result.Container = this;
             if (result is IAutoSet)
             {
-                (result as IAutoSet).OnAutoSetChanged+=(o, e) => RaisePropertyChanged(nameof(CanSimplified));
+                (result as IAutoSet).OnAutoSetChanged += (o, e) => RaisePropertyChanged(nameof(CanSimplified));
             }
 
             return result;
@@ -494,26 +501,26 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private ObservableCollection<object> _selectedNoteSegmentTemplates;
+        private ObservableCollection<object> _selectedNoteSegments;
 
-        public ObservableCollection<object> SelectedNoteSegmentTemplates
+        public ObservableCollection<object> SelectedNoteSegments
         {
-            get { return _selectedNoteSegmentTemplates; }
+            get { return _selectedNoteSegments; }
             set
             {
-                _selectedNoteSegmentTemplates = value;
+                _selectedNoteSegments = value;
                 RaisePropertyChanged();
             }
         }
 
-        private INoteSegmentService _selectedNoteSegmentTemplate;
+        private INoteSegmentService _selectedNoteSegment;
 
-        public INoteSegmentService SelectedNoteSegmentTemplate
+        public INoteSegmentService SelectedNoteSegment
         {
-            get { return _selectedNoteSegmentTemplate; }
+            get { return _selectedNoteSegment; }
             set
             {
-                _selectedNoteSegmentTemplate = value;
+                _selectedNoteSegment = value;
                 RaisePropertyChanged();
             }
         }

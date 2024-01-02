@@ -11,6 +11,7 @@ using MatoProductivity.Views;
 using System.Drawing;
 using MatoProductivity.Core.ViewModels;
 using System.Runtime.CompilerServices;
+using MatoProductivity.Helper;
 
 namespace MatoProductivity.ViewModels
 {
@@ -58,6 +59,11 @@ namespace MatoProductivity.ViewModels
 
         private async void RemoveAction(object obj)
         {
+            var confirmResult = await CommonHelper.Confirm($"是否删除笔记「{this.Title}」?");
+            if (confirmResult == false)
+            {
+                return;
+            }
             await repository.DeleteAsync(this.NoteId);
             OnDone?.Invoke(this, EventArgs.Empty);
 

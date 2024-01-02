@@ -64,7 +64,6 @@
                 </Border>
                 <Button IsVisible="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
                         CornerRadius="100"
-                        x:Name="RemoveButton"
                         HeightRequest="25"
                         WidthRequest="25"
                         Padding="0"
@@ -72,19 +71,80 @@
                         TextColor="White"
                         Command="{TemplateBinding BindingContext.Remove}"
                         FontFamily="FontAwesome_Solid"
-                        Text="&#xf00d;"
+                        Text="&#xf068;"
                         HorizontalOptions="End"
                         VerticalOptions="Start"></Button>
             </Grid>
         </ControlTemplate>
 
         <ControlTemplate x:Key="NoteTemplateViewDesktop">
-            <Border Margin="0,10,0,10"
-                    Padding="8">
-                <Grid>
-                    <ContentPresenter Grid.Column="1" />
-                </Grid>
-            </Border>
+            <Grid>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.CreateNote}"
+                                          CommandParameter="{TemplateBinding Path= BindingContext}"></TapGestureRecognizer>
+                    <DropGestureRecognizer AllowDrop="True"
+                                           DragLeaveCommand="{TemplateBinding BindingContext.DragLeave}"
+                                           DragLeaveCommandParameter="{TemplateBinding BindingContext}"
+                                           DragOverCommand="{TemplateBinding BindingContext.DraggedOver}"
+                                           DragOverCommandParameter="{TemplateBinding BindingContext}"
+                                           DropCommand="{TemplateBinding BindingContext.Dropped}"
+                                           DropCommandParameter="{TemplateBinding BindingContext}" />
+                    <DragGestureRecognizer CanDrag="True"
+                                           DragStartingCommand="{TemplateBinding BindingContext.Dragged}"
+                                           DragStartingCommandParameter="{TemplateBinding BindingContext}" />
+                </Grid.GestureRecognizers>
+                <Border Margin="2,2"
+                        Padding="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="20"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <ContentPresenter Grid.RowSpan="2" />
+                        <Border Grid.Row="1"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                                IsVisible="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
+                                StrokeThickness="0"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="100"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="5, 0, 5, 0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf013;"></Span>
+                                        <Span Text=" 编辑"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                                                          CommandParameter="{TemplateBinding Path= BindingContext}"></TapGestureRecognizer>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Border>
+
+
+
+                    </Grid>
+                </Border>
+                <Button IsVisible="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
+                        CornerRadius="100"
+                        HeightRequest="25"
+                        WidthRequest="25"
+                        Padding="0"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        Command="{TemplateBinding BindingContext.Remove}"
+                        FontFamily="FontAwesome_Solid"
+                        Text="&#xf068;"
+                        HorizontalOptions="End"
+                        VerticalOptions="Start"></Button>
+            </Grid>
 
         </ControlTemplate>
 
@@ -191,32 +251,58 @@
                                     <RowDefinition Height="Auto"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <Image Source="baby.svg"
+                                <Image Source="{Binding NoteTemplate.Icon}"
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center"></Image>
 
                                 <Label Text="{Binding NoteTemplate.Title}"
+                                       
                                        VerticalOptions="Center"
                                        HorizontalTextAlignment="Start"
                                        Grid.Row="1"
                                        Style="{StaticResource Headline4_MulishBlack}"
                                        ></Label>
 
-                                <Label
-                                       VerticalOptions="Center"
-                                       HorizontalTextAlignment="Start"
-                                       Grid.Row="2"
-                                       Style="{StaticResource Body1_MulishBold}">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding NoteTemplate.NoteSegmentTemplates.Count}"></Span>
-                                            <Span>个片段</Span>
-                                            <Span Text="{Binding NoteTemplate.CanSimplified}"></Span>
-                                            
-                                        </FormattedString>
-                                    </Label.FormattedText>
+                                <Grid  Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Label VerticalOptions="Center"
+                                           HorizontalTextAlignment="Start"
+                                         Grid.Column="0"
+                                           Style="{StaticResource Body1_MulishBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding NoteTemplate.NoteSegmentTemplates.Count}"></Span>
+                                                <Span>个片段</Span>
+                                            </FormattedString>
+                                        </Label.FormattedText>
 
-                                </Label>
+                                    </Label>
+                                    <Border IsVisible="{Binding NoteTemplate.CanSimplified}"
+                                            StrokeShape="RoundRectangle 100"
+                                            Stroke="Transparent"
+                                            BackgroundColor="Green"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center"
+                                            HeightRequest="25"
+                                            WidthRequest="25"
+                                            Grid.Column="1">
+                                        <Label TextColor="White" 
+                                               VerticalOptions="Center" 
+                                               HorizontalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span FontFamily="FontAwesome_Solid"
+                                                          Text="&#xf069;"></Span>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+
+                                        </Label>
+
+                                    </Border>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </ContentView>

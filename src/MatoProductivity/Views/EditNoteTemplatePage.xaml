@@ -15,8 +15,7 @@
                     <SwipeView.RightItems>
                         <SwipeItems>
                             <SwipeItemView  Command="{TemplateBinding BindingContext.Remove}">
-                                <Border
-                                        Padding="15, 0">
+                                <Border Padding="15, 0">
                                     <Label Text="&#xf2ed;"
                                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                                            FontSize="{StaticResource Headline4FontSize}"
@@ -330,7 +329,6 @@
 
                 <Button Text="删除"
                         Style="{StaticResource Text_Button}"
-                        
                         IsVisible="{Binding IsConfiguratingNoteSegment ,Converter={StaticResource True2FalseConverter}}"
                         Command="{Binding Remove}"></Button>
 
@@ -350,7 +348,6 @@
 
                 <Button Command="{Binding SwitchState}"
                         Style="{StaticResource Text_Button}"
-                        
                         Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成编辑|编辑笔记}"></Button>
 
 
@@ -401,23 +398,45 @@
                             <Label Text="{Binding Desc}" />
                         </Grid>
                     </Grid>
-                    <Label>
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span>共</Span>
-                                <Span Text="{Binding NoteSegments.Count}"></Span>
-                                <Span>个片段</Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span>共</Span>
+                                    <Span Text="{Binding NoteSegments.Count}"></Span>
+                                    <Span>个片段</Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Border StrokeShape="RoundRectangle 5"
+                                Stroke="Transparent"
+                                BackgroundColor="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=Green|Gray}"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                Grid.Column="1">
+                            <Label TextColor="White"
+                                   Margin="5,0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf069;"></Span>
+                                        <Span Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter= 支持快速创建|不支持快速创建}"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+
+                        </Border>
+
+                    </Grid>
+                    
 
                 </VerticalStackLayout>
             </CollectionView.Header>
-            <CollectionView.Footer>
-                <Label HorizontalTextAlignment="Center"
-                       Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=可快速生成|不可快速生成}"></Label>
-
-            </CollectionView.Footer>
             <CollectionView.EmptyView>
 
                 <Grid  HorizontalOptions="Center"

@@ -6,6 +6,10 @@ using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
 using Castle.Facilities.Logging;
 using MatoProductivity.Core;
+using MatoProductivity.Helper;
+using MatoProductivity.Services;
+using MatoProductivity.ViewModels;
+using MatoProductivity.Views;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;
@@ -24,9 +28,9 @@ namespace MatoProductivity
             InitializeComponent();
             _abpBootstrapper.Initialize();
             this.MainPage = abpBootstrapper.IocManager.Resolve(typeof(MainPage)) as MainPage;
-            
-            
-            
+
+
+
             EditorHandler.Mapper.AppendToMapping("Background", (handler, view) =>
             {
 #if ANDROID
@@ -90,7 +94,37 @@ namespace MatoProductivity
 #elif IOS || MACCATALYST
                 handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
 #endif
-                });
+            });
+        }
+
+        public static void HandleAppActions(AppAction appAction)
+        {
+            App.Current.Dispatcher.Dispatch(async () =>
+            {
+                if (appAction.Id == "create_note")
+                {
+                    using (var objWrapper = IocManager.Instance.ResolveAsDisposable<EditNotePageViewModel>())
+                    {
+                        var editNotePageViewModel = objWrapper.Object;
+                        editNotePageViewModel.SimplifiedClone.Execute((long)2);
+                    }
+                }
+                else if (true)
+                {
+                    var navigationService = IocManager.Instance.Resolve<NavigationService>();
+                    if (navigationService != null)
+                    {
+                        await navigationService.PopToRootAsync();
+                        await navigationService.GoPageAsync("NoteContent");
+                        using (var objWrapper = IocManager.Instance.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
+                        {
+                            (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+
+                            await navigationService.PushAsync(objWrapper.Object);
+                        }
+                    }
+                }
+            });
         }
     }
 }

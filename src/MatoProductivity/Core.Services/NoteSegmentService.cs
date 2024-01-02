@@ -142,7 +142,7 @@ namespace MatoProductivity.Core.Services
 
             if (Permissions.ShouldShowRationale<TPermission>())
             {
-                CommonHelper.ShowMsg(explain, "需要权限");
+                CommonHelper.Alert(explain, "需要权限");
             }
 
             status = await Permissions.RequestAsync<TPermission>();

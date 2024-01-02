@@ -163,9 +163,15 @@ namespace MatoProductivity.ViewModels
 
         }
 
-        private void RemoveAction(object obj)
+        private async void  RemoveAction(object obj)
         {
             var note = (Note)obj;
+
+            var confirmResult = await MatoProductivity.Helper.CommonHelper.Confirm($"是否删除场景「{note.Title}」?");
+            if (confirmResult == false)
+            {
+                return;
+            }
             foreach (var noteGroup in this.NoteGroups)
             {
                 var delete = noteGroup.FirstOrDefault(c => c.Id == note.Id);

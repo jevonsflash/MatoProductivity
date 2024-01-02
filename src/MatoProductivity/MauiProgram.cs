@@ -39,7 +39,13 @@ namespace MatoProductivity
                 {
                     handlers.AddHandler(typeof(MatoProductivity.Core.Controls.AMap), typeof(AMapHandler));
                 })
-                ;
+                 .ConfigureEssentials(essentials =>
+                 {
+                     essentials
+                         .AddAppAction("create_note", "创建新笔记", icon: "app_info_action_icon")
+                         .OnAppAction(App.HandleAppActions);
+                 });
+            
 
             builder.Services.AddMauiBlazorWebView();
 
