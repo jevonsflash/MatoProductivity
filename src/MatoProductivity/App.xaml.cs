@@ -11,6 +11,7 @@ using MatoProductivity.Services;
 using MatoProductivity.ViewModels;
 using MatoProductivity.Views;
 using Microsoft.Maui;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;
 using Microsoft.Maui.Handlers;
@@ -101,29 +102,58 @@ namespace MatoProductivity
         {
             App.Current.Dispatcher.Dispatch(async () =>
             {
-                if (appAction.Id == "create_note")
+                if (long.TryParse(appAction.Id, out var id))
                 {
+
                     using (var objWrapper = IocManager.Instance.ResolveAsDisposable<EditNotePageViewModel>())
                     {
                         var editNotePageViewModel = objWrapper.Object;
-                        editNotePageViewModel.SimplifiedClone.Execute((long)2);
+                        editNotePageViewModel.SimplifiedClone.Execute(id);
                     }
-                }
-                else if (true)
-                {
                     var navigationService = IocManager.Instance.Resolve<NavigationService>();
                     if (navigationService != null)
                     {
-                        await navigationService.PopToRootAsync();
-                        await navigationService.GoPageAsync("NoteContent");
-                        using (var objWrapper = IocManager.Instance.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
+                        var currentPage = await navigationService.GetCurrentPageAsync();
+                        if (currentPage!=null && currentPage is NoteListPage)
                         {
-                            (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+                            await ((currentPage as NoteListPage).BindingContext as NoteListPageViewModel).Init();
+                        }
+                        else
+                        {
+                            await Task.Delay(1000);
+                            await navigationService.PopToRootAsync();
+                            await navigationService.GoPageAsync("Note");
 
-                            await navigationService.PushAsync(objWrapper.Object);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (appAction.Id == "create_note")
+                    {
+                        var navigationService = IocManager.Instance.Resolve<NavigationService>();
+                        if (navigationService != null)
+                        {
+                            var currentPage = await navigationService.GetCurrentPageAsync();
+                            if (currentPage!=null && currentPage.BindingContext is IPopupContainerViewModelBase)
+                            {
+                                await (currentPage.BindingContext as IPopupContainerViewModelBase).CloseAllPopup();
+                            }
+                            await navigationService.PopToRootAsync();
+                            await navigationService.GoPageAsync("Note");
+                            using (var objWrapper = IocManager.Instance.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
+                            {
+                                (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+
+                                await navigationService.PushAsync(objWrapper.Object);
+                            }
                         }
                     }
                 }
+
+
+
             });
         }
     }

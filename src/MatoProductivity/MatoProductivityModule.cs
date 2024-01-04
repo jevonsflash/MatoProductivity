@@ -13,9 +13,20 @@ namespace MatoProductivity
         typeof(MatoProductivityEntityFrameworkCoreModule))]
     public class MatoProductivityModule : AbpModule
     {
-        public override void Initialize()
+        public override async void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(MatoProductivityModule).GetAssembly());
+            if (VersionTracking.Default.IsFirstLaunchEver)
+            {
+                MatoProductivityEntityFrameworkCoreModule.SkipDbSeed = false;
+                var appAction = new AppAction("create_note", "创建新笔记", icon: "app_info_action_icon");
+                await AppActions.Current.SetAsync([appAction]);
+            }
+            else
+            {
+                MatoProductivityEntityFrameworkCoreModule.SkipDbSeed = true;
+
+            }
         }
 
         public override void PostInitialize()

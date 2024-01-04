@@ -14,36 +14,32 @@ using Microsoft.EntityFrameworkCore;
 namespace MatoProductivity.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(MatoProductivityCoreModule), 
+        typeof(MatoProductivityCoreModule),
         typeof(AbpEntityFrameworkCoreModule))]
     public class MatoProductivityEntityFrameworkCoreModule : AbpModule
     {
-        public bool SkipDbContextRegistration { get; set; }
 
-        public bool SkipDbSeed { get; set; }
+        public static bool SkipDbSeed { get; set; }
 
         public override void PreInitialize()
         {
-            if (!SkipDbContextRegistration)
+            Configuration.Modules.AbpEfCore().AddDbContext<MatoProductivityDbContext>(options =>
             {
-                Configuration.Modules.AbpEfCore().AddDbContext<MatoProductivityDbContext>(options =>
+                if (options.ExistingConnection != null)
                 {
-                    if (options.ExistingConnection != null)
-                    {
-                        DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
-                    }
-                    else
-                    {
-                        DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
-                    }
-                });
-            }
+                    DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
+                }
+                else
+                {
+                    DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+                }
+            });
         }
         public override void Initialize()
         {
- 
+
             IocManager.RegisterAssemblyByConvention(typeof(MatoProductivityEntityFrameworkCoreModule).GetAssembly());
-            
+
         }
 
         public override void PostInitialize()

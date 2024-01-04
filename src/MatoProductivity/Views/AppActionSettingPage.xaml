@@ -15,15 +15,30 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
+            <Grid  HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Image Source="app_action"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"></Image>
+                <Label Text="符合快速创建的场景，可添加应用的快捷方式，长按App图标呼出菜单，即可一键创建笔记"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       Grid.Row="1"
+                       Style="{StaticResource Body1_MulishBold}"></Label>
+            </Grid>
+
             <CollectionView  ItemsSource="{Binding AppActions}"
+                             Grid.Row="1"
                              IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
                              SelectionMode="Single"
                              IsGrouped="false">
-                <CollectionView.Header>
-                    <Label Text="选择"></Label>
-                </CollectionView.Header>
-              
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">
@@ -55,11 +70,12 @@
             </CollectionView>
 
             <CollectionView  ItemsSource="{Binding AvailableAppActions}"
+                             Grid.Row="2"
                              IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
                              SelectionMode="Single"
                              IsGrouped="false">
                 <CollectionView.Header>
-                    <Label Text="选择"></Label>
+                    <Label Text="更多可用场景"></Label>
                 </CollectionView.Header>
 
                 <CollectionView.ItemTemplate>

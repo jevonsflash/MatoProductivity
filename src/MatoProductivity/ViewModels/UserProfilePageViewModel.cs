@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace MatoProductivity.ViewModels
 {
-    public class UserProfilePageViewModel : ViewModelBase, ISingletonDependency
+    public class UserProfilePageViewModel : ViewModelBase, ISingletonDependency, IPopupContainerViewModelBase
     {
 
         private Popup shortCutSettingPage;
@@ -76,6 +76,12 @@ namespace MatoProductivity.ViewModels
 
             }
         }
+        public async Task CloseAllPopup()
+        {
+            await navigationService.HidePopupAsync(shortCutSettingPage);
+        }
+
+
         public Command AppActionSetting { get; set; }
 
 

@@ -10,31 +10,31 @@ using Microsoft.Extensions.Logging;
 
 namespace MatoProductivity
 {
-	public static class MauiProgram
-	{
-		public static MauiApp CreateMauiApp()
-		{
-			var builder = MauiApp.CreateBuilder();
-			builder
-				.UseMatoProductivity<MatoProductivityModule>()
-				.UseMauiApp<App>()
+    public static class MauiProgram
+    {
+        public static MauiApp CreateMauiApp()
+        {
+            var builder = MauiApp.CreateBuilder();
+            builder
+                .UseMatoProductivity<MatoProductivityModule>()
+                .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseMauiMaps()
-				.ConfigureFonts(fonts =>
-				{
-					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-					fonts.AddFont("FontAwesome.ttf", "FontAwesome");
-					fonts.AddFont("FontAwesome-Regular.ttf", "FontAwesome_Regular");
-					fonts.AddFont("FontAwesome-Solid.ttf", "FontAwesome_Solid");
-					fonts.AddFont("Mulish-Black.ttf", "Mulish_Black");
-					fonts.AddFont("Mulish-Bold.ttf", "Mulish_Bold");
-					fonts.AddFont("Mulish-ExtraBold.ttf", "Mulish_ExtraBold");
-					fonts.AddFont("Mulish-ExtraLight.ttf", "Mulish_ExtraLight");
-					fonts.AddFont("Mulish-Light.ttf", "Mulish_Light");
-					fonts.AddFont("Mulish-Medium.ttf", "Mulish_Medium");
-					fonts.AddFont("Mulish-Regular.ttf", "Mulish_Regular");
-					fonts.AddFont("Mulish-SemiBold.ttf", "Mulish_SemiBold");
-				})
+                .ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("FontAwesome.ttf", "FontAwesome");
+                    fonts.AddFont("FontAwesome-Regular.ttf", "FontAwesome_Regular");
+                    fonts.AddFont("FontAwesome-Solid.ttf", "FontAwesome_Solid");
+                    fonts.AddFont("Mulish-Black.ttf", "Mulish_Black");
+                    fonts.AddFont("Mulish-Bold.ttf", "Mulish_Bold");
+                    fonts.AddFont("Mulish-ExtraBold.ttf", "Mulish_ExtraBold");
+                    fonts.AddFont("Mulish-ExtraLight.ttf", "Mulish_ExtraLight");
+                    fonts.AddFont("Mulish-Light.ttf", "Mulish_Light");
+                    fonts.AddFont("Mulish-Medium.ttf", "Mulish_Medium");
+                    fonts.AddFont("Mulish-Regular.ttf", "Mulish_Regular");
+                    fonts.AddFont("Mulish-SemiBold.ttf", "Mulish_SemiBold");
+                })
                 .ConfigureMauiHandlers(handlers =>
                 {
                     handlers.AddHandler(typeof(MatoProductivity.Core.Controls.AMap), typeof(AMapHandler));
@@ -42,10 +42,10 @@ namespace MatoProductivity
                  .ConfigureEssentials(essentials =>
                  {
                      essentials
-                         .AddAppAction("create_note", "创建新笔记", icon: "app_info_action_icon")
-                         .OnAppAction(App.HandleAppActions);
+                     .UseVersionTracking()
+                     .OnAppAction(App.HandleAppActions);
                  });
-            
+
 
             builder.Services.AddMauiBlazorWebView();
 
@@ -54,7 +54,7 @@ namespace MatoProductivity
             builder.Logging.AddDebug();
 #endif
             return builder.Build();
-		}
+        }
 
 
     }

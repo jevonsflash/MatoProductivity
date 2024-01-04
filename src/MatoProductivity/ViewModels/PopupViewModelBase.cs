@@ -15,7 +15,7 @@ using Size = Microsoft.Maui.Graphics.Size;
 
 namespace MatoProductivity.ViewModels
 {
-    public class PopupViewModelBase : ViewModelBase
+    public class PopupViewModelBase : ViewModelBase, IPopupViewModelBase
     {
         private readonly IDeviceDisplay deviceDisplay;
         public PopupViewModelBase()

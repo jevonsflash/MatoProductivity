@@ -9,6 +9,7 @@ using MatoProductivity.Views;
 using Microsoft.Maui.ApplicationModel;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Runtime.CompilerServices;
 
 namespace MatoProductivity.ViewModels
@@ -18,6 +19,7 @@ namespace MatoProductivity.ViewModels
         private readonly IRepository<NoteTemplate, long> repository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
+        private List<AppAction> _tempAppActions = new List<AppAction>();
 
         public event EventHandler<AppAction> OnFinishedChooise;
 
@@ -65,12 +67,17 @@ namespace MatoProductivity.ViewModels
                 var allAppActions = await Microsoft.Maui.ApplicationModel.AppActions.Current.GetAsync();
                 var existAppActionIds = new List<long>();
                 var appActions = new List<AppAction>();
-                foreach (var appAction in appActions)
+                foreach (var appAction in allAppActions)
                 {
                     if (long.TryParse(appAction.Id, out var id))
                     {
                         appActions.Add(appAction);
                         existAppActionIds.Add(id);
+                    }
+                    else
+                    {
+                        _tempAppActions.Add(appAction);
+
                     }
                 }
                 var availableAppActions = this.repository.GetAllList()
@@ -80,9 +87,24 @@ namespace MatoProductivity.ViewModels
                 .ToList();
 
                 this.AppActions=new ObservableCollection<AppAction>(appActions);
+                this.AppActions.CollectionChanged+=AppActions_CollectionChangedAsync;
                 this.AvailableAppActions=new ObservableCollection<AppAction>(availableAppActions);
 
             }).ContinueWith((e) => { Loading = false; });
+
+        }
+
+        private async void AppActions_CollectionChangedAsync(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Microsoft.Maui.ApplicationModel.AppActions.Current.IsSupported)
+            {
+                if (e.Action==NotifyCollectionChangedAction.Add ||e.Action==NotifyCollectionChangedAction.Remove)
+                {
+
+                    await Microsoft.Maui.ApplicationModel.AppActions.Current.SetAsync(this.AppActions.Concat(this._tempAppActions));
+
+                }
+            }
 
         }
 

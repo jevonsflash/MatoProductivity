@@ -19,7 +19,7 @@ using System.Windows.Input;
 
 namespace MatoProductivity.ViewModels
 {
-    public class EditNoteTemplatePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer, IDraggableViewModel
+    public class EditNoteTemplatePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer, IDraggableViewModel, IPopupContainerViewModelBase
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentTemplateServiceFactory noteSegmentServiceFactory;
@@ -165,34 +165,38 @@ namespace MatoProductivity.ViewModels
         private async void CreateAction(object obj)
         {
             Loading = true;
-            await Task.Delay(300);
-            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+            await Task.Run(async () =>
             {
-                var note = new NoteTemplate() { Title = "新建模板" };
-                var result = await repository.InsertAsync(note);
-                await unitOfWorkManager.Current.SaveChangesAsync();
+                await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                {
+                    var note = new NoteTemplate() { Title = "新建模板" };
+                    var result = await repository.InsertAsync(note);
+                    await unitOfWorkManager.Current.SaveChangesAsync();
 
-                await Init(result);
-            });
+                    Init(result);
+                });
+            }).ContinueWith((e) => { Loading = false; });
         }
 
         private async void CloneAction(object obj)
         {
             Loading = true;
-            await Task.Delay(300);
-            var id = (long)obj;
-            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+            await Task.Run(async () =>
             {
-                var note = await noteRepository.GetAll().Include(c => c.NoteSegments)
-                              .ThenInclude(c => c.NoteSegmentPayloads)
-                              .Where(c => c.Id == id).FirstOrDefaultAsync();
-                var noteTemplate = ObjectMapper.Map<NoteTemplate>(note);
+                var id = (long)obj;
+                await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                {
+                    var note = await noteRepository.GetAll().Include(c => c.NoteSegments)
+                                  .ThenInclude(c => c.NoteSegmentPayloads)
+                                  .Where(c => c.Id == id).FirstOrDefaultAsync();
+                    var noteTemplate = ObjectMapper.Map<NoteTemplate>(note);
 
-                var result = await repository.InsertAsync(noteTemplate);
-                await unitOfWorkManager.Current.SaveChangesAsync();
+                    var result = await repository.InsertAsync(noteTemplate);
+                    await unitOfWorkManager.Current.SaveChangesAsync();
 
-                await Init(result);
-            });
+                    Init(result);
+                });
+            }).ContinueWith((e) => { Loading = false; });
 
         }
 
@@ -285,16 +289,19 @@ namespace MatoProductivity.ViewModels
                 Loading = true;
                 if (NoteTemplateId != default)
                 {
-                    await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                    await Task.Run(async () =>
                     {
-                        var note = await this.repository
-                            .GetAll()
-                            .Include(c => c.NoteSegmentTemplates)
-                            .ThenInclude(c => c.NoteSegmentTemplatePayloads)
-                            .Where(c => c.Id == this.NoteTemplateId).FirstOrDefaultAsync();
-                        await Init(note);
+                        await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                        {
+                            var note = await this.repository
+                                .GetAll()
+                                .Include(c => c.NoteSegmentTemplates)
+                                .ThenInclude(c => c.NoteSegmentTemplatePayloads)
+                                .Where(c => c.Id == this.NoteTemplateId).FirstOrDefaultAsync();
+                            Init(note);
 
-                    });
+                        });
+                    }).ContinueWith((e) => { Loading = false; });
                 }
 
             }
@@ -316,54 +323,50 @@ namespace MatoProductivity.ViewModels
 
         }
 
-        private async Task Init(NoteTemplate note)
+        private void Init(NoteTemplate note)
         {
-            await Task.Run(() =>
+            if (note != null)
             {
-                if (note != null)
+                var noteSegmentTemplates = note.NoteSegmentTemplates;
+                this.noteId = note.Id;
+                this.NoteSegments = noteSegmentTemplates != null
+                    ? new ObservableCollection<INoteSegmentService>(
+                  noteSegmentTemplates.Select(GetNoteSegmentTemplateViewModel))
+                    : new ObservableCollection<INoteSegmentService>();
+                NoteSegments.CollectionChanged += (o, e) =>
                 {
-                    var noteSegmentTemplates = note.NoteSegmentTemplates;
-                    this.noteId = note.Id;
-                    this.NoteSegments = noteSegmentTemplates != null
-                        ? new ObservableCollection<INoteSegmentService>(
-                      noteSegmentTemplates.Select(GetNoteSegmentTemplateViewModel))
-                        : new ObservableCollection<INoteSegmentService>();
-                    NoteSegments.CollectionChanged += (o, e) =>
+
+                    if (e.Action == NotifyCollectionChangedAction.Add)
                     {
-
-                        if (e.Action == NotifyCollectionChangedAction.Add)
+                        var result = e.NewItems[0];
+                        if (result is IAutoSet)
                         {
-                            var result = e.NewItems[0];
-                            if (result is IAutoSet)
-                            {
-                                (result as IAutoSet).OnAutoSetChanged += (o, e) => RaisePropertyChanged(nameof(CanSimplified));
-                            }
-                            RaisePropertyChanged(nameof(CanSimplified));
-
+                            (result as IAutoSet).OnAutoSetChanged += (o, e) => RaisePropertyChanged(nameof(CanSimplified));
                         }
-                        else if (e.Action == NotifyCollectionChangedAction.Remove)
+                        RaisePropertyChanged(nameof(CanSimplified));
+
+                    }
+                    else if (e.Action == NotifyCollectionChangedAction.Remove)
+                    {
+                        var result = e.OldItems[0];
+                        if (result is IAutoSet)
                         {
-                            var result = e.OldItems[0];
-                            if (result is IAutoSet)
-                            {
-                                (result as IAutoSet).OnAutoSetChanged -= (o, e) => RaisePropertyChanged(nameof(CanSimplified));
-                            }
-
-                            RaisePropertyChanged(nameof(CanSimplified));
-
+                            (result as IAutoSet).OnAutoSetChanged -= (o, e) => RaisePropertyChanged(nameof(CanSimplified));
                         }
-                    };
-                    Title = note.Title;
-                    Desc = note.Desc;
-                    Icon = note.Icon;
-                    Color = note.Color;
-                    BackgroundColor = note.BackgroundColor;
-                    PreViewContent = note.PreViewContent;
-                    IsEditable = note.IsEditable;
 
-                }
-            });
+                        RaisePropertyChanged(nameof(CanSimplified));
 
+                    }
+                };
+                Title = note.Title;
+                Desc = note.Desc;
+                Icon = note.Icon;
+                Color = note.Color;
+                BackgroundColor = note.BackgroundColor;
+                PreViewContent = note.PreViewContent;
+                IsEditable = note.IsEditable;
+
+            }
         }
         private INoteSegmentService GetNoteSegmentTemplateViewModel(NoteSegmentTemplate c)
         {
@@ -690,11 +693,14 @@ namespace MatoProductivity.ViewModels
             await navigationService.PopAsync();
 
         }
+
+        public async Task CloseAllPopup()
+        {
+            await navigationService.HidePopupAsync(noteSegmentStoreListPage);
+        }
+
         public Command Submit { get; set; }
         public Command Clone { get; set; }
-
-
-
         public Command Create { get; set; }
         public Command CreateSegment { get; set; }
         public Command CreateSegmentFromStore { get; set; }

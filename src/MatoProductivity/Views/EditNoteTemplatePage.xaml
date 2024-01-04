@@ -465,6 +465,8 @@
                 Text="+"
                 VerticalOptions="End">
         </Button>
+        <ActivityIndicator Grid.RowSpan="3"
+                           IsRunning="{Binding Loading}"></ActivityIndicator>
 
     </Grid>
 </mato:ContentPageBase>

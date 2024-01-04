@@ -10,19 +10,23 @@
     <TabBar>
         <Tab  Title="场景" 
               Icon="headphone.png">
-            <ShellContent  x:Name="NoteTemplateContent"/>
+            <ShellContent  x:Name="NoteTemplateContent"
+                           Route="NoteTemplate"/>
         </Tab>
         <Tab  Title="笔记" 
               Icon="microphone2.png"  >
-            <ShellContent x:Name="NoteContent"/>
+            <ShellContent x:Name="NoteContent"
+                          Route="Note"/>
         </Tab>
         <Tab  Title="统计"
               Icon="microphone2.png">
-            <ShellContent x:Name="StatisticContent" />
+            <ShellContent x:Name="StatisticContent"
+                          Route="Statistic" />
         </Tab>
         <Tab  Title="我的"
               Icon="microphone2.png">
-            <ShellContent x:Name="UserProfileContent" />
+            <ShellContent x:Name="UserProfileContent"
+                          Route="UserProfile" />
         </Tab>
     </TabBar>
 </Shell>

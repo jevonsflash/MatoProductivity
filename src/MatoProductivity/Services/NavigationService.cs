@@ -30,6 +30,11 @@ namespace MatoProductivity.Services
 
         }
 
+        public Task<Page> GetCurrentPageAsync()
+        {
+            return Task.FromResult(mainShell.CurrentPage);
+        }
+
         public async Task PushAsync(string pageName, object[] args = null, bool animated = true)
         {
             var page = GetPageInstance(pageName, args);
@@ -79,11 +84,19 @@ namespace MatoProductivity.Services
 
         public async Task ShowPopupAsync(Popup popupPage)
         {
+            if (popupPage==null)
+            {
+                return;
+            }
             await Shell.Current.CurrentPage.ShowPopupAsync(popupPage);
         }
         public async Task HidePopupAsync(Popup popupPage)
         {
-            popupPage.Close();
+            if (popupPage==null)
+            {
+                return;
+            }
+            await popupPage.CloseAsync();
         }
         private Page GetPageInstance(string obj, object[] args, IList<ToolbarItem> barItem = null)
         {
