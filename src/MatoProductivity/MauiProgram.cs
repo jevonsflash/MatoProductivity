@@ -35,10 +35,6 @@ namespace MatoProductivity
                     fonts.AddFont("Mulish-Regular.ttf", "Mulish_Regular");
                     fonts.AddFont("Mulish-SemiBold.ttf", "Mulish_SemiBold");
                 })
-                .ConfigureMauiHandlers(handlers =>
-                {
-                    handlers.AddHandler(typeof(MatoProductivity.Core.Controls.AMap), typeof(AMapHandler));
-                })
                  .ConfigureEssentials(essentials =>
                  {
                      essentials

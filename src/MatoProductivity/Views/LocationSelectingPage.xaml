@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                x:Class="MatoProductivity.Core.Views.LocationSelectingPage"
+                Opened="PopupBase_Opened"
+                xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
+                xmlns:views="clr-namespace:MatoProductivity.Views;assembly=MatoProductivity"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                VerticalOptions="End"
+                HorizontalOptions="Fill">
+
+    <Border StrokeShape="RoundRectangle 20">
+
+        <Grid Padding="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label FontSize="Large"
+                       Margin="10, 10, 10, 0"
+                       FontAttributes="Bold"
+                       Text="选择地点"></Label>
+                <HorizontalStackLayout Grid.Column="1"
+                                       HorizontalOptions="End">
+                    <Button Text="删除"
+                            Style="{StaticResource Text_Button}"
+                            Command="{Binding Remove}"></Button>
+                    <Button Text="完成"
+                            Style="{StaticResource Text_Button}"
+                            Command="{Binding Done}"></Button>
+                </HorizontalStackLayout>
+            </Grid>
+            <Label Grid.Row="1"
+                   HorizontalTextAlignment="Center"
+                   VerticalOptions="Center"
+                   Margin="10, 10, 10, 0"
+                   Text="{Binding Address}"></Label>
+            <BlazorWebView 
+                Grid.Row="2"
+                x:Name="mainMapBlazorWebView"
+                           HostPage="wwwroot/amap_index.html">
+                <BlazorWebView.RootComponents>
+                    <RootComponent Selector="#app"
+                                   x:Name="rootComponent"
+                                   ComponentType="{x:Type views:AMapPage}" />
+                </BlazorWebView.RootComponents>
+            </BlazorWebView>
+        </Grid>
+    </Border>
+</mato:PopupBase>

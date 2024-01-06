@@ -82,11 +82,6 @@
 	  <ProjectReference Include="..\MatoProductivity.Infrastructure\MatoProductivity.Infrastructure.csproj" />
 	</ItemGroup>
 
-
-	<ItemGroup Condition=" '$(TargetPlatformIdentifier)' == 'android' ">
-		<ProjectReference Include="..\libs\AMap.Android\AMap.Android.csproj" />
-	</ItemGroup>
-
 	<ItemGroup>
 	  <Compile Update="Controls\IsDoneToggleButton.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
@@ -106,7 +101,7 @@
 	  <Compile Update="Core.Views\MediaSegmentView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
-	  <Compile Update="Core.Views\LocationSelectingPage.xaml.cs">
+	  <Compile Update="Views\LocationSelectingPage.xaml.cs">
 	    <DependentUpon>LocationSelectingPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Core.Views\ScriptSegmentView.xaml.cs">
@@ -181,7 +176,7 @@
 	  <MauiXaml Update="Core.Views\MediaSegmentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Core.Views\LocationSelectingPage.xaml">
+	  <MauiXaml Update="Views\LocationSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Core.Views\ScriptSegmentView.xaml">

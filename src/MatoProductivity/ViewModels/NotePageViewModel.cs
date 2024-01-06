@@ -76,17 +76,21 @@ namespace MatoProductivity.ViewModels
             {
                 if (NoteId != default)
                 {
-
-                    await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                    Loading = true;
+                    await Task.Delay(300);
+                    await Task.Run(async () =>
                     {
-                        var note = await this.repository
-                            .GetAll()
-                            .Include(c => c.NoteSegments)
-                            .ThenInclude(c => c.NoteSegmentPayloads)
-                            .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
-                        await Init(note);
+                        await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                        {
+                            var note = await this.repository
+                                .GetAll()
+                                .Include(c => c.NoteSegments)
+                                .ThenInclude(c => c.NoteSegmentPayloads)
+                                .Where(c => c.Id == this.NoteId).FirstOrDefaultAsync();
+                            Init(note);
 
-                    });
+                        });
+                    }).ContinueWith((e) => { Loading = false; });
                 }
             }
             else if (e.PropertyName == nameof(NoteSegments))
@@ -95,31 +99,24 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private async Task Init(Note note)
+        private void Init(Note note)
         {
-            Loading = true;
-            await Task.Delay(300);
-            await Task.Run(() =>
+            var noteSegments = note.NoteSegments;
+            this.NoteSegments = new ObservableCollection<INoteSegmentService>(
+              noteSegments.Select(GetNoteSegmentViewModel)
+              );
+            Title = note.Title;
+            Desc = note.Desc;
+            Icon = note.Icon;
+            Color = note.Color;
+            BackgroundColor = note.BackgroundColor;
+            PreViewContent = note.PreViewContent;
+            IsEditable = note.IsEditable;
+
+            foreach (var noteSegment in NoteSegments)
             {
-
-                var noteSegments = note.NoteSegments;
-                this.NoteSegments = new ObservableCollection<INoteSegmentService>(
-                  noteSegments.Select(GetNoteSegmentViewModel)
-                  );
-                Title = note.Title;
-                Desc = note.Desc;
-                Icon = note.Icon;
-                Color = note.Color;
-                BackgroundColor = note.BackgroundColor;
-                PreViewContent = note.PreViewContent;
-                IsEditable = note.IsEditable;
-
-                foreach (var noteSegment in NoteSegments)
-                {
-                    noteSegment.Container = this;
-                }
-            }).ContinueWith((e) => { Loading = false; });
-
+                noteSegment.Container = this;
+            }
         }
 
         private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)
