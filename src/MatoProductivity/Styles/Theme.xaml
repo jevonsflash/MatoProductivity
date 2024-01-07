@@ -222,6 +222,34 @@
                 Value="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}" />
     </Style>
 
+    <Style TargetType="Border"
+           BasedOn="{StaticResource Base_FrameEntry}"
+           x:Key="SelectableLayoutStyle">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup Name="CommonStates">
+                    <VisualState Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
+                            <Setter Property="Stroke"
+                                    Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
+                            <Setter Property="Stroke"
+                                    Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+
+        </Setter>
+    </Style>
+
     <!--#endregion-->
 
     <!--#region Entry-->
@@ -281,9 +309,13 @@
         <Setter Property="FontFamily"
                 Value="Mulish_ExtraBold" />
         <Setter Property="Padding"
-                Value="20" />
+                Value="20,5" />
+        <Setter Property="Margin"
+                Value="0,0,5,0" />
         <Setter Property="BorderWidth"
                 Value="0" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
         <Setter Property="FontSize"
                 Value="{StaticResource ButtonFontSize}" />
     </Style>
@@ -294,13 +326,14 @@
 
         <Setter Property="BorderWidth"
                 Value="2" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
+
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal">
                         <VisualState.Setters>
-                            <Setter Property="TextColor"
-                                    Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
 
                             <Setter Property="BackgroundColor"
                                     Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
@@ -332,6 +365,9 @@
     <Style x:Key="Emphatic_Button"
            BasedOn="{StaticResource Base_Button}"
            TargetType="Button">
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightButtonTextColor2}, Dark={StaticResource DarkButtonTextColor2}}" />
+
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -339,8 +375,6 @@
                         <VisualState.Setters>
                             <Setter Property="BackgroundColor"
                                     Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}" />
-                            <Setter Property="TextColor"
-                                    Value="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Disabled">
@@ -353,6 +387,9 @@
                     </VisualState>
                     <VisualState x:Name="Pressed">
                         <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}" />
+
                             <Setter Property="Scale"
                                     Value="0.95" />
                         </VisualState.Setters>
@@ -374,12 +411,16 @@
                         <VisualState.Setters>
                             <Setter Property="TextColor"
                                     Value="{StaticResource AccentColor}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="Transparent" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
                             <Setter Property="TextColor"
                                     Value="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="Transparent" />
                         </VisualState.Setters>
                     </VisualState>
 
@@ -387,6 +428,8 @@
                         <VisualState.Setters>
                             <Setter Property="TextColor"
                                     Value="{StaticResource AccentColor2}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="Transparent" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>

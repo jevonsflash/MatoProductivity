@@ -540,9 +540,11 @@
         <Button x:Name="AddButton"
                 Command="{Binding CreateSegmentFromStore}"
                 Grid.Row="2"
+                Padding="20"
                 Margin="0, 0, 0, 15"
-                Style="{StaticResource Base_Button}"
-                Text="+"
+                Style="{StaticResource Emphatic_Button}"
+                Text="&#xf067;"
+                FontFamily="FontAwesome_Solid"
                 VerticalOptions="End">
         </Button>
 

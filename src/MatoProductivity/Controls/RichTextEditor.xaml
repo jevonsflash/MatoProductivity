@@ -5,44 +5,10 @@
              x:Class="MatoProductivity.Core.Controls.RichTextEditor">
     <ContentView.Resources>
         <Style TargetType="Button"
-               BasedOn="{StaticResource Base_Button}"
+               BasedOn="{StaticResource Emphatic_Button}"
                x:Key="RichTextButtonStyle">
             <Setter Property="FontFamily"
                     Value="FontAwesome_Solid"></Setter>
-            <Setter Property="BackgroundColor"
-                    Value="Transparent" />
-            <Setter Property="TextColor"
-                    Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                    >
-                
-            </Setter>
-            <Setter Property="BorderWidth"
-                    Value="0" />
-        </Style>
-        <Style TargetType="Border"
-               x:Key="SelectableLayoutStyle">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup Name="CommonStates">
-                        <VisualState Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
-                                <Setter Property="Stroke"
-                                        Value="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}" />
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState Name="Normal">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
-                                <Setter Property="Stroke"
-                                        Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
         </Style>
     </ContentView.Resources>
     <Border>
@@ -101,11 +67,10 @@
 
                             <Border x:Name="TargetElement"
                                     Style="{StaticResource SelectableLayoutStyle}"
-                                    BackgroundColor="{Binding}"
                                     WidthRequest="40"
                                     HeightRequest="40"
                                     StrokeShape="RoundRectangle 40">
-
+                                <Border BackgroundColor="{Binding}"></Border>
                             </Border>
 
                         </DataTemplate>

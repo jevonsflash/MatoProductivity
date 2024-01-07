@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Color = Microsoft.Maui.Graphics.Color;
 using Size = Microsoft.Maui.Graphics.Size;
 
 namespace MatoProductivity.Core.Services
@@ -18,20 +17,20 @@ namespace MatoProductivity.Core.Services
     public class ScriptSegmentService : FileSegmentService, ITransientDependency
     {
 
-        public static List<Color> DefaultLineColorList = new List<Color>() {
-            Color.FromArgb("#000000"),
-            Color.FromArgb("#F9371C"),
-            Color.FromArgb("#F97C1C"),
-            Color.FromArgb("#F9C81C"),
-            Color.FromArgb("#41D0B6"),
-            Color.FromArgb("#2CADF6"),
-            Color.FromArgb("#6562FC")
+        public static List<string> DefaultLineColorList = new List<string>() {
+            "#000000",
+            "#F9371C",
+            "#F97C1C",
+            "#F9C81C",
+            "#41D0B6",
+            "#2CADF6",
+            "#6562FC"
         };
 
         public static List<DrawingLineSize> DefaultDrawingLineSizeList = new List<DrawingLineSize>() {
-          new DrawingLineSize(){Name="Small", Value=2, FontSize=12},
-          new DrawingLineSize(){Name="Middle", Value=5, FontSize=16},
-          new DrawingLineSize(){Name="Large", Value=8, FontSize=20},
+          new DrawingLineSize(){Name=FaIcons.IconCircle, Value=2, FontSize=5},
+          new DrawingLineSize(){Name=FaIcons.IconCircle, Value=5, FontSize=10},
+          new DrawingLineSize(){Name=FaIcons.IconCircle, Value=8, FontSize=18},
         };
         public Command Undo { get; set; }
         public Command Storage { get; set; }
@@ -91,9 +90,9 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private Color _lineColor;
+        private string _lineColor;
 
-        public Color LineColor
+        public string LineColor
         {
             get { return _lineColor; }
             set
@@ -104,9 +103,9 @@ namespace MatoProductivity.Core.Services
         }
 
 
-        private List<Color> _lineColorSelectorSource;
+        private List<string> _lineColorSelectorSource;
 
-        public List<Color> LineColorSelectorSource
+        public List<string> LineColorSelectorSource
         {
             get { return _lineColorSelectorSource; }
             set

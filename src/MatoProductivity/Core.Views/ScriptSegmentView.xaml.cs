@@ -41,4 +41,20 @@ public partial class ScriptSegmentView : ContentView, ITransientDependency
         HideCollectionViews();
 
     }
+
+    private void ExpandDrawingViewButton_Clicked(object sender, EventArgs e)
+    {
+        if (this.MainEditor.HeightRequest<900)
+        {
+            this.MainEditor.HeightRequest+=200;
+        }
+    }
+
+    private void ShrinkDrawingViewButton_Clicked(object sender, EventArgs e)
+    {
+        if (this.MainEditor.HeightRequest>300)
+        {
+            this.MainEditor.HeightRequest-=200;
+        }
+    }
 }

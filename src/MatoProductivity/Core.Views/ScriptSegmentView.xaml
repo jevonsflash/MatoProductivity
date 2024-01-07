@@ -7,44 +7,12 @@
              x:Class="MatoProductivity.Core.Views.ScriptSegmentView">
     <ContentView.Resources>
         <Style TargetType="Button"
-               BasedOn="{StaticResource Base_Button}"
+               BasedOn="{StaticResource Emphatic_Button}"
                x:Key="ScriptButtonStyle">
             <Setter Property="FontFamily"
                     Value="FontAwesome_Solid"></Setter>
-            <Setter Property="BackgroundColor"
-                    Value="Transparent" />
-            <Setter Property="TextColor"
-                    Value="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}">
+        </Style>
 
-            </Setter>
-            <Setter Property="BorderWidth"
-                    Value="0" />
-        </Style>
-        <Style TargetType="Border"
-               x:Key="SelectableLayoutStyle">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup Name="CommonStates">
-                        <VisualState Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
-                                <Setter Property="Stroke"
-                                        Value="{AppThemeBinding Light={StaticResource LightPrimaryLineColor}, Dark={StaticResource DarkPrimaryLineColor}}" />
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState Name="Normal">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor"
-                                        Value="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}" />
-                                <Setter Property="Stroke"
-                                        Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
     </ContentView.Resources>
 
     <Grid>
@@ -54,7 +22,6 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-
             <Image Source="{Binding PreviewImage}"
                    IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}"></Image>
 
@@ -64,12 +31,32 @@
                                  LineColor="{Binding LineColor}"
                                  LineWidth="{Binding DrawingLineSize.Value}"
                                  HeightRequest="300"
+                                 BackgroundColor="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}"
                                  IsMultiLineModeEnabled="true"
                                  ShouldClearOnFinish="false" />
 
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="End">
+                <Button  Text="&#xf067;"
+                         FontFamily="FontAwesome_Solid"
+                         Style="{StaticResource Text_Button}"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         x:Name="ExpandDrawingViewButton"
+                         Clicked="ExpandDrawingViewButton_Clicked"></Button>
+
+                <Button Text="&#xf068;"
+                        FontFamily="FontAwesome_Solid"
+                        Style="{StaticResource Text_Button}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        x:Name="ShrinkDrawingViewButton"
+                        Clicked="ShrinkDrawingViewButton_Clicked"></Button>
+            </StackLayout>
 
             <VerticalStackLayout x:Name="OptionsLayout"
                                  Grid.Row="2"
+                                 Margin="0,5,0,0"
                                  Spacing="5">
                 <CollectionView x:Name="DrawingLineSizeCollectionView"
                                 Background="Transparent"
@@ -85,11 +72,16 @@
                         <DataTemplate>
 
                             <Border x:Name="TargetElement"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    StrokeShape="RoundRectangle 40"
                                     Style="{x:StaticResource SelectableLayoutStyle}"
                                     Padding="5,0">
                                 <Label Text="{Binding Name}"
+                                       HorizontalTextAlignment="Center"
+                                       FontFamily="FontAwesome_Solid"
                                        VerticalOptions="Center"
-                                       FontSize="{Binding Value}"></Label>
+                                       FontSize="{Binding FontSize}"></Label>
                             </Border>
 
 
@@ -112,11 +104,13 @@
 
                             <Border x:Name="TargetElement"
                                     Style="{StaticResource SelectableLayoutStyle}"
-                                    BackgroundColor="{Binding}"
                                     WidthRequest="40"
                                     HeightRequest="40"
                                     StrokeShape="RoundRectangle 40">
-
+                                <Border StrokeShape="RoundRectangle 40"
+                                        WidthRequest="20"
+                                        HeightRequest="20"
+                                        BackgroundColor="{Binding}"></Border>
                             </Border>
 
                         </DataTemplate>
@@ -124,9 +118,8 @@
                 </CollectionView>
             </VerticalStackLayout>
             <Grid  IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}">
-                <Button Text="重新绘制" Command="{Binding RemovePhoto}"
-                        
-                        ></Button>
+                <Button Text="重新绘制"
+                        Command="{Binding RemovePhoto}"></Button>
             </Grid>
             <Grid  IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}">
                 <Grid.ColumnDefinitions>
@@ -134,25 +127,31 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <HorizontalStackLayout
-                                       Spacing="5"
+                <HorizontalStackLayout Spacing="5"
                                        Margin="0,10">
                     <Button Text="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.Name, FallbackValue=Auto}"
+                            FontSize="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.FontSize, FallbackValue=Auto}"
                             Style="{StaticResource ScriptButtonStyle}"
                             Clicked="DrawingLineSizeButton_Clicked"
                             x:Name="DrawingLineSizeButton"></Button>
-                    <Button Text="Color"
+                    <Button Text="&#xf111;"
                             TextColor="{Binding Source={x:Reference ColorCollectionView}, Path=SelectedItem}"
-                            Style="{StaticResource ScriptButtonStyle}"
+                            FontFamily="FontAwesome_Solid"
                             Clicked="LineColorButton_Clicked"
                             x:Name="LineColorButton"></Button>
                 </HorizontalStackLayout>
 
-               
-                <Button Text="Clean"
-                        Grid.Column="2"
-                        Clicked="Button_Clicked"
-                        Command="{Binding Clear}"></Button>
+                <Grid  Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Button Text="清除"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"
+                            Clicked="Button_Clicked"
+                            Command="{Binding Clear}"></Button>
+                </Grid>
             </Grid>
 
 
