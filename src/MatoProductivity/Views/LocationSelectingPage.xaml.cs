@@ -23,4 +23,31 @@ new Dictionary<string, object>
     private async void PopupBase_Opened(object sender, CommunityToolkit.Maui.Core.PopupOpenedEventArgs e)
     {
     }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        this.ContentFrame.IsVisible=true;
+        this.ContentButton.IsVisible=false;
+        this.ContentLabel.IsVisible=false;
+
+    }
+
+    private void Entry_Completed(object sender, EventArgs e)
+    {
+        EditDone();
+    }
+
+
+    private void Entry_Unfocused(object sender, FocusEventArgs e)
+    {
+        EditDone();
+
+    }
+    private void EditDone()
+    {
+        this.ContentFrame.IsVisible=false;
+        this.ContentButton.IsVisible=true;
+        this.ContentLabel.IsVisible=true;
+    }
+
 }

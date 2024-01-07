@@ -147,7 +147,7 @@
 
     private async Task Refresh()
     {
-        var displayHeight = LocationSelectingPageViewModel.PopupSize.Height - 64;
+        var displayHeight = LocationSelectingPageViewModel.PopupSize.Height - 164;
         var displayWidth = LocationSelectingPageViewModel.PopupSize.Width;
         await JSRuntime.InvokeVoidAsync("viewService.SetAmapContainerSize", displayWidth, displayHeight);
 
@@ -181,7 +181,7 @@
             if (e.PropertyName==nameof(LocationSelectingPageViewModel.PopupSize))
             {
                 var displayWidth = LocationSelectingPageViewModel.PopupSize.Width;
-                var displayHeight = LocationSelectingPageViewModel.PopupSize.Height - 64;
+                var displayHeight = LocationSelectingPageViewModel.PopupSize.Height - 164;
                 await JSRuntime.InvokeVoidAsync("viewService.SetAmapContainerSize", displayWidth, displayHeight);
 
             }

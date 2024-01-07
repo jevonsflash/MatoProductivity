@@ -142,13 +142,13 @@ namespace MatoProductivity.Core.Amap
             }
             var inverseLocation = new ReGeocodeLocation
             {
-                Street = amapResponse.Regeocode.AddressComponent.StreetNumber.Street,
+                Street = amapResponse.Regeocode.AddressComponent.StreetNumber.Street.FirstOrDefault(),
                 AdCode = amapResponse.Regeocode.AddressComponent.AdCode,
                 Address = amapResponse.Regeocode.Address,
                 City = amapResponse.Regeocode.AddressComponent.City,
                 Country = amapResponse.Regeocode.AddressComponent.Country,
                 District = amapResponse.Regeocode.AddressComponent.District,
-                Number = amapResponse.Regeocode.AddressComponent.StreetNumber.Number,
+                Number = amapResponse.Regeocode.AddressComponent.StreetNumber.Number.FirstOrDefault(),
                 Province = amapResponse.Regeocode.AddressComponent.Province,
                 Town = amapResponse.Regeocode.AddressComponent.TownShip
             };

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace MatoProductivity.Core.Amap
@@ -112,13 +113,38 @@ namespace MatoProductivity.Core.Amap
         /// <summary>
         /// 经纬度所属商圈列表
         /// </summary>
-        public List<BusinessArea> BusinessAreas { get; set; }
+
+        [JsonProperty("businessAreas")]
+        public JToken BusinessAreasToken { get; set; }
+
+        public List<BusinessArea> BusinessAreas
+        {
+            get
+            {
+                if (BusinessAreasToken==default)
+                {
+                    return new List<BusinessArea>();
+                }
+                if (BusinessAreasToken.Type == JTokenType.Object)
+                {
+                    return new List<BusinessArea> { BusinessAreasToken.ToObject<BusinessArea>() };
+                }
+                else if (BusinessAreasToken.Type == JTokenType.Array)
+                {
+                    return BusinessAreasToken.ToObject<List<BusinessArea>>();
+                }
+                else
+                {
+                    return new List<BusinessArea>();
+                }
+            }
+        }
+
         public AddressComponent()
         {
             NeighBorHood = new NeighBorHood();
             Building = new Building();
             StreetNumber = new StreetNumber();
-            BusinessAreas = new List<BusinessArea>();
         }
     }
 
@@ -131,13 +157,53 @@ namespace MatoProductivity.Core.Amap
         /// 社区名称
         /// 例如：北京大学
         /// </summary>
-        public string[] Name { get; set; } = new string[0];
+        [JsonProperty("name")]
+        public JToken NameToken { get; set; }
+
+        public List<string> Name
+        {
+            get
+            {
+                if (NameToken.Type == JTokenType.String)
+                {
+                    return new List<string> { NameToken.ToObject<string>() };
+                }
+                else if (NameToken.Type == JTokenType.Array)
+                {
+                    return NameToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
 
         /// <summary>
         /// POI类型
         /// 例如：科教文化服务;学校;高等院校
         /// </summary>
-        public string[] Type { get; set; } = new string[0];
+        [JsonProperty("type")]
+        public JToken TypeToken { get; set; }
+
+        public List<string> Type
+        {
+            get
+            {
+                if (TypeToken.Type == JTokenType.String)
+                {
+                    return new List<string> { TypeToken.ToObject<string>() };
+                }
+                else if (TypeToken.Type == JTokenType.Array)
+                {
+                    return TypeToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
     }
     /// <summary>
     /// 楼信息
@@ -148,13 +214,52 @@ namespace MatoProductivity.Core.Amap
         /// 建筑名称
         /// 例如：万达广场
         /// </summary>
-        public string[] Name { get; set; } = new string[0];
+        [JsonProperty("name")]
+        public JToken NameToken { get; set; }
 
+        public List<string> Name
+        {
+            get
+            {
+                if (NameToken.Type == JTokenType.String)
+                {
+                    return new List<string> { NameToken.ToObject<string>() };
+                }
+                else if (NameToken.Type == JTokenType.Array)
+                {
+                    return NameToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 类型
         /// 例如：科教文化服务;学校;高等院校
         /// </summary>
-        public string[] Type { get; set; } = new string[0];
+        [JsonProperty("type")]
+        public JToken TypeToken { get; set; }
+
+        public List<string> Type
+        {
+            get
+            {
+                if (TypeToken.Type == JTokenType.String)
+                {
+                    return new List<string> { TypeToken.ToObject<string>() };
+                }
+                else if (TypeToken.Type == JTokenType.Array)
+                {
+                    return TypeToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
     }
     /// <summary>
     /// 街道信息
@@ -165,31 +270,129 @@ namespace MatoProductivity.Core.Amap
         /// 街道名称
         /// 例如：中关村北二条
         /// </summary>
-        public string Street { get; set; }
+        [JsonProperty("street")]
+        public JToken StreetToken { get; set; }
+
+        public List<string> Street
+        {
+            get
+            {
+                if (StreetToken.Type == JTokenType.String)
+                {
+                    return new List<string> { StreetToken.ToObject<string>() };
+                }
+                else if (StreetToken.Type == JTokenType.Array)
+                {
+                    return StreetToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
+
 
         /// <summary>
         /// 门牌号
         /// 例如：3号
         /// </summary>
-        public string Number { get; set; }
+        [JsonProperty("number")]
+        public JToken NumberToken { get; set; }
 
+        public List<string> Number
+        {
+            get
+            {
+                if (NumberToken.Type == JTokenType.String)
+                {
+                    return new List<string> { NumberToken.ToObject<string>() };
+                }
+                else if (NumberToken.Type == JTokenType.Array)
+                {
+                    return NumberToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 坐标点
         /// 经纬度坐标点：经度，纬度
         /// </summary>
-        public string Location { get; set; }
+        [JsonProperty("location")]
+        public JToken LocationToken { get; set; }
 
+        public List<string> Location
+        {
+            get
+            {
+                if (LocationToken.Type == JTokenType.String)
+                {
+                    return new List<string> { LocationToken.ToObject<string>() };
+                }
+                else if (LocationToken.Type == JTokenType.Array)
+                {
+                    return LocationToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 方向
         /// 坐标点所处街道方位
         /// </summary>
-        public string Direction { get; set; }
+        [JsonProperty("direction")]
+        public JToken DirectionToken { get; set; }
 
+        public List<string> Direction
+        {
+            get
+            {
+                if (DirectionToken.Type == JTokenType.String)
+                {
+                    return new List<string> { DirectionToken.ToObject<string>() };
+                }
+                else if (DirectionToken.Type == JTokenType.Array)
+                {
+                    return DirectionToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 门牌地址到请求坐标的距离
         /// 单位：米
         /// </summary>
-        public string Distance { get; set; }
+        [JsonProperty("distance")]
+        public JToken DistanceToken { get; set; }
+
+        public List<string> Distance
+        {
+            get
+            {
+                if (DistanceToken.Type == JTokenType.String)
+                {
+                    return new List<string> { DistanceToken.ToObject<string>() };
+                }
+                else if (DistanceToken.Type == JTokenType.Array)
+                {
+                    return DistanceToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -201,19 +404,77 @@ namespace MatoProductivity.Core.Amap
         /// 商圈中心点经纬度
         /// 经纬度坐标点：经度，纬度
         /// </summary>
-        public string Location { get; set; }
+        [JsonProperty("location")]
+        public JToken LocationToken { get; set; }
 
+        public List<string> Location
+        {
+            get
+            {
+                if (LocationToken.Type == JTokenType.String)
+                {
+                    return new List<string> { LocationToken.ToObject<string>() };
+                }
+                else if (LocationToken.Type == JTokenType.Array)
+                {
+                    return LocationToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 商圈名称 
         /// 例如：颐和园
         /// </summary>
-        public string Name { get; set; }
+        [JsonProperty("name")]
+        public JToken NameToken { get; set; }
 
+        public List<string> Name
+        {
+            get
+            {
+                if (NameToken.Type == JTokenType.String)
+                {
+                    return new List<string> { NameToken.ToObject<string>() };
+                }
+                else if (NameToken.Type == JTokenType.Array)
+                {
+                    return NameToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 商圈所在区域的adcode  
         /// 例如：朝阳区/海淀区 
         /// </summary>
-        public string Id { get; set; }
+        [JsonProperty("id")]
+        public JToken IdToken { get; set; }
+
+        public List<string> Id
+        {
+            get
+            {
+                if (IdToken.Type == JTokenType.String)
+                {
+                    return new List<string> { IdToken.ToObject<string>() };
+                }
+                else if (IdToken.Type == JTokenType.Array)
+                {
+                    return IdToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -224,26 +485,130 @@ namespace MatoProductivity.Core.Amap
         /// <summary>
         /// 道路Id
         /// </summary>
-        public string Id { get; set; }
+        [JsonProperty("id")]
+        public JToken IdToken { get; set; }
+
+        public List<string> Id
+        {
+            get
+            {
+                if (IdToken.Type == JTokenType.String)
+                {
+                    return new List<string> { IdToken.ToObject<string>() };
+                }
+                else if (IdToken.Type == JTokenType.Array)
+                {
+                    return IdToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }        /// <summary>
+                 /// 道路名称
+                 /// </summary>
+        [JsonProperty("name")]
+        public JToken NameToken { get; set; }
+
+        public List<string> Name
+        {
+            get
+            {
+                if (NameToken.Type == JTokenType.String)
+                {
+                    return new List<string> { NameToken.ToObject<string>() };
+                }
+                else if (NameToken.Type == JTokenType.Array)
+                {
+                    return NameToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
+
+
+
         /// <summary>
-        /// 道路名称
+        /// 方向
+        /// 坐标点所处街道方位
         /// </summary>
-        public string Name { get; set; }
+        [JsonProperty("direction")]
+        public JToken DirectionToken { get; set; }
+
+        public List<string> Direction
+        {
+            get
+            {
+                if (DirectionToken.Type == JTokenType.String)
+                {
+                    return new List<string> { DirectionToken.ToObject<string>() };
+                }
+                else if (DirectionToken.Type == JTokenType.Array)
+                {
+                    return DirectionToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
-        /// 道路到请求的坐标距离
+        /// 门牌地址到请求坐标的距离
         /// 单位：米
         /// </summary>
-        public string Distance { get; set; }
-        /// <summary>
-        /// 方位
-        /// 输入点和此路的相对方位
-        /// </summary>
-        public string Direction { get; set; }
+        [JsonProperty("distance")]
+        public JToken DistanceToken { get; set; }
+
+        public List<string> Distance
+        {
+            get
+            {
+                if (DistanceToken.Type == JTokenType.String)
+                {
+                    return new List<string> { DistanceToken.ToObject<string>() };
+                }
+                else if (DistanceToken.Type == JTokenType.Array)
+                {
+                    return DistanceToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
+
+
         /// <summary>
         /// 坐标点
         /// 经纬度坐标点：经度，纬度
         /// </summary>
-        public string Location { get; set; }
+        [JsonProperty("location")]
+        public JToken LocationToken { get; set; }
+
+        public List<string> Location
+        {
+            get
+            {
+                if (LocationToken.Type == JTokenType.String)
+                {
+                    return new List<string> { LocationToken.ToObject<string>() };
+                }
+                else if (LocationToken.Type == JTokenType.Array)
+                {
+                    return LocationToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -251,40 +616,183 @@ namespace MatoProductivity.Core.Amap
     /// </summary>
     public class Roadinter
     {
-        /// <summary>
-        /// 交叉路口到请求坐标的距离
-        /// 单位：米
-        /// </summary>
-        public string Distance { get; set; }
+
         /// <summary>
         /// 方位
         /// 输入点相对路口的方位
         /// </summary>
-        public string Direction { get; set; }
+        [JsonProperty("direction")]
+        public JToken DirectionToken { get; set; }
+
+        public List<string> Direction
+        {
+            get
+            {
+                if (DirectionToken.Type == JTokenType.String)
+                {
+                    return new List<string> { DirectionToken.ToObject<string>() };
+                }
+                else if (DirectionToken.Type == JTokenType.Array)
+                {
+                    return DirectionToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
-        /// 路口经纬度
+        /// 交叉路口到请求坐标的距离
+        /// 单位：米
         /// </summary>
-        public string Location { get; set; }
+        [JsonProperty("distance")]
+        public JToken DistanceToken { get; set; }
+
+        public List<string> Distance
+        {
+            get
+            {
+                if (DistanceToken.Type == JTokenType.String)
+                {
+                    return new List<string> { DistanceToken.ToObject<string>() };
+                }
+                else if (DistanceToken.Type == JTokenType.Array)
+                {
+                    return DistanceToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 坐标点
+        /// 经纬度坐标点：经度，纬度
+        /// </summary>
+        [JsonProperty("location")]
+        public JToken LocationToken { get; set; }
+
+        public List<string> Location
+        {
+            get
+            {
+                if (LocationToken.Type == JTokenType.String)
+                {
+                    return new List<string> { LocationToken.ToObject<string>() };
+                }
+                else if (LocationToken.Type == JTokenType.Array)
+                {
+                    return LocationToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
+
         /// <summary>
         /// 第一条道路id
         /// </summary>
         [JsonProperty("first_id")]
-        public string FirstId { get; set; }
+
+        public JToken FirstIdToken { get; set; }
+
+        public List<string> FirstId
+        {
+            get
+            {
+                if (FirstIdToken.Type == JTokenType.String)
+                {
+                    return new List<string> { FirstIdToken.ToObject<string>() };
+                }
+                else if (FirstIdToken.Type == JTokenType.Array)
+                {
+                    return FirstIdToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 第一条道路名称
         /// </summary>
         [JsonProperty("first_name")]
-        public string FirstName { get; set; }
+
+        public JToken FirstNameToken { get; set; }
+
+        public List<string> FirstName
+        {
+            get
+            {
+                if (FirstNameToken.Type == JTokenType.String)
+                {
+                    return new List<string> { FirstNameToken.ToObject<string>() };
+                }
+                else if (FirstNameToken.Type == JTokenType.Array)
+                {
+                    return FirstNameToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 第二条道路id
         /// </summary>
         [JsonProperty("second_id")]
-        public string SecondId { get; set; }
+        public JToken SecondIdToken { get; set; }
+
+        public List<string> SecondId
+        {
+            get
+            {
+                if (SecondIdToken.Type == JTokenType.String)
+                {
+                    return new List<string> { SecondIdToken.ToObject<string>() };
+                }
+                else if (SecondIdToken.Type == JTokenType.Array)
+                {
+                    return SecondIdToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
         /// <summary>
         /// 第二条道路名称
         /// </summary>
         [JsonProperty("second_name")]
-        public string SecondName { get; set; }
+        public JToken SecondNameToken { get; set; }
+
+        public List<string> SecondName
+        {
+            get
+            {
+                if (SecondNameToken.Type == JTokenType.String)
+                {
+                    return new List<string> { SecondNameToken.ToObject<string>() };
+                }
+                else if (SecondNameToken.Type == JTokenType.Array)
+                {
+                    return SecondNameToken.ToObject<List<string>>();
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
+        }
     }
 
     /// <summary>

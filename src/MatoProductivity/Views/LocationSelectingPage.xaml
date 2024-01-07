@@ -39,14 +39,50 @@
                             Command="{Binding Done}"></Button>
                 </HorizontalStackLayout>
             </Grid>
-            <Label Grid.Row="1"
-                   HorizontalTextAlignment="Center"
-                   VerticalOptions="Center"
-                   Margin="10, 10, 10, 0"
-                   Text="{Binding Address}"></Label>
-            <BlazorWebView 
-                Grid.Row="2"
-                x:Name="mainMapBlazorWebView"
+
+            <Grid Grid.Row="1"
+                  Margin="10, 10, 10, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       x:Name="ContentLabel"
+                       Text="{Binding Address}"></Label>
+                <Border IsVisible="False"
+                        Grid.RowSpan="2"
+                        x:Name="ContentFrame"
+                        Style="{StaticResource Base_FrameEntry}">
+                    <Entry Text="{Binding Address, Mode=TwoWay}"
+                           Placeholder="请输入地址, 按Enter键完成"
+                           Completed="Entry_Completed"
+                           Unfocused="Entry_Unfocused"
+                           ClearButtonVisibility="WhileEditing"></Entry>
+                </Border>
+                <Border x:Name="ContentButton"
+                        Grid.Row="1"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span FontFamily="FontAwesome"
+                                      Text="&#xf044;"></Span>
+                                <Span Text=" 修改"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+
+                    </Label>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped">
+                        </TapGestureRecognizer>
+                    </Border.GestureRecognizers>
+                </Border>
+            </Grid>
+            <BlazorWebView Grid.Row="2"
+                           Margin="-10, 0"
+                           x:Name="mainMapBlazorWebView"
                            HostPage="wwwroot/amap_index.html">
                 <BlazorWebView.RootComponents>
                     <RootComponent Selector="#app"

@@ -18,10 +18,10 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="PickPhoto"
+                <Button Text="选取照片"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                         Command="{Binding PickPhoto}"></Button>
-                <Button Text="CapturePhoto"
+                <Button Text="拍照"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                         Grid.Column="1"
                         Command="{Binding CapturePhoto}"></Button>

@@ -23,7 +23,7 @@ namespace MatoProductivity.ViewModels
         private readonly AmapHttpRequestClient amapHttpRequestClient;
         public event EventHandler<FinishedChooiseEvenArgs> OnFinishedChooise;
         private static AsyncLock asyncLock = new AsyncLock();
-        public static RateLimitedAction throttledAction = Debouncer.Debounce(null, TimeSpan.FromMilliseconds(500), leading: false, trailing: true);
+        public static RateLimitedAction throttledAction = Debouncer.Debounce(null, TimeSpan.FromMilliseconds(1500), leading: false, trailing: true);
         public LocationSelectingPageViewModel(AmapHttpRequestClient amapHttpRequestClient)
         {
             this.Search = new Command(SearchAction);
@@ -95,8 +95,12 @@ namespace MatoProductivity.ViewModels
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
                                 this.CurrentLocation=amapLocation;
-                                Address = reGeocodeLocation?.Address;
-                                Pois=new ObservableCollection<Core.Location.Poi>(reGeocodeLocation.Pois);
+                                if (reGeocodeLocation!=null)
+                                {
+                                    Address = reGeocodeLocation.Address;
+                                    Pois=new ObservableCollection<Core.Location.Poi>(reGeocodeLocation.Pois);
+
+                                }
                             });
                         });
                         throttledAction.Invoke();

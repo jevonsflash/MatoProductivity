@@ -4,7 +4,8 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     x:Class="MatoProductivity.Styles.Colors">
     <Color x:Key="PrimaryColor">#212121</Color>
-    <Color x:Key="AccentColor">#AA3333</Color>
+    <Color x:Key="AccentColor">#536DFE</Color>
+    <Color x:Key="AccentColor2">#4055C1</Color>
 
     <Color x:Key="FailColor">#D04C41</Color>
     <Color x:Key="SuccessColor">#00AF49</Color>
