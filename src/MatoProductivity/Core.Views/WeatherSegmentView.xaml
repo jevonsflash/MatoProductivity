@@ -6,17 +6,14 @@
              x:Class="MatoProductivity.Core.Views.WeatherSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <WebView>
-                <WebView.Source>
-                    <HtmlWebViewSource Html="{Binding Content}"></HtmlWebViewSource>
-                </WebView.Source>
-            </WebView>
+            <Label   Style="{StaticResource Body1_MulishRegular}"
+                     Text="{Binding Content}"></Label>
+
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            <controls:RichTextEditor Text="{Binding Content, Mode=TwoWay}" 
-                                     Placeholder="{Binding PlaceHolder}"></controls:RichTextEditor>
-
+            <Label   Style="{StaticResource Body1_MulishRegular}"
+                     Text="{Binding Content}"></Label>
 
         </VerticalStackLayout>
 
@@ -25,16 +22,8 @@
                 <Entry  Text="{Binding Title}"
                         Placeholder="请输入标题" />
             </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Entry  Text="{Binding PlaceHolder}"
-                        Placeholder="请输入PlaceHolder" />
-            </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Editor Text="{Binding Content}"
-                        Placeholder="{Binding PlaceHolder}"></Editor>
-            </Border>
+            <Label   Style="{StaticResource Body1_MulishRegular}"
+                     Text="{Binding Content}"></Label>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

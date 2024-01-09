@@ -36,7 +36,7 @@ partial class AudioRecorder : IAudioRecorder
 
 		var audioManager = Android.App.Application.Context.GetSystemService(Context.AudioService) as Android.Media.AudioManager;
 
-		var rate = audioManager?.GetProperty(Android.Media.AudioManager.PropertyOutputSampleRate);
+		var rate = "16000";
 		if (rate != null)
 		{
 			var micSampleRate = int.Parse(rate);

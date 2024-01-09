@@ -5,7 +5,8 @@
              x:Class="MatoProductivity.Core.Views.LocationSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-
+            <Label   Style="{StaticResource Body1_MulishRegular}"
+                     Text="{Binding Address}"></Label>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
@@ -28,16 +29,11 @@
                 <Entry  Text="{Binding Title}"
                         Placeholder="请输入标题" />
             </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Entry  Text="{Binding PlaceHolder}"
-                        Placeholder="请输入PlaceHolder" />
-            </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Editor Text="{Binding Content}"
-                        Placeholder="{Binding PlaceHolder}"></Editor>
-            </Border>
+            <Label   Style="{StaticResource Body1_MulishRegular}"
+                     Text="{Binding Address}"></Label>
+            <Button Grid.Row="1"
+                    Text="从地图选取"
+                    Command="{Binding PickFromMap}"></Button>
         </VerticalStackLayout>
     </Grid>
 </ContentView>
