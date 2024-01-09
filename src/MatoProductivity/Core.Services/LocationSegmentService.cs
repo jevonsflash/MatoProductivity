@@ -16,12 +16,13 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class LocationSegmentService : NoteSegmentService, ITransientDependency, IPopupContainerViewModelBase
+    public class LocationSegmentService : NoteSegmentService, ITransientDependency, IPopupContainerViewModelBase,IAutoSet
     {
 
         private readonly AmapHttpRequestClient amapHttpRequestClient;
         private readonly NavigationService navigationService;
         private readonly IIocResolver iocResolver;
+        public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
         public Command PickFromMap { get; set; }
         private Popup locationSelectingPage;
         public LocationSegmentService(
@@ -182,6 +183,7 @@ namespace MatoProductivity.Core.Services
             }
         }
 
+        public bool IsAutoSet { get; set; } = true;
 
 
 

@@ -33,6 +33,10 @@
                     <Button Text="StopPlay"
                             Command="{Binding StopPlayAudio}" />
 
+
+                    <Button Text="TranslatedContent"
+                            Command="{Binding TranslatedContent}" />
+
                     <Label Text="{Binding RecordingTime, Converter={StaticResource TimeSpanToFormatTimeStringConverter}}" />
                 </VerticalStackLayout>
 

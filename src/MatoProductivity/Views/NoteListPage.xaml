@@ -366,7 +366,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Image Source="emptylist.svg"
+                    <Image Source="emptylist"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"></Image>
                     <Label Text="您还没有创建任何笔记"

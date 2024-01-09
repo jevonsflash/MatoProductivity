@@ -1,7 +1,9 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Baidu.Aip.Speech;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.ViewModels;
 using Microsoft.Maui.Dispatching;
 using Plugin.Maui.Audio;
 using System;
@@ -22,6 +24,7 @@ namespace MatoProductivity.Core.Services
         public Command StopRecordAudio { get; set; }
         public Command StopPlayAudio { get; set; }
         public Command RecordAudio { get; set; }
+        public Command TranslatedContent { get; set; }
 
         AsyncAudioPlayer audioPlayer;
         IAudioRecorder audioRecorder;
@@ -41,6 +44,7 @@ namespace MatoProductivity.Core.Services
             this.StopRecordAudio = new Command(StopRecordAudioAction, () => IsRecording);
             this.StopPlayAudio = new Command(StopPlayAudioAction, () => IsPlaying);
             this.RecordAudio = new Command(RecordAudioAction, () => !IsRecording);
+            this.TranslatedContent = new Command(TranslatedContentAction);
 
             this.audioManager = AudioManager.Current;
             this.dispatcher = dispatcher;
@@ -83,6 +87,36 @@ namespace MatoProductivity.Core.Services
 
 
         }
+
+        private async void TranslatedContentAction(object obj)
+        {
+            var asrClient = new Asr("11797113", "UsXraVVnzHbzwXGuCD0Z4d9b", "8kGEszPmYxN5WGEHYV8yzx80zGVZElcX");
+            asrClient.Timeout = 120000;
+            var translated = await Task.Run(() =>
+            {
+                var result = asrClient.Recognize(this.FileContent, "pcm", 16000);
+                var msg = result["result"]?.ToString();
+                return msg;
+            });
+            Console.WriteLine(translated);
+            if (string.IsNullOrEmpty(translated))
+            {
+                return;
+            }
+            if (Container is EditNotePageViewModel)
+            {
+
+                var note = new NoteSegment()
+                {
+                    Title = this.NoteSegment.Title+"的识别结果",
+                    Type= "TextSegment",
+                    NoteSegmentPayloads= new List<NoteSegmentPayload>()
+                };
+                note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", translated));
+                (Container as EditNotePageViewModel).CreateSegment.Execute(note);
+             }
+        }
+
 
 
         async void PlayAudioAction()

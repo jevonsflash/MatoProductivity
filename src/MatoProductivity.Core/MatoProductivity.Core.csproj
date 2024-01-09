@@ -58,6 +58,9 @@
 
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\libs\AipSdk\AipSdk.csproj" />
+		<ProjectReference Include="..\libs\Plugin.Maui.Audio\Plugin.Maui.Audio.csproj" />
+		<ProjectReference Include="..\libs\QWeatherAPI\QWeatherAPI.csproj" />
 		<ProjectReference Include="..\MatoProductivity.Infrastructure\MatoProductivity.Infrastructure.csproj" />
 	</ItemGroup>
 

@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{0B03CB59-4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Maui.Audio", "src\libs\Plugin.Maui.Audio\Plugin.Maui.Audio.csproj", "{39B00D9E-3C79-4613-B0B5-0FA2F63CDE6F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QWeatherAPI", "src\libs\QWeatherAPI\QWeatherAPI.csproj", "{9591298E-04EF-45F8-949A-32CA6F34625F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AipSdk", "src\libs\AipSdk\AipSdk.csproj", "{2415FA29-E81C-4C91-A6DA-DC2379A90788}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,12 +76,30 @@ Global
 		{39B00D9E-3C79-4613-B0B5-0FA2F63CDE6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39B00D9E-3C79-4613-B0B5-0FA2F63CDE6F}.Release|x64.ActiveCfg = Release|Any CPU
 		{39B00D9E-3C79-4613-B0B5-0FA2F63CDE6F}.Release|x64.Build.0 = Release|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Debug|x64.Build.0 = Debug|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Release|x64.ActiveCfg = Release|Any CPU
+		{9591298E-04EF-45F8-949A-32CA6F34625F}.Release|x64.Build.0 = Release|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Debug|x64.Build.0 = Debug|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Release|x64.ActiveCfg = Release|Any CPU
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{39B00D9E-3C79-4613-B0B5-0FA2F63CDE6F} = {0B03CB59-4827-4EBB-B943-5FF3E15D16C4}
+		{9591298E-04EF-45F8-949A-32CA6F34625F} = {0B03CB59-4827-4EBB-B943-5FF3E15D16C4}
+		{2415FA29-E81C-4C91-A6DA-DC2379A90788} = {0B03CB59-4827-4EBB-B943-5FF3E15D16C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}

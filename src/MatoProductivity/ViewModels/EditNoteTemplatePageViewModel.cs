@@ -247,7 +247,7 @@ namespace MatoProductivity.ViewModels
                 var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegmentTemplate);
                 if (newModel != null)
                 {
-                    newModel.Create.Execute(null);
+                    //newModel.Create.Execute(null);
                     newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
                     newModel.Container = this;
                     this.NoteSegments.Add(newModel);

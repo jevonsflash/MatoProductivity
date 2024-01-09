@@ -76,7 +76,6 @@
 	</ItemGroup>
 
 	<ItemGroup>	
-	  <ProjectReference Include="..\libs\Plugin.Maui.Audio\Plugin.Maui.Audio.csproj" />	
 	  <ProjectReference Include="..\MatoProductivity.Core\MatoProductivity.Core.csproj" />
 	  <ProjectReference Include="..\MatoProductivity.EntityFrameworkCore\MatoProductivity.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\MatoProductivity.Infrastructure\MatoProductivity.Infrastructure.csproj" />

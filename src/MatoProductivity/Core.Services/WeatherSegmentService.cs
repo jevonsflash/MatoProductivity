@@ -2,6 +2,10 @@
 using Abp.Domain.Repositories;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Core.Weather;
+using MatoProductivity.Helper;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using QWeatherAPI.Result.RealTimeWeather;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +13,9 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class WeatherSegmentService : NoteSegmentService, ITransientDependency
+    public class WeatherSegmentService : NoteSegmentService, ITransientDependency, IAutoSet
     {
-
-        private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
+        public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
         public WeatherSegmentService(
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
@@ -21,7 +24,7 @@ namespace MatoProductivity.Core.Services
             PropertyChanged += WeatherSegmentViewModel_PropertyChanged;
         }
 
-        private void WeatherSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void WeatherSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
@@ -29,14 +32,19 @@ namespace MatoProductivity.Core.Services
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
+                var location = await GeoLocationHelper.GetNativePosition();
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                var locationString = $"{location.Longitude},{location.Latitude}";
+                var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
+                var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
+
+                this.NowWeather = realTimeWeatherInfo.Now;
+
+                var defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), StringifyNowWeather);
+
+                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), defaultContentSegmentPayload);
                 Content = content.GetStringValue();
 
-                var defaultPlaceHolderSegmentPayload = this.CreateNoteSegmentPayload(nameof(PlaceHolder), "请输入" + Title);
-
-                var placeHolder = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
-                PlaceHolder = placeHolder.GetStringValue();
             }
 
             else if (e.PropertyName == nameof(Content))
@@ -48,9 +56,9 @@ namespace MatoProductivity.Core.Services
                 }
             }
 
-            else if (e.PropertyName == nameof(PlaceHolder))
+            else if (e.PropertyName == nameof(NowWeather))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
+                this.RaisePropertyChanged(nameof(StringifyNowWeather));
             }
             else if (e.PropertyName == nameof(Title))
             {
@@ -58,10 +66,36 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        public override void CreateAction(object obj)
+        public async override void CreateAction(object obj)
         {
 
+            var location = await GeoLocationHelper.GetNativePosition();
+
+            var locationString = $"{location.Longitude},{location.Latitude}";
+            var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
+            var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
+
+            this.NowWeather = realTimeWeatherInfo.Now;
+
+            var defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), StringifyNowWeather);
+
+            NoteSegment?.SetNoteSegmentPayloads(defaultContentSegmentPayload);
         }
+
+        private Now _nowWeather;
+
+        public Now NowWeather
+        {
+            get { return _nowWeather; }
+            set
+            {
+                _nowWeather = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string StringifyNowWeather => $"温度 {NowWeather.Temp}°C,天气 {NowWeather.Text}";
+
 
         private string _content;
 
@@ -77,6 +111,7 @@ namespace MatoProductivity.Core.Services
 
         private string _title;
 
+
         public string Title
         {
             get { return _title; }
@@ -87,20 +122,6 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private string _placeHolder;
-
-        public string PlaceHolder
-        {
-            get { return _placeHolder; }
-            set
-            {
-                _placeHolder = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-
-
+        public bool IsAutoSet { get; set; } = true;
     }
 }

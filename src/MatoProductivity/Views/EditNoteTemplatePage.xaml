@@ -445,7 +445,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Image Source="emptylist.svg"
+                    <Image Source="emptylist"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"></Image>
                     <Label Text="没有任何片段"

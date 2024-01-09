@@ -255,16 +255,30 @@ namespace MatoProductivity.ViewModels
 
         private async void CreateSegmentAction(object obj)
         {
-            var type = obj as string;
             NoteSegment note = default;
-            await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+            if (obj is string)
             {
-                var noteTemplate = await noteSegmentStoreRepository.GetAll()
-                              .Where(c => c.Type == type).FirstOrDefaultAsync();
-                note = ObjectMapper.Map<NoteSegment>(noteTemplate);
+                var type = obj as string;
+                await unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+                {
+                    var noteTemplate = await noteSegmentStoreRepository.GetAll()
+                                  .Where(c => c.Type == type).FirstOrDefaultAsync();
+                    note = ObjectMapper.Map<NoteSegment>(noteTemplate);
 
-            });
+                });
+            }
+            else if (obj is NoteSegment)
+            {
+                note = obj as NoteSegment;
+            }
+
+            if (note == default)
+            {
+                return;
+            }
             _CreateSegment(note);
+
+
         }
 
 
@@ -287,7 +301,7 @@ namespace MatoProductivity.ViewModels
                     Type = note.Type,
                     Desc = note.Desc,
                     Icon = note.Icon,
-                    NoteSegmentPayloads = new List<NoteSegmentPayload>()
+                    NoteSegmentPayloads = note.NoteSegmentPayloads ?? new List<NoteSegmentPayload>()
 
                 };
 
@@ -295,7 +309,7 @@ namespace MatoProductivity.ViewModels
                 var newModel = noteSegmentServiceFactory.GetNoteSegmentService(noteSegment);
                 if (newModel != null)
                 {
-                    newModel.Create.Execute(null);
+                    //newModel.Create.Execute(null);
                     newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
                     newModel.Container = this;
                     this.NoteSegments.Add(newModel);
