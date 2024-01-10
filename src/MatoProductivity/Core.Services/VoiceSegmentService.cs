@@ -1,5 +1,6 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using Abp.Threading.Timers;
 using Baidu.Aip.Speech;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
@@ -30,10 +31,10 @@ namespace MatoProductivity.Core.Services
         IAudioRecorder audioRecorder;
         readonly Stopwatch recordingStopwatch = new Stopwatch();
         private readonly IAudioManager audioManager;
-        private readonly IDispatcher dispatcher;
+        private readonly AbpAsyncTimer timer;
 
         public VoiceSegmentService(
-            IDispatcher dispatcher,
+            AbpAsyncTimer timer,
             IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
@@ -47,12 +48,18 @@ namespace MatoProductivity.Core.Services
             this.TranslatedContent = new Command(TranslatedContentAction);
 
             this.audioManager = AudioManager.Current;
-            this.dispatcher = dispatcher;
+            this.timer = timer;
+            this.timer.Period = 100;
+            this.timer.Elapsed = async (timer) =>
+            {
+                await Task.Run(() => RaisePropertyChanged(nameof(RecordingTime)));
+            };
+            this.timer.Start();
         }
 
-        public double RecordingTime
+        public TimeSpan RecordingTime
         {
-            get => recordingStopwatch.ElapsedMilliseconds / 1000;
+            get => TimeSpan.FromMilliseconds(recordingStopwatch.ElapsedMilliseconds);
         }
 
         private bool isPlaying;
@@ -84,8 +91,6 @@ namespace MatoProductivity.Core.Services
             {
 
             }
-
-
         }
 
         private async void TranslatedContentAction(object obj)
@@ -114,7 +119,7 @@ namespace MatoProductivity.Core.Services
                 };
                 note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", translated));
                 (Container as EditNotePageViewModel).CreateSegment.Execute(note);
-             }
+            }
         }
 
 
@@ -150,7 +155,6 @@ namespace MatoProductivity.Core.Services
             }
 
             recordingStopwatch.Restart();
-            UpdateRecordingTime();
             RaisePropertyChanged(nameof(IsRecording));
             RecordAudio.ChangeCanExecute();
             StopRecordAudio.ChangeCanExecute();
@@ -171,22 +175,6 @@ namespace MatoProductivity.Core.Services
             StopRecordAudio.ChangeCanExecute();
         }
 
-        void UpdateRecordingTime()
-        {
-            if (IsRecording is false)
-            {
-                return;
-            }
-
-            dispatcher.DispatchDelayed(
-                TimeSpan.FromMilliseconds(16),
-                () =>
-                {
-                    RaisePropertyChanged(nameof(RecordingTime));
-
-                    UpdateRecordingTime();
-                });
-        }
 
 
     }

@@ -57,7 +57,7 @@ partial class AudioRecorder : IAudioRecorder
 
 		bufferSize = AudioRecord.GetMinBufferSize(sampleRate, channelConfig, encoding) * 8;
 
-		return new AudioRecord(AudioSource.Mic, sampleRate, ChannelIn.Stereo, encoding, bufferSize);
+		return new AudioRecord(AudioSource.Mic, sampleRate, ChannelIn.Mono, encoding, bufferSize);
 	}
 
 	public Task<IAudioSource> StopAsync()
@@ -131,7 +131,7 @@ partial class AudioRecorder : IAudioRecorder
 
 	void CopyWaveFile(string? sourcePath, string destinationPath)
 	{
-		int channels = 2;
+		int channels = 1;
 		long byteRate = 16 * sampleRate * channels / 8;
 
 		var data = new byte[bufferSize];

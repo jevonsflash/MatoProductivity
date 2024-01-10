@@ -10,7 +10,7 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            
+
             <Image Source="{Binding PreviewImage}"></Image>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
                     <Button Text="TranslatedContent"
                             Command="{Binding TranslatedContent}" />
 
-                    <Label Text="{Binding RecordingTime, Converter={StaticResource TimeSpanToFormatTimeStringConverter}}" />
+                    <Label Text="{Binding RecordingTime,  StringFormat='{mm:ss}'}" />
                 </VerticalStackLayout>
 
 
@@ -46,7 +46,7 @@
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
                         Command="{Binding RemovePhoto}"></Button>-->
             </Grid>
-       
+
 
 
         </VerticalStackLayout>
@@ -56,7 +56,7 @@
                 <Entry  Text="{Binding Title}"
                         Placeholder="请输入标题" />
             </Border>
- 
+
         </VerticalStackLayout>
     </Grid>
 </ContentView>
