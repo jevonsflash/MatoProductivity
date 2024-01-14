@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class LocationSegmentService : NoteSegmentService, ITransientDependency, IPopupContainerViewModelBase,IAutoSet
+    public class LocationSegmentService : NoteSegmentService, ITransientDependency, IPopupContainerViewModelBase, IAutoSet
     {
 
         private readonly AmapHttpRequestClient amapHttpRequestClient;
@@ -57,7 +57,20 @@ namespace MatoProductivity.Core.Services
                     Locations= [amapLocation]
 
                 };
-                var reGeocodeLocation = await amapHttpRequestClient.InverseAsync(amapInverseHttpRequestParamter);
+                ReGeocodeLocation reGeocodeLocation = null;
+                try
+                {
+                    reGeocodeLocation = await amapHttpRequestClient.InverseAsync(amapInverseHttpRequestParamter);
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString);
+                }
+                if (reGeocodeLocation==null)
+                {
+                    return;
+                }
                 var address = reGeocodeLocation.Address;
 
                 var defaultLocationSegmentPayload = this.CreateNoteSegmentPayload(nameof(Location), amapLocation.ToString());
@@ -91,14 +104,13 @@ namespace MatoProductivity.Core.Services
         {
             PopupLoading = true;
             PickFromMap.ChangeCanExecute();
-            await Task.Run(() =>
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<LocationSelectingPage>())
             {
-                using (var objWrapper = iocResolver.ResolveAsDisposable<LocationSelectingPage>())
-                {
-                    locationSelectingPage = objWrapper.Object;
-                    (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise += LocationSelectingPageViewModel_OnFinishedChooise;
-                }
-            });
+                locationSelectingPage = objWrapper.Object;
+                (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise += LocationSelectingPageViewModel_OnFinishedChooise;
+            }
+
             await navigationService.ShowPopupAsync(locationSelectingPage).ContinueWith(async (e) =>
             {
                 (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
@@ -157,7 +169,7 @@ namespace MatoProductivity.Core.Services
                 RaisePropertyChanged();
             }
         }
-       
+
 
         private string _title;
 

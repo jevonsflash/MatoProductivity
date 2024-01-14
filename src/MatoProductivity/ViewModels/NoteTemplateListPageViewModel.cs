@@ -40,9 +40,9 @@ namespace MatoProductivity.ViewModels
         private async void CreateActionAsync(object obj)
         {
 
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
+            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = 0 }))
             {
-                (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+                (objWrapper.Object.BindingContext as EditNoteTemplatePageViewModel).Create.Execute(null);
 
                 await navigationService.PushAsync(objWrapper.Object);
             }

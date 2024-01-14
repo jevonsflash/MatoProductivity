@@ -31,9 +31,9 @@ namespace MatoProductivity.ViewModels
             IUnitOfWorkManager unitOfWorkManager,
             IIocResolver iocResolver)
         {
-            Remove = new Command(RemoveAction);
-            Edit = new Command(EditAction);
-            Share = new Command(ShareAction);
+            Remove = new Command(RemoveAction, (o) => !Loading);
+            Edit = new Command(EditAction, (o) => !Loading);
+            Share = new Command(ShareAction, (o) => !Loading);
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.repository = repository;
@@ -96,6 +96,17 @@ namespace MatoProductivity.ViewModels
             else if (e.PropertyName == nameof(NoteSegments))
             {
                 RaisePropertyChanged(nameof(CanSimplified));
+            }
+
+            else if (e.PropertyName == nameof(Loading))
+            {
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    this.Remove.ChangeCanExecute();
+                    this.Edit.ChangeCanExecute();
+                    this.Share.ChangeCanExecute();
+                });
             }
         }
 

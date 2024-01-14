@@ -259,14 +259,13 @@ namespace MatoProductivity.ViewModels
         {
             PopupLoading = true;
             CreateSegmentFromStore.ChangeCanExecute();
-            await Task.Run(() =>
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<NoteSegmentStoreListPage>())
             {
-                using (var objWrapper = iocResolver.ResolveAsDisposable<NoteSegmentStoreListPage>())
-                {
-                    noteSegmentStoreListPage = objWrapper.Object;
-                    (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise += EditNoteTemplatePageViewModel_OnFinishedChooise;
-                }
-            });
+                noteSegmentStoreListPage = objWrapper.Object;
+                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise += EditNoteTemplatePageViewModel_OnFinishedChooise;
+            }
+
             await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith((e) =>
             {
                 (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;

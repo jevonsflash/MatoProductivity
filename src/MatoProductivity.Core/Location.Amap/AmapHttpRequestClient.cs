@@ -67,7 +67,7 @@ namespace MatoProductivity.Core.Amap
             }
             if (amapResponse.Count <= 0)
             {
-    
+
                 throw new AbpException("ResolveLocationZero");
             }
 
@@ -132,12 +132,22 @@ namespace MatoProductivity.Core.Amap
             }
 
             var resultContent = await response.Content.ReadAsStringAsync();
-            var amapResponse = JsonConvert.DeserializeObject<AmapInverseLocationResponse>(resultContent);
+            AmapInverseLocationResponse amapResponse = null;
+            try
+            {
+                amapResponse = JsonConvert.DeserializeObject<AmapInverseLocationResponse>(resultContent);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new AbpException($"Deserialize address failed:{ex}!");
+            }
 
             if (!amapResponse.IsSuccess())
             {
                 var localizerError = amapResponse.GetErrorMessage();
-              
+
                 throw new AbpException($"Resolution address failed:{localizerError}!");
             }
             var inverseLocation = new ReGeocodeLocation

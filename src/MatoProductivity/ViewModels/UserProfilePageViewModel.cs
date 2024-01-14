@@ -40,16 +40,15 @@ namespace MatoProductivity.ViewModels
         {
             PopupLoading = true;
             AppActionSetting.ChangeCanExecute();
-            await Task.Run(() =>
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<AppActionSettingPage>())
             {
-                using (var objWrapper = iocResolver.ResolveAsDisposable<AppActionSettingPage>())
-                {
-                    shortCutSettingPage = objWrapper.Object;
-                    (shortCutSettingPage.BindingContext as AppActionSettingPageViewModel).OnFinishedChooise += AppActionSettingPageViewModel_OnFinishedChooise;
-                }
-            });
+                shortCutSettingPage = objWrapper.Object;
+                (shortCutSettingPage.BindingContext as AppActionSettingPageViewModel).OnFinishedChooise += AppActionSettingPageViewModel_OnFinishedChooise;
+            }
+
             await navigationService.ShowPopupAsync(shortCutSettingPage).ContinueWith(async (e) =>
-            {
+            { 
                 (shortCutSettingPage.BindingContext as AppActionSettingPageViewModel).OnFinishedChooise -= AppActionSettingPageViewModel_OnFinishedChooise;
                 shortCutSettingPage = null;
                 MainThread.BeginInvokeOnMainThread(() =>

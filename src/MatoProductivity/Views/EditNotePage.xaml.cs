@@ -1,6 +1,7 @@
 using Abp.Dependency;
 using MatoProductivity.ViewModels;
 using Microsoft.Maui.Handlers;
+using System.Collections.Specialized;
 
 namespace MatoProductivity.Views;
 
@@ -12,14 +13,22 @@ public partial class EditNotePage : ContentPageBase, ITransientDependency
     {
         InitializeComponent();
         this.BindingContext = editNotePageViewModel;
+        this.MainCollectionView.ChildAdded+=MainCollectionView_ChildAdded;
     }
 
+    private async void MainCollectionView_ChildAdded(object sender, ElementEventArgs e)
+    {
+
+        await this.MainCollectionViewWrapper.ScrollToAsync(MainCollectionViewWrapper.ScrollX, MainCollectionView.Height, true);
+
+    }
 
     public EditNotePage(EditNotePageViewModel editNotePageViewModel, long NoteId) : this(editNotePageViewModel)
     {
         this.editNotePageViewModel.NoteId = NoteId;
 
     }
+
 
     public EditNotePage(EditNotePageViewModel editNotePageViewModel, long NoteId, long NoteTemplateId) : this(editNotePageViewModel, NoteId)
     {

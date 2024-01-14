@@ -12,12 +12,20 @@ public partial class EditNoteTemplatePage : ContentPageBase, ITransientDependenc
     {
         InitializeComponent();
         this.BindingContext = editNoteTemplatePageViewModel;
+        this.MainCollectionView.ChildAdded+=MainCollectionView_ChildAdded;
     }
 
 
     public EditNoteTemplatePage(EditNoteTemplatePageViewModel editNoteTemplatePageViewModel, long NoteId) : this(editNoteTemplatePageViewModel)
     {
         this.editNoteTemplatePageViewModel.NoteTemplateId = NoteId;
+
+    }
+
+    private async void MainCollectionView_ChildAdded(object sender, ElementEventArgs e)
+    {
+
+        await this.MainCollectionViewWrapper.ScrollToAsync(MainCollectionViewWrapper.ScrollX, MainCollectionView.Height, true);
 
     }
 

@@ -8,23 +8,23 @@
                                       DisplayMemberName="Name" />
     </Shell.SearchHandler>
     <TabBar>
-        <Tab  Title="场景" 
-              Icon="headphone.png">
+        <Tab  Title="场景"
+              Icon="tab_note_template">
             <ShellContent  x:Name="NoteTemplateContent"
                            Route="NoteTemplate"/>
         </Tab>
-        <Tab  Title="笔记" 
-              Icon="microphone2.png"  >
+        <Tab  Title="笔记"
+              Icon="tab_note"  >
             <ShellContent x:Name="NoteContent"
                           Route="Note"/>
         </Tab>
         <Tab  Title="统计"
-              Icon="microphone2.png">
+              Icon="tab_statistics">
             <ShellContent x:Name="StatisticContent"
                           Route="Statistic" />
         </Tab>
         <Tab  Title="我的"
-              Icon="microphone2.png">
+              Icon="tab_user">
             <ShellContent x:Name="UserProfileContent"
                           Route="UserProfile" />
         </Tab>

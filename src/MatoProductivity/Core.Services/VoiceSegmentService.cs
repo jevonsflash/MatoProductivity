@@ -6,12 +6,14 @@ using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.ViewModels;
 using Microsoft.Maui.Dispatching;
+using Newtonsoft.Json;
 using Plugin.Maui.Audio;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.Maui.ApplicationModel.Permissions;
 using AudioManager = Plugin.Maui.Audio.AudioManager;
@@ -108,6 +110,12 @@ namespace MatoProductivity.Core.Services
             {
                 return;
             }
+            var translatedObject = JsonConvert.DeserializeObject<List<string>>(translated);
+            var translatedContents = string.Join('\n', translatedObject);
+
+            var ttt = Encoding.Unicode.GetBytes(translatedContents);
+            var test1 = Encoding.Latin1.GetString(ttt);
+
             if (Container is EditNotePageViewModel)
             {
 
@@ -117,7 +125,7 @@ namespace MatoProductivity.Core.Services
                     Type= "TextSegment",
                     NoteSegmentPayloads= new List<NoteSegmentPayload>()
                 };
-                note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", translated));
+                note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", "你好你好你好"));
                 (Container as EditNotePageViewModel).CreateSegment.Execute(note);
             }
         }

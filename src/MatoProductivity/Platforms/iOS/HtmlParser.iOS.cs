@@ -17,6 +17,7 @@ namespace MatoProductivity.Core.Controls
             var data = nsString.Encode(NSStringEncoding.UTF8);
             var dictionary = new NSAttributedStringDocumentAttributes();
             dictionary.DocumentType = NSDocumentType.HTML;
+            dictionary.StringEncoding = NSStringEncoding.UTF8;
             NSError error = new NSError();
             var attrString = new NSAttributedString(data, dictionary, ref error);
             var mutString = ResetFontSize(new NSMutableAttributedString(attrString));
