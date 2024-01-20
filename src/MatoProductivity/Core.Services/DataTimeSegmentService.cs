@@ -21,9 +21,7 @@ namespace MatoProductivity.Core.Services
 
         public DataTimeSegmentService(
              AbpAsyncTimer timer,
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += DataTimeSegmentViewModel_PropertyChanged;
             this.timer = timer;

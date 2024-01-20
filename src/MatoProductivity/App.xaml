@@ -4,7 +4,6 @@
              xmlns:style="clr-namespace:MatoProductivity.Styles;assembly=MatoProductivity"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:view="clr-namespace:MatoProductivity;assembly=MatoProductivity"
-             xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity.Core"
              xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
              x:Class="MatoProductivity.App"
              windows:Application.ImageDirectory="Assets">

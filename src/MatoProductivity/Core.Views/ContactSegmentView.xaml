@@ -6,11 +6,28 @@
              x:Class="MatoProductivity.Core.Views.ContactSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-          
+            <Grid IsVisible="{Binding ContactName, Converter={x:StaticResource IsValid2BoolConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label   Style="{StaticResource Body1_MulishRegular}"
+                         Grid.Row="0"
+                         Text="{Binding ContactName}"></Label>
+                <Label   Style="{StaticResource Body1_MulishRegular}"
+                         Grid.Row="1"
+                         Text="{Binding ContactPhone}"></Label>
+                <Label   Style="{StaticResource Body1_MulishRegular}"
+                         Grid.Row="2"
+                         Text="{Binding ContactEmail}"></Label>
+            </Grid>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Button Text="PickContact"
+                    Style="{StaticResource Plain_Button}"
                     IsVisible="{Binding ContactName, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                     Command="{Binding PickContact}"></Button>
 
@@ -32,23 +49,6 @@
                          Text="{Binding ContactEmail}"></Label>
             </Grid>
 
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Entry  Text="{Binding PlaceHolder}"
-                        Placeholder="请输入PlaceHolder" />
-            </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Editor Text="{Binding Content}"
-                        Placeholder="{Binding PlaceHolder}"></Editor>
-            </Border>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

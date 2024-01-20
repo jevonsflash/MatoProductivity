@@ -37,9 +37,7 @@ namespace MatoProductivity.Core.Services
 
         public VoiceSegmentService(
             AbpAsyncTimer timer,
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += VoiceSegmentViewModel_PropertyChanged;
             this.RemoveAudio = new Command(RemoveAudioAction);

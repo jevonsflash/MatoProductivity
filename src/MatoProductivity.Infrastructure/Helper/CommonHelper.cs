@@ -36,23 +36,35 @@ namespace MatoProductivity.Infrastructure.Helper
             return arr;
         }
 
-        public static string FormatTimeSpamString(TimeSpan timeSpan, string format = "yyyy年MM月dd日 HH:mm:ss")
+        public static string FormatTimeSpamString(TimeSpan timeSpan, string format = "已过去|现在|还剩")
         {
+            var parseString = format.Split('|');
             if (timeSpan > TimeSpan.Zero)
             {
-                return "已过去";
+                return parseString[0];
             }
             else if (timeSpan==TimeSpan.Zero)
             {
-                return "现在";
+                return parseString[1];
             }
             else
             {
-                return "还剩";
+                return parseString[2];
             }
         }
-
-        public static string FormatTimeString(DateTime dateTime, string format = "yyyy年MM月dd日 HH:mm:ss")
+        public static string FormatTimeSpamString2(TimeSpan timeSpan, string format = "{0}天{1}小时{2}分{3}秒")
+        {
+            var affix = "已过";
+            if (timeSpan < TimeSpan.Zero)
+            {
+                timeSpan=TimeSpan.Zero-timeSpan;
+                affix="还剩";
+            }
+            string friendlyString = string.Format(format,
+                timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+            return affix+friendlyString;
+        }
+        public static string FormatDateTimeString(DateTime dateTime, string format = "yyyy年M月d日 HH:mm:ss")
         {
             DateTime now = DateTime.Now;
             double diff = (now - dateTime).TotalSeconds;
@@ -98,7 +110,7 @@ namespace MatoProductivity.Infrastructure.Helper
 
 
 
-        public static string FormatTimeString2(DateTime dateTime, string format = "yyyy年MM月dd日 HH:mm:ss")
+        public static string FormatDateTimeString2(DateTime dateTime, string format = "yyyy年M月d日 HH:mm:ss")
         {
             DateTime now = DateTime.Now;
             double diff = (now - dateTime).TotalSeconds;

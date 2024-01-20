@@ -4,45 +4,6 @@
              xmlns:core="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
              x:Class="MatoProductivity.Core.Views.TimerSegmentView">
     <ContentView.Resources>
-        <ControlTemplate x:Key="RadioButtonTemplate">
-            <Border StrokeThickness="2"
-                    StrokeShape="RoundRectangle 10"
-                    WidthRequest="90"
-                    HorizontalOptions="Start"
-                    VerticalOptions="Start">
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CheckedStates">
-                            <VisualState x:Name="Checked">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor"
-                                            Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
-
-                                    <Setter Property="Stroke"
-                                            Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
-
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Unchecked">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor"
-                                            Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
-                                    <Setter Property="Stroke"
-                                            Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
-
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </VisualStateManager.VisualStateGroups>
-                <Grid Margin="4"
-                      WidthRequest="90">
-
-                    <ContentPresenter />
-                </Grid>
-            </Border>
-        </ControlTemplate>
-
         <Style TargetType="RadioButton">
             <Setter Property="ControlTemplate"
                     Value="{StaticResource RadioButtonTemplate}" />
@@ -50,26 +11,42 @@
     </ContentView.Resources>
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
-            <Label FontSize="Large">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="将于 "></Span>
-                        <Span Text="{Binding ExactTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
-            <Label FontSize="Large">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{Binding TimeFromNow, Converter={StaticResource TimeSpanToFormatStringConverter}}"></Span>
-                        <Span Text="{Binding TimeFromNow}"></Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        StrokeShape="RoundRectangle 10,0,10,0">
+                    <Label VerticalOptions="Center"
+                           LineBreakMode="NoWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding ExactTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Border>
+                <Border Grid.Column="1"
+                        Style="{StaticResource Base_FrameEntry}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 0,10,0,10"
+                        BackgroundColor="{Binding TimeFromNow, Converter={StaticResource TimeSpanRangeStringConverter}, ConverterParameter=#D04C41|#00AF49|#00AF49}">
+                    <Label VerticalOptions="Center"
+                           TextColor="White"
+                           LineBreakMode="NoWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding TimeFromNow, Converter={StaticResource TimeSpanToFriendlyStringConverter}}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Border>
+            </Grid>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <StackLayout RadioButtonGroup.GroupName="CountdownMode"
                          RadioButtonGroup.SelectedValue="{Binding CountdownMode}"
                          Orientation="Horizontal">
@@ -125,19 +102,12 @@
 
             </Grid>
             <Label Text="通知消息："></Label>
-            <Label  Style="{StaticResource Body1_MulishRegular}"
-                    Text="{Binding NotificationContent}"></Label>
+            <Border Style="{StaticResource Base_FrameEntry}">
+                <Entry  Text="{Binding NotificationContent}"
+                        Placeholder="请输入通知内容" />
+            </Border>
 
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
-            <Entry  Text="{Binding NotificationContent}"
-                    Placeholder="请输入通知内容" />
-            <Grid ColumnDefinitions="*,*">
-                <DatePicker Date="{Binding Time}"></DatePicker>
-                <TimePicker Grid.Column="1"
-                            Time="{Binding TimeOffset}"></TimePicker>
-            </Grid>
-        </VerticalStackLayout>
     </Grid>
 </ContentView>

@@ -19,9 +19,7 @@ namespace MatoProductivity.Core.Services
         private INoteSegmentPayload DefaultContactEmailSegmentPayload => this.CreateNoteSegmentPayload(nameof(ContactEmail), "");
         private INoteSegmentPayload DefaultContactPhoneSegmentPayload => this.CreateNoteSegmentPayload(nameof(ContactPhone), "");
         public ContactSegmentService(
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             this.PickContact = new Command(PickContactAction);
             PropertyChanged += ContactSegmentViewModel_PropertyChanged;

@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:core="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
+             xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
              x:Class="MatoProductivity.Core.Views.DateTimeSegmentView">
     <Grid>
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.PreView}}">
-            <Label FontSize="Large">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text=" 于 "></Span>
-                        <Span Text="{Binding ExactTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
-            <Label FontSize="Large">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{Binding TimeFromNow, Converter={StaticResource TimeSpanToFormatStringConverter}}"></Span>
-                        <Span Text="{Binding TimeFromNow}"></Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                <Border Style="{StaticResource Base_FrameEntry}"
+                        StrokeShape="RoundRectangle 10,0,10,0">
+                    <Label VerticalOptions="Center" LineBreakMode="NoWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding ExactTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Border>
+                <Border Grid.Column="1"
+                        Style="{StaticResource Base_FrameEntry}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 0,10,0,10"
+                        BackgroundColor="{Binding TimeFromNow, Converter={StaticResource TimeSpanRangeStringConverter}, ConverterParameter=#D04C41|#00AF49|#00AF49}">
+                    <Label VerticalOptions="Center"
+                           TextColor="White"
+                           LineBreakMode="NoWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding TimeFromNow, Converter={StaticResource TimeSpanToFriendlyStringConverter}}"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Border>
+            </Grid>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Edit}}">
-            <Label  Style="{StaticResource Body1_MulishRegular}"
-                    IsVisible="{Binding IsAutoSet}"
-                    Text="将在保存时自动获取时间"></Label>
-            <Grid ColumnDefinitions="*,*">
 
+
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
+            <Grid ColumnDefinitions="*,*">
                 <Border Style="{StaticResource Base_FrameEntry}">
                     <DatePicker Date="{Binding Time}"
+                                VerticalOptions="Center"
                                 IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
                 </Border>
                 <Border Style="{StaticResource Base_FrameEntry}"
                         Grid.Column="1">
                     <TimePicker Time="{Binding TimeOffset}"
-                                IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
-                </Border>
-            </Grid>
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static core:NoteSegmentState.Config}}">
-            <Entry  Text="{Binding Title}"
-                    Placeholder="请输入标题" />
-            <Grid ColumnDefinitions="*,*">
-                <Border Style="{StaticResource Base_FrameEntry}">
-                    <DatePicker Date="{Binding Time}"
-                                IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
-                </Border>
-                <Border Style="{StaticResource Base_FrameEntry}"
-                        Grid.Column="1">
-                    <TimePicker Time="{Binding TimeOffset}"
+                                VerticalOptions="Center"
                                 IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>
                 </Border>
             </Grid>
 
-            <Grid ColumnDefinitions="*,*">
+            <Grid ColumnDefinitions="*,*"
+                  IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
 
                 <StackLayout Orientation="Horizontal">
                     <Label  Style="{StaticResource Body1_MulishRegular}"

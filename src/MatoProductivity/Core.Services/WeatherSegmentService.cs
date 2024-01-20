@@ -17,9 +17,7 @@ namespace MatoProductivity.Core.Services
     {
         public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
         public WeatherSegmentService(
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += WeatherSegmentViewModel_PropertyChanged;
         }

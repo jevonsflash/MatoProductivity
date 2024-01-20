@@ -9,10 +9,19 @@ namespace MatoProductivity.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value==null)
+            {
+                return null;
+            }
             var time = (DateTime)value;
-            string parseFomate = parameter == null ? "yyyy年MM月dd日 HH:mm:ss" : parameter as string;
-            return CommonHelper.FormatTimeString(time, parseFomate);
-            //return time.ToString("yyyy年MM月dd日 HH:mm:ss");
+            var format = "yy年M月d日 HH:mm:ss";
+            if (DateTime.Now.Year==time.Year)
+            {
+                format =  "M月d日 HH:mm:ss";
+            }
+            string parseFomate = parameter == null ? format : parameter as string;
+            return CommonHelper.FormatDateTimeString(time, parseFomate);
+            //return time.ToString("yyyy年M月d日 HH:mm:ss");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

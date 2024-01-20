@@ -20,27 +20,29 @@ namespace MatoProductivity.Core.Services
     }
     public abstract class NoteSegmentService : ViewModelBase, INoteSegmentService
     {
-        private readonly IRepository<NoteSegment, long> repository;
-        private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
-
         public NoteSegmentService(
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
             INoteSegment noteSegment)
         {
             Submit = new Command(SubmitAction);
             Create = new Command(CreateAction);
             Remove = new Command(RemoveAction);
-            this.repository = repository;
-            this.payloadRepository = payloadRepository;
+            GoToState = new Command(GoToStateAction);
             NoteSegment = noteSegment;
             NoteSegmentState = NoteSegmentState.Config;
-
             Dragged = new Command(OnDragged);
             DraggedOver = new Command(OnDraggedOver);
             DragLeave = new Command(OnDragLeave);
             Dropped = new Command(i => OnDropped(i));
 
+        }
+
+        public virtual void GoToStateAction(object obj)
+        {
+            if (obj is NoteSegmentState)
+            {
+                this.NoteSegmentState=(NoteSegmentState)obj;
+
+            }
         }
 
         private void OnDragged(object item)
@@ -116,7 +118,7 @@ namespace MatoProductivity.Core.Services
 
         }
 
-        private async void RemoveAction(object obj)
+        public virtual async void RemoveAction(object obj)
         {
             if (Container is INoteSegmentServiceContainer)
             {
@@ -214,6 +216,7 @@ namespace MatoProductivity.Core.Services
         public Command Submit { get; set; }
         public Command Create { get; set; }
         public Command Remove { get; set; }
+        public Command GoToState { get; set; }
 
 
         public Command Dragged { get; set; }

@@ -18,9 +18,8 @@ namespace MatoProductivity.Core.Services
         private INoteSegmentPayload DefaultIsDoneSegmentPayload => this.CreateNoteSegmentPayload(nameof(IsDone), false.ToString());
 
         public TodoSegmentService(
-            IRepository<NoteSegment, long> repository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += TodoSegmentViewModel_PropertyChanged;
             SwitchDone=new Command(SwitchDoneAction);
@@ -31,7 +30,7 @@ namespace MatoProductivity.Core.Services
         {
             var isdone = NoteSegment?.GetNoteSegmentPayload(nameof(IsDone));
             isdone.SetStringValue(((bool)obj).ToString());
-           
+
             var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == (NoteSegment as NoteSegment).Id);
 
 

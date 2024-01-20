@@ -18,7 +18,7 @@ namespace MatoProductivity
 
         private async void ContentPageBase_Appearing(object sender, EventArgs e)
         {
-           await NoteTemplateListPageViewModel.Init();
+           //await NoteTemplateListPageViewModel.Init();
         }
     }
 }

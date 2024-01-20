@@ -55,4 +55,9 @@ public partial class EditNotePage : ContentPageBase, ITransientDependency
     {
 
     }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+
+    }
 }

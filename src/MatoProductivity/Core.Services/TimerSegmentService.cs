@@ -22,9 +22,7 @@ namespace MatoProductivity.Core.Services
         public TimerSegmentService(
              AbpAsyncTimer timer,
             IBackgroundJobManager backgroundJobManager,
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
 
             PropertyChanged += TimerSegmentViewModel_PropertyChanged;

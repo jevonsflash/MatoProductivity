@@ -17,9 +17,7 @@ namespace MatoProductivity.Core.Services
 
 
         public MediaSegmentService(
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += MediaSegmentViewModel_PropertyChanged;
             this.CapturePhoto = new Command(CapturePhotoAction);

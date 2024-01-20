@@ -9,9 +9,7 @@
             <Image Source="{Binding PreviewImage}"></Image>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-
-            <Image Source="{Binding PreviewImage}"></Image>
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -48,14 +46,6 @@
             </Grid>
 
 
-
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
 
         </VerticalStackLayout>
     </Grid>

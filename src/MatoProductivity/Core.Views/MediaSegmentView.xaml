@@ -9,8 +9,8 @@
             <Image Source="{Binding PreviewImage}"></Image>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
+
             <Image Source="{Binding PreviewImage}"></Image>
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -19,9 +19,11 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button Text="选取照片"
+                        Style="{StaticResource Emphatic_Button}"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                         Command="{Binding PickPhoto}"></Button>
                 <Button Text="拍照"
+                        Style="{StaticResource Plain_Button}"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                         Grid.Column="1"
                         Command="{Binding CapturePhoto}"></Button>
@@ -33,14 +35,6 @@
        
 
 
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
- 
         </VerticalStackLayout>
     </Grid>
 </ContentView>

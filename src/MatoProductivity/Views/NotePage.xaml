@@ -18,18 +18,67 @@
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <ControlTemplate x:Key="NoteSegmentCardViewDesktop">
-                    <Grid Margin="0"
-                          Padding="8">
-                        <Grid>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+
+                        <Label Grid.Column="0"
+                               VerticalOptions="Center"
+                               Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
+                               FontFamily="FontAwesome"></Label>
+
+                        <Label Text="{TemplateBinding BindingContext.NoteSegment.Title}"
+                               Grid.Column="1"
+                               VerticalOptions="Center">
+                        </Label>
+
+
+
+                        <ContentPresenter Grid.Row="1"
+                                          Grid.ColumnSpan="2" />
+                        <Grid Grid.Row="2"
+                              Grid.ColumnSpan="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="30"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Label Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
-                                   FontFamily="FontAwesome"></Label>
-                            <ContentPresenter Grid.Column="1" />
+
+                            <Label FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="NoWrap">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="创建于 "></Span>
+                                        <Span Text="{TemplateBinding BindingContext.NoteSegment.CreationTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label Grid.Column="1"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}"
+                                   VerticalOptions="Center"
+                                   IsVisible="{TemplateBinding BindingContext.NoteSegment.LastModificationTime,Converter={StaticResource IsValid2BoolConverter}}"
+                                   LineBreakMode="NoWrap">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="修改于 "></Span>
+                                        <Span Text="{TemplateBinding BindingContext.NoteSegment.LastModificationTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
                         </Grid>
+
                     </Grid>
 
                 </ControlTemplate>
@@ -116,26 +165,42 @@
                 <HorizontalStackLayout Grid.Column="1"
                                        HorizontalOptions="End">
                     <Button Text="删除"
-                            
                             Style="{StaticResource Text_Button}"
                             Command="{Binding Remove}"></Button>
                     <Button Text="编辑"
-                            
                             Style="{StaticResource Text_Button}"
                             Command="{Binding Edit}"></Button>
                     <Button Text="分享"
-                            
                             Style="{StaticResource Text_Button}"
                             Command="{Binding Share}"></Button>
                 </HorizontalStackLayout>
             </Grid>
+            <ScrollView Orientation="Vertical"
+                        x:Name="MainCollectionViewWrapper"
+                        Grid.Row="1">
+                <VerticalStackLayout x:Name="MainCollectionView"
+                                     BindableLayout.ItemsSource="{Binding NoteSegments}"
+                                     BindableLayout.ItemTemplateSelector="{StaticResource NoteSegmentDataTemplateSelector}">
 
-            <CollectionView Grid.Row="1"
-                            x:Name="MainCollectionView"
-                            ItemsSource="{Binding NoteSegments}"
-                            SelectionMode="None"
-                            ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
-            </CollectionView>
+                    <BindableLayout.EmptyView>
+                        <Grid  HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Image Source="emptylist"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"></Image>
+                            <Label Text="没有任何片段"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center"
+                                   Grid.Row="1"
+                                   Style="{StaticResource Body1_MulishBold}"></Label>
+                        </Grid>
+                    </BindableLayout.EmptyView>
+                </VerticalStackLayout>
+            </ScrollView>
 
             <ActivityIndicator Grid.RowSpan="2"
                                IsRunning="{Binding Loading}"></ActivityIndicator>

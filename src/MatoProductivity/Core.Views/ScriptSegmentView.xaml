@@ -21,7 +21,7 @@
 
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Image Source="{Binding PreviewImage}"
                    IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}"></Image>
 
@@ -30,7 +30,7 @@
                                  Lines="{Binding ScriptLines}"
                                  LineColor="{Binding LineColor}"
                                  LineWidth="{Binding DrawingLineSize.Value}"
-                                 HeightRequest="300"
+                                 HeightRequest="250"
                                  BackgroundColor="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}"
                                  IsMultiLineModeEnabled="true"
                                  ShouldClearOnFinish="false" />
@@ -155,14 +155,6 @@
             </Grid>
 
 
-
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
 
         </VerticalStackLayout>
     </Grid>

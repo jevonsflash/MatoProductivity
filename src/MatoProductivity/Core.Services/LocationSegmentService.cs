@@ -28,9 +28,7 @@ namespace MatoProductivity.Core.Services
         public LocationSegmentService(
             AmapHttpRequestClient amapHttpRequestClient,
             NavigationService navigationService,
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment, IIocResolver iocResolver) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment, IIocResolver iocResolver) : base(noteSegment)
         {
             PropertyChanged += LocationSegmentViewModel_PropertyChanged;
             PickFromMap = new Command(PickFromMapAction);

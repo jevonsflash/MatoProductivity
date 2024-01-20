@@ -15,9 +15,7 @@ namespace MatoProductivity.Core.Services
         private INoteSegmentPayload DefaultFileContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(FileContent), "");
 
         public FileSegmentService(
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += FileSegmentViewModel_PropertyChanged;
 

@@ -6,35 +6,29 @@
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <WebView>
-                <WebView.Source>
-                    <HtmlWebViewSource Html="{Binding Content}"></HtmlWebViewSource>
-                </WebView.Source>
-            </WebView>
+            <Label Text="{Binding Content}"></Label>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            <controls:RichTextEditor Text="{Binding Content, Mode=TwoWay}" 
-                                     Placeholder="{Binding PlaceHolder}"></controls:RichTextEditor>
-
-
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
-            <Border Style="{StaticResource Base_FrameEntry}">
-
-                <Entry  Text="{Binding PlaceHolder}"
-                        Placeholder="请输入PlaceHolder" />
-            </Border>
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Border Style="{StaticResource Base_FrameEntry}">
 
                 <Editor Text="{Binding Content}"
+                        AutoSize="TextChanges"
+                        MinimumHeightRequest="250"
                         Placeholder="{Binding PlaceHolder}"></Editor>
             </Border>
+            <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Text="PlaceHolder"></Label>
+                <Border Grid.Row="1" Style="{StaticResource Base_FrameEntry}">
+
+                    <Entry  Text="{Binding PlaceHolder}"
+                            Placeholder="请输入PlaceHolder" />
+                </Border>
+            </Grid>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

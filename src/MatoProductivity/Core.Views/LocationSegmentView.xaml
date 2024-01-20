@@ -9,7 +9,7 @@
                      Text="{Binding Address}"></Label>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -22,18 +22,6 @@
                     Text="从地图选取"
                         Command="{Binding PickFromMap}"></Button>
             </Grid>
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
-            <Label   Style="{StaticResource Body1_MulishRegular}"
-                     Text="{Binding Address}"></Label>
-            <Button Grid.Row="1"
-                    Text="从地图选取"
-                    Command="{Binding PickFromMap}"></Button>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

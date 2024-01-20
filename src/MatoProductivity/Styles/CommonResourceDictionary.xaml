@@ -4,6 +4,7 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                     xmlns:converter="clr-namespace:MatoProductivity.Converter;assembly=MatoProductivity"
+                    xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
                     x:Class="MatoProductivity.Styles.CommonResourceDictionary">
     <system:String x:Key="Version">2.0</system:String>
     <system:Double x:Key="TinyFontSize">10</system:Double>
@@ -28,8 +29,10 @@
     </converter:DateTimeToStringConverter>
     <converter:DateTimeToFormatTimeStringConverter x:Key="DateTimeToFormatTimeStringConverter">
     </converter:DateTimeToFormatTimeStringConverter>
-    <converter:TimeSpanToFormatStringConverter x:Key="TimeSpanToFormatStringConverter">
-    </converter:TimeSpanToFormatStringConverter>
+    <converter:TimeSpanRangeStringConverter x:Key="TimeSpanRangeStringConverter">
+    </converter:TimeSpanRangeStringConverter>
+    <converter:TimeSpanToFriendlyStringConverter x:Key="TimeSpanToFriendlyStringConverter">
+    </converter:TimeSpanToFriendlyStringConverter>
     <converter:AllTrueMultiConverter x:Key="AllTrueMultiConverter">
     </converter:AllTrueMultiConverter>
     <converter:AnyTrueMultiConverter x:Key="AnyTrueMultiConverter">
@@ -37,4 +40,10 @@
     <toolkit:EnumToBoolConverter x:Key="EnumToBoolConverter" />
     <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter" />
     <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
+    <toolkit:EnumToBoolConverter x:Key="EditOrConfigToBoolConverter">
+        <toolkit:EnumToBoolConverter.TrueValues>
+            <service:NoteSegmentState>Edit</service:NoteSegmentState>
+            <service:NoteSegmentState>Config</service:NoteSegmentState>
+        </toolkit:EnumToBoolConverter.TrueValues>
+    </toolkit:EnumToBoolConverter>
 </ResourceDictionary>

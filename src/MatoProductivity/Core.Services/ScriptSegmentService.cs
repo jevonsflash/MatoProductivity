@@ -40,9 +40,7 @@ namespace MatoProductivity.Core.Services
         public Func<Size> GetImageSize { get; set; }
 
         public ScriptSegmentService(
-            IRepository<NoteSegment, long> repository,
-            IRepository<NoteSegmentPayload, long> payloadRepository,
-            INoteSegment noteSegment) : base(repository, payloadRepository, noteSegment)
+            INoteSegment noteSegment) : base(noteSegment)
         {
             PropertyChanged += ScriptSegmentViewModel_PropertyChanged;
             this.Undo = new Command(UndoAction);

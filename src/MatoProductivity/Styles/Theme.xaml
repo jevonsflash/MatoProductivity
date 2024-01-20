@@ -439,7 +439,7 @@
     </Style>
 
     <Style TargetType="Button"
-           BasedOn="{StaticResource Plain_Button}"></Style>
+           BasedOn="{StaticResource Base_Button}"></Style>
     <!--#endregion-->
 
     <!--#region ActivityIndicator -->
@@ -469,4 +469,44 @@
         </Setter>
     </Style>
     <!--#endregion-->
+
+    <ControlTemplate x:Key="RadioButtonTemplate">
+        <Border StrokeThickness="2"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="90"
+                HorizontalOptions="Start"
+                VerticalOptions="Start">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CheckedStates">
+                        <VisualState x:Name="Checked">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}" />
+
+                                <Setter Property="Stroke"
+                                        Value="{AppThemeBinding Light={StaticResource LightCardBorderColor}, Dark={StaticResource DarkCardBorderColor}}" />
+
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Unchecked">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
+                                <Setter Property="Stroke"
+                                        Value="{AppThemeBinding Light={StaticResource LightCardUnselectedBackgroundColor}, Dark={StaticResource DarkCardUnselectedBackgroundColor}}" />
+
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+            <Grid Margin="4"
+                  WidthRequest="90">
+
+                <ContentPresenter />
+            </Grid>
+        </Border>
+    </ControlTemplate>
+
 </ResourceDictionary>

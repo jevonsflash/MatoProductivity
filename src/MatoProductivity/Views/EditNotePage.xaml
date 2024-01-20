@@ -59,7 +59,7 @@
                                 Padding="8">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="20"></RowDefinition>
+                                    <RowDefinition Height="30"></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
@@ -77,11 +77,15 @@
                                        VerticalOptions="Center"
                                        Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
                                        FontFamily="FontAwesome"></Label>
-                                <Label Grid.Column="1"
-                                       VerticalOptions="Center"
-                                       Text="{TemplateBinding BindingContext.NoteSegment.Title}">
 
-                                </Label>
+                                <Entry Text="{TemplateBinding BindingContext.NoteSegment.Title, Mode=TwoWay}"
+                                       HeightRequest="50"
+                                       Grid.Column="1"
+                                       VerticalOptions="Center">
+                                </Entry>
+
+
+
                                 <ContentPresenter Grid.Row="1"
                                                   Grid.ColumnSpan="2" />
                             </Grid>
@@ -305,21 +309,39 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding SubmitBack}"></TapGestureRecognizer>
-            </Grid.GestureRecognizers>
+
             <Label Grid.Column="0"
                    Text="&#xf060;"
                    FontSize="{StaticResource Headline4FontSize}"
                    FontFamily="FontAwesome_Solid"
                    TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                    HorizontalOptions="Start"
-                   VerticalOptions="Center"></Label>
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SubmitBack}"></TapGestureRecognizer>
+                </Label.GestureRecognizers>
+            </Label>
             <Label Grid.Column="1"
+                   IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}"
                    Style="{StaticResource Headline4_MulishBlack}"
                    Text="{Binding Title}"
                    Margin="10, 0, 0, 0"
-                   VerticalOptions="Center" />
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SwitchState}"></TapGestureRecognizer>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Border Grid.Column="1"
+                    IsVisible="{Binding IsConfiguratingNoteSegment}"
+                    Margin="10, 0, 0, 0"
+                    VerticalOptions="Center"
+                    Style="{StaticResource Base_FrameEntry}">
+                <Entry Placeholder="请输入标题"
+                       Text="{Binding Title}"
+                       Style="{StaticResource Base_Entry}">
+                </Entry>
+            </Border>
 
             <HorizontalStackLayout Grid.Column="2"
                                    HeightRequest="60"
@@ -349,7 +371,7 @@
 
                 <Button Command="{Binding SwitchState}"
                         Style="{StaticResource Text_Button}"
-                        Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成编辑|编辑笔记}"></Button>
+                        Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 
 
             </HorizontalStackLayout>
@@ -361,7 +383,7 @@
             <Grid>
                 <Grid RowDefinitions="auto,auto"
                       IsVisible="{Binding IsConfiguratingNoteSegment}">
-                    <StackLayout Spacing="5">
+                    <!--<StackLayout Spacing="5">
                         <Label Text="标题"
                                Style="{StaticResource Body1_MulishSemiBold}"></Label>
                         <Border Style="{StaticResource Base_FrameEntry}">
@@ -370,7 +392,7 @@
                                    Style="{StaticResource Base_Entry}">
                             </Entry>
                         </Border>
-                    </StackLayout>
+                    </StackLayout>-->
                     <StackLayout Spacing="5"
                                  Grid.Row="1">
                         <Label Text="描述"
@@ -429,8 +451,7 @@
         <ScrollView Orientation="Vertical"
                     x:Name="MainCollectionViewWrapper"
                     Grid.Row="2">
-            <VerticalStackLayout
-                                 x:Name="MainCollectionView"
+            <VerticalStackLayout x:Name="MainCollectionView"
                                  BindableLayout.ItemsSource="{Binding NoteSegments}"
                                  BindableLayout.ItemTemplateSelector="{StaticResource NoteSegmentDataTemplateSelector}">
                 <BindableLayout.EmptyView>

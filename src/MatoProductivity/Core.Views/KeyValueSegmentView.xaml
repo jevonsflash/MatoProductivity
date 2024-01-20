@@ -14,10 +14,9 @@
                 </Grid.ColumnDefinitions>
 
                 <Label   Style="{StaticResource Body1_MulishRegular}"
+                         Grid.Column="0"
                          VerticalOptions="Center"
-                         HorizontalTextAlignment="End"
                          Text="{Binding Title}" />
-
                 <Label  Style="{StaticResource Body1_MulishRegular}"
                         Grid.Column="2"
                         VerticalOptions="Center"
@@ -26,7 +25,7 @@
             </Grid>
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -34,10 +33,10 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Label Style="{StaticResource Body1_MulishRegular}"
-                       VerticalOptions="Center"
-                       HorizontalTextAlignment="End"
-                       Text="{Binding Title}" />
+                <Border Style="{StaticResource Base_FrameEntry}">
+                    <Entry  Text="{Binding Title}"
+                            Placeholder="请输入标题" />
+                </Border>
 
                 <Border Style="{StaticResource Base_FrameEntry}"
                         Grid.Column="2">
@@ -46,24 +45,6 @@
                 </Border>
             </Grid>
 
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Border Style="{StaticResource Base_FrameEntry}">
-                    <Entry  Text="{Binding Title}"
-                            Placeholder="请输入标题" />
-                </Border>
-                <Border Style="{StaticResource Base_FrameEntry}"
-                        Grid.Column="1">
-                    <Entry Text="{Binding Content, Mode=TwoWay}"
-                           Placeholder="{Binding PlaceHolder}"></Entry>
-                </Border>
-            </Grid>
         </VerticalStackLayout>
     </Grid>
 </ContentView>

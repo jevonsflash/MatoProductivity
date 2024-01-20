@@ -7,40 +7,41 @@
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
             <Label Text="{Binding Title}"></Label>
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}">
-            
-            <Label Text="{Binding Title}"></Label>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="PickDocument"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
-                        Command="{Binding PickDocument}"></Button>
                 <Button Text="SaveDocument"
-                        Grid.Column="1"
+                        Style="{StaticResource Plain_Button}"
+                        Grid.Column="0"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
                         Command="{Binding SaveDocument}"></Button>
                 <Button Text="ShareDocument"
-                        Grid.Column="2"
+                        Style="{StaticResource Plain_Button}"
+                        Grid.Column="1"
                         IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
                         Command="{Binding ShareDocument}"></Button>
             </Grid>
-       
-
-
         </VerticalStackLayout>
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
+
             <Border Style="{StaticResource Base_FrameEntry}">
                 <Entry  Text="{Binding Title}"
                         Placeholder="请输入标题" />
             </Border>
- 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Text="PickDocument"
+                        Style="{StaticResource Plain_Button}"
+                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
+                        Command="{Binding PickDocument}"></Button>
+
+            </Grid>
+
         </VerticalStackLayout>
     </Grid>
 </ContentView>

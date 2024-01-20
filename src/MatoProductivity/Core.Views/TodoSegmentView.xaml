@@ -36,18 +36,8 @@
             </Grid>
         </VerticalStackLayout>
 
-        <VerticalStackLayout>
-            <VerticalStackLayout.IsVisible>
-                <MultiBinding Converter="{StaticResource AnyTrueMultiConverter}">
-                    <Binding Path="NoteSegmentState"
-                             Converter="{StaticResource EnumToBoolConverter}"  
-                             ConverterParameter="{x:Static service:NoteSegmentState.Edit}" />
-                    <Binding Path="NoteSegmentState"
-                             Converter="{StaticResource EnumToBoolConverter}"
-                             ConverterParameter="{x:Static service:NoteSegmentState.Config}" />
-                </MultiBinding>
-            </VerticalStackLayout.IsVisible>
-            
+        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
