@@ -62,6 +62,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"></RowDefinition>
                                     <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="30"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20"></ColumnDefinition>
@@ -79,7 +80,7 @@
                                        Text="{TemplateBinding BindingContext.NoteSegment.Icon}"
                                        FontFamily="FontAwesome"></Label>
 
-                                <Entry Text="{TemplateBinding BindingContext.NoteSegment.Title, Mode=TwoWay}"
+                                <Entry Text="{TemplateBinding BindingContext.Title, Mode=TwoWay}"
                                        IsReadOnly="{TemplateBinding BindingContext.NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}"
                                        HeightRequest="50"
                                        Grid.Column="1"
@@ -90,6 +91,42 @@
 
                                 <ContentPresenter Grid.Row="1"
                                                   Grid.ColumnSpan="2" />
+
+                                <Grid Grid.Row="2"
+                                      Grid.ColumnSpan="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="NoWrap">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="创建于 "></Span>
+                                                <Span Text="{TemplateBinding BindingContext.NoteSegment.CreationTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Grid.Column="1"
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}"
+                                           VerticalOptions="Center"
+                                           IsVisible="{TemplateBinding BindingContext.NoteSegment.LastModificationTime,Converter={StaticResource IsValid2BoolConverter}}"
+                                           LineBreakMode="NoWrap">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="修改于 "></Span>
+                                                <Span Text="{TemplateBinding BindingContext.NoteSegment.LastModificationTime,Converter={StaticResource DateTimeToStringConverter}}"></Span>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                </Grid>
+
                             </Grid>
                         </Border>
                     </StackLayout>
@@ -302,7 +339,7 @@
 
     </ContentPage.Resources>
     <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
-          RowDefinitions="Auto,Auto, *, Auto"
+          RowDefinitions="Auto, *, Auto"
           Padding="20, 10, 20, 0">
         <Grid Grid.Row="0"
               Margin="0, 0, 0, 10">
@@ -397,100 +434,185 @@
 
         </Grid>
 
-        <VerticalStackLayout Grid.Row="1">
-            <Grid>
-                <Grid RowDefinitions="auto,auto"
-                      IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
-                    <!--<StackLayout Spacing="5">
-                        <Label Text="标题"
-                               Style="{StaticResource Body1_MulishSemiBold}"></Label>
-                        <Border Style="{StaticResource Base_FrameEntry}">
-                            <Entry Placeholder="请输入标题"
-                                   Text="{Binding Title}"
-                                   Style="{StaticResource Base_Entry}">
-                            </Entry>
-                        </Border>
-                    </StackLayout>-->
-                    <StackLayout Spacing="5"
-                                 Grid.Row="1">
-                        <Label Text="描述"
-                               Style="{StaticResource Body1_MulishSemiBold}"></Label>
-                        <Border Style="{StaticResource Base_FrameEntry}">
-                            <Entry Placeholder="请输入描述"
-                                   Text="{Binding Desc}"
-                                   Style="{StaticResource Base_Entry}">
-                            </Entry>
-                        </Border>
-                    </StackLayout>
-                </Grid>
-                <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource PreViewOrEditToBoolConverter}}">
-                    <Label Text="{Binding Desc}" />
-                </Grid>
-            </Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Label>
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span>共</Span>
-                            <Span Text="{Binding NoteSegments.Count}"></Span>
-                            <Span>个片段</Span>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-                <Border StrokeShape="RoundRectangle 5"
-                        Stroke="Transparent"
-                        BackgroundColor="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=Green|Gray}"
-                        HorizontalOptions="End"
-                        VerticalOptions="Center"
-                        Grid.Column="1">
-                    <Label TextColor="White"
-                           Margin="5,0">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span FontFamily="FontAwesome_Solid"
-                                      Text="&#xf069;"></Span>
-                                <Span Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter= 支持快速创建|不支持快速创建}"></Span>
-                            </FormattedString>
-                        </Label.FormattedText>
-
-                    </Label>
-
-                </Border>
-
-            </Grid>
+        <CollectionView Grid.Row="1"
+                        x:Name="MainCollectionView"
+                        ItemsUpdatingScrollMode="KeepLastItemInView"
+                        ItemsSource="{Binding NoteSegments}"
+                        SelectedItems="{Binding SelectedNoteSegments}"
+                        SelectedItem="{Binding SelectedNoteSegment}"
+                        SelectionMode="{Binding SelectionMode}"
+                        ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
 
 
-        </VerticalStackLayout>
-
-        <ScrollView Orientation="Vertical"
-                    x:Name="MainCollectionViewWrapper"
-                    Grid.Row="2">
-            <VerticalStackLayout x:Name="MainCollectionView"
-                                 BindableLayout.ItemsSource="{Binding NoteSegments}"
-                                 BindableLayout.ItemTemplateSelector="{StaticResource NoteSegmentDataTemplateSelector}">
-                <BindableLayout.EmptyView>
-                    <Grid  HorizontalOptions="Center"
-                           VerticalOptions="Center">
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Image Source="emptylist"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"></Image>
-                        <Label Text="没有任何片段"
-                               HorizontalTextAlignment="Center"
-                               VerticalOptions="Center"
-                               Grid.Row="1"
-                               Style="{StaticResource Body1_MulishBold}"></Label>
+            <!--<CollectionView.Header>
+                <VerticalStackLayout>
+                    <Grid>
+                        <Grid RowDefinitions="auto,auto"
+                              IsVisible="{Binding IsConfiguratingNoteSegment}">
+                            <StackLayout Spacing="5">
+                                <Label Text="标题"
+                                       Style="{StaticResource Body1_MulishSemiBold}"></Label>
+                                <Border Style="{StaticResource Base_FrameEntry}">
+                                    <Entry Placeholder="请输入标题"
+                                           Text="{Binding Title}"
+                                           Style="{StaticResource Base_Entry}">
+                                    </Entry>
+                                </Border>
+                            </StackLayout>
+                            <StackLayout Spacing="5"
+                                         Grid.Row="1">
+                                <Label Text="描述"
+                                       Style="{StaticResource Body1_MulishSemiBold}"></Label>
+                                <Border Style="{StaticResource Base_FrameEntry}">
+                                    <Entry Placeholder="请输入描述"
+                                           Text="{Binding Desc}"
+                                           Style="{StaticResource Base_Entry}">
+                                    </Entry>
+                                </Border>
+                            </StackLayout>
+                        </Grid>
+                        <Grid IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
+                            <Label Text="{Binding Desc}" />
+                        </Grid>
                     </Grid>
-                </BindableLayout.EmptyView>
-            </VerticalStackLayout>
-        </ScrollView>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span>共</Span>
+                                    <Span Text="{Binding NoteSegments.Count}"></Span>
+                                    <Span>个片段</Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Border StrokeShape="RoundRectangle 5"
+                                Stroke="Transparent"
+                                BackgroundColor="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter=Green|Gray}"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                Grid.Column="1">
+                            <Label TextColor="White"
+                                   Margin="5,0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf069;"></Span>
+                                        <Span Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter= 支持快速创建|不支持快速创建}"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+
+                        </Border>
+
+                    </Grid>
+
+
+                </VerticalStackLayout>
+            </CollectionView.Header>-->
+            <!--https://github.com/dotnet/maui/issues/17437-->
+            <!--<CollectionView.Footer>
+                <VerticalStackLayout>
+
+                    <HorizontalStackLayout Margin="0,5">
+                        <Border Padding="8">
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome"
+                                              Text="&#xf24a;"></Span>
+                                        <Span Text=" 笔记"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegment}"
+                                                      CommandParameter="TextSegment">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border Padding="8">
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome"
+                                              Text="&#xf046;"></Span>
+                                        <Span Text=" Todo"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegment}"
+                                                      CommandParameter="TodoSegment">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Border Padding="8">
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome"
+                                              Text="&#xf017;"></Span>
+                                        <Span Text=" 时间戳"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegment}"
+                                                      CommandParameter="DateTimeSegment">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border Padding="8">
+
+
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf141;"></Span>
+                                        <Span Text=" 更多片段"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateSegmentFromStore}">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </CollectionView.Footer>-->
+            <CollectionView.EmptyView>
+
+                <Grid  HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Source="emptylist"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"></Image>
+                    <Label Text="没有任何片段"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="1"
+                           Style="{StaticResource Body1_MulishBold}"></Label>
+                </Grid>
+            </CollectionView.EmptyView>
+        </CollectionView>
         <Button x:Name="AddButton"
                 IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
                 Command="{Binding CreateSegmentFromStore}"

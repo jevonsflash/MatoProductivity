@@ -351,6 +351,7 @@ namespace MatoProductivity.ViewModels
             if (e.PropertyName == nameof(NoteId))
             {
                 Loading = true;
+                await Task.Delay(300);
                 await Task.Run(async () =>
                 {
                     if (NoteId != default)

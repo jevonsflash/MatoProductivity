@@ -175,32 +175,12 @@
                             Command="{Binding Share}"></Button>
                 </HorizontalStackLayout>
             </Grid>
-            <ScrollView Orientation="Vertical"
-                        x:Name="MainCollectionViewWrapper"
-                        Grid.Row="1">
-                <VerticalStackLayout x:Name="MainCollectionView"
-                                     BindableLayout.ItemsSource="{Binding NoteSegments}"
-                                     BindableLayout.ItemTemplateSelector="{StaticResource NoteSegmentDataTemplateSelector}">
-
-                    <BindableLayout.EmptyView>
-                        <Grid  HorizontalOptions="Center"
-                               VerticalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Image Source="emptylist"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"></Image>
-                            <Label Text="没有任何片段"
-                                   HorizontalTextAlignment="Center"
-                                   VerticalOptions="Center"
-                                   Grid.Row="1"
-                                   Style="{StaticResource Body1_MulishBold}"></Label>
-                        </Grid>
-                    </BindableLayout.EmptyView>
-                </VerticalStackLayout>
-            </ScrollView>
+            <CollectionView Grid.Row="1"
+                            x:Name="MainCollectionView"
+                            ItemsSource="{Binding NoteSegments}"
+                            SelectionMode="None"
+                            ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
+            </CollectionView>
 
             <ActivityIndicator Grid.RowSpan="2"
                                IsRunning="{Binding Loading}"></ActivityIndicator>

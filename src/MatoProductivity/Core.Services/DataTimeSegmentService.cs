@@ -41,7 +41,7 @@ namespace MatoProductivity.Core.Services
                 var isAutoSet = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsAutoSet), DefaultIsAutoSetNoteSegmentPayload);
 
 
-                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
+                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), "未命名"+NoteSegment.Title);
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 

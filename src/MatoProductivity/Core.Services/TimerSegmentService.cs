@@ -45,7 +45,7 @@ namespace MatoProductivity.Core.Services
                 var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
                 var isShowFromNow = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
 
-                var defaultNotificationContentString = NoteSegment.Title;
+                var defaultNotificationContentString = NoteSegment.Title+"时间已到";
 
                 var defaultNotificationContent = this.CreateNoteSegmentPayload(nameof(NotificationContent), defaultNotificationContentString);
                 var notificationContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(NotificationContent), defaultNotificationContent);
