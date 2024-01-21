@@ -169,14 +169,14 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private NoteSegmentState _isConfigState;
+        private NoteSegmentState _noteSegmentState;
 
         public NoteSegmentState NoteSegmentState
         {
-            get { return _isConfigState; }
+            get { return _noteSegmentState; }
             set
             {
-                _isConfigState = value;
+                _noteSegmentState = value;
                 RaisePropertyChanged();
 
             }

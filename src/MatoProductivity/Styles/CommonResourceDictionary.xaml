@@ -46,4 +46,11 @@
             <service:NoteSegmentState>Config</service:NoteSegmentState>
         </toolkit:EnumToBoolConverter.TrueValues>
     </toolkit:EnumToBoolConverter>
+
+    <toolkit:EnumToBoolConverter x:Key="PreViewOrEditToBoolConverter">
+        <toolkit:EnumToBoolConverter.TrueValues>
+            <service:NoteSegmentState>Edit</service:NoteSegmentState>
+            <service:NoteSegmentState>PreView</service:NoteSegmentState>
+        </toolkit:EnumToBoolConverter.TrueValues>
+    </toolkit:EnumToBoolConverter>
 </ResourceDictionary>

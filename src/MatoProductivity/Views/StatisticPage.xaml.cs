@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace MatoProductivity.Views;
 
-public partial class StatisticPage : ContentPageBase, ITransientDependency
+public partial class StatisticPage : ContentPageBase, ISingletonDependency
 {
     private StatisticPageViewModel noteListPageViewModel => this.BindingContext as StatisticPageViewModel;
 

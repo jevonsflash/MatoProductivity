@@ -6,7 +6,7 @@ using MatoProductivity.ViewModels;
 
 namespace MatoProductivity
 {
-    public partial class NoteTemplateListPage : ContentPageBase, ITransientDependency
+    public partial class NoteTemplateListPage : ContentPageBase, ISingletonDependency
     {
         private NoteTemplateListPageViewModel NoteTemplateListPageViewModel => this.BindingContext as NoteTemplateListPageViewModel;
 

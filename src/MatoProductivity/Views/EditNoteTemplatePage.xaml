@@ -4,6 +4,7 @@
                       xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                       xmlns:core="clr-namespace:MatoProductivity.Core.Views;assembly=MatoProductivity"
                       NavigationPage.HasNavigationBar="False"
+                      xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
                       xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       x:Name="MainPage"
                       x:Class="MatoProductivity.Views.EditNoteTemplatePage">
@@ -317,7 +318,7 @@
 
             </Label>
             <Label Grid.Column="1"
-                   IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}"
+                   IsVisible="{Binding NoteSegmentState, Converter={StaticResource PreViewOrEditToBoolConverter}}"
                    Style="{StaticResource Headline4_MulishBlack}"
                    Text="{Binding Title}"
                    Margin="10, 0, 0, 0"
@@ -328,7 +329,7 @@
             </Label>
 
             <Border Grid.Column="1"
-                    IsVisible="{Binding IsConfiguratingNoteSegment}"
+                    IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}"
                     Margin="10, 0, 0, 0"
                     VerticalOptions="Center"
                     Style="{StaticResource Base_FrameEntry}">
@@ -347,7 +348,7 @@
 
                 <Button Text="删除"
                         Style="{StaticResource Text_Button}"
-                        IsVisible="{Binding IsConfiguratingNoteSegment ,Converter={StaticResource True2FalseConverter}}"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource PreViewOrEditToBoolConverter}}"
                         Command="{Binding Remove}"></Button>
 
 
@@ -363,10 +364,25 @@
                         IsVisible="{Binding IsConfiguratingNoteSegment}"
                         Command="{Binding SelectAllSegment}"></Button>-->
 
+                <Button Command="{Binding SwitchState}"
+                        CommandParameter="{x:Static service:NoteSegmentState.Edit}"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}"
+                        Style="{StaticResource Text_Button}"
+                        Text="编辑"></Button>
+
 
                 <Button Command="{Binding SwitchState}"
+                        CommandParameter="{x:Static service:NoteSegmentState.Config}"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}"
                         Style="{StaticResource Text_Button}"
-                        Text="{Binding IsConfiguratingNoteSegment, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
+                        Text="更多"></Button>
+
+
+                <Button Command="{Binding SwitchState}"
+                        CommandParameter="{x:Static service:NoteSegmentState.PreView}"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}"
+                        Style="{StaticResource Text_Button}"
+                        Text="完成"></Button>
 
 
             </HorizontalStackLayout>
@@ -377,7 +393,7 @@
         <VerticalStackLayout Grid.Row="1">
             <Grid>
                 <Grid RowDefinitions="auto,auto"
-                      IsVisible="{Binding IsConfiguratingNoteSegment}">
+                      IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
                     <!--<StackLayout Spacing="5">
                         <Label Text="标题"
                                Style="{StaticResource Body1_MulishSemiBold}"></Label>
@@ -400,7 +416,7 @@
                         </Border>
                     </StackLayout>
                 </Grid>
-                <Grid IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
+                <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource PreViewOrEditToBoolConverter}}">
                     <Label Text="{Binding Desc}" />
                 </Grid>
             </Grid>
@@ -467,6 +483,7 @@
             </VerticalStackLayout>
         </ScrollView>
         <Button x:Name="AddButton"
+                IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
                 Command="{Binding CreateSegmentFromStore}"
                 Grid.Row="3"
                 Padding="20"

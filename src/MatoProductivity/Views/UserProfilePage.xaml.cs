@@ -6,7 +6,7 @@ using MatoProductivity.ViewModels;
 
 namespace MatoProductivity
 {
-    public partial class UserProfilePage : ContentPageBase, ITransientDependency
+    public partial class UserProfilePage : ContentPageBase, ISingletonDependency
     {
         private UserProfilePageViewModel UserProfilePageViewModel => this.BindingContext as UserProfilePageViewModel;
 

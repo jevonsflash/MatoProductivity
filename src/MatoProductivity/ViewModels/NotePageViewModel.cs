@@ -15,7 +15,7 @@ using MatoProductivity.Helper;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NotePageViewModel : PopupViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer
+    public class NotePageViewModel : PopupViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer,IDisposable
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
@@ -264,6 +264,11 @@ namespace MatoProductivity.ViewModels
                 }
             }
             return false;
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
 
         public Command Remove { get; set; }

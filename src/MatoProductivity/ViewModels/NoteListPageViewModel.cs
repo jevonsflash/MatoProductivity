@@ -163,7 +163,7 @@ namespace MatoProductivity.ViewModels
 
         }
 
-        private async void  RemoveAction(object obj)
+        private async void RemoveAction(object obj)
         {
             var note = (Note)obj;
 
@@ -249,14 +249,23 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNote != default)
                 {
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
-                    {
-                        notePagePage = objWrapper.Object;
-                        (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone; ;
+                    //using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
+                    //{
+                    //    notePagePage = objWrapper.Object;
+                    //    (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone; ;
 
-                        await navigationService.ShowPopupAsync(notePagePage);
-                    }
+                    //    await navigationService.ShowPopupAsync(notePagePage);
+                    //}
+                    var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = SelectedNote.Id });
+                    objWrapper.Object.Disappearing+=(o, e) =>
+                    {
+                        objWrapper.Dispose();
+                    };
+                    await navigationService.PushAsync(objWrapper.Object);
+
                     SelectedNote = default;
+
+
                 }
             }
 

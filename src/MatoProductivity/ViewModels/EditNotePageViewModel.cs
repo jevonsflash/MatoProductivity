@@ -19,7 +19,7 @@ using System.Windows.Input;
 
 namespace MatoProductivity.ViewModels
 {
-    public class EditNotePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer, IDraggableViewModel, IPopupContainerViewModelBase
+    public class EditNotePageViewModel : ViewModelBase, ITransientDependency, INoteSegmentServiceContainer, IDraggableViewModel, IPopupContainerViewModelBase, IDisposable
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
@@ -62,7 +62,6 @@ namespace MatoProductivity.ViewModels
             Back = new Command(BackAction);
             SwitchState = new Command(SwitchStateAction);
 
-            IsConfiguratingNoteSegment = false;
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.templateRepository = templateRepository;
@@ -74,7 +73,7 @@ namespace MatoProductivity.ViewModels
             this.iocResolver = iocResolver;
             this.PropertyChanged += EditNotePageViewModel_PropertyChanged;
             SelectedNoteSegments = new ObservableCollection<object>();
-
+            NoteSegmentState=NoteSegmentState.PreView;
         }
 
         private async void SimplifiedCloneAction(object obj)
@@ -135,7 +134,11 @@ namespace MatoProductivity.ViewModels
 
         private void SwitchStateAction(object obj)
         {
-            this.IsConfiguratingNoteSegment = !this.IsConfiguratingNoteSegment;
+            if (obj is NoteSegmentState)
+            {
+                this.NoteSegmentState=(NoteSegmentState)obj;
+
+            }
         }
         private void OnItemDragged(object item)
         {
@@ -310,7 +313,7 @@ namespace MatoProductivity.ViewModels
                 if (newModel != null)
                 {
                     //newModel.Create.Execute(null);
-                    newModel.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
+                    newModel.NoteSegmentState = NoteSegmentState;
                     newModel.Container = this;
                     this.NoteSegments.Add(newModel);
                 }
@@ -370,13 +373,13 @@ namespace MatoProductivity.ViewModels
             {
                 RaisePropertyChanged(nameof(CanSimplified));
             }
-            else if (e.PropertyName == nameof(IsConfiguratingNoteSegment))
+            else if (e.PropertyName == nameof(NoteSegmentState))
             {
                 if (NoteSegments != null)
                 {
                     foreach (var noteSegment in NoteSegments)
                     {
-                        noteSegment.NoteSegmentState = IsConfiguratingNoteSegment ? NoteSegmentState.Config : NoteSegmentState.Edit;
+                        noteSegment.NoteSegmentState = NoteSegmentState;
                     }
                 }
 
@@ -396,31 +399,7 @@ namespace MatoProductivity.ViewModels
                     ? new ObservableCollection<INoteSegmentService>(
                   noteSegments.Select(GetNoteSegmentViewModel))
                     : new ObservableCollection<INoteSegmentService>();
-                NoteSegments.CollectionChanged += (o, e) =>
-                {
-
-                    if (e.Action == NotifyCollectionChangedAction.Add)
-                    {
-                        var result = e.NewItems[0];
-                        if (result is IAutoSet)
-                        {
-                            (result as IAutoSet).OnAutoSetChanged += (o, e) => RaisePropertyChanged(nameof(CanSimplified));
-                        }
-                        RaisePropertyChanged(nameof(CanSimplified));
-
-                    }
-                    else if (e.Action == NotifyCollectionChangedAction.Remove)
-                    {
-                        var result = e.OldItems[0];
-                        if (result is IAutoSet)
-                        {
-                            (result as IAutoSet).OnAutoSetChanged -= (o, e) => RaisePropertyChanged(nameof(CanSimplified));
-                        }
-
-                        RaisePropertyChanged(nameof(CanSimplified));
-
-                    }
-                };
+                NoteSegments.CollectionChanged +=NoteSegments_CollectionChanged;
                 Title = note.Title;
                 Desc = note.Desc;
                 Icon = note.Icon;
@@ -433,11 +412,37 @@ namespace MatoProductivity.ViewModels
 
         }
 
+        private void NoteSegments_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var result = e.NewItems[0];
+                if (result is IAutoSet)
+                {
+                    (result as IAutoSet).OnAutoSetChanged += (o, e) => RaisePropertyChanged(nameof(CanSimplified));
+                }
+                RaisePropertyChanged(nameof(CanSimplified));
+
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var result = e.OldItems[0];
+                if (result is IAutoSet)
+                {
+                    (result as IAutoSet).OnAutoSetChanged -= (o, e) => RaisePropertyChanged(nameof(CanSimplified));
+                }
+
+                RaisePropertyChanged(nameof(CanSimplified));
+
+            }
+
+        }
 
         private INoteSegmentService GetNoteSegmentViewModel(NoteSegment c)
         {
             var result = noteSegmentServiceFactory.GetNoteSegmentService(c);
-            result.NoteSegmentState = NoteSegmentState.Edit;
+            result.NoteSegmentState = NoteSegmentState;
             result.Container = this;
             if (result is IAutoSet)
             {
@@ -592,16 +597,15 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private bool _isConfiguratingNoteSegment;
+        private NoteSegmentState _noteSegmentState;
 
-        public bool IsConfiguratingNoteSegment
+        public NoteSegmentState NoteSegmentState
         {
-            get { return _isConfiguratingNoteSegment; }
+            get { return _noteSegmentState; }
             set
             {
-                _isConfiguratingNoteSegment = value;
+                _noteSegmentState = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(SelectionMode));
 
             }
         }
@@ -620,7 +624,7 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        public SelectionMode SelectionMode => IsConfiguratingNoteSegment ? SelectionMode.Multiple : SelectionMode.Single;
+        public SelectionMode SelectionMode => NoteSegmentState==NoteSegmentState.Config ? SelectionMode.Multiple : SelectionMode.Single;
 
         public bool CanSimplified => NoteSegments == null ? false : NoteSegments.All(this.GetIsItemSimplified);
 
@@ -758,6 +762,17 @@ namespace MatoProductivity.ViewModels
         public async Task CloseAllPopup()
         {
             await navigationService.HidePopupAsync(noteSegmentStoreListPage);
+        }
+
+        public void Dispose()
+        {
+            this.PropertyChanged-=EditNotePageViewModel_PropertyChanged;
+            if (NoteSegments!=null)
+            {
+                NoteSegments.CollectionChanged -=NoteSegments_CollectionChanged;
+
+            }
+
         }
 
         public Command Submit { get; set; }
