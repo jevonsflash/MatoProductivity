@@ -17,18 +17,18 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
         internal void Create()
         {
 
-            CreateNoteSegmentStore("时间戳", "时间/提醒", "DateTimeSegment", "时间戳片段，记录一个瞬时时间，保存在您的笔记中", FaIcons.IconClockO, "#D8292B");
-            CreateNoteSegmentStore("笔记", "文本", "TextSegment", "笔记片段，随时用文本记录您的想法", FaIcons.IconStickyNoteO, "#E1A08B");
-            CreateNoteSegmentStore("Todo", "文本", "TodoSegment", "笔记片段，随时用文本记录您的想法", FaIcons.IconCheckSquareO, "#C7C3E3");
-            CreateNoteSegmentStore("记录值", "文本", "KeyValueSegment", "记录值片段，通过回答对应问题以记录数值", FaIcons.IconCheckSquareO, "#C7C3E3");
-            CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "计时器片段，计时器结束后将提醒您", FaIcons.IconBell, "#AD9CC2");
-            CreateNoteSegmentStore("手绘", "文件", "ScriptSegment", "您可自由地手绘一个涂鸦，由我们进行记录", FaIcons.IconPencilSquareO, "#AD9CC2");
-            CreateNoteSegmentStore("照片/视频", "文件", "MediaSegment", "拍照或摄像并存储", FaIcons.IconCamera, "#AD9CC2");
-            CreateNoteSegmentStore("文档", "文件", "DocumentSegment", "从您设备中选取一个文档，并存储", FaIcons.IconFile, "#AD9CC2");
+            CreateNoteSegmentStore("时间戳", "时间/提醒", "DateTimeSegment", "记录一个瞬时时间", FaIcons.IconClockO, "#D8292B");
+            CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "创建计时器提醒", FaIcons.IconBell, "#D8292B");
+            CreateNoteSegmentStore("笔记", "文本", "TextSegment", "随时用文本记录您的想法", FaIcons.IconStickyNoteO, "#E1A08B");
+            CreateNoteSegmentStore("Todo", "文本", "TodoSegment", "记录一个Todo项目", FaIcons.IconCheckSquareO, "#E1A08B");
+            CreateNoteSegmentStore("数值", "文本", "KeyValueSegment", "记录数值，以便统计数据", FaIcons.IconLineChart, "#E1A08B");
+            CreateNoteSegmentStore("手绘", "文件", "ScriptSegment", "创建一个手绘", FaIcons.IconPaintBrush, "#AD9CC2");
+            CreateNoteSegmentStore("照片/视频", "文件", "MediaSegment", "拍照或摄像", FaIcons.IconCamera, "#AD9CC2");
+            CreateNoteSegmentStore("文档", "文件", "DocumentSegment", "从您设备中选取一个文档", FaIcons.IconFile, "#AD9CC2");
             CreateNoteSegmentStore("录音", "文件", "VoiceSegment", "记录一段声音", FaIcons.IconMicrophone, "#AD9CC2");
-            CreateNoteSegmentStore("地点", "其它", "LocationSegment", "获取当前地点，或者从地图上选取一个地点并记录", FaIcons.IconMapMarker, "#AD9CC2");
-            CreateNoteSegmentStore("天气", "其它", "WeatherSegment", "获取并记录当前天气信息", FaIcons.IconCloud, "#AD9CC2");
-            CreateNoteSegmentStore("联系人", "其它", "ContactSegment", "从您设备的通讯录中选择一个联系人，记录其联系方式", FaIcons.IconUser, "#AD9CC2");
+            CreateNoteSegmentStore("地点", "其它", "LocationSegment", "获取当前地点，或者从地图上选取一个地点", FaIcons.IconMapMarker, "#6D987C");
+            CreateNoteSegmentStore("天气", "其它", "WeatherSegment", "获取当前天气信息", FaIcons.IconCloud, "#6D987C");
+            CreateNoteSegmentStore("联系人", "其它", "ContactSegment", "从您设备的通讯录中选择一个联系人", FaIcons.IconUser, "#6D987C");
 
 
 

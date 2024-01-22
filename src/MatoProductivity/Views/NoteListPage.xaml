@@ -7,7 +7,7 @@
                       xmlns:model="clr-namespace:MatoProductivity.Models;assembly=MatoProductivity"
                       x:Class="MatoProductivity.Views.NoteListPage"
                       xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-                      Appearing="ContentPageBase_Appearing">
+                      Loaded="ContentPageBase_Loaded">
 
     <mato:ContentPageBase.Resources>
         <ControlTemplate x:Key="NoteCardViewPhone">
@@ -17,26 +17,42 @@
                         <SwipeItems>
                             <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
-                                <Border
-                                        Padding="15, 0">
-                                    <Label Text="&#xf2ed;"
-                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
-                                           FontSize="{StaticResource Headline4FontSize}"
-                                           FontFamily="FontAwesome_Solid"
-                                           VerticalTextAlignment="Center">
-                                    </Label>
+                                <Border Padding="15, 0">
+                                    <StackLayout Orientation="Vertical"
+                                                 VerticalOptions="Center">
+                                        <Label Text="&#xf2ed;"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                               FontSize="{StaticResource Headline4FontSize}"
+                                               FontFamily="FontAwesome_Solid"
+                                               HorizontalOptions="Center">
+                                        </Label>
+                                        <Label Text="删除"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                               HorizontalOptions="Center">
+                                        </Label>
+                                    </StackLayout>
+
+
                                 </Border>
                             </SwipeItemView>
                             <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
-                                <Border 
-                                        Padding="25, 0, 15, 0">
-                                    <Label Text="&#xf303;"
-                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
-                                           FontSize="{StaticResource Headline4FontSize}"
-                                           FontFamily="FontAwesome_Solid"
-                                           VerticalTextAlignment="Center">
-                                    </Label>
+                                <Border Padding="25, 0, 15, 0">
+
+
+                                    <StackLayout Orientation="Vertical"
+                                                 VerticalOptions="Center">
+                                        <Label Text="&#xf303;"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                               FontSize="{StaticResource Headline4FontSize}"
+                                               FontFamily="FontAwesome_Solid"
+                                               HorizontalOptions="Center">
+                                        </Label>
+                                        <Label Text="编辑"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                               HorizontalOptions="Center">
+                                        </Label>
+                                    </StackLayout>
                                 </Border>
                             </SwipeItemView>
                         </SwipeItems>
@@ -92,7 +108,6 @@
                    Grid.Row="0"
                    Grid.RowSpan="2"
                    Text="&#xf2bd;"
-                   
                    FontSize="{StaticResource Headline2FontSize}"
                    FontFamily="FontAwesome_Solid"
                    VerticalOptions="Center"
@@ -121,20 +136,17 @@
                                    Margin="0, 0, 10, 0">
 
                 <Button Text="删除选中"
-                        
                         Style="{StaticResource Text_Button}"
                         IsVisible="{Binding IsEditing}"
                         Command="{Binding RemoveSelected}"></Button>
 
                 <Button Text="全选"
-                        
                         Style="{StaticResource Text_Button}"
                         IsVisible="{Binding IsEditing}"
                         Command="{Binding SelectAll}"></Button>
 
 
-                <Button Command="{Binding SwitchState}"
-                        
+                <Button Command="{Binding GoToState}"
                         Style="{StaticResource Text_Button}"
                         Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 

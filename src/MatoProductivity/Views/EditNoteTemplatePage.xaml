@@ -17,12 +17,19 @@
                         <SwipeItems>
                             <SwipeItemView  Command="{TemplateBinding BindingContext.Remove}">
                                 <Border Padding="15, 0">
-                                    <Label Text="&#xf2ed;"
-                                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
-                                           FontSize="{StaticResource Headline4FontSize}"
-                                           FontFamily="FontAwesome_Solid"
-                                           VerticalTextAlignment="Center">
-                                    </Label>
+                                    <StackLayout Orientation="Vertical"
+                                                 VerticalOptions="Center">
+                                        <Label Text="&#xf2ed;"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                               FontSize="{StaticResource Headline4FontSize}"
+                                               FontFamily="FontAwesome_Solid"
+                                               HorizontalOptions="Center">
+                                        </Label>
+                                        <Label Text="删除"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                               HorizontalOptions="Center">
+                                        </Label>
+                                    </StackLayout>
                                 </Border>
                             </SwipeItemView>
 
@@ -325,7 +332,7 @@
                    Margin="10, 0, 0, 0"
                    VerticalOptions="Center">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding SwitchState}"
+                    <TapGestureRecognizer Command="{Binding GoToState}"
                                           CommandParameter="{x:Static service:NoteSegmentState.Config}"></TapGestureRecognizer>
                 </Label.GestureRecognizers>
             </Label>
@@ -351,6 +358,7 @@
                 <Button Text="删除"
                         Style="{StaticResource Text_Button}"
                         IsVisible="{Binding NoteSegmentState, Converter={StaticResource PreViewOrEditToBoolConverter}}"
+                        Padding="5,5"
                         Command="{Binding Remove}"></Button>
 
 
@@ -366,24 +374,33 @@
                         IsVisible="{Binding IsConfiguratingNoteSegment}"
                         Command="{Binding SelectAllSegment}"></Button>-->
 
-                <Button Command="{Binding SwitchState}"
+                <Button Command="{Binding GoToState}"
                         CommandParameter="{x:Static service:NoteSegmentState.Edit}"
                         IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}"
                         Style="{StaticResource Text_Button}"
+                        Padding="5,5"
                         Text="编辑"></Button>
 
 
-                <Button Command="{Binding SwitchState}"
+                <Button Command="{Binding GoToState}"
                         CommandParameter="{x:Static service:NoteSegmentState.Config}"
                         IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Edit}}"
                         Style="{StaticResource Text_Button}"
+                        Padding="5,5"
                         Text="更多"></Button>
 
-
-                <Button Command="{Binding SwitchState}"
-                        CommandParameter="{x:Static service:NoteSegmentState.PreView}"
+                <Button Command="{Binding GoToState}"
+                        CommandParameter="{x:Static service:NoteSegmentState.Edit}"
                         IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}"
                         Style="{StaticResource Text_Button}"
+                        Padding="5,5"
+                        Text="更少"></Button>
+
+                <Button Command="{Binding GoToState}"
+                        CommandParameter="{x:Static service:NoteSegmentState.PreView}"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
+                        Style="{StaticResource Text_Button}"
+                        Padding="5,5"
                         Text="完成"></Button>
 
 

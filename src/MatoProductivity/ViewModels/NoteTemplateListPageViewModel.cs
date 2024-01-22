@@ -29,7 +29,7 @@ namespace MatoProductivity.ViewModels
             Remove = new Command(RemoveAction);
             Edit = new Command(EditAction);
             CreateNote = new Command(CreateNoteAction);
-            this.SwitchState = new Command(SwitchStateAction);
+            this.GoToState = new Command(GoToStateAction);
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -100,7 +100,7 @@ namespace MatoProductivity.ViewModels
 
         }
 
-        private void SwitchStateAction(object obj)
+        private void GoToStateAction(object obj)
         {
             this.IsEditing = !this.IsEditing;
         }
@@ -179,7 +179,7 @@ namespace MatoProductivity.ViewModels
         }
         public SelectionMode SelectionMode => IsEditing ? SelectionMode.Multiple : SelectionMode.Single;
 
-        public Command SwitchState { get; set; }
+        public Command GoToState { get; set; }
         public Command Create { get; set; }
         public Command CreateNote { get; set; }
 

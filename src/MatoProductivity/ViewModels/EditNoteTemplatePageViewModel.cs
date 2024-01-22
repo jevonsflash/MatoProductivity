@@ -57,7 +57,7 @@ namespace MatoProductivity.ViewModels
             ItemDragLeave = new Command(OnItemDragLeave);
             ItemDropped = new Command(i => OnItemDropped(i));
             Back = new Command(BackAction);
-            SwitchState = new Command(SwitchStateAction);
+            GoToState = new Command(GoToStateAction);
 
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
@@ -70,7 +70,7 @@ namespace MatoProductivity.ViewModels
             this.iocResolver = iocResolver;
             this.PropertyChanged += EditNoteTemplatePageViewModel_PropertyChanged;
             SelectedNoteSegments = new ObservableCollection<object>();
-            NoteSegmentState=NoteSegmentState.PreView;
+            NoteSegmentState=NoteSegmentState.Edit;
 
         }
 
@@ -85,10 +85,16 @@ namespace MatoProductivity.ViewModels
             await this.navigationService.PopAsync();
         }
 
-        private void SwitchStateAction(object obj)
+        private void GoToStateAction(object obj)
         {
             if (obj is NoteSegmentState)
             {
+
+                if ((NoteSegmentState)obj==NoteSegmentState.PreView &&(this.NoteSegmentState==NoteSegmentState.Config || this.NoteSegmentState==NoteSegmentState.Edit))
+                {
+                    this.SubmitBackAction(null);
+                }
+
                 this.NoteSegmentState=(NoteSegmentState)obj;
 
             }
@@ -691,11 +697,7 @@ namespace MatoProductivity.ViewModels
                 }
                 UnitOfWorkManager.Current.SaveChanges();
 
-
             });
-
-            await navigationService.PopAsync();
-
         }
 
         public async Task CloseAllPopup()
@@ -733,7 +735,7 @@ namespace MatoProductivity.ViewModels
 
         public Command ItemDropped { get; set; }
 
-        public Command SwitchState { get; set; }
+        public Command GoToState { get; set; }
 
         public Command Back { get; set; }
 

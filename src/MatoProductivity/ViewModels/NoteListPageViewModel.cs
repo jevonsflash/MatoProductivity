@@ -42,7 +42,7 @@ namespace MatoProductivity.ViewModels
             this.RemoveSelected = new Command(RemoveSelectedAction);
             this.SelectAll = new Command(SelectAllAction);
             this.Search = new Command(SearchAction);
-            this.SwitchState = new Command(SwitchStateAction);
+            this.GoToState = new Command(GoToStateAction);
             PreviousWeekCommand = new Command<DateTime>(PreviousWeekCommandHandler);
             NextWeekCommand = new Command<DateTime>(NextWeekCommandHandler);
             DayCommand = new Command<DayModel>(DayCommandHandler);
@@ -132,7 +132,7 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-        private void SwitchStateAction(object obj)
+        private void GoToStateAction(object obj)
         {
             this.IsEditing = !this.IsEditing;
         }
@@ -370,7 +370,7 @@ namespace MatoProductivity.ViewModels
         public Command RemoveSelected { get; set; }
         public Command SelectAll { get; set; }
         public Command Search { get; set; }
-        public Command SwitchState { get; set; }
+        public Command GoToState { get; set; }
 
         public Command DayCommand { get; set; }
         public Command PreviousWeekCommand { get; set; }

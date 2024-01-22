@@ -15,13 +15,15 @@ public partial class NoteListPage : ContentPageBase, ISingletonDependency
 
     }
 
-    private async void ContentPageBase_Appearing(object sender, EventArgs e)
-    {
-       await noteListPageViewModel.Init();
-    }
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
        await navigationService.ShowPopupAsync((this.Resources["PopupMenu"] as PopupBase));
+    }
+
+    private async void ContentPageBase_Loaded(object sender, EventArgs e)
+    {
+        await noteListPageViewModel.Init();
+
     }
 }
