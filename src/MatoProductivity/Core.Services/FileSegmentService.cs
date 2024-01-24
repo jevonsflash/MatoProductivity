@@ -27,7 +27,7 @@ namespace MatoProductivity.Core.Services
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), "未命名"+NoteSegment.Title);
+                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 

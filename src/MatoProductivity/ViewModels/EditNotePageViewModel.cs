@@ -39,7 +39,6 @@ namespace MatoProductivity.ViewModels
             IRepository<NoteSegment, long> noteSegmentRepository,
             IRepository<NoteSegmentPayload, long> payloadRepository,
             IRepository<NoteSegmentStore, long> noteSegmentStoreRepository,
-
             IRepository<Note, long> repository,
             IUnitOfWorkManager unitOfWorkManager,
             IIocResolver iocResolver)
@@ -306,7 +305,7 @@ namespace MatoProductivity.ViewModels
                 var noteSegment = new NoteSegment()
                 {
                     NoteId = this.NoteId,
-                    Title = note.Title,
+                    Title = "未命名" + note.Title,
                     Type = note.Type,
                     Desc = note.Desc,
                     Icon = note.Icon,

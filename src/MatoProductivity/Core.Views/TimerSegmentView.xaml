@@ -54,7 +54,7 @@
                     <RadioButton.Content>
                         <StackLayout>
 
-                            <Label Text="计时"
+                            <Label Text="倒计时"
                                    HorizontalOptions="Center"
                                    VerticalOptions="End" />
                         </StackLayout>
@@ -64,7 +64,7 @@
                     <RadioButton.Content>
                         <StackLayout>
 
-                            <Label Text="时间点"
+                            <Label Text="日期/时间"
                                    HorizontalOptions="Center"
                                    VerticalOptions="End" />
                         </StackLayout>
@@ -72,39 +72,53 @@
                 </RadioButton>
 
             </StackLayout>
-            <Grid ColumnDefinitions="*,*"
-                  IsVisible="{Binding CountdownMode, Converter={StaticResource IsEqualConverter}, ConverterParameter=Relative}">
+            <Grid ColumnDefinitions="*,10,*" Margin="0,10,0,0"
+                  IsVisible="{Binding CountdownMode, Converter={StaticResource IsEqualConverter}, ConverterParameter=Absolute}">
                 <Border Style="{StaticResource Base_FrameEntry}">
                     <DatePicker Date="{Binding Time}"></DatePicker>
                 </Border>
                 <Border Style="{StaticResource Base_FrameEntry}"
-                        Grid.Column="1">
+                        Grid.Column="2">
                     <TimePicker Time="{Binding TimeOffset}"></TimePicker>
                 </Border>
             </Grid>
-            <Grid ColumnDefinitions="*,*,*"
-                  IsVisible="{Binding CountdownMode, Converter={StaticResource IsEqualConverter}, ConverterParameter=Absolute}">
+            <Grid ColumnDefinitions="*,30,*,30,*,30"
+                  Margin="0,10,0,0"
+                  IsVisible="{Binding CountdownMode, Converter={StaticResource IsEqualConverter}, ConverterParameter=Relative}">
                 <Border Style="{StaticResource Base_FrameEntry}">
                     <Entry Keyboard="Numeric"
                            Text="{Binding Day}"></Entry>
                 </Border>
+                <Label Text="天"
+                       Grid.Column="1"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"></Label>
                 <Border Style="{StaticResource Base_FrameEntry}"
-                        Grid.Column="1">
+                        
+                        Grid.Column="2">
                     <Entry Keyboard="Numeric"
                            Text="{Binding Hour}"></Entry>
                 </Border>
+                <Label Text="时"
+                       Grid.Column="3"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"></Label>
                 <Border Style="{StaticResource Base_FrameEntry}"
-                        Grid.Column="2">
+                        Grid.Column="4">
 
                     <Entry Keyboard="Numeric"
                            Text="{Binding Minute}"></Entry>
                 </Border>
+                <Label Text="分"
+                       Grid.Column="5"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"></Label>
 
             </Grid>
-            <Label Text="通知消息："></Label>
+            <Label Text="提醒内容："></Label>
             <Border Style="{StaticResource Base_FrameEntry}">
                 <Entry  Text="{Binding NotificationContent}"
-                        Placeholder="请输入通知内容" />
+                        Placeholder="请输入提醒内容" />
             </Border>
 
         </VerticalStackLayout>

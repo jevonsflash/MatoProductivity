@@ -18,6 +18,7 @@ namespace MatoProductivity.EntityFrameworkCore
         public DbSet<NoteSegmentTemplate> NoteSegmentTemplate { get; set; }
         public DbSet<NoteSegmentTemplatePayload> NoteSegmentTemplatePayload { get; set; }
         public DbSet<Theme> Theme { get; set; }
+        public DbSet<Setting> Setting { get; set; }
         public MatoProductivityDbContext(DbContextOptions<MatoProductivityDbContext> options) 
             : base(options)
         {

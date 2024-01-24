@@ -15,7 +15,7 @@ using MatoProductivity.Helper;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NotePageViewModel : PopupViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer,IDisposable
+    public class NotePageViewModel : PopupViewModelBase, ITransientDependency, IReadOnlyNoteSegmentServiceContainer, IDisposable
     {
         private readonly NavigationService navigationService;
         private readonly INoteSegmentServiceFactory noteSegmentServiceFactory;
@@ -49,12 +49,15 @@ namespace MatoProductivity.ViewModels
 
         private async void EditAction(object obj)
         {
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = this.NoteId }))
-            {
-                await navigationService.PushAsync(objWrapper.Object);
-                OnDone?.Invoke(this, EventArgs.Empty);
+            var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = this.NoteId });
 
-            }
+            objWrapper.Object.Disappearing+=(o, e) =>
+            {
+                objWrapper.Dispose();
+            };
+            await navigationService.PushAsync(objWrapper.Object);
+            OnDone?.Invoke(this, EventArgs.Empty);
+
         }
 
         private async void RemoveAction(object obj)
@@ -268,7 +271,7 @@ namespace MatoProductivity.ViewModels
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            this.PropertyChanged -= NotePageViewModel_PropertyChanged;
         }
 
         public Command Remove { get; set; }

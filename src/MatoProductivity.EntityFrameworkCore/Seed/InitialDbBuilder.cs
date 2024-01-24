@@ -17,8 +17,12 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
         internal void Create()
         {
 
+            CreateSetting("Theme", "Light");
+            CreateSetting("DetailPageMode", "PreviewPage");
+
+
             CreateNoteSegmentStore("时间戳", "时间/提醒", "DateTimeSegment", "记录一个瞬时时间", FaIcons.IconClockO, "#D8292B");
-            CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "创建计时器提醒", FaIcons.IconBell, "#D8292B");
+            CreateNoteSegmentStore("计时器", "时间/提醒", "TimerSegment", "创建一个计时器，当它结束时会提醒您", FaIcons.IconBell, "#D8292B");
             CreateNoteSegmentStore("笔记", "文本", "TextSegment", "随时用文本记录您的想法", FaIcons.IconStickyNoteO, "#E1A08B");
             CreateNoteSegmentStore("Todo", "文本", "TodoSegment", "记录一个Todo项目", FaIcons.IconCheckSquareO, "#E1A08B");
             CreateNoteSegmentStore("数值", "文本", "KeyValueSegment", "记录数值，以便统计数据", FaIcons.IconLineChart, "#E1A08B");
@@ -39,7 +43,8 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             var noteTemplateId = noteTemplateEntity.Id;
             var noteSegmentTemplate1 = CreateNoteSegmentTemplate(noteTemplateId, "开始", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId, "宝宝饿啦", FaIcons.IconClockO, "TimerSegment", "", "#000000");
-            var noteSegmentTemplate1_2 = CreateNoteSegmentTemplate(noteTemplateId, "数量(ml)", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
+            var noteSegmentTemplate1_2 = CreateNoteSegmentTemplate(noteTemplateId, "数量", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate1_2.Id, "Unit", "ml");
             var noteSegmentTemplateId1 = noteSegmentTemplate1.Id;
             CreateNoteSegmentTemplatePayload(noteSegmentTemplateId1, "IsAutoSet", true);
 
@@ -60,7 +65,8 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             var noteTemplateId4 = noteTemplateEntity4.Id;
             var noteSegmentTemplate4 = CreateNoteSegmentTemplate(noteTemplateId4, "时间", FaIcons.IconClockO, "DateTimeSegment", "", "#000000");
             var noteSegmentTemplateId4 = noteSegmentTemplate4.Id;
-            var noteSegmentTemplate4_2 = CreateNoteSegmentTemplate(noteTemplateId4, "体温(℃)", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
+            var noteSegmentTemplate4_2 = CreateNoteSegmentTemplate(noteTemplateId4, "体温", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate4_2.Id, "Unit", "℃");
 
             CreateNoteSegmentTemplatePayload(noteSegmentTemplateId4, "IsAutoSet", true);
 
@@ -69,7 +75,8 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
             NoteTemplate noteTemplateEntity5 = CreateNoteTemplate("吃辅食", "宝宝成长", "diet", "#000000", "#FFFFFF");
             var noteTemplateId5 = noteTemplateEntity5.Id;
-            CreateNoteSegmentTemplate(noteTemplateId5, "数量(ml)", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
+            var noteSegmentTemplate5_1 = CreateNoteSegmentTemplate(noteTemplateId5, "数量", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate5_1.Id, "Unit", "ml");
             CreateNoteSegmentTemplate(noteTemplateId5, "过敏备注", FaIcons.IconStickyNoteO, "TextSegment", "备注信息", "#000000");
 
 
@@ -82,7 +89,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             var noteSegmentTemplate7_1 = CreateNoteSegmentTemplate(noteTemplateId7, "日期", FaIcons.IconClockO, "DateTimeSegment", "日期", "#000000");
 
             CreateNoteSegmentTemplatePayload(noteSegmentTemplate7_1.Id, "IsAutoSet", true);
-            CreateNoteSegmentTemplate(noteTemplateId7, "地点", FaIcons.IconClockO, "TimerSegment", "地点", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId7, "地点", FaIcons.IconMapMarker, "TimerSegment", "地点", "#000000");
             CreateNoteSegmentTemplate(noteTemplateId7, "备注", FaIcons.IconStickyNoteO, "TextSegment", "备注信息", "#000000");
 
 
@@ -112,7 +119,7 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             NoteTemplate noteTemplateEntity2 = CreateNoteTemplate("灵感", "其它", "step_to_the_sun", "#000000", "#FFFFFF");
             var noteTemplateId2 = noteTemplateEntity2.Id;
             CreateNoteSegmentTemplate(noteTemplateId2, "记下想法", FaIcons.IconStickyNoteO, "TextSegment", "备注信息", "#000000");
-            CreateNoteSegmentTemplate(noteTemplateId2, "画出想法", FaIcons.IconPencilSquareO, "ScriptSegment", "备注信息", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId2, "画出想法", FaIcons.IconPaintBrush, "ScriptSegment", "备注信息", "#000000");
 
 
             #endregion
@@ -120,9 +127,12 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
             NoteTemplate noteTemplateEntity6 = CreateNoteTemplate("记油耗", "其它", "automobile", "#000000", "#FFFFFF");
             var noteTemplateId6 = noteTemplateEntity6.Id;
-            var noteSegmentTemplate6 = CreateNoteSegmentTemplate(noteTemplateId6, "里程", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
-            var noteSegmentTemplate6_1 = CreateNoteSegmentTemplate(noteTemplateId6, "数量升", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
-            var noteSegmentTemplate6_2 = CreateNoteSegmentTemplate(noteTemplateId6, "价格", FaIcons.IconCheckSquareO, "KeyValueSegment", "", "#000000");
+            var noteSegmentTemplate6 = CreateNoteSegmentTemplate(noteTemplateId6, "里程", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate6.Id, "Unit", "km");
+            var noteSegmentTemplate6_1 = CreateNoteSegmentTemplate(noteTemplateId6, "数量", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate6_1.Id, "Unit", "L");
+            var noteSegmentTemplate6_2 = CreateNoteSegmentTemplate(noteTemplateId6, "价格", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate6_2.Id, "Unit", "元");
 
 
             CreateNoteSegmentTemplatePayload(noteSegmentTemplate6.Id, "Content", 10000);
@@ -130,23 +140,38 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             CreateNoteSegmentTemplatePayload(noteSegmentTemplate6_2.Id, "Content", 400);
             #endregion
 
+            #region 预约师傅上门
+
+
+            NoteTemplate noteTemplateEntity11 = CreateNoteTemplate("预约师傅上门", "其它", "speed_test", "#000000", "#FFFFFF");
+            var noteTemplateId11 = noteTemplateEntity11.Id;
+            CreateNoteSegmentTemplate(noteTemplateId11, "安装师傅上门日期", FaIcons.IconClockO, "DateTimeSegment", "", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId11, "安装师傅联系方式", FaIcons.IconUser, "ContactSegment", "", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId11, "备注", FaIcons.IconStickyNoteO, "TextSegment", "备注信息", "#000000");
+
+            #endregion
+
             #region 打卡
 
-            NoteTemplate noteTemplateEntity9 = CreateNoteTemplate("打卡", "其它", "speed_test", "#000000", "#FFFFFF", true);
+            NoteTemplate noteTemplateEntity9 = CreateNoteTemplate("快速打卡", "其它", "speed_test", "#000000", "#FFFFFF", true);
             var noteTemplateId9 = noteTemplateEntity9.Id;
             var noteSegmentTemplate9 = CreateNoteSegmentTemplate(noteTemplateId9, "时间", FaIcons.IconClockO, "DateTimeSegment", "", "#000000");
             var noteSegmentTemplateId9 = noteSegmentTemplate9.Id;
             CreateNoteSegmentTemplatePayload(noteSegmentTemplateId9, "IsAutoSet", true);
+            CreateNoteSegmentTemplate(noteTemplateId9, "地点", FaIcons.IconMapMarker, "TimerSegment", "地点", "#000000");
 
             #endregion
 
             #region 打卡2
 
-            NoteTemplate noteTemplateEntity10 = CreateNoteTemplate("打卡2", "其它", "speed_test", "#000000", "#FFFFFF", true);
+            NoteTemplate noteTemplateEntity10 = CreateNoteTemplate("打卡", "其它", "speed_test", "#000000", "#FFFFFF", true);
             var noteTemplateId10 = noteTemplateEntity10.Id;
             var noteSegmentTemplate10 = CreateNoteSegmentTemplate(noteTemplateId10, "时间", FaIcons.IconClockO, "DateTimeSegment", "", "#000000");
             var noteSegmentTemplateId10 = noteSegmentTemplate10.Id;
             CreateNoteSegmentTemplatePayload(noteSegmentTemplateId10, "IsAutoSet", true);
+            CreateNoteSegmentTemplate(noteTemplateId10, "地点", FaIcons.IconMapMarker, "TimerSegment", "地点", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId10, "此地的风景", FaIcons.IconCamera, "MediaSegment", "", "#000000");
+            CreateNoteSegmentTemplate(noteTemplateId10, "此时的天气", FaIcons.IconCloud, "WeatherSegment", "", "#000000");
 
             #endregion
         }
@@ -197,8 +222,8 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
 
         private NoteSegmentTemplatePayload CreateNoteSegmentTemplatePayload(long noteSegmentTemplateId, string key, object value)
         {
-            var noteSegmentTemplateEntity = this.context.Set<NoteSegmentTemplatePayload>().FirstOrDefault(c => c.NoteSegmentTemplateId == noteSegmentTemplateId && c.Key==key);
-            if (noteSegmentTemplateEntity == null)
+            var noteSegmentTemplatePayloadEntity = this.context.Set<NoteSegmentTemplatePayload>().FirstOrDefault(c => c.NoteSegmentTemplateId == noteSegmentTemplateId && c.Key==key);
+            if (noteSegmentTemplatePayloadEntity == null)
             {
                 var item = new NoteSegmentTemplatePayload(key, value)
                 {
@@ -206,10 +231,10 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
                 };
                 var noteSegmentTemplateEntityEntry = this.context.Set<NoteSegmentTemplatePayload>().Add(item);
                 this.context.SaveChanges();
-                noteSegmentTemplateEntity = noteSegmentTemplateEntityEntry.Entity;
+                noteSegmentTemplatePayloadEntity = noteSegmentTemplateEntityEntry.Entity;
             }
 
-            return noteSegmentTemplateEntity;
+            return noteSegmentTemplatePayloadEntity;
         }
 
 
@@ -234,6 +259,20 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             }
 
             return noteSegmentStoreEntity;
+        }
+
+        private Setting CreateSetting(string key, string value)
+        {
+            var settingEntity = this.context.Set<Setting>().FirstOrDefault(c => c.Id==key);
+            if (settingEntity == null)
+            {
+                var item = new Setting(key, value);
+                var settingEntityEntry = this.context.Set<Setting>().Add(item);
+                this.context.SaveChanges();
+                settingEntity = settingEntityEntry.Entity;
+            }
+
+            return settingEntity;
         }
     }
 }

@@ -92,10 +92,13 @@ namespace MatoProductivity.ViewModels
             }
             else
             {
-                using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id }))
+                var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id });
+                objWrapper.Object.Disappearing+=(o, e) =>
                 {
-                    await navigationService.PushAsync(objWrapper.Object);
-                }
+                    objWrapper.Dispose();
+                };
+                await navigationService.PushAsync(objWrapper.Object);
+
             }
 
         }

@@ -42,14 +42,19 @@
 
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
-            <Grid ColumnDefinitions="*,*">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="10"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 <Border Style="{StaticResource Base_FrameEntry}">
                     <DatePicker Date="{Binding Time}"
                                 VerticalOptions="Center"
                                 IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></DatePicker>
                 </Border>
                 <Border Style="{StaticResource Base_FrameEntry}"
-                        Grid.Column="1">
+                        Grid.Column="2">
                     <TimePicker Time="{Binding TimeOffset}"
                                 VerticalOptions="Center"
                                 IsEnabled="{Binding IsAutoSet, Converter={StaticResource True2FalseConverter}}"></TimePicker>

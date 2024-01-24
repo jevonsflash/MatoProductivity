@@ -14,7 +14,7 @@
 
                 <Editor Text="{Binding Content}"
                         AutoSize="TextChanges"
-                        MinimumHeightRequest="250"
+                        MinimumHeightRequest="50"
                         Placeholder="{Binding PlaceHolder}"></Editor>
             </Border>
             <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">

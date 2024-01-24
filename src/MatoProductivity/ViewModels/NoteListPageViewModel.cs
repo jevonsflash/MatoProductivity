@@ -21,6 +21,7 @@ namespace MatoProductivity.ViewModels
     {
         private readonly IDateService _dateService;
         private readonly IRepository<Note, long> repository;
+        private readonly IRepository<Setting, string> settingRepository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
         private NotePage notePagePage;
@@ -28,11 +29,13 @@ namespace MatoProductivity.ViewModels
         public NoteListPageViewModel(
             IDateService dateService,
             IRepository<Note, long> repository,
+            IRepository<Setting, string> settingRepository,
             IIocResolver iocResolver,
             NavigationService navigationService)
         {
             this._dateService = dateService;
             this.repository = repository;
+            this.settingRepository=settingRepository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
             this.PropertyChanged += NotePageViewModel_PropertyChangedAsync;
@@ -184,21 +187,28 @@ namespace MatoProductivity.ViewModels
         {
             var note = (Note)obj;
 
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = note.Id }))
+            var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = note.Id });
+
+            objWrapper.Object.Disappearing+=(o, e) =>
             {
-                await navigationService.PushAsync(objWrapper.Object);
-            }
+                objWrapper.Dispose();
+            };
+            await navigationService.PushAsync(objWrapper.Object);
+
         }
 
         private async void CreateActionAsync(object obj)
         {
 
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 }))
-            {
-                (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+            var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 });
 
-                await navigationService.PushAsync(objWrapper.Object);
-            }
+            (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
+            objWrapper.Object.Disappearing+=(o, e) =>
+            {
+                objWrapper.Dispose();
+            };
+            await navigationService.PushAsync(objWrapper.Object);
+
         }
 
         public async Task Init()
@@ -249,19 +259,30 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNote != default)
                 {
-                    //using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
-                    //{
-                    //    notePagePage = objWrapper.Object;
-                    //    (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone; ;
+                    var detailPageMode = settingRepository.FirstOrDefault(c => c.Id=="DetailPageMode")?.Value;
 
-                    //    await navigationService.ShowPopupAsync(notePagePage);
-                    //}
-                    var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = SelectedNote.Id });
-                    objWrapper.Object.Disappearing+=(o, e) =>
+                    if (detailPageMode=="PreviewPage")
                     {
-                        objWrapper.Dispose();
-                    };
-                    await navigationService.PushAsync(objWrapper.Object);
+                        using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
+                        {
+                            notePagePage = objWrapper.Object;
+                            (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone; ;
+
+                            await navigationService.ShowPopupAsync(notePagePage);
+                        }
+                    }
+
+                    else if (detailPageMode=="EditPage")
+                    {
+                        var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = SelectedNote.Id });
+                        objWrapper.Object.Disappearing+=(o, e) =>
+                        {
+                            objWrapper.Dispose();
+                        };
+                        await navigationService.PushAsync(objWrapper.Object);
+
+                    }
+
 
                     SelectedNote = default;
 

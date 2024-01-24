@@ -34,14 +34,14 @@
                 </Grid.ColumnDefinitions>
 
                 <Border Style="{StaticResource Base_FrameEntry}">
-                    <Entry  Text="{Binding Title}"
-                            Placeholder="请输入标题" />
+                    <Entry Text="{Binding Content, Mode=TwoWay}"
+                           Placeholder="{Binding PlaceHolder}"></Entry>
                 </Border>
 
                 <Border Style="{StaticResource Base_FrameEntry}"
                         Grid.Column="2">
-                    <Entry Text="{Binding Content, Mode=TwoWay}"
-                           Placeholder="{Binding PlaceHolder}"></Entry>
+                    <Entry Text="{Binding Unit, Mode=TwoWay}"
+                           Placeholder="请输入单位"></Entry>
                 </Border>
             </Grid>
 

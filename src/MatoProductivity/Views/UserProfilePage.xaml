@@ -4,7 +4,12 @@
                       xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
                       Title="UserProfilePage"
                       x:Class="MatoProductivity.UserProfilePage">
-
+    <ContentPage.Resources>
+        <Style TargetType="RadioButton">
+            <Setter Property="ControlTemplate"
+                    Value="{StaticResource RadioButtonTemplate}" />
+        </Style>
+    </ContentPage.Resources>
     <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
           RowDefinitions="Auto,Auto, *">
 
@@ -69,13 +74,51 @@
         </Grid>
         <StackLayout Grid.Row="2"
                      Padding="20, 0, 20, 0">
+            <Label Text="主题选择"></Label>
+            <StackLayout RadioButtonGroup.GroupName="Theme"
+                         RadioButtonGroup.SelectedValue="{Binding Theme}"
+                         Orientation="Horizontal">
+                <RadioButton Value="Dark">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="黑暗"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton Value="Light">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="明亮"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton Value="Auto">
+                    <RadioButton.Content>
+                        <StackLayout>
+
+                            <Label Text="自动"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End" />
+                        </StackLayout>
+                    </RadioButton.Content>
+                </RadioButton>
+
+            </StackLayout>
+
             <TableView Intent="Settings">
                 <TableRoot>
                     <TableSection Title="设置"
                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}">
-                        <SwitchCell                           
-                            Text="暗黑模式">
-                            
+
+
+                        <SwitchCell Text="预览模式"
+                                    On="{Binding IsDetailPreviewPageMode, Mode=TwoWay}">
                         </SwitchCell>
                         <TextCell Text="退出登录"
                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
