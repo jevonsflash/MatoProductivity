@@ -12,7 +12,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>MatoProductivity</ApplicationTitle>
+		<ApplicationTitle>凡事摘要</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.matoproductivity</ApplicationId>

@@ -2,7 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:service="clr-namespace:MatoProductivity.Core.Services;assembly=MatoProductivity"
-             xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
+             xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
              x:Class="MatoProductivity.Core.Views.VoiceSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
@@ -12,31 +12,82 @@
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="60"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <VerticalStackLayout HorizontalOptions="Center"
-                                     VerticalOptions="Center">
-
-                    <Button Text="Start"
-                            Command="{Binding RecordAudio}" />
-
-                    <Button Text="Stop"
-                            Command="{Binding StopRecordAudio}" />
-
-                    <Button Text="Play"
+                <StackLayout Orientation="Horizontal">
+                    <Button Text="&#xf04b;"
+                            Style="{StaticResource Plain_Button}"
+                            FontFamily="FontAwesome_Solid"
                             Command="{Binding PlayAudio}" />
 
-                    <Button Text="StopPlay"
+                    <Button Text="&#xf04d;"
+                            Style="{StaticResource Plain_Button}"
+                            FontFamily="FontAwesome_Solid"
                             Command="{Binding StopPlayAudio}" />
-
-
-                    <Button Text="TranslatedContent"
+                    <Button Text="识别"
+                            Style="{StaticResource Plain_Button}"
                             Command="{Binding TranslatedContent}" />
 
-                    <Label Text="{Binding RecordingTime,  StringFormat='{mm:ss}'}" />
-                </VerticalStackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal"
+                             Grid.Column="1">
+
+                    <controls:PlayingMotionView IsVisible="{Binding IsPlaying}">
+                    </controls:PlayingMotionView>
+                    <Label Text="{Binding RecordingTime, Converter={StaticResource TimeSpanToFriendlyStringConverter}, ConverterParameter=mm\\:ss}" />
+
+                </StackLayout>
+                <Border Padding="5, 0"
+                        Grid.Column="2"
+                        IsVisible="{Binding IsRecording, Converter={StaticResource True2FalseConverter}}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding RecordAudio}"></TapGestureRecognizer>
+                    </Border.GestureRecognizers>
+                    <StackLayout Orientation="Vertical"
+                                 VerticalOptions="Center">
+                        <Label Text="&#xf111;"
+                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                               FontSize="{StaticResource Headline4FontSize}"
+                               FontFamily="FontAwesome_Solid"
+                               HorizontalOptions="Center">
+                        </Label>
+                        <Label Text="开始录制"
+                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                               HorizontalOptions="Center">
+                        </Label>
+                        
+                    </StackLayout>
+                </Border>
+
+                <Border Padding="5, 0"
+                        Grid.Column="2"
+                        IsVisible="{Binding IsRecording}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding StopRecordAudio}"></TapGestureRecognizer>
+                    </Border.GestureRecognizers>
+                    <StackLayout Orientation="Vertical"
+                                 VerticalOptions="Center">
+                        <Label Text="&#xf04d;"
+                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                               FontSize="{StaticResource Headline4FontSize}"
+                               FontFamily="FontAwesome_Solid"
+                               HorizontalOptions="Center">
+                        </Label>
+                        <Label Text="停止录制"
+                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                               HorizontalOptions="Center">
+                        </Label>
+                    </StackLayout>
+                </Border>
+
+
+
+
+
+                <ActivityIndicator Grid.ColumnSpan="3"
+                                   IsRunning="{Binding Loading}"></ActivityIndicator>
 
 
                 <!--<Button Text="RemovePhoto"

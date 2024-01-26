@@ -305,7 +305,7 @@ namespace MatoProductivity.ViewModels
                 var noteSegment = new NoteSegment()
                 {
                     NoteId = this.NoteId,
-                    Title = "未命名" + note.Title,
+                    Title = note.Title.StartsWith("未命名") ? note.Title : "未命名"+ note.Title,
                     Type = note.Type,
                     Desc = note.Desc,
                     Icon = note.Icon,

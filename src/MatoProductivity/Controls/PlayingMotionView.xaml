@@ -2,46 +2,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MatoProductivity.Controls.PlayingMotionView">
     <ContentView.Content>
-        <StackLayout Orientation="Horizontal" Spacing="0">
+        <StackLayout Orientation="Horizontal"
+                     Spacing="0">
 
-            <BoxView 
-              Margin="1,0"
-              x:Name="BoxView01"
-              HeightRequest="6"
-              WidthRequest="2" 
-              BackgroundColor="White" 
-              VerticalOptions="Center" 
-              HorizontalOptions="Start">
-
-            </BoxView>
-            <BoxView 
-              Margin="1,0"                   
-              x:Name="BoxView02"
-              HeightRequest="10"
-              WidthRequest="2" 
-              BackgroundColor="White" 
-              VerticalOptions="Center" 
-              HorizontalOptions="Start">
+            <BoxView Margin="1,0"
+                     x:Name="BoxView01"
+                     HeightRequest="6"
+                     WidthRequest="2"
+                     BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Start">
 
             </BoxView>
-            <BoxView 
-              Margin="1,0"                   
-              x:Name="BoxView03"
-              HeightRequest="8"
-              WidthRequest="2" 
-              BackgroundColor="White" 
-              VerticalOptions="Center" 
-              HorizontalOptions="Start">
+            <BoxView Margin="1,0"
+                     x:Name="BoxView02"
+                     HeightRequest="10"
+                     WidthRequest="2"
+                     BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Start">
 
             </BoxView>
-            <BoxView 
-              Margin="1,0"                   
-              x:Name="BoxView04"
-              HeightRequest="9"
-              WidthRequest="2" 
-              BackgroundColor="White" 
-              VerticalOptions="Center" 
-              HorizontalOptions="Start">
+            <BoxView Margin="1,0"
+                     x:Name="BoxView03"
+                     HeightRequest="8"
+                     WidthRequest="2"
+                     BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Start">
+
+            </BoxView>
+            <BoxView Margin="1,0"
+                     x:Name="BoxView04"
+                     HeightRequest="9"
+                     WidthRequest="2"
+                     BackgroundColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Start">
 
             </BoxView>
         </StackLayout>

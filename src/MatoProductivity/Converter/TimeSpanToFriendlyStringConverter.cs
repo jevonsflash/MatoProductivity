@@ -10,8 +10,16 @@ namespace MatoProductivity.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var time = (TimeSpan)value;
-            var format = parameter==default ? "{0}天{1}时{2}分{3}秒" : parameter.ToString();
-            return CommonHelper.FormatTimeSpamString2(time, format);
+            if (parameter==default)
+            {
+                var format = "{0}天{1}时{2}分{3}秒";
+                return CommonHelper.FormatTimeSpamString2(time, format);
+            }
+            else
+            {
+                var format = parameter.ToString();
+                return time.ToString(@format);
+            }
             //return time.ToString("yyyy年M月d日 HH:mm:ss");
         }
 

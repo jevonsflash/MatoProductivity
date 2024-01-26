@@ -4,6 +4,7 @@ using Abp.Threading.Timers;
 using Baidu.Aip.Speech;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Infrastructure.Common;
 using MatoProductivity.ViewModels;
 using Microsoft.Maui.Dispatching;
 using Newtonsoft.Json;
@@ -41,11 +42,11 @@ namespace MatoProductivity.Core.Services
         {
             PropertyChanged += VoiceSegmentViewModel_PropertyChanged;
             this.RemoveAudio = new Command(RemoveAudioAction);
-            this.PlayAudio = new Command(PlayAudioAction, () => !IsPlaying);
+            this.PlayAudio = new Command(PlayAudioAction, () => !IsPlaying&& FileContent!=null);
             this.StopRecordAudio = new Command(StopRecordAudioAction, () => IsRecording);
             this.StopPlayAudio = new Command(StopPlayAudioAction, () => IsPlaying);
             this.RecordAudio = new Command(RecordAudioAction, () => !IsRecording);
-            this.TranslatedContent = new Command(TranslatedContentAction);
+            this.TranslatedContent = new Command(TranslatedContentAction, (o) => !HasTranslatedContent && FileContent!=null);
 
             this.audioManager = AudioManager.Current;
             this.timer = timer;
@@ -74,6 +75,17 @@ namespace MatoProductivity.Core.Services
             }
         }
 
+        private bool hasTranslatedContent;
+        public bool HasTranslatedContent
+        {
+            get => hasTranslatedContent;
+            set
+            {
+                hasTranslatedContent = value;
+                TranslatedContent.ChangeCanExecute();
+            }
+        }
+
         public bool IsRecording
         {
             get => audioRecorder?.IsRecording ?? false;
@@ -89,12 +101,15 @@ namespace MatoProductivity.Core.Services
 
             if (e.PropertyName == nameof(FileContent))
             {
-
+                TranslatedContent.ChangeCanExecute();
+                PlayAudio.ChangeCanExecute();
             }
         }
 
         private async void TranslatedContentAction(object obj)
         {
+            this.Loading=true;
+
             var asrClient = new Asr("11797113", "UsXraVVnzHbzwXGuCD0Z4d9b", "8kGEszPmYxN5WGEHYV8yzx80zGVZElcX");
             asrClient.Timeout = 120000;
             var translated = await Task.Run(() =>
@@ -106,25 +121,27 @@ namespace MatoProductivity.Core.Services
             Console.WriteLine(translated);
             if (string.IsNullOrEmpty(translated))
             {
+                this.Loading=false;
                 return;
             }
             var translatedObject = JsonConvert.DeserializeObject<List<string>>(translated);
             var translatedContents = string.Join('\n', translatedObject);
-
-            var ttt = Encoding.Unicode.GetBytes(translatedContents);
-            var test1 = Encoding.Latin1.GetString(ttt);
 
             if (Container is EditNotePageViewModel)
             {
 
                 var note = new NoteSegment()
                 {
-                    Title = this.NoteSegment.Title+"的识别结果",
+                    Title = this.NoteSegment.Title+" - 识别结果",
                     Type= "TextSegment",
+                    Icon=FaIcons.IconStickyNoteO,
                     NoteSegmentPayloads= new List<NoteSegmentPayload>()
                 };
-                note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", "你好你好你好"));
+                note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", translatedContents));
                 (Container as EditNotePageViewModel).CreateSegment.Execute(note);
+
+                this.Loading=false;
+
             }
         }
 
