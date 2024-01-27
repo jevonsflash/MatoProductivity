@@ -11,10 +11,33 @@ namespace MatoProductivity.Controls
         Random r = new Random();
         private bool isOpen = false;
         private double originHeight = 10;
-
+        private Animation[] animations = null;
         public PlayingMotionView()
         {
             InitializeComponent();
+            Loaded+=PlayingMotionView_Loaded;
+            animations=new Animation[4];
+        }
+
+        private void PlayingMotionView_Loaded(object sender, EventArgs e)
+        {
+            Init();
+        }
+
+        public void Start()
+        {
+            foreach (var item in animations)
+            {
+                item.Resume();
+            }
+        }
+
+        public void Stop()
+        {
+            foreach (var item in animations)
+            {
+                item.Pause();
+            }
         }
 
         public void Init()
@@ -42,6 +65,7 @@ namespace MatoProductivity.Controls
             scaleUpAnimation.Add(0, 0.5, scaleUpAnimation1);
             scaleUpAnimation.Add(0.5, 1, scaleUpAnimation2);
             scaleUpAnimation.Commit(this, "RestoreAnimation1", 16, duration, repeat: () => true);
+            animations[0]= scaleUpAnimation;
             return isOpen;
         }
         private bool viewbox2down()
@@ -60,6 +84,7 @@ namespace MatoProductivity.Controls
             scaleUpAnimation.Add(0, 0.5, scaleUpAnimation1);
             scaleUpAnimation.Add(0.5, 1, scaleUpAnimation2);
             scaleUpAnimation.Commit(this, "RestoreAnimation2", 16, duration, repeat: () => true);
+            animations[1]= scaleUpAnimation;
             return isOpen;
         }
         private bool viewbox3down()
@@ -78,6 +103,7 @@ namespace MatoProductivity.Controls
             scaleUpAnimation.Add(0, 0.5, scaleUpAnimation1);
             scaleUpAnimation.Add(0.5, 1, scaleUpAnimation2);
             scaleUpAnimation.Commit(this, "RestoreAnimation3", 16, duration, repeat: () => true);
+            animations[2]= scaleUpAnimation;
             return isOpen;
         }
         private bool viewbox4down()
@@ -96,6 +122,7 @@ namespace MatoProductivity.Controls
             scaleUpAnimation.Add(0, 0.5, scaleUpAnimation1);
             scaleUpAnimation.Add(0.5, 1, scaleUpAnimation2);
             scaleUpAnimation.Commit(this, "RestoreAnimation4", 16, duration, repeat: () => true);
+            animations[3]= scaleUpAnimation;
             return isOpen;
         }
 

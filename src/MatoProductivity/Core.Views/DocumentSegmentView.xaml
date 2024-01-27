@@ -6,38 +6,37 @@
              x:Class="MatoProductivity.Core.Views.DocumentSegmentView">
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <Label Text="{Binding Title}"></Label>
+            <Label 
+                   IsVisible="{Binding IsFileContentNotEmpty}"
+                   Text="{Binding FileName}"></Label>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="SaveDocument"
+                <Button Text="保存到设备"
                         Style="{StaticResource Plain_Button}"
                         Grid.Column="0"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
                         Command="{Binding SaveDocument}"></Button>
-                <Button Text="ShareDocument"
+                <Button Text="分享"
                         Style="{StaticResource Plain_Button}"
                         Grid.Column="1"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
                         Command="{Binding ShareDocument}"></Button>
             </Grid>
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
 
-            <Border Style="{StaticResource Base_FrameEntry}">
-                <Entry  Text="{Binding Title}"
-                        Placeholder="请输入标题" />
-            </Border>
+            <Label 
+                   IsVisible="{Binding IsFileContentNotEmpty}"
+                   Text="{Binding FileName}"></Label>
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Text="PickDocument"
+                <Button Text="{Binding IsFileContentNotEmpty ,Converter={StaticResource Bool2StringConverter},ConverterParameter=重新选取文件|选取文件}"
                         Style="{StaticResource Plain_Button}"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                         Command="{Binding PickDocument}"></Button>
 
             </Grid>

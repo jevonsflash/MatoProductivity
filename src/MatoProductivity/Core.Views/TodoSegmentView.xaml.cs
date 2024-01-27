@@ -12,13 +12,6 @@ public partial class TodoSegmentView : ContentView, ITransientDependency
         InitializeComponent();
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        this.ContentFrame.IsVisible=true;
-        this.ContentButton.IsVisible=false;
-
-    }
-
     private void IsDoneToggleButton_Toggled(object sender, ToggledEventArgs e)
     {
         (this.BindingContext as TodoSegmentService).SwitchDone.Execute(e.Value);

@@ -419,9 +419,9 @@
                         ItemTemplate="{StaticResource NoteSegmentDataTemplateSelector}">
 
 
-            <!--<CollectionView.Header>
+            <CollectionView.Header>
                 <VerticalStackLayout>
-                    <Grid>
+                    <!--<Grid>
                         <Grid RowDefinitions="auto,auto"
                               IsVisible="{Binding IsConfiguratingNoteSegment}">
                             <StackLayout Spacing="5">
@@ -449,7 +449,7 @@
                         <Grid IsVisible="{Binding IsConfiguratingNoteSegment, Converter={StaticResource True2FalseConverter}}">
                             <Label Text="{Binding Desc}" />
                         </Grid>
-                    </Grid>
+                    </Grid>-->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition></ColumnDefinition>
@@ -488,7 +488,7 @@
 
 
                 </VerticalStackLayout>
-            </CollectionView.Header>-->
+            </CollectionView.Header>
             <CollectionView.EmptyView>
 
                 <Grid  HorizontalOptions="Center"

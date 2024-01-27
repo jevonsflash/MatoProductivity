@@ -44,8 +44,8 @@
             </VisualStateGroupList>
         </VisualStateManager.VisualStateGroups>
         <Grid Padding="0"
-              HeightRequest="30"
-              WidthRequest="30"
+              HeightRequest="25"
+              WidthRequest="25"
               VerticalOptions="CenterAndExpand">
 
             <Label Margin="0"
@@ -53,7 +53,8 @@
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
-                   Text="X">
+                   FontFamily="FontAwesome_Solid"
+                   Text="&#xf00c;">
 
             </Label>
         </Grid>

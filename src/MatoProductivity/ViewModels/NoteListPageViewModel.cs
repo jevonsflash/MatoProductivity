@@ -188,6 +188,7 @@ namespace MatoProductivity.ViewModels
             var note = (Note)obj;
 
             var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = note.Id });
+            (objWrapper.Object.BindingContext as EditNotePageViewModel).NoteSegmentState=Core.Services.NoteSegmentState.Edit;
 
             objWrapper.Object.Disappearing+=(o, e) =>
             {
@@ -201,7 +202,7 @@ namespace MatoProductivity.ViewModels
         {
 
             var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0 });
-
+            (objWrapper.Object.BindingContext as EditNotePageViewModel).NoteSegmentState=Core.Services.NoteSegmentState.Edit;
             (objWrapper.Object.BindingContext as EditNotePageViewModel).Create.Execute(null);
             objWrapper.Object.Disappearing+=(o, e) =>
             {

@@ -50,6 +50,7 @@ namespace MatoProductivity.ViewModels
         private async void EditAction(object obj)
         {
             var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = this.NoteId });
+            (objWrapper.Object.BindingContext as EditNotePageViewModel).NoteSegmentState=Core.Services.NoteSegmentState.Edit;
 
             objWrapper.Object.Disappearing+=(o, e) =>
             {

@@ -87,6 +87,9 @@
 	  <Compile Update="Controls\IsDoneToggleButton.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
+	  <Compile Update="Controls\RecordingMotionView.xaml.cs">
+	    <DependentUpon>RecordingMotionView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Controls\RichTextEditor.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
@@ -157,6 +160,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Controls\IsDoneToggleButton.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\RecordingMotionView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Controls\PlayingMotionView.xaml">

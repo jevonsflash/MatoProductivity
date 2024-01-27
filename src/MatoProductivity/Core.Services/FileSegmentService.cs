@@ -39,7 +39,7 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(FileContent))
             {
-                if (FileContent!=null&& FileContent.Length>0)
+                if (IsFileContentNotEmpty)
                 {
                     NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(FileContent), FileContent));
 
@@ -56,7 +56,7 @@ namespace MatoProductivity.Core.Services
                 NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
         }
-  
+
         public override void CreateAction(object obj)
         {
 
@@ -87,6 +87,7 @@ namespace MatoProductivity.Core.Services
             {
                 _fileContent = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsFileContentNotEmpty));
             }
         }
 
@@ -103,6 +104,8 @@ namespace MatoProductivity.Core.Services
                 RaisePropertyChanged();
             }
         }
+
+        public bool IsFileContentNotEmpty => FileContent!=null&& FileContent.Length>0;
 
     }
 }

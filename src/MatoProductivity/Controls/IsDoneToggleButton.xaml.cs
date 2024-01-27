@@ -10,6 +10,7 @@ public partial class IsDoneToggleButton : ContentView
     public IsDoneToggleButton()
     {
         InitializeComponent();
+        SetIsToggled(IsToggled);
     }
 
     public static readonly BindableProperty IsToggledProperty =

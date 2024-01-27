@@ -166,12 +166,15 @@
                                        HorizontalOptions="End">
                     <Button Text="删除"
                             Style="{StaticResource Text_Button}"
+                            Padding="5,5"
                             Command="{Binding Remove}"></Button>
                     <Button Text="编辑"
                             Style="{StaticResource Text_Button}"
+                            Padding="5,5"
                             Command="{Binding Edit}"></Button>
                     <Button Text="分享"
                             Style="{StaticResource Text_Button}"
+                            Padding="5,5"
                             Command="{Binding Share}"></Button>
                 </HorizontalStackLayout>
             </Grid>

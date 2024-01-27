@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Helper;
 using Microsoft.Maui.Storage;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,8 @@ namespace MatoProductivity.Core.Services
             PropertyChanged += DocumentSegmentViewModel_PropertyChanged;
             this.PickDocument = new Command(PickDocumentAction);
             this.RemoveDocument = new Command(RemoveDocumentAction);
-            this.ShareDocument = new Command(ShareDocumentAction);
-            this.SaveDocument = new Command(SaveDocumentAction);
+            this.ShareDocument = new Command(ShareDocumentAction, () => IsFileContentNotEmpty);
+            this.SaveDocument = new Command(SaveDocumentAction, () => IsFileContentNotEmpty);
 
         }
 
@@ -37,7 +38,17 @@ namespace MatoProductivity.Core.Services
 
         private void DocumentSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (e.PropertyName==nameof(IsFileContentNotEmpty))
+            {
+                this.ShareDocument.ChangeCanExecute();
+                this.SaveDocument.ChangeCanExecute();
+            }
+            if (e.PropertyName == nameof(NoteSegment))
+            {
+                var title = NoteSegment?.GetNoteSegmentPayload(nameof(Title));
+                FileName = title?.GetStringValue();
 
+            }
         }
 
         public async void ShareDocumentAction()
@@ -72,11 +83,11 @@ namespace MatoProductivity.Core.Services
                 var fileSaverResult = await FileSaver.Default.SaveAsync(fn, inputStream, CancellationToken.None);
                 if (fileSaverResult.IsSuccessful)
                 {
-                    await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show();
+                    await Toast.Make($"文件已保存: {fileSaverResult.FilePath}").Show();
                 }
                 else
                 {
-                    await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
+                    await Toast.Make($"文件保存失败: {fileSaverResult.Exception.Message}").Show();
                 }
             }
         }
@@ -87,12 +98,37 @@ namespace MatoProductivity.Core.Services
             {
                 PickerTitle = "请选择一个文件"
             };
+            FileResult result = null;
+            try
+            {
+                result = await FilePicker.Default.PickAsync(options);
 
-            var result = await FilePicker.Default.PickAsync(options);
+            }
+            catch (Exception ex)
+            {
+                CommonHelper.Alert("文件读取失败:"+ex.Message);
+            }
             if (result != null)
             {
                 await SaveFile(result);
-                this.Title=result.FileName;
+                var filename = result.FileName;
+                var filenameTitle = this.CreateNoteSegmentPayload(nameof(NoteSegment.Title), filename);
+                NoteSegment?.SetNoteSegmentPayloads(filenameTitle);
+
+                this.FileName=filename;
+
+            }
+        }
+
+        private string _fileName;
+
+        public string FileName
+        {
+            get { return _fileName; }
+            set
+            {
+                _fileName = value;
+                RaisePropertyChanged();
             }
         }
 

@@ -39,6 +39,18 @@ namespace MatoProductivity.ViewModels
             {
                 if (!string.IsNullOrEmpty(Theme))
                 {
+                    if (Theme=="Dark")
+                    {
+                        Application.Current.UserAppTheme = AppTheme.Dark;
+                    }
+                    else if (Theme=="Light")
+                    {
+                        Application.Current.UserAppTheme = AppTheme.Light;
+                    }
+                    else
+                    {
+                        Application.Current.UserAppTheme = AppTheme.Unspecified;
+                    }
                     this.settingRepository.Update(nameof(Theme), c => c.Value=Theme);
 
                 }

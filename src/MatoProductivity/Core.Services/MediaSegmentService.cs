@@ -2,6 +2,7 @@
 using Abp.Domain.Repositories;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
+using MatoProductivity.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,17 +41,38 @@ namespace MatoProductivity.Core.Services
         {
             if (MediaPicker.Default.IsCaptureSupported)
             {
-                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
-                await SaveFile(photo);
-
+                FileResult photo = null;
+                try
+                {
+                    photo = await MediaPicker.Default.CapturePhotoAsync();
+                }
+                catch (Exception ex)
+                {
+                    CommonHelper.Alert("获取照片失败:"+ex.Message);
+                }
+                if (photo != null)
+                {
+                    await SaveFile(photo);
+                }
             }
         }
 
 
         public async void PickPhotoAction()
         {
-            FileResult photo = await MediaPicker.Default.PickPhotoAsync();
-
+            FileResult photo = null;
+            try
+            {
+                photo = await MediaPicker.Default.PickPhotoAsync();
+            }
+            catch (Exception ex)
+            {
+                CommonHelper.Alert("获取照片失败:"+ex.Message);
+            }
+            if (photo != null)
+            {
+                await SaveFile(photo);
+            }
             await SaveFile(photo);
 
         }

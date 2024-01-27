@@ -1,6 +1,9 @@
-﻿using Abp.Modules;
+﻿using Abp.Dependency;
+using Abp.Domain.Repositories;
+using Abp.Modules;
 using Abp.Reflection.Extensions;
 using MatoProductivity.Core;
+using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.EntityFrameworkCore;
 using MatoProductivity.ViewModels;
 using MatoProductivity.Views;
@@ -31,6 +34,23 @@ namespace MatoProductivity
 
         public override void PostInitialize()
         {
+            using (var settingRepositoryWrapper = IocManager.ResolveAsDisposable<IRepository<Setting, string>>())
+            {
+                var settingRepository = settingRepositoryWrapper.Object;
+                var theme = settingRepository.FirstOrDefault(c => c.Id=="Theme")?.Value;
+                if (theme=="Dark")
+                {
+                    Application.Current.UserAppTheme = AppTheme.Dark;
+                }
+                else if (theme=="Light")
+                {
+                    Application.Current.UserAppTheme = AppTheme.Light;
+                }
+                else
+                {
+                    Application.Current.UserAppTheme = AppTheme.Unspecified;
+                }
+            }
             base.PostInitialize();
         }
 

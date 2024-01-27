@@ -5,16 +5,6 @@
              xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MatoProductivity.Core.Views.ScriptSegmentView">
-    <ContentView.Resources>
-        <Style TargetType="Button"
-               BasedOn="{StaticResource Emphatic_Button}"
-               x:Key="ScriptButtonStyle">
-            <Setter Property="FontFamily"
-                    Value="FontAwesome_Solid"></Setter>
-        </Style>
-
-    </ContentView.Resources>
-
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
             <Image Source="{Binding PreviewImage}"></Image>
@@ -131,12 +121,13 @@
                                        Margin="0,10">
                     <Button Text="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.Name, FallbackValue=Auto}"
                             FontSize="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.FontSize, FallbackValue=Auto}"
-                            Style="{StaticResource ScriptButtonStyle}"
+                            FontFamily="FontAwesome_Solid"
+                            Style="{StaticResource Plain_Button}"
                             Clicked="DrawingLineSizeButton_Clicked"
                             x:Name="DrawingLineSizeButton"></Button>
-                    <Button Text="&#xf111;"
-                            TextColor="{Binding Source={x:Reference ColorCollectionView}, Path=SelectedItem}"
-                            FontFamily="FontAwesome_Solid"
+                    <Button Text="颜色"
+                            TextColor="White"
+                            BackgroundColor="{Binding Source={x:Reference ColorCollectionView}, Path=SelectedItem}"
                             Clicked="LineColorButton_Clicked"
                             x:Name="LineColorButton"></Button>
                 </HorizontalStackLayout>

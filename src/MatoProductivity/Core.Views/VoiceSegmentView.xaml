@@ -5,42 +5,73 @@
              xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
              x:Class="MatoProductivity.Core.Views.VoiceSegmentView">
     <Grid>
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <Image Source="{Binding PreviewImage}"></Image>
-        </VerticalStackLayout>
+        <Grid IsVisible="{Binding Loading ,Converter={StaticResource True2FalseConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="70"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Horizontal"
+                         Grid.Row="1">
+                <Button Text="&#xf04b;"
+                        Style="{StaticResource Plain_Button}"
+                        FontFamily="FontAwesome_Solid"
+                        Command="{Binding PlayAudio}" />
 
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
+                <Button Text="&#xf04d;"
+                        Style="{StaticResource Plain_Button}"
+                        FontFamily="FontAwesome_Solid"
+                        Command="{Binding StopPlayAudio}" />
+                <Button Text="识别"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
+                        Style="{StaticResource Plain_Button}"
+                        Command="{Binding TranslatedContent}" />
+
+            </StackLayout>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="60"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <StackLayout Orientation="Horizontal">
-                    <Button Text="&#xf04b;"
-                            Style="{StaticResource Plain_Button}"
-                            FontFamily="FontAwesome_Solid"
-                            Command="{Binding PlayAudio}" />
+                <controls:PlayingMotionView HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            IsVisible="{Binding IsPlaying}"
+                                            Grid.Column="0">
+                </controls:PlayingMotionView>
 
-                    <Button Text="&#xf04d;"
-                            Style="{StaticResource Plain_Button}"
-                            FontFamily="FontAwesome_Solid"
-                            Command="{Binding StopPlayAudio}" />
-                    <Button Text="识别"
-                            Style="{StaticResource Plain_Button}"
-                            Command="{Binding TranslatedContent}" />
-
-                </StackLayout>
+                <controls:RecordingMotionView HorizontalOptions="Center"
+                                              VerticalOptions="Center"
+                                              Grid.Column="0"
+                                              IsVisible="{Binding IsRecording}">
+                </controls:RecordingMotionView>
                 <StackLayout Orientation="Horizontal"
-                             Grid.Column="1">
+                             Grid.Column="1"
+                             VerticalOptions="Center">
+                    <Label TextColor="{AppThemeBinding Light={StaticResource LightDisabledTextColor}, Dark={StaticResource DarkDisabledTextColor}}"
+                           FontSize="{StaticResource Subtitle1FontSize}"
+                           IsVisible="{Binding IsPlaying}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span  Text="{Binding PlayingTime, Converter={StaticResource TimeSpanToFriendlyStringConverter}, ConverterParameter=mm\\:ss}"></Span>
+                                <Span Text="/"></Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-                    <controls:PlayingMotionView IsVisible="{Binding IsPlaying}">
-                    </controls:PlayingMotionView>
-                    <Label Text="{Binding RecordingTime, Converter={StaticResource TimeSpanToFriendlyStringConverter}, ConverterParameter=mm\\:ss}" />
+                    <Label FontSize="{StaticResource Subtitle1FontSize}"
+                           Text="{Binding RecordingTime, Converter={StaticResource TimeSpanToFriendlyStringConverter}, ConverterParameter=mm\\:ss}" />
+
 
                 </StackLayout>
+            </Grid>
+            <Grid Grid.Column="2"
+                  Grid.RowSpan="2"
+                  IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
+
                 <Border Padding="5, 0"
-                        Grid.Column="2"
                         IsVisible="{Binding IsRecording, Converter={StaticResource True2FalseConverter}}">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding RecordAudio}"></TapGestureRecognizer>
@@ -48,21 +79,20 @@
                     <StackLayout Orientation="Vertical"
                                  VerticalOptions="Center">
                         <Label Text="&#xf111;"
-                               TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                               TextColor="Red"
                                FontSize="{StaticResource Headline4FontSize}"
                                FontFamily="FontAwesome_Solid"
                                HorizontalOptions="Center">
                         </Label>
-                        <Label Text="开始录制"
+                        <Label Text="{Binding IsFileContentNotEmpty ,Converter={StaticResource Bool2StringConverter},ConverterParameter=重新录制|录制}"
                                TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                                HorizontalOptions="Center">
                         </Label>
-                        
+
                     </StackLayout>
                 </Border>
 
                 <Border Padding="5, 0"
-                        Grid.Column="2"
                         IsVisible="{Binding IsRecording}">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding StopRecordAudio}"></TapGestureRecognizer>
@@ -75,29 +105,30 @@
                                FontFamily="FontAwesome_Solid"
                                HorizontalOptions="Center">
                         </Label>
-                        <Label Text="停止录制"
+                        <Label Text="停止"
                                TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                                HorizontalOptions="Center">
                         </Label>
                     </StackLayout>
                 </Border>
-
-
-
-
-
-                <ActivityIndicator Grid.ColumnSpan="3"
-                                   IsRunning="{Binding Loading}"></ActivityIndicator>
-
-
-                <!--<Button Text="RemovePhoto"
-                        Grid.Column="2"
-                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
-                        Command="{Binding RemovePhoto}"></Button>-->
             </Grid>
 
 
 
-        </VerticalStackLayout>
+
+            <!--<Button Text="RemovePhoto"
+                        Grid.Column="2"
+                        IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}}"
+                        Command="{Binding RemovePhoto}"></Button>-->
+        </Grid>
+        <Grid IsVisible="{Binding Loading}">
+            <Border Opacity="0.3"
+                    Background="{AppThemeBinding Light={StaticResource LightCardBackgroundColor}, Dark={StaticResource DarkCardBackgroundColor}}"></Border>
+
+            <ActivityIndicator HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               IsRunning="{Binding Loading}"></ActivityIndicator>
+
+        </Grid>
     </Grid>
 </ContentView>

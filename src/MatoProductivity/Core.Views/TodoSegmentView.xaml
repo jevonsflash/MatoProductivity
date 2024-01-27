@@ -16,12 +16,12 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <controls:IsDoneToggleButton IsToggled="{Binding IsDone, Mode=TwoWay}" 
-                                             Toggled="IsDoneToggleButton_Toggled"
-                                             ></controls:IsDoneToggleButton>
+                <controls:IsDoneToggleButton IsToggled="{Binding IsDone, Mode=TwoWay}"
+                                             Toggled="IsDoneToggleButton_Toggled"></controls:IsDoneToggleButton>
 
-
-                <Label  Grid.Column="2">
+                <Label  Grid.Column="2"
+                        VerticalOptions="Center"
+                        FontSize="{StaticResource Subtitle1FontSize }">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{Binding Title}"></Span>
@@ -48,7 +48,8 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <controls:IsDoneToggleButton IsToggled="{Binding IsDone}"></controls:IsDoneToggleButton>
+                <controls:IsDoneToggleButton VerticalOptions="Center"
+                                             IsToggled="{Binding IsDone}"></controls:IsDoneToggleButton>
 
                 <Border Style="{StaticResource Base_FrameEntry}"
                         Grid.Column="2">
@@ -57,30 +58,15 @@
                             Placeholder="Todo" />
                 </Border>
                 <StackLayout Grid.Column="2"
+                             IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}"
                              Grid.Row="1">
-                    
-                    <Border 
-                            x:Name="ContentButton">
-                        <Label >
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span FontFamily="FontAwesome"
-                                          Text="&#xf141;"></Span>
-                                    <Span Text=" 备注(可选)"></Span>
-                                </FormattedString>
-                            </Label.FormattedText>
 
-                        </Label>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped">
-                            </TapGestureRecognizer>
-                        </Border.GestureRecognizers>
-                    </Border>
-                    <Border Style="{StaticResource Base_FrameEntry}" 
-                            x:Name="ContentFrame" IsVisible="false">
+
+                    <Border Style="{StaticResource Base_FrameEntry}"
+                            x:Name="ContentFrame">
 
                         <Editor Text="{Binding Content}"
-                                MinimumHeightRequest="150"
+                                MinimumHeightRequest="100"
                                 AutoSize="TextChanges"
                                 Placeholder="请输入备注"></Editor>
                     </Border>

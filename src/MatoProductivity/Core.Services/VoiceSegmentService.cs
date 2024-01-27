@@ -33,6 +33,7 @@ namespace MatoProductivity.Core.Services
         AsyncAudioPlayer audioPlayer;
         IAudioRecorder audioRecorder;
         readonly Stopwatch recordingStopwatch = new Stopwatch();
+        readonly Stopwatch playingStopwatch = new Stopwatch();
         private readonly IAudioManager audioManager;
         private readonly AbpAsyncTimer timer;
 
@@ -42,18 +43,19 @@ namespace MatoProductivity.Core.Services
         {
             PropertyChanged += VoiceSegmentViewModel_PropertyChanged;
             this.RemoveAudio = new Command(RemoveAudioAction);
-            this.PlayAudio = new Command(PlayAudioAction, () => !IsPlaying&& FileContent!=null);
+            this.PlayAudio = new Command(PlayAudioAction, () => !IsPlaying&& IsFileContentNotEmpty);
             this.StopRecordAudio = new Command(StopRecordAudioAction, () => IsRecording);
             this.StopPlayAudio = new Command(StopPlayAudioAction, () => IsPlaying);
             this.RecordAudio = new Command(RecordAudioAction, () => !IsRecording);
-            this.TranslatedContent = new Command(TranslatedContentAction, (o) => !HasTranslatedContent && FileContent!=null);
+            this.TranslatedContent = new Command(TranslatedContentAction, (o) => !HasTranslatedContent && IsFileContentNotEmpty);
 
             this.audioManager = AudioManager.Current;
             this.timer = timer;
-            this.timer.Period = 100;
+            this.timer.Period = 500;
             this.timer.Elapsed = async (timer) =>
             {
                 await Task.Run(() => RaisePropertyChanged(nameof(RecordingTime)));
+                await Task.Run(() => RaisePropertyChanged(nameof(PlayingTime)));
             };
             this.timer.Start();
         }
@@ -63,6 +65,11 @@ namespace MatoProductivity.Core.Services
             get => TimeSpan.FromMilliseconds(recordingStopwatch.ElapsedMilliseconds);
         }
 
+        public TimeSpan PlayingTime
+        {
+            get => TimeSpan.FromMilliseconds(playingStopwatch.ElapsedMilliseconds);
+        }
+
         private bool isPlaying;
         public bool IsPlaying
         {
@@ -70,6 +77,7 @@ namespace MatoProductivity.Core.Services
             set
             {
                 isPlaying = value;
+                RaisePropertyChanged();
                 PlayAudio.ChangeCanExecute();
                 StopPlayAudio.ChangeCanExecute();
             }
@@ -82,6 +90,7 @@ namespace MatoProductivity.Core.Services
             set
             {
                 hasTranslatedContent = value;
+                RaisePropertyChanged();
                 TranslatedContent.ChangeCanExecute();
             }
         }
@@ -101,6 +110,7 @@ namespace MatoProductivity.Core.Services
 
             if (e.PropertyName == nameof(FileContent))
             {
+                this.HasTranslatedContent=false;
                 TranslatedContent.ChangeCanExecute();
                 PlayAudio.ChangeCanExecute();
             }
@@ -139,7 +149,7 @@ namespace MatoProductivity.Core.Services
                 };
                 note.NoteSegmentPayloads.Add(new NoteSegmentPayload("Content", translatedContents));
                 (Container as EditNotePageViewModel).CreateSegment.Execute(note);
-
+                this.HasTranslatedContent=true;
                 this.Loading=false;
 
             }
@@ -156,10 +166,12 @@ namespace MatoProductivity.Core.Services
                     audioPlayer = this.audioManager.CreateAsyncPlayer(stream);
                 }
                 IsPlaying = true;
+                playingStopwatch.Restart();
 
                 await audioPlayer.PlayAsync(CancellationToken.None);
 
                 IsPlaying = false;
+                playingStopwatch.Stop();
             }
         }
 

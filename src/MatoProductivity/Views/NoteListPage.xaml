@@ -162,21 +162,15 @@
                    Style="{StaticResource Subtitle1_MulishBlack}"
                    VerticalOptions="Center"></Label>
             <Button Grid.Column="2"
-                    CornerRadius="15"
+                    Style="{StaticResource Plain_Button}"
                     Text="&#xf053;"
-                    TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
-                    FontSize="{StaticResource Body2FontSize}"
                     FontFamily="FontAwesome_Solid"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                     Command="{Binding PreviousWeekCommand}"
                     CommandParameter="{Binding Week.StartDay}"></Button>
             <Button Grid.Column="3"
-                    CornerRadius="15"
+                    Style="{StaticResource Plain_Button}"
                     Text="&#xf054;"
-                    TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
-                    FontSize="{StaticResource Body2FontSize}"
                     FontFamily="FontAwesome_Solid"
-                    BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                     Command="{Binding NextWeekCommand}"
                     CommandParameter="{Binding Week.LastDay}"></Button>
         </Grid>
