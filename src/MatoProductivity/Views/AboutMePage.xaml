@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                x:Class="MatoProductivity.Views.AboutMePage"
+                Opened="PopupBase_Opened"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                x:Name="MainPage"
+                VerticalOptions="End"
+                HorizontalOptions="Fill">
+    <Border StrokeShape="RoundRectangle 20">
+        <ScrollView>
+            <StackLayout>
+                <Grid  HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Source="logo"
+                           WidthRequest="64"
+                           HeightRequest="64"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"></Image>
+                    <Label Text="凡事摘要"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center"
+                           Grid.Row="1"
+                           Style="{StaticResource Body1_MulishBold}"></Label>
+                </Grid>
+
+                <Label Text="{Binding Introduction}"
+                       HorizontalOptions="CenterAndExpand"
+                       Margin="0">
+                </Label>
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="CenterAndExpand">
+                    <Label Text="Version"></Label>
+                    <Label HorizontalOptions="Center"
+                           Text="1.0"></Label>
+                </StackLayout>
+
+                <Label Text="喜欢请支持，期待您的意见反馈"
+                       Margin="0,20"></Label>
+
+                <StackLayout Orientation="Horizontal"
+                             Margin="0,20">
+                    <Button Text="在 App Store 上打分和评价"
+                            WidthRequest="250"
+                            VerticalOptions="CenterAndExpand"
+                            BorderWidth="1"
+                            Command="{Binding GoUriCommand}"
+                            CommandParameter="itms-apps://itunes.apple.com/app/id1244370953"
+                            BorderColor="{DynamicResource PhoneForegroundBrush}"
+                            HorizontalOptions="CenterAndExpand">
+
+                    </Button>
+
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Button FontFamily="FontAwesome"
+                            Text="&#xf044;"
+                            IsEnabled="False"
+                            Margin="0,20,20,20"
+                            Command="{Binding GoUriCommand}"
+                            CommandParameter="https://github.com/jevonsflash"
+                            HeightRequest="22"
+                            WidthRequest="22"></Button>
+                    <Button FontFamily="FontAwesome"
+                            Text="&#xf044;"
+                            Margin="0,20,20,20"
+                            Command="{Binding GoUriCommand}"
+                            CommandParameter="mailto:jevons@hotmail.com"
+                            HeightRequest="22"
+                            WidthRequest="22"></Button>
+                    <Button Text="&#xf044;"
+                            FontFamily="FontAwesome"
+                            Margin="0,20,20,20"
+                            Command="{Binding GoUriCommand}"
+                            CommandParameter="http://weibo.com/jevonsflash"
+                            HeightRequest="22"
+                            WidthRequest="22"></Button>
+                </StackLayout>
+
+                <Label HorizontalOptions="CenterAndExpand">
+                    Design &amp; Code By Linxiao, Copyright &#169; 2023, All Rights Reserved
+                </Label>
+
+                <StackLayout Orientation="Vertical"
+                             HorizontalOptions="CenterAndExpand">
+                    <Image Source="cn"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="Center"
+                           HeightRequest="22"
+                           WidthRequest="22">
+
+                    </Image>
+                    <Label HorizontalOptions="Center"
+                           VerticalOptions="CenterAndExpand">
+                        GZ · China
+                    </Label>
+
+   
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+    </Border>
+
+</mato:PopupBase>

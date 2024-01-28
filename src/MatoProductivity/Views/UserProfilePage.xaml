@@ -131,11 +131,17 @@
                       
                         <TextCell Text="关于软件"
                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
-                                  />
+                                  Command="{Binding AboutMe}" />
                         <TextCell Text="隐私政策"
-                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
+                                  Command="{Binding PrivacyPolicy}" />
+
                         <TextCell Text="开源信息"
                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}" />
+                        <TextCell Text="凡事摘要 版本 1.0"
+                                  
+                                  TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
+                                  Command="{Binding Version}" />
                     </TableSection>
                 </TableRoot>
             </TableView>

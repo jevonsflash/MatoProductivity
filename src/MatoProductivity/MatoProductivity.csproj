@@ -65,6 +65,8 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\cd2.png" />
+	  <None Remove="Resources\Images\cn.png" />
+	  <None Remove="Resources\Images\easter_egg_photo.JPG" />
 	  <None Remove="Resources\Images\headphone.png" />
 	  <None Remove="Resources\Images\microphone2.png" />
 	</ItemGroup>
@@ -105,6 +107,12 @@
 	  <Compile Update="Core.Views\MediaSegmentView.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\E.xaml.cs">
+	    <DependentUpon>E.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\AboutMePage.xaml.cs">
+	    <DependentUpon>AboutMePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\LocationSelectingPage.xaml.cs">
 	    <DependentUpon>LocationSelectingPage.xaml</DependentUpon>
 	  </Compile>
@@ -140,6 +148,9 @@
 	  </Compile>
 	  <Compile Update="Views\AppActionSettingPage.xaml.cs">
 	    <DependentUpon>AppActionSettingPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\PrivacyPolicyPage.xaml.cs">
+	    <DependentUpon>PrivacyPolicyPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\UserProfilePage.xaml.cs">
 	    <DependentUpon>UserProfilePage.xaml</DependentUpon>
@@ -183,6 +194,12 @@
 	  <MauiXaml Update="Core.Views\MediaSegmentView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\E.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AboutMePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\LocationSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -223,6 +240,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AppActionSettingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\PrivacyPolicyPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\UserProfilePage.xaml">

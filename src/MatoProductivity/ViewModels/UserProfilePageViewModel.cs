@@ -9,6 +9,7 @@ using MatoProductivity.Services;
 using MatoProductivity.Views;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace MatoProductivity.ViewModels
 {
@@ -19,6 +20,10 @@ namespace MatoProductivity.ViewModels
         private readonly NavigationService navigationService;
         private readonly IRepository<Setting, string> settingRepository;
         private readonly IIocResolver iocResolver;
+        private AboutMePage aboutMePage;
+        private int clickCount;
+        readonly Stopwatch clickStopwatch = new Stopwatch();
+
         public UserProfilePageViewModel(
             NavigationService navigationService,
             IRepository<Setting, string> settingRepository,
@@ -26,11 +31,48 @@ namespace MatoProductivity.ViewModels
             )
         {
             AppActionSetting = new Command(AppActionSettingAction, (o) => !PopupLoading);
+            AboutMe = new Command(AboutMeAction, (o) => !PopupLoading);
+            PrivacyPolicy = new Command(PrivacyPolicyAction, (o) => !PopupLoading);
+            Version = new Command(VersionAction, (o) => !PopupLoading);
             this.navigationService=navigationService;
             this.settingRepository=settingRepository;
             this.iocResolver=iocResolver;
             PropertyChanged+=UserProfilePageViewModel_PropertyChanged;
             Init();
+        }
+
+        private async void VersionAction(object obj)
+        {
+            var currentCircle = clickStopwatch.ElapsedMilliseconds;
+            if (currentCircle<500)
+            {
+                clickCount++;
+            }
+            if (clickCount>3)
+            {
+                clickCount=0;
+                using (var objWrapper = iocResolver.ResolveAsDisposable<E>())
+                {
+                    await navigationService.ShowPopupAsync(objWrapper.Object);
+                }
+
+            }
+            clickStopwatch.Restart();
+        }
+
+        private async void PrivacyPolicyAction(object obj)
+        {
+            var objWrapper = iocResolver.ResolveAsDisposable<PrivacyPolicyPage>();
+            await navigationService.PushAsync(objWrapper.Object);
+        }
+
+        private async void AboutMeAction(object obj)
+        {
+            using (var objWrapper = iocResolver.ResolveAsDisposable<AboutMePage>())
+            {
+                aboutMePage = objWrapper.Object;
+                await navigationService.ShowPopupAsync(aboutMePage);
+            }
         }
 
         private void UserProfilePageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -114,6 +156,8 @@ namespace MatoProductivity.ViewModels
             }
         }
 
+    
+
         private async void Init()
         {
             var settings = settingRepository.GetAllList();
@@ -177,6 +221,9 @@ namespace MatoProductivity.ViewModels
 
 
         public Command AppActionSetting { get; set; }
+        public Command AboutMe { get; set; }
+        public Command PrivacyPolicy { get; set; }
+        public Command Version { get; set; }
 
 
     }

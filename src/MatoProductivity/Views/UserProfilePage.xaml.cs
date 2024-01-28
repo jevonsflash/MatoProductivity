@@ -16,5 +16,9 @@ namespace MatoProductivity
             this.BindingContext = noteTemplateListPageViewModel;
         }
 
+        private void TextCell_Tapped(object sender, EventArgs e)
+        {
+
+        }
     }
 }

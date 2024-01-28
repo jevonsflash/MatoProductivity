@@ -51,9 +51,15 @@ namespace MatoProductivity.Helper
             return await Application.Current.MainPage.DisplayPromptAsync(title, msg, "确定", "取消", "请输入内容", initialValue: initialValue);
         }
 
-        public static void GoUrl(object obj)
+        public static async Task GoUri(object obj)
         {
-            throw new NotImplementedException();
+            var uri = obj.ToString();
+            UriBuilder uriSite = new UriBuilder(uri);
+            var prefix = uri.Split("://")[0];
+            bool supportsUri = await Launcher.Default.CanOpenAsync(prefix+"://");
+
+            if (supportsUri)
+                await Launcher.Default.OpenAsync(uriSite.Uri);
         }
 
         public static void BeginInvokeOnMainThread(Action action)

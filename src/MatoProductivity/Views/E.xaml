@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                x:Class="MatoProductivity.Views.E"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                x:Name="MainPage"
+                VerticalOptions="Center"
+                HorizontalOptions="Fill">
+    <Grid >
+
+        <Image Source="easter_egg_photo"
+               x:Name="MainImage"
+               WidthRequest="64"
+               HeightRequest="64"
+               Aspect="AspectFill"
+               HorizontalOptions="Center"
+               VerticalOptions="Center">
+
+            <Image.Clip>
+                <EllipseGeometry RadiusX="64"
+                                 RadiusY="64"
+                                 Center="32,32" />
+            </Image.Clip>
+        </Image>
+
+
+    </Grid>
+
+</mato:PopupBase>

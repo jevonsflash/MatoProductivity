@@ -1,0 +1,72 @@
+﻿<mato:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                      xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
+                      Title="PrivacyPolicyPage"
+                      x:Class="MatoProductivity.PrivacyPolicyPage">
+    <ContentPage.Resources>
+        <Style TargetType="RadioButton">
+            <Setter Property="ControlTemplate"
+                    Value="{StaticResource RadioButtonTemplate}" />
+        </Style>
+    </ContentPage.Resources>
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+          RowDefinitions="Auto,Auto, *">
+
+        <Grid Grid.Row="0"
+              Margin="20, 20, 0, 20"
+              HorizontalOptions="FillAndExpand">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+            </Grid.GestureRecognizers>
+            <Label Text="&#xf060;"
+                   FontSize="{StaticResource Headline4FontSize}"
+                   FontFamily="FontAwesome_Solid"
+                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Start"></Label>
+            <StackLayout HorizontalOptions="CenterAndExpand">
+            </StackLayout>
+        </Grid>
+        <StackLayout Grid.Row="2"
+                     Padding="20, 0, 20, 0">
+            <Label Text="隐私权政策"></Label>
+            <Label Text="一、隐私权政策的适用范围"></Label>
+            <Label Text="本隐私权政策适用于凡事摘要App（以下简称“App”）收集、使用、存储和保护用户个人信息的相关行为。"></Label>
+            <Label Text="二、个人信息收集"></Label>
+            <Label>
+                <Label.Text>
+1. App仅在用户自愿和知情的前提下收集个人信息，包括但不限于用户名、密码、联系方式等。
+2. App不会收集用户的敏感信息，如身份证号、银行卡号等。
+3. App收集的信息仅用于提供和改进服务，不会用于其他用途。
+                </Label.Text>
+            </Label>
+            <Label Text="三、个人信息保护"></Label>
+            <Label>
+                <Label.Text>
+1. App采取必要的措施保护用户个人信息的安全，包括但不限于加密存储、定期更新安全策略等。
+2. App不会向第三方出售或共享用户个人信息，除非得到用户的明确同意。
+3. App会严格遵守相关法律法规，确保用户个人信息的合法性和安全性。
+                </Label.Text>
+            </Label>
+            <Label Text="四、用户权利"></Label>
+            <Label>
+                <Label.Text>
+1. 用户有权要求查看、更正或删除自己的个人信息。
+2. 用户有权要求App停止使用自己的个人信息。
+3. 用户可以通过App提供的联系方式与App联系，提出上述权利要求。
+                </Label.Text>
+            </Label>
+            <Label Text="五、政策更新"></Label>
+            <Label>
+                <Label.Text>
+1. 本隐私权政策可能会根据法律法规和业务需要进行更新，更新后的政策将及时在App中发布。
+2. 用户使用App即表示同意本隐私权政策，如有任何疑问或建议，请及时联系我们。
+                </Label.Text>
+            </Label>
+        </StackLayout>
+    </Grid>
+
+
+    
+</mato:ContentPageBase>
