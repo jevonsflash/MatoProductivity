@@ -129,18 +129,6 @@ namespace MatoProductivity.Core.Services
 
         public TimeSpan TimeFromNow => DateTime.Now - ExactTime;
 
-        private string _title;
-
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
-
 
         private bool _isAutoSet;
 

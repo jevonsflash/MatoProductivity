@@ -93,18 +93,6 @@ namespace MatoProductivity.Core.Services
 
 
 
-        private string _title;
-
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool IsFileContentNotEmpty => FileContent!=null&& FileContent.Length>0;
 
     }

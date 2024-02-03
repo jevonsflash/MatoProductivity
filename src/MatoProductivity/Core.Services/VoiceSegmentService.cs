@@ -182,7 +182,7 @@ namespace MatoProductivity.Core.Services
 
         async void RecordAudioAction()
         {
-            if (await CheckPermissionIsGrantedAsync<Microphone>())
+            if (await CheckPermissionIsGrantedAsync<Microphone>("录音片段需要访问您的麦克风，请在设置中开启权限"))
             {
                 audioRecorder = audioManager.CreateRecorder();
 

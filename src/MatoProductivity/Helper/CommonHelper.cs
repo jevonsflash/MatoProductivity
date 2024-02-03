@@ -35,9 +35,12 @@ namespace MatoProductivity.Helper
             return await Application.Current.MainPage.DisplayAlert("提示", msg, "确定", "取消");
         }
 
-        public static void ShowNoAuthorized()
+        public static void ShowNoAuthorized(string msg)
         {
-            Application.Current.MainPage.DisplayAlert("需要权限", "需要您设备的媒体库权限，请至「设置」「隐私权」「媒体与AppleMusic」 打开权限", "好");
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Application.Current.MainPage.DisplayAlert("需要系统权限", msg, "好");
+            });
         }
 
         public static async Task<string> ActionSheet(string title, params string[] buttons)

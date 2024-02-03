@@ -11,6 +11,8 @@ namespace MatoProductivity.Core.Services
 {
     public class TodoSegmentService : NoteSegmentService, ITransientDependency
     {
+        private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
+
         public Command SwitchDone { get; set; }
 
         private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
@@ -104,21 +106,9 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private string _title;
-
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
+ 
 
         private bool _isDone;
-        private readonly IRepository<NoteSegmentPayload, long> payloadRepository;
-
         public bool IsDone
         {
             get { return _isDone; }

@@ -114,7 +114,21 @@ namespace MatoProductivity.ViewModels
                                 }
                             }
                         }
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+
+                            CommonHelper.Alert("已创建" + note.Title);
+                        });
                     }
+                    else
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+
+                            CommonHelper.Alert("创建失败");
+                        });
+                    }
+
                 });
             });
         }

@@ -4,7 +4,7 @@
                 xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
                 xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
                 x:Class="MatoProductivity.Views.E"
-                Size="{Binding PopupSize}"
+                Size="250,250"
                 Color="Transparent"
                 x:Name="MainPage"
                 VerticalOptions="Center"
@@ -12,17 +12,17 @@
     <Grid >
 
         <Image Source="easter_egg_photo"
+               WidthRequest="100"
+               HeightRequest="100"
                x:Name="MainImage"
-               WidthRequest="64"
-               HeightRequest="64"
                Aspect="AspectFill"
                HorizontalOptions="Center"
                VerticalOptions="Center">
 
             <Image.Clip>
-                <EllipseGeometry RadiusX="64"
-                                 RadiusY="64"
-                                 Center="32,32" />
+                <EllipseGeometry RadiusX="50"
+                                 RadiusY="50"
+                                 Center="50,50" />
             </Image.Clip>
         </Image>
 

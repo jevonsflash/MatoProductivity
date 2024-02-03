@@ -26,7 +26,7 @@ public partial class E : PopupBase, ITransientDependency
 
     public async void Init()
     {
-        var result = await MainImage.ScaleTo(3, 1000).ContinueWith(c => this.CanBeDismissedByTappingOutsideOfPopup=true);
+        var result = await MainImage.ScaleTo(1.5, 1000).ContinueWith(c => this.CanBeDismissedByTappingOutsideOfPopup=true);
     }
 
 

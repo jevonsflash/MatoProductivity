@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace MatoProductivity.Core.Services
 {
@@ -29,15 +30,20 @@ namespace MatoProductivity.Core.Services
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
+                if (await CheckPermissionIsGrantedAsync<LocationWhenInUse>("请在设置中开启位置的访问权限"))
+                {
+                    var location = await GeoLocationHelper.GetNativePosition();
+                    if (location==null)
+                    {
+                        return;
+                    }
+                    var locationString = $"{location.Longitude},{location.Latitude}";
 
-                var location = await GeoLocationHelper.GetNativePosition();
+                    var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
+                    var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
 
-                var locationString = $"{location.Longitude},{location.Latitude}";
-                var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
-                var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
-
-                this.NowWeather = realTimeWeatherInfo.Now;
-
+                    this.NowWeather = realTimeWeatherInfo.Now;
+                }
                 var defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), StringifyNowWeather);
 
                 var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), defaultContentSegmentPayload);
@@ -67,17 +73,7 @@ namespace MatoProductivity.Core.Services
         public async override void CreateAction(object obj)
         {
 
-            var location = await GeoLocationHelper.GetNativePosition();
-
-            var locationString = $"{location.Longitude},{location.Latitude}";
-            var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
-            var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
-
-            this.NowWeather = realTimeWeatherInfo.Now;
-
-            var defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), StringifyNowWeather);
-
-            NoteSegment?.SetNoteSegmentPayloads(defaultContentSegmentPayload);
+            
         }
 
         private Now _nowWeather;
@@ -92,7 +88,7 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        public string StringifyNowWeather => $"温度 {NowWeather.Temp}°C,天气 {NowWeather.Text}";
+        public string StringifyNowWeather => $"温度 {NowWeather?.Temp}°C,天气 {NowWeather?.Text}";
 
 
         private string _content;
@@ -107,18 +103,7 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private string _title;
 
-
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
 
         public bool IsAutoSet { get; set; } = true;
     }

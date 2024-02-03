@@ -88,7 +88,6 @@ namespace MatoProductivity.ViewModels
 
                 }
 
-                CommonHelper.Alert("已创建" + note.Title);
             }
             else
             {

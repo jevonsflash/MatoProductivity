@@ -12,7 +12,9 @@ using MatoProductivity.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace MatoProductivity.Core.Services
 {
@@ -44,38 +46,22 @@ namespace MatoProductivity.Core.Services
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
                 var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
-                var location = await GeoLocationHelper.GetNativePosition();
-                var amapLocation = new Core.Location.Location()
-                {
-                    Latitude=location.Latitude,
-                    Longitude=location.Longitude
-                };
-                var amapInverseHttpRequestParamter = new AmapInverseHttpRequestParamter()
-                {
-                    Locations= [amapLocation]
 
-                };
-                ReGeocodeLocation reGeocodeLocation = null;
-                try
+                var (amapLocation, address) = await this.InitLocation();
+                if (amapLocation!=null)
                 {
-                    reGeocodeLocation = await amapHttpRequestClient.InverseAsync(amapInverseHttpRequestParamter);
+                    var defaultLocationSegmentPayload = this.CreateNoteSegmentPayload(nameof(Location), amapLocation?.ToString());
+                    this.Location = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Location), defaultLocationSegmentPayload)?.GetStringValue();
+
 
                 }
-                catch (Exception ex)
+                if (address!=null)
                 {
-                    Logger.Error(ex.ToString);
-                }
-                if (reGeocodeLocation==null)
-                {
-                    return;
-                }
-                var address = reGeocodeLocation.Address;
+                    var defaultAddressSegmentPayload = this.CreateNoteSegmentPayload(nameof(Address), address);
+                    this.Address = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Address), defaultAddressSegmentPayload)?.GetStringValue();
 
-                var defaultLocationSegmentPayload = this.CreateNoteSegmentPayload(nameof(Location), amapLocation.ToString());
-                this.Location = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Location), defaultLocationSegmentPayload)?.GetStringValue();
+                }
 
-                var defaultAddressSegmentPayload = this.CreateNoteSegmentPayload(nameof(Address), address);
-                this.Address = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Address), defaultAddressSegmentPayload)?.GetStringValue();
             }
 
             else if (e.PropertyName == nameof(Address))
@@ -131,9 +117,48 @@ namespace MatoProductivity.Core.Services
             (sender as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
             await navigationService.HidePopupAsync(locationSelectingPage);
         }
-
-        public override void CreateAction(object obj)
+        public override async void CreateAction(object obj)
         {
+
+        }
+        private async Task<(Core.Location.Location, string)> InitLocation()
+        {
+            string address = null;
+            Location.Location amapLocation = null;
+            if (await CheckPermissionIsGrantedAsync<LocationWhenInUse>("请在设置中开启位置的访问权限"))
+            {
+                var location = await GeoLocationHelper.GetNativePosition();
+                if (location==null)
+                {
+                    return (null, null);
+                }
+                amapLocation = new Core.Location.Location()
+                {
+                    Latitude=location.Latitude,
+                    Longitude=location.Longitude
+                };
+                var amapInverseHttpRequestParamter = new AmapInverseHttpRequestParamter()
+                {
+                    Locations= [amapLocation]
+
+                };
+                ReGeocodeLocation reGeocodeLocation = null;
+                try
+                {
+                    reGeocodeLocation = await amapHttpRequestClient.InverseAsync(amapInverseHttpRequestParamter);
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString);
+                }
+                if (reGeocodeLocation==null)
+                {
+                    return (null, null);
+                }
+                address = reGeocodeLocation.Address;
+            }
+            return (amapLocation, address);
 
         }
 
@@ -169,17 +194,7 @@ namespace MatoProductivity.Core.Services
         }
 
 
-        private string _title;
 
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
 
         private string _location;
 

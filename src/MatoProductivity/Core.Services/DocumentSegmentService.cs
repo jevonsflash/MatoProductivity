@@ -43,12 +43,7 @@ namespace MatoProductivity.Core.Services
                 this.ShareDocument.ChangeCanExecute();
                 this.SaveDocument.ChangeCanExecute();
             }
-            if (e.PropertyName == nameof(NoteSegment))
-            {
-                var title = NoteSegment?.GetNoteSegmentPayload(nameof(Title));
-                FileName = title?.GetStringValue();
 
-            }
         }
 
         public async void ShareDocumentAction()

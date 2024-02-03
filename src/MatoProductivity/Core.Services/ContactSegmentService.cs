@@ -64,7 +64,7 @@ namespace MatoProductivity.Core.Services
 
         private async void PickContactAction(object obj)
         {
-            if (await CheckPermissionIsGrantedAsync<ContactsRead>("此功能需要读取联系人列表，请在设置中开启权限"))
+            if (await CheckPermissionIsGrantedAsync<ContactsRead>("联系人片段需要读取您设备的联系人列表，请在设置中开启权限"))
             {
                 try
                 {

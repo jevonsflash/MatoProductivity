@@ -13,6 +13,7 @@ using Microsoft.Maui.Devices.Sensors;
 using Nito.AsyncEx;
 using System;
 using System.Collections.ObjectModel;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace MatoProductivity.ViewModels
 {
@@ -113,16 +114,50 @@ namespace MatoProductivity.ViewModels
 
         private async void Init()
         {
-            var location = await GeoLocationHelper.GetNativePosition();
-
-            var amapLocation = new Core.Location.Location()
+            if (await CheckPermissionIsGrantedAsync<LocationWhenInUse>("请在设置中开启位置的访问权限"))
             {
-                Latitude=location.Latitude,
-                Longitude=location.Longitude
-            };
-            this.CurrentLocation=amapLocation;
-
+                var location = await GeoLocationHelper.GetNativePosition();
+                if (location==null)
+                {
+                    return;
+                }
+                var amapLocation = new Core.Location.Location()
+                {
+                    Latitude=location.Latitude,
+                    Longitude=location.Longitude
+                };
+                this.CurrentLocation=amapLocation;
+            }
         }
+
+        public static async Task<bool> CheckPermissionIsGrantedAsync<TPermission>(string explain = "此功能需要相应的权限，请在设置中开启权限") where TPermission : BasePermission, new()
+        {
+            var result = await MainThread.InvokeOnMainThreadAsync(async () =>
+             {
+                 PermissionStatus status = await Permissions.CheckStatusAsync<TPermission>();
+
+                 if (status == PermissionStatus.Granted)
+                 {
+                     return true;
+                 }
+
+                 if (status == PermissionStatus.Denied && DeviceInfo.Platform == DevicePlatform.iOS)
+                 {
+                     return false;
+                 }
+
+                 if (Permissions.ShouldShowRationale<TPermission>())
+                 {
+                     CommonHelper.ShowNoAuthorized(explain);
+                 }
+
+                 status = await Permissions.RequestAsync<TPermission>();
+
+                 return status == PermissionStatus.Granted;
+             });
+            return result;
+        }
+
 
         private Core.Location.Location _currentLocation;
 

@@ -164,7 +164,6 @@
                    Grid.Row="0"
                    Grid.RowSpan="2"
                    Text="&#xf2bd;"
-                   
                    FontSize="{StaticResource Headline2FontSize}"
                    FontFamily="FontAwesome_Solid"
                    VerticalOptions="Center"
@@ -194,7 +193,6 @@
 
 
                 <Button Command="{Binding GoToState}"
-                        
                         Style="{StaticResource Text_Button}"
                         Text="{Binding IsEditing, Converter={StaticResource Bool2StringConverter},ConverterParameter=完成|编辑}"></Button>
 
@@ -256,12 +254,10 @@
                                        VerticalOptions="Center"></Image>
 
                                 <Label Text="{Binding NoteTemplate.Title}"
-                                       
                                        VerticalOptions="Center"
                                        HorizontalTextAlignment="Start"
                                        Grid.Row="1"
-                                       Style="{StaticResource Headline4_MulishBlack}"
-                                       ></Label>
+                                       Style="{StaticResource Headline4_MulishBlack}"></Label>
 
                                 <Grid  Grid.Row="2">
                                     <Grid.ColumnDefinitions>
@@ -270,7 +266,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Label VerticalOptions="Center"
                                            HorizontalTextAlignment="Start"
-                                         Grid.Column="0"
+                                           Grid.Column="0"
                                            Style="{StaticResource Body1_MulishBold}">
                                         <Label.FormattedText>
                                             <FormattedString>
@@ -289,8 +285,8 @@
                                             HeightRequest="25"
                                             WidthRequest="25"
                                             Grid.Column="1">
-                                        <Label TextColor="White" 
-                                               VerticalOptions="Center" 
+                                        <Label TextColor="White"
+                                               VerticalOptions="Center"
                                                HorizontalOptions="Center">
                                             <Label.FormattedText>
                                                 <FormattedString>
@@ -326,33 +322,51 @@
                            Style="{StaticResource Body1_MulishBold}"></Label>
                 </Grid>
             </CollectionView.EmptyView>
+            <CollectionView.Footer>
+                <Border Margin="2,2"
+                        HeightRequest="200"
+                        Padding="8">
+                   
+                    <Border BackgroundColor="Transparent"
+                            StrokeThickness="2"
+                            StrokeDashArray="1,1"
+                            Stroke="Gray">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="45"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Label VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Text="没有找到你想要的场景?"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                                Margin="5, 0, 5, 0" />
+
+                            <Label Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   Style="{StaticResource Headline4_MulishBlack}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="5, 0, 5, 0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf067;"></Span>
+                                        <Span Text=" 创建场景"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                            </Label>
+                        </Grid>
+                    </Border>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Create}"></TapGestureRecognizer>
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </CollectionView.Footer>
 
         </CollectionView>
-        <Border  Grid.RowSpan="3"
-                 BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
-                 VerticalOptions="End"
-                 HorizontalOptions="End"
-                 StrokeShape="RoundRectangle 20"
-                 TranslationY="-20"
-                 TranslationX="-20"
-                 Padding="20">
-            <Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding Create}"></TapGestureRecognizer>
-            </Border.GestureRecognizers>
-            <Label FontSize="{StaticResource Headline3FontSize}"
-                   TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="&#xf067;"
-                              FontFamily="FontAwesome_Solid"></Span>
-                        <Span>场景</Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-        </Border>
-
-
     </Grid>
 </mato:ContentPageBase>

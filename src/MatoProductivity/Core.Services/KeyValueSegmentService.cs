@@ -87,17 +87,7 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        private string _title;
-
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
+    
 
         private string _placeHolder;
 
