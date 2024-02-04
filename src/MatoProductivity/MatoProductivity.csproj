@@ -149,6 +149,9 @@
 	  <Compile Update="Views\AppActionSettingPage.xaml.cs">
 	    <DependentUpon>AppActionSettingPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ThirdPartyLicensesPage.xaml.cs">
+	    <DependentUpon>ThirdPartyLicensesPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\PrivacyPolicyPage.xaml.cs">
 	    <DependentUpon>PrivacyPolicyPage.xaml</DependentUpon>
 	  </Compile>
@@ -240,6 +243,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AppActionSettingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ThirdPartyLicensesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\PrivacyPolicyPage.xaml">

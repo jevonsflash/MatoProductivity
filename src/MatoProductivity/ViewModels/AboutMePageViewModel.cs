@@ -39,6 +39,14 @@ namespace MatoProductivity.ViewModels
         {
             await this.navigationService.PopAsync();
         }
+        protected override void SetSize(DisplayInfo displayInfo)
+        {
+            var newWidth = displayInfo.Width*0.8;
+            var newHeight = 800;
+
+            var d = displayInfo.Density;
+            PopupSize=new Size(newWidth/d, newHeight/d);
+        }
 
         public Command GoUriCommand { get; set; }
         public Command Back { get; set; }

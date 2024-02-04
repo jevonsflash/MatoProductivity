@@ -7,13 +7,13 @@
     <Grid>
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
             <Label   Style="{StaticResource Body1_MulishRegular}"
-                     Text="{Binding Content}"></Label>
+                     Text="{Binding Content, TargetNullValue=无法获取天气信息}"></Label>
 
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Label   Style="{StaticResource Body1_MulishRegular}"
-                     Text="{Binding Content}"></Label>
+                     Text="{Binding Content, TargetNullValue=无法获取天气信息}"></Label>
 
         </VerticalStackLayout>
     </Grid>

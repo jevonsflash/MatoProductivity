@@ -21,6 +21,11 @@ namespace MatoProductivity.Helper
             Application.Current.MainPage.DisplayAlert(title, msg, "好");
         }
 
+        public static async Task<bool> Confirm(string msg, string title, string accept, string cancel)
+        {
+
+            return await Application.Current.MainPage.DisplayAlert(title, msg, accept, cancel);
+        }
 
         public static async Task<bool> Confirm(string msg, string title)
         {
@@ -43,11 +48,25 @@ namespace MatoProductivity.Helper
             });
         }
 
-        public static async Task<string> ActionSheet(string title, params string[] buttons)
+        public static async Task<string> ActionSheet(params string[] buttons)
         {
-            return await Application.Current.MainPage.DisplayActionSheet(title, "取消", "删除", buttons);
+            return await Application.Current.MainPage.DisplayActionSheet("提示", "取消", null, buttons);
         }
 
+        public static async Task<string> ActionSheet(string title, params string[] buttons)
+        {
+            return await Application.Current.MainPage.DisplayActionSheet(title, "取消", null, buttons);
+        }
+
+        public static async Task<string> ActionSheet(string title, string cancel,  params string[] buttons)
+        {
+            return await Application.Current.MainPage.DisplayActionSheet(title, cancel, null, buttons);
+        }
+
+        public static async Task<string> ActionSheet(string title, string cancel, string destruction, params string[] buttons)
+        {
+            return await Application.Current.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
+        }
         public static async Task<string> PromptAsync(string title, string initialValue = null, string msg = null)
         {
 

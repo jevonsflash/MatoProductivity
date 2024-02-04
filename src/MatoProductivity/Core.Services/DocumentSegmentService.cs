@@ -108,7 +108,7 @@ namespace MatoProductivity.Core.Services
                 await SaveFile(result);
                 var filename = result.FileName;
                 var filenameTitle = this.CreateNoteSegmentPayload(nameof(NoteSegment.Title), filename);
-                NoteSegment?.SetNoteSegmentPayloads(filenameTitle);
+                NoteSegment?.SetNoteSegmentPayload(filenameTitle);
 
                 this.FileName=filename;
 

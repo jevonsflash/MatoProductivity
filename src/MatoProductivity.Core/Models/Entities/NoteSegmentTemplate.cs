@@ -54,7 +54,7 @@ namespace MatoProductivity.Core.Models.Entities
             return default;
         }
 
-        public void SetNoteSegmentPayloads(INoteSegmentPayload noteSegmentPayload)
+        public void SetNoteSegmentPayload(INoteSegmentPayload noteSegmentPayload)
         {
             if (NoteSegmentTemplatePayloads != null)
             {
@@ -71,7 +71,7 @@ namespace MatoProductivity.Core.Models.Entities
             }
         }
 
-        public INoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, INoteSegmentPayload noteSegmentPayload)
+        public INoteSegmentPayload GetOrSetNoteSegmentPayload(string key, INoteSegmentPayload noteSegmentPayload)
         {
             if (NoteSegmentTemplatePayloads != null)
             {

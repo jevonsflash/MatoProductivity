@@ -13,7 +13,7 @@
         string Type { get; set; }
 
         INoteSegmentPayload GetNoteSegmentPayload(string key);
-        INoteSegmentPayload GetOrSetNoteSegmentPayloads(string key, INoteSegmentPayload noteSegmentPayload);
-        void SetNoteSegmentPayloads(INoteSegmentPayload noteSegmentPayload);
+        INoteSegmentPayload GetOrSetNoteSegmentPayload(string key, INoteSegmentPayload noteSegmentPayload);
+        void SetNoteSegmentPayload(INoteSegmentPayload noteSegmentPayload);
     }
 }

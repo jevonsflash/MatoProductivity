@@ -8,8 +8,8 @@
                 Size="{Binding PopupSize}"
                 Color="Transparent"
                 x:Name="MainPage"
-                VerticalOptions="End"
-                HorizontalOptions="Fill">
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
     <Border StrokeShape="RoundRectangle 20">
         <ScrollView>
             <StackLayout>

@@ -42,13 +42,17 @@ namespace MatoProductivity.Core.Services
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var time = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Time), DefaultTimeNoteSegmentPayload);
-                var isShowFromNow = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
+                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
+                Title = title.GetStringValue();
+
+                var time = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Time), DefaultTimeNoteSegmentPayload);
+                var isShowFromNow = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(IsShowFromNow), DefaultIsShowFromNowNoteSegmentPayload);
 
                 var defaultNotificationContentString = NoteSegment.Title+"时间已到";
 
                 var defaultNotificationContent = this.CreateNoteSegmentPayload(nameof(NotificationContent), defaultNotificationContentString);
-                var notificationContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(NotificationContent), defaultNotificationContent);
+                var notificationContent = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(NotificationContent), defaultNotificationContent);
                 NotificationContent = notificationContent.GetStringValue();
 
                 DateTime parsedTime;
@@ -67,17 +71,17 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(IsShowFromNow))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(IsShowFromNow), IsShowFromNow));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(IsShowFromNow), IsShowFromNow));
             }
 
             else if (e.PropertyName == nameof(ExactTime))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Time), ExactTime));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Time), ExactTime));
             }
 
             else if (e.PropertyName == nameof(NotificationContent))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(NotificationContent), NotificationContent));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(NotificationContent), NotificationContent));
             }
             else if (e.PropertyName == nameof(Day) ||e.PropertyName == nameof(Hour)||e.PropertyName == nameof(Minute))
             {
@@ -117,13 +121,17 @@ namespace MatoProductivity.Core.Services
                 }
 
             }
+            else if (e.PropertyName == nameof(Title))
+            {
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
+            }
 
         }
 
         public override void CreateAction(object obj)
         {
-            NoteSegment?.SetNoteSegmentPayloads(DefaultTimeNoteSegmentPayload);
-            NoteSegment?.SetNoteSegmentPayloads(DefaultIsShowFromNowNoteSegmentPayload);
+            NoteSegment?.SetNoteSegmentPayload(DefaultTimeNoteSegmentPayload);
+            NoteSegment?.SetNoteSegmentPayload(DefaultIsShowFromNowNoteSegmentPayload);
         }
 
 

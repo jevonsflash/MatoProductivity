@@ -28,11 +28,11 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
 
-                var fileContent = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(FileContent), DefaultFileContentSegmentPayload);
+                var fileContent = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(FileContent), DefaultFileContentSegmentPayload);
                 FileContent = fileContent.Value;
 
             }
@@ -41,7 +41,7 @@ namespace MatoProductivity.Core.Services
             {
                 if (IsFileContentNotEmpty)
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(FileContent), FileContent));
+                    NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(FileContent), FileContent));
 
                 }
                 else
@@ -53,7 +53,7 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
         }
 

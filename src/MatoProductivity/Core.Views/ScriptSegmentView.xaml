@@ -122,6 +122,7 @@
                     <Button Text="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.Name, FallbackValue=Auto}"
                             FontSize="{Binding Source={x:Reference DrawingLineSizeCollectionView}, Path=SelectedItem.FontSize, FallbackValue=Auto}"
                             FontFamily="FontAwesome_Solid"
+                            WidthRequest="60"
                             Style="{StaticResource Plain_Button}"
                             Clicked="DrawingLineSizeButton_Clicked"
                             x:Name="DrawingLineSizeButton"></Button>
@@ -132,17 +133,14 @@
                             x:Name="LineColorButton"></Button>
                 </HorizontalStackLayout>
 
-                <Grid  Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Button Text="清除"
-                            HorizontalOptions="End"
-                            VerticalOptions="Center"
-                            Clicked="Button_Clicked"
-                            Command="{Binding Clear}"></Button>
-                </Grid>
+                <Button Text="清除"
+                        Grid.Column="1"
+                        Style="{StaticResource Plain_Button}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End"
+                        Clicked="Button_Clicked"
+                        Command="{Binding Clear}"></Button>
+
             </Grid>
 
 

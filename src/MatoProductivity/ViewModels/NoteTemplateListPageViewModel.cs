@@ -1,6 +1,7 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Castle.MicroKernel.Registration;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Helper;
@@ -30,6 +31,8 @@ namespace MatoProductivity.ViewModels
             Edit = new Command(EditAction);
             CreateNote = new Command(CreateNoteAction);
             this.GoToState = new Command(GoToStateAction);
+            OpenContextMenu = new Command(OpenContextMenuAction);
+
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -37,6 +40,90 @@ namespace MatoProductivity.ViewModels
             this.PropertyChanged += NoteTemplatePageViewModel_PropertyChangedAsync;
             //Init();
         }
+
+        private async void OpenContextMenuAction(object obj)
+        {
+            var tempAppActions = new List<AppAction>();
+
+            var allAppActions = await AppActions.Current.GetAsync();
+            var existAppActionIds = new List<long>();
+            var appActions = new List<AppAction>();
+            foreach (var appAction in allAppActions)
+            {
+                if (long.TryParse(appAction.Id, out var id))
+                {
+                    appActions.Add(appAction);
+                    existAppActionIds.Add(id);
+                }
+                else
+                {
+                    tempAppActions.Add(appAction);
+
+                }
+            }
+            var availableNoteTemplates = this.NoteTemplates.Select(c => c.NoteTemplate)
+            .Where(c => c.CanSimplified)
+            .Where(c => !existAppActionIds.Contains(c.Id)).ToList();
+
+            var availableCancelNoteTemplates = this.NoteTemplates.Select(c => c.NoteTemplate)
+            .Where(c => c.CanSimplified)
+            .Where(c => existAppActionIds.Contains(c.Id)).ToList();
+
+
+            string firstButton = null;
+            var noteTemplateWrapper = (NoteTemplateWrapper)obj;
+            if (availableNoteTemplates.Contains(noteTemplateWrapper.NoteTemplate))
+            {
+                firstButton="PIN到快捷方式";
+            }
+            else if (availableCancelNoteTemplates.Contains(noteTemplateWrapper.NoteTemplate))
+            {
+                firstButton="取消PIN到快捷方式";
+            }
+
+
+            var confirmResult = await CommonHelper.ActionSheet(noteTemplateWrapper.NoteTemplate.Title, "取消", null, firstButton, "编辑", "删除", "排序");
+
+
+
+
+            if (confirmResult=="PIN到快捷方式")
+            {
+                if (AppActions.Current.IsSupported)
+                {
+                    appActions.Add(new AppAction(noteTemplateWrapper.NoteTemplate.Id.ToString(), noteTemplateWrapper.NoteTemplate.Title));
+                    await AppActions.Current.SetAsync(appActions.Concat(tempAppActions));
+
+                }
+            }
+            else if (confirmResult=="取消PIN到快捷方式")
+            {
+                if (AppActions.Current.IsSupported)
+                {
+                    var currentAppAction = appActions.FirstOrDefault(c => c.Id==noteTemplateWrapper.NoteTemplate.Id.ToString());
+                    if (currentAppAction!=null)
+                    {
+                        appActions.Remove(currentAppAction);
+                        await AppActions.Current.SetAsync(appActions.Concat(tempAppActions));
+                    }
+
+
+                }
+            }
+            else if (confirmResult=="编辑")
+            {
+                this.Edit.Execute(obj);
+            }
+            else if (confirmResult=="删除")
+            {
+                this.Remove.Execute(obj);
+            }
+            else if (confirmResult=="排序")
+            {
+                this.IsEditing=true;
+            }
+        }
+
         private async void CreateActionAsync(object obj)
         {
 
@@ -85,6 +172,7 @@ namespace MatoProductivity.ViewModels
                 {
                     var editNotePageViewModel = objWrapper.Object;
                     editNotePageViewModel.SimplifiedClone.Execute(note.Id);
+                    await navigationService.GoPageAsync("Note");
 
                 }
 
@@ -92,6 +180,7 @@ namespace MatoProductivity.ViewModels
             else
             {
                 var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = note.Id });
+                (objWrapper.Object.BindingContext as EditNotePageViewModel).NoteSegmentState=Core.Services.NoteSegmentState.Edit;
                 objWrapper.Object.Disappearing+=(o, e) =>
                 {
                     objWrapper.Dispose();
@@ -187,11 +276,7 @@ namespace MatoProductivity.ViewModels
 
         public Command Remove { get; set; }
         public Command Edit { get; set; }
+        public Command OpenContextMenu { get; set; }
     }
-
-
-
-
-
 
 }

@@ -30,15 +30,19 @@ namespace MatoProductivity.Core.Services
         {
             if (e.PropertyName == nameof(NoteSegment))
             {
-                var contactName = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(ContactName), DefaultContactNameSegmentPayload);
+                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
+                Title = title.GetStringValue();
+
+                var contactName = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(ContactName), DefaultContactNameSegmentPayload);
                 ContactName = contactName.GetStringValue();
 
 
-                var contactPhone = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(ContactPhone), DefaultContactPhoneSegmentPayload);
+                var contactPhone = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(ContactPhone), DefaultContactPhoneSegmentPayload);
                 ContactPhone = contactPhone.GetStringValue();
 
 
-                var contactEmail = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(ContactEmail), DefaultContactEmailSegmentPayload);
+                var contactEmail = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(ContactEmail), DefaultContactEmailSegmentPayload);
                 ContactEmail = contactEmail.GetStringValue();
             }
 
@@ -46,25 +50,30 @@ namespace MatoProductivity.Core.Services
             {
                 if (!string.IsNullOrEmpty(ContactPhone))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(ContactPhone), ContactPhone));
+                    NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(ContactPhone), ContactPhone));
 
                 }
             }
 
             else if (e.PropertyName == nameof(ContactEmail))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(ContactEmail), ContactEmail));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(ContactEmail), ContactEmail));
             }
             else if (e.PropertyName == nameof(ContactName))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(ContactName), ContactName));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(ContactName), ContactName));
+            }
+
+            else if (e.PropertyName == nameof(Title))
+            {
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
         }
 
 
         private async void PickContactAction(object obj)
         {
-            if (await CheckPermissionIsGrantedAsync<ContactsRead>("联系人片段需要读取您设备的联系人列表，请在设置中开启权限"))
+            if (await CheckPermissionIsGrantedAsync<ContactsRead>("联系人片段需要读取您设备的通讯录，请在设置中开启权限"))
             {
                 try
                 {

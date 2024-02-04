@@ -18,7 +18,7 @@
                          Text="{Binding ContactName}"></Label>
                 <Label   Style="{StaticResource Body1_MulishRegular}"
                          Grid.Row="1"
-                         Text="{Binding ContactPhone}"></Label>
+                         Text="{Binding ContactPhone, TargetNullValue=未知联系方式}"></Label>
                 <Label   Style="{StaticResource Body1_MulishRegular}"
                          Grid.Row="2"
                          Text="{Binding ContactEmail}"></Label>
@@ -26,10 +26,6 @@
         </VerticalStackLayout>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
-            <Button Text="PickContact"
-                    Style="{StaticResource Plain_Button}"
-                    IsVisible="{Binding ContactName, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
-                    Command="{Binding PickContact}"></Button>
 
             <Grid IsVisible="{Binding ContactName, Converter={x:StaticResource IsValid2BoolConverter}}">
                 <Grid.RowDefinitions>
@@ -43,11 +39,16 @@
                          Text="{Binding ContactName}"></Label>
                 <Label   Style="{StaticResource Body1_MulishRegular}"
                          Grid.Row="1"
-                         Text="{Binding ContactPhone}"></Label>
+                         Text="{Binding ContactPhone, TargetNullValue=未知联系方式}"></Label>
                 <Label   Style="{StaticResource Body1_MulishRegular}"
                          Grid.Row="2"
                          Text="{Binding ContactEmail}"></Label>
             </Grid>
+
+            <Button Text="选择联系人"
+                    Style="{StaticResource Plain_Button}"
+                    Command="{Binding PickContact}"></Button>
+
 
         </VerticalStackLayout>
     </Grid>

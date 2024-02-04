@@ -13,6 +13,7 @@ namespace MatoProductivity.Core.Services
     {
 
         private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
+        private INoteSegmentPayload DefaultUnitSegmentPayload => this.CreateNoteSegmentPayload(nameof(Unit), "");
         public KeyValueSegmentService(
             INoteSegment noteSegment) : base(noteSegment)
         {
@@ -24,19 +25,22 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                var content = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Content), DefaultContentSegmentPayload);
                 Content = content.GetStringValue();
+
+                var unit = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Unit), DefaultUnitSegmentPayload);
+                Unit = unit.GetStringValue();
             }
 
             else if (e.PropertyName == nameof(Content))
             {
                 if (!string.IsNullOrEmpty(Content))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Content), Content));
+                    NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Content), Content));
 
                 }
             }
@@ -45,7 +49,7 @@ namespace MatoProductivity.Core.Services
             {
                 if (!string.IsNullOrEmpty(Unit))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Unit), Unit));
+                    NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Unit), Unit));
 
                 }
             }
@@ -53,7 +57,7 @@ namespace MatoProductivity.Core.Services
 
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
                 this.PlaceHolder= "请输入" + Title;
             }
         }

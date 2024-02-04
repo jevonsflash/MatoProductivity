@@ -28,26 +28,44 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
-                if (await CheckPermissionIsGrantedAsync<LocationWhenInUse>("请在设置中开启位置的访问权限"))
+
+                var content = NoteSegment?.GetNoteSegmentPayload(nameof(Content));
+                if (content!=null)
                 {
-                    var location = await GeoLocationHelper.GetNativePosition();
-                    if (location==null)
-                    {
-                        return;
-                    }
-                    var locationString = $"{location.Longitude},{location.Latitude}";
-
-                    var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
-                    var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
-
-                    this.NowWeather = realTimeWeatherInfo.Now;
+                    Content = content.GetStringValue();
                 }
-                var defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), StringifyNowWeather);
+                else
+                {
+                    INoteSegmentPayload defaultContentSegmentPayload;
+                    if (await CheckPermissionIsGrantedAsync<LocationWhenInUse>("请在设置中开启位置的访问权限"))
+                    {
+                        var location = await GeoLocationHelper.GetNativePosition();
+                        if (location!=null)
+                        {
+                            var locationString = $"{location.Longitude},{location.Latitude}";
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), defaultContentSegmentPayload);
-                Content = content.GetStringValue();
+                            var locationInfo = (await QWeatherAPI.GeoAPI.GetGeoAsync(locationString, QWeatherConsts.Key)).Locations[0];
+                            var realTimeWeatherInfo = await QWeatherAPI.RealTimeWeatherAPI.GetRealTimeWeatherAsync(locationInfo.Lon, locationInfo.Lat, QWeatherConsts.Key);
+
+                            this.NowWeather = realTimeWeatherInfo.Now;
+
+                            defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), StringifyNowWeather);
+
+                            Content = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Content), defaultContentSegmentPayload)?.GetStringValue();
+
+                            return;
+                        }
+                    }
+
+
+
+                    //defaultContentSegmentPayload = this.CreateNoteSegmentPayload(nameof(Content), "");
+
+                    //Content = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Content), defaultContentSegmentPayload)?.GetStringValue();
+
+                }
 
             }
 
@@ -55,7 +73,7 @@ namespace MatoProductivity.Core.Services
             {
                 if (!string.IsNullOrEmpty(Content))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Content), Content));
+                    NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Content), Content));
 
                 }
             }
@@ -66,14 +84,14 @@ namespace MatoProductivity.Core.Services
             }
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
         }
 
         public async override void CreateAction(object obj)
         {
 
-            
+
         }
 
         private Now _nowWeather;

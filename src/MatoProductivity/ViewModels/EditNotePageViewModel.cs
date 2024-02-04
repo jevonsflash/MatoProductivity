@@ -133,11 +133,28 @@ namespace MatoProductivity.ViewModels
             });
         }
 
-        private void SubmitBackAction(object obj)
+        private async void SubmitBackAction(object obj)
         {
+            if (this.NoteSegmentState==NoteSegmentState.Edit ||this.NoteSegmentState==NoteSegmentState.Config)
+            {
+                var confirmResult = await CommonHelper.ActionSheet("您有未保存的修改，是否保存？", "取消", null, "保存", "放弃修改");
+                if (confirmResult=="保存")
+                {
+                    this.SubmitAction(obj);
+                    this.BackAction(obj);
+                }
+                else if (confirmResult=="放弃修改")
+                {
+                    this.BackAction(obj);
 
-            this.SubmitAction(obj);
-            this.BackAction(obj);
+                }
+            }
+            else
+            {
+                this.BackAction(obj);
+
+            }
+
         }
 
         private async void BackAction(object obj)
@@ -152,7 +169,8 @@ namespace MatoProductivity.ViewModels
 
                 if ((NoteSegmentState)obj==NoteSegmentState.PreView &&(this.NoteSegmentState==NoteSegmentState.Config || this.NoteSegmentState==NoteSegmentState.Edit))
                 {
-                    this.SubmitBackAction(null);
+                    //this.SubmitBackAction(null);
+                    this.SubmitAction(null);
                 }
 
                 this.NoteSegmentState=(NoteSegmentState)obj;
@@ -742,7 +760,7 @@ namespace MatoProductivity.ViewModels
 
 
                         var payloadEntities = await payloadRepository.GetAllListAsync(c => c.NoteSegmentId == entity.Id);
-                        foreach (var item in entity.NoteSegmentPayloads)
+                        foreach (var item in (newNoteSegment as NoteSegment).NoteSegmentPayloads)
                         {
                             if (!payloadEntities.Any(c => c.Key == item.Key))
                             {

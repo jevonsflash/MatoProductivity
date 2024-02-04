@@ -153,7 +153,7 @@ namespace MatoProductivity.Core.Services
                 var result = status == PermissionStatus.Granted;
                 if (!result)
                 {
-                    CommonHelper.Alert("您拒绝了权限，部分功能将受限");
+                    //CommonHelper.Alert("您拒绝了权限，部分功能将受限");
 
                 }
                 return result;

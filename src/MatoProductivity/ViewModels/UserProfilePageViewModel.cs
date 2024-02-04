@@ -33,12 +33,19 @@ namespace MatoProductivity.ViewModels
             AppActionSetting = new Command(AppActionSettingAction, (o) => !PopupLoading);
             AboutMe = new Command(AboutMeAction, (o) => !PopupLoading);
             PrivacyPolicy = new Command(PrivacyPolicyAction, (o) => !PopupLoading);
+            ThirdPartyLicenses = new Command(ThirdPartyLicensesAction, (o) => !PopupLoading);
             Version = new Command(VersionAction, (o) => !PopupLoading);
             this.navigationService=navigationService;
             this.settingRepository=settingRepository;
             this.iocResolver=iocResolver;
             PropertyChanged+=UserProfilePageViewModel_PropertyChanged;
             Init();
+        }
+
+        private async void ThirdPartyLicensesAction(object obj)
+        {
+            var objWrapper = iocResolver.ResolveAsDisposable<ThirdPartyLicensesPage>();
+            await navigationService.PushAsync(objWrapper.Object);
         }
 
         private async void VersionAction(object obj)
@@ -223,6 +230,7 @@ namespace MatoProductivity.ViewModels
         public Command AppActionSetting { get; set; }
         public Command AboutMe { get; set; }
         public Command PrivacyPolicy { get; set; }
+        public Command ThirdPartyLicenses { get; set; }
         public Command Version { get; set; }
 
 

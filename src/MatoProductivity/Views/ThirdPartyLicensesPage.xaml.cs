@@ -6,17 +6,16 @@ using MatoProductivity.ViewModels;
 
 namespace MatoProductivity
 {
-    public partial class PrivacyPolicyPage : ContentPageBase, ISingletonDependency
+    public partial class ThirdPartyLicensesPage : ContentPageBase, ISingletonDependency
     {
-        public PrivacyPolicyPage()
+        public ThirdPartyLicensesPage()
         {
             InitializeComponent();
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
-            await navigationService.PopAsync();
-
+           await navigationService.PopAsync();
         }
     }
 }

@@ -25,6 +25,8 @@ namespace MatoProductivity.ViewModels
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
         private NotePage notePagePage;
+        private bool _isUsingContextMenu;
+        private DayModel _selectedDay;
 
         public NoteListPageViewModel(
             IDateService dateService,
@@ -54,7 +56,11 @@ namespace MatoProductivity.ViewModels
 
             //Init();
         }
-        private DayModel _selectedDay;
+
+        public void SetIsUsingContextMenu(bool value)
+        {
+            this._isUsingContextMenu= value;
+        }
 
 
         private ObservableCollection<DayModel> _daysList;
@@ -260,6 +266,11 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNote != default)
                 {
+                    if (_isUsingContextMenu)
+                    {
+                        SelectedNote = default;
+                        return;
+                    }
                     var detailPageMode = settingRepository.FirstOrDefault(c => c.Id=="DetailPageMode")?.Value;
 
                     if (detailPageMode=="PreviewPage")

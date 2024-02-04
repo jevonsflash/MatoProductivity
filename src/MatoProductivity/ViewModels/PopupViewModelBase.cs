@@ -23,24 +23,24 @@ namespace MatoProductivity.ViewModels
             this.deviceDisplay=DeviceDisplay.Current;
             this.deviceDisplay.MainDisplayInfoChanged+=DeviceDisplay_MainDisplayInfoChanged;
             var displayInfo = this.deviceDisplay.MainDisplayInfo;
-            var newWidth = displayInfo.Width;
-            var newHeight = displayInfo.Height*0.8;
-
-            var d = displayInfo.Density;
-            PopupSize=new Size(newWidth/d, newHeight/d);
+            SetSize(displayInfo);
         }
 
         private void DeviceDisplay_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
         {
             var displayInfo = e.DisplayInfo;
             // 新的宽度和高度
+            SetSize(displayInfo);
+        }
+
+        protected virtual void SetSize(DisplayInfo displayInfo)
+        {
             var newWidth = displayInfo.Width;
             var newHeight = displayInfo.Height*0.8;
 
             var d = displayInfo.Density;
             PopupSize=new Size(newWidth/d, newHeight/d);
         }
-
 
         private Size _popupSize;
 

@@ -12,10 +12,12 @@
     <mato:ContentPageBase.Resources>
         <ControlTemplate x:Key="NoteCardViewPhone">
             <Grid>
-                <SwipeView>
+                <SwipeView SwipeStarted="SwipeView_SwipeStarted"
+                           SwipeEnded="SwipeView_SwipeEnded">
                     <SwipeView.RightItems>
-                        <SwipeItems>
-                            <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
+                        <SwipeItems SwipeBehaviorOnInvoked="Close">
+                            <SwipeItemView Invoked="SwipeItemView_Invoked"
+                                           Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Remove}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
                                 <Border Padding="15, 0">
                                     <StackLayout Orientation="Vertical"
@@ -35,7 +37,8 @@
 
                                 </Border>
                             </SwipeItemView>
-                            <SwipeItemView Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
+                            <SwipeItemView Invoked="SwipeItemView_Invoked"
+                                           Command="{Binding   Source={x:Reference MainCollectionView}, Path= BindingContext.Edit}"
                                            CommandParameter="{TemplateBinding Path= BindingContext}">
                                 <Border Padding="25, 0, 15, 0">
 
@@ -163,13 +166,13 @@
                    VerticalOptions="Center"></Label>
             <Button Grid.Column="2"
                     Style="{StaticResource Plain_Button}"
-                    Text="&#xf053;"
+                    Text="《"
                     FontFamily="FontAwesome_Solid"
                     Command="{Binding PreviousWeekCommand}"
                     CommandParameter="{Binding Week.StartDay}"></Button>
             <Button Grid.Column="3"
                     Style="{StaticResource Plain_Button}"
-                    Text="&#xf054;"
+                    Text="》"
                     FontFamily="FontAwesome_Solid"
                     Command="{Binding NextWeekCommand}"
                     CommandParameter="{Binding Week.LastDay}"></Button>

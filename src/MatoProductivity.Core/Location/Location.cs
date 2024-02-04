@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace MatoProductivity.Core.Location
 {
@@ -113,6 +114,33 @@ namespace MatoProductivity.Core.Location
         public override string ToString()
         {
             return $"{Latitude},{Longitude}";
+        }
+
+        public string ToFriendlyString()
+        {
+
+            StringBuilder sb = new StringBuilder();
+
+            // 格式化纬度为度、分、秒形式  
+            string friendlyLatitude = Latitude.ToString("F3"); // 3位小数  
+            string[] latitudeParts = friendlyLatitude.Split('.');
+            int degrees = int.Parse(latitudeParts[0]);
+            int minutes = (int)Math.Round((double)(int.Parse(latitudeParts[1]) * 60)); // 将小数部分转换为分钟  
+            decimal seconds = (decimal)(int.Parse(latitudeParts[1]) * 3600 - minutes * 60); // 计算剩余的秒数  
+            string friendlyLatitudeFormatted = $"{degrees}°{minutes}'{seconds}''N";
+
+            // 格式化经度为度、分、秒形式  
+            string friendlyLongitude = Longitude.ToString("F3"); // 3位小数  
+            string[] longitudeParts = friendlyLongitude.Split('.');
+            int degreesLong = int.Parse(longitudeParts[0]);
+            int minutesLong = (int)Math.Round((double)(int.Parse(longitudeParts[1]) * 60)); // 将小数部分转换为分钟  
+            decimal secondsLong = (decimal)(int.Parse(longitudeParts[1]) * 3600 - minutesLong * 60); // 计算剩余的秒数  
+            string friendlyLongitudeFormatted = $"{degreesLong}°{minutesLong}'{secondsLong}''W";
+
+            sb.AppendLine($"纬度：{friendlyLatitudeFormatted}");
+            sb.AppendLine($"经度：{friendlyLongitudeFormatted}");
+
+            return sb.ToString();
         }
     }
 }

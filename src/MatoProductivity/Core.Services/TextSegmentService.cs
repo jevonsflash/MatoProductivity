@@ -24,16 +24,16 @@ namespace MatoProductivity.Core.Services
             if (e.PropertyName == nameof(NoteSegment))
             {
                 var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
-                var title = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Title), defaultTitle);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
                 Title = title.GetStringValue();
 
 
-                var content = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(Content), DefaultContentSegmentPayload);
+                var content = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Content), DefaultContentSegmentPayload);
                 Content = content.GetStringValue();
 
                 var defaultPlaceHolderSegmentPayload = this.CreateNoteSegmentPayload(nameof(PlaceHolder), "请输入" + Title);
 
-                var placeHolder = NoteSegment?.GetOrSetNoteSegmentPayloads(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
+                var placeHolder = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(PlaceHolder), defaultPlaceHolderSegmentPayload);
                 PlaceHolder = placeHolder.GetStringValue();
             }
 
@@ -41,18 +41,18 @@ namespace MatoProductivity.Core.Services
             {
                 if (!string.IsNullOrEmpty(Content))
                 {
-                    NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Content), Content));
+                    NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Content), Content));
 
                 }
             }
 
             else if (e.PropertyName == nameof(PlaceHolder))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(PlaceHolder), PlaceHolder));
             }
             else if (e.PropertyName == nameof(Title))
             {
-                NoteSegment?.SetNoteSegmentPayloads(this.CreateNoteSegmentPayload(nameof(Title), Title));
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
         }
 

@@ -401,7 +401,7 @@
                         IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
                         Style="{StaticResource Text_Button}"
                         Padding="5,5"
-                        Text="完成"></Button>
+                        Text="保存"></Button>
 
 
             </HorizontalStackLayout>

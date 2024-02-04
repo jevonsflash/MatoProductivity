@@ -14,10 +14,14 @@ namespace MatoProductivity
         {
             InitializeComponent();
             this.BindingContext = noteTemplateListPageViewModel;
+            this.Load();
         }
 
-
         private async void ContentPageBase_Loaded(object sender, EventArgs e)
+        {
+        }
+
+        private async void Load()
         {
             await NoteTemplateListPageViewModel.Init();
 

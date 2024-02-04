@@ -53,4 +53,10 @@ public partial class EditNotePage : ContentPageBase, ITransientDependency
     {
 
     }
+
+    protected override bool OnBackButtonPressed()
+    {
+        editNotePageViewModel.SubmitBack.Execute(null);
+        return true;
+    }
 }
