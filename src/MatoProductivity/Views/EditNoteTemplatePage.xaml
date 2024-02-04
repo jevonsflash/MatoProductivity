@@ -485,7 +485,11 @@
                         </Border>
 
                     </Grid>
-
+                    <Image Source="{Binding Icon}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChooseIcon}"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
 
                 </VerticalStackLayout>
             </CollectionView.Header>

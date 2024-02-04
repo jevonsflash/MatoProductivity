@@ -41,8 +41,9 @@ namespace MatoProductivity.EntityFrameworkCore.Seed
             NoteTemplate noteTemplateEntity = CreateNoteTemplate("喂奶", "宝宝成长", "baby", "#000000", "#FFFFFF");
 
             var noteTemplateId = noteTemplateEntity.Id;
-            var noteSegmentTemplate1 = CreateNoteSegmentTemplate(noteTemplateId, "开始", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
-            CreateNoteSegmentTemplate(noteTemplateId, "宝宝饿啦", FaIcons.IconBell, "TimerSegment", "", "#000000");
+            var noteSegmentTemplate1 = CreateNoteSegmentTemplate(noteTemplateId, "开始时间", FaIcons.IconClockO, "DateTimeSegment", "喂奶开始时间", "#000000");
+            var noteSegmentTemplate1_1 = CreateNoteSegmentTemplate(noteTemplateId, "下一次喂奶", FaIcons.IconBell, "TimerSegment", "", "#000000");
+            CreateNoteSegmentTemplatePayload(noteSegmentTemplate1_1.Id, "NotificationContent", "宝宝饿啦");
             var noteSegmentTemplate1_2 = CreateNoteSegmentTemplate(noteTemplateId, "数量", FaIcons.IconLineChart, "KeyValueSegment", "", "#000000");
             CreateNoteSegmentTemplatePayload(noteSegmentTemplate1_2.Id, "Unit", "ml");
             var noteSegmentTemplateId1 = noteSegmentTemplate1.Id;

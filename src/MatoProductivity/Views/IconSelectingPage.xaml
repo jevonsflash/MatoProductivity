@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:controls="clr-namespace:MatoProductivity.Controls;assembly=MatoProductivity"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                x:Class="MatoProductivity.Views.IconSelectingPage"
+                Opened="PopupBase_Opened"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                VerticalOptions="End"
+                HorizontalOptions="Fill">
+    <Border StrokeShape="RoundRectangle 20">
+        <Grid Padding="20,10">
+            <CollectionView  ItemsSource="{Binding IconImages}"
+                             ItemsUpdatingScrollMode="KeepLastItemInView"
+                             SelectedItem="{Binding SelectedIcon}"
+                             IsVisible="{Binding Loading, Converter={StaticResource True2FalseConverter}}"
+                             SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     VerticalItemSpacing="6"
+                                     HorizontalItemSpacing="6">
+                        <GridItemsLayout.Span>
+                            <OnIdiom Phone="2"
+                                     Tablet="4"
+                                     Desktop="4">
+                            </OnIdiom>
+                        </GridItemsLayout.Span>
+
+                    </GridItemsLayout>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Grid.RowSpan="2"
+                                    WidthRequest="90"
+                                    HeightRequest="90">
+                                <Image Source="{Binding}"></Image>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <ActivityIndicator Grid.RowSpan="6"
+                               IsRunning="{Binding Loading}"></ActivityIndicator>
+
+        </Grid>
+    </Border>
+
+</mato:PopupBase>

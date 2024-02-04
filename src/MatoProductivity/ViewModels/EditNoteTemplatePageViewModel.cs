@@ -31,6 +31,7 @@ namespace MatoProductivity.ViewModels
         private readonly IUnitOfWorkManager unitOfWorkManager;
         private readonly IIocResolver iocResolver;
         private Popup noteSegmentStoreListPage;
+        private Popup iconSelectingPage;
 
         public EditNoteTemplatePageViewModel(
             NavigationService navigationService,
@@ -58,6 +59,8 @@ namespace MatoProductivity.ViewModels
             ItemDropped = new Command(i => OnItemDropped(i));
             Back = new Command(BackAction);
             GoToState = new Command(GoToStateAction);
+            ChooseIcon = new Command(ChooseIconAction);
+
             this.navigationService = navigationService;
             this.noteSegmentServiceFactory = noteSegmentServiceFactory;
             this.noteRepository = noteRepository;
@@ -73,7 +76,37 @@ namespace MatoProductivity.ViewModels
 
         }
 
-       
+        private async void ChooseIconAction(object obj)
+        {
+
+            PopupLoading = true;
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<IconSelectingPage>())
+            {
+                iconSelectingPage = objWrapper.Object;
+                (iconSelectingPage.BindingContext as IconSelectingPageViewModel).OnFinishedChooise +=EditNoteTemplatePageViewModel_OnFinishedChooise1; ;
+            }
+
+            await navigationService.ShowPopupAsync(iconSelectingPage).ContinueWith((e) =>
+            {
+                (iconSelectingPage.BindingContext as IconSelectingPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise1;
+                iconSelectingPage = null;
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    PopupLoading = false;
+                });
+
+            }); ;
+
+
+        }
+
+        private async void EditNoteTemplatePageViewModel_OnFinishedChooise1(object sender, string e)
+        {
+            Console.WriteLine(e);
+            await navigationService.HidePopupAsync(iconSelectingPage);
+
+        }
 
         private async void SubmitBackAction(object obj)
         {
@@ -722,6 +755,7 @@ namespace MatoProductivity.ViewModels
         public async Task CloseAllPopup()
         {
             await navigationService.HidePopupAsync(noteSegmentStoreListPage);
+            await navigationService.HidePopupAsync(iconSelectingPage);
         }
 
         public void Dispose()
@@ -740,6 +774,9 @@ namespace MatoProductivity.ViewModels
         public Command Create { get; set; }
         public Command CreateSegment { get; set; }
         public Command CreateSegmentFromStore { get; set; }
+
+        public Command ChooseIcon { get; set; }
+
         public Command Remove { get; set; }
         public Command RemoveSegment { get; set; }
         public Command RemoveSelectedSegment { get; set; }
