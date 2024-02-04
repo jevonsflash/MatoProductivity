@@ -31,7 +31,7 @@ public partial class RichTextEditor : ContentView
     {
         InitializeComponent();
         PropertyChanged+=RichTextEditor_PropertyChanged;
-        this.Loaded+=RichTextEditor_Loaded; ;
+        this.Loaded+=RichTextEditor_Loaded;
         this.ColorCollectionView.ItemsSource=DefaultTextColorList;
         this.TextSizeCollectionView.ItemsSource=DefaultTextSizeList;
         HideCollectionViews();

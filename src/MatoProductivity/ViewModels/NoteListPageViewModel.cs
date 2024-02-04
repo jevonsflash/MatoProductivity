@@ -278,7 +278,7 @@ namespace MatoProductivity.ViewModels
                         using (var objWrapper = iocResolver.ResolveAsDisposable<NotePage>(new { NoteId = SelectedNote.Id }))
                         {
                             notePagePage = objWrapper.Object;
-                            (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone; ;
+                            (notePagePage.BindingContext as NotePageViewModel).OnDone += NoteListPageViewModel_OnDone;
 
                             await navigationService.ShowPopupAsync(notePagePage);
                         }

@@ -163,7 +163,7 @@ namespace MatoProductivity.ViewModels
             }
         }
 
-    
+
 
         private async void Init()
         {
@@ -195,15 +195,18 @@ namespace MatoProductivity.ViewModels
 
             await navigationService.ShowPopupAsync(shortCutSettingPage).ContinueWith(async (e) =>
             {
-                (shortCutSettingPage.BindingContext as AppActionSettingPageViewModel).OnFinishedChooise -= AppActionSettingPageViewModel_OnFinishedChooise;
-                shortCutSettingPage = null;
+                if (shortCutSettingPage!=null)
+                {
+                    (shortCutSettingPage.BindingContext as AppActionSettingPageViewModel).OnFinishedChooise -= AppActionSettingPageViewModel_OnFinishedChooise;
+                    shortCutSettingPage = null;
+                }
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;
                     AppActionSetting.ChangeCanExecute();
                 });
 
-            }); ;
+            });
 
         }
 

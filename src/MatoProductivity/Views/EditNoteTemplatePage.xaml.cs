@@ -53,4 +53,10 @@ public partial class EditNoteTemplatePage : ContentPageBase, ITransientDependenc
         editNoteTemplatePageViewModel.SubmitBack.Execute(null);
         return true;
     }
+
+    private void MainCollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+    {
+        this.CoverImage.TranslationY=  e.VerticalOffset*0.8;
+    }
+
 }

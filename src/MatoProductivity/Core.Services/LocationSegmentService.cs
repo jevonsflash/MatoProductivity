@@ -124,15 +124,18 @@ namespace MatoProductivity.Core.Services
 
             await navigationService.ShowPopupAsync(locationSelectingPage).ContinueWith(async (e) =>
             {
-                (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
-                locationSelectingPage = null;
+                if (locationSelectingPage!=null)
+                {
+                    (locationSelectingPage.BindingContext as LocationSelectingPageViewModel).OnFinishedChooise -= LocationSelectingPageViewModel_OnFinishedChooise;
+                    locationSelectingPage = null;
+                }
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;
                     PickFromMap.ChangeCanExecute();
                 });
 
-            }); ;
+            });
 
         }
 

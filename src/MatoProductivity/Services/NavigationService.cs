@@ -38,6 +38,10 @@ namespace MatoProductivity.Services
         public async Task PushAsync(string pageName, object[] args = null, bool animated = true)
         {
             var page = GetPageInstance(pageName, args);
+            if (mainPageNavigation.NavigationStack.LastOrDefault()==page)
+            {
+                return;
+            }
             await mainPageNavigation.PushAsync(page, animated);
         }
 
@@ -49,6 +53,10 @@ namespace MatoProductivity.Services
 
         public async Task PushAsync(Page page, bool animated = true)
         {
+            if (mainPageNavigation.NavigationStack.LastOrDefault()==page)
+            {
+                return;
+            }
             await mainPageNavigation.PushAsync(page, animated);
         }
 

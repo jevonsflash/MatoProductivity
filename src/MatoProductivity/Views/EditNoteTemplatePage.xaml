@@ -410,6 +410,7 @@
         </Grid>
 
         <CollectionView Grid.Row="1"
+                        Scrolled="MainCollectionView_Scrolled"
                         x:Name="MainCollectionView"
                         ItemsUpdatingScrollMode="KeepLastItemInView"
                         ItemsSource="{Binding NoteSegments}"
@@ -485,11 +486,39 @@
                         </Border>
 
                     </Grid>
-                    <Image Source="{Binding Icon}">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChooseIcon}"></TapGestureRecognizer>
-                        </Image.GestureRecognizers>
-                    </Image>
+                    <Grid>
+                        <Image Source="{Binding Icon}"
+                               x:Name="CoverImage">
+                        </Image>
+                        <Border Grid.Row="2"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
+                                IsVisible="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
+                                StrokeThickness="0"
+                                HorizontalOptions="Center"
+                                Margin="0,0,0,20"
+                                VerticalOptions="End">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="100"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Label TextColor="{AppThemeBinding Light={StaticResource LightButtonTextColor}, Dark={StaticResource DarkButtonTextColor}}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="5, 0, 5, 0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span FontFamily="FontAwesome_Solid"
+                                              Text="&#xf013;"></Span>
+                                        <Span Text=" 更换封面"></Span>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding  ChooseIcon}"></TapGestureRecognizer>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Border>
+
+                    </Grid>
+
 
                 </VerticalStackLayout>
             </CollectionView.Header>

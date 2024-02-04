@@ -84,26 +84,29 @@ namespace MatoProductivity.ViewModels
             using (var objWrapper = iocResolver.ResolveAsDisposable<IconSelectingPage>())
             {
                 iconSelectingPage = objWrapper.Object;
-                (iconSelectingPage.BindingContext as IconSelectingPageViewModel).OnFinishedChooise +=EditNoteTemplatePageViewModel_OnFinishedChooise1; ;
+                (iconSelectingPage.BindingContext as IconSelectingPageViewModel).OnFinishedChooise +=EditNoteTemplatePageViewModel_OnFinishedChooise1;
             }
 
             await navigationService.ShowPopupAsync(iconSelectingPage).ContinueWith((e) =>
             {
-                (iconSelectingPage.BindingContext as IconSelectingPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise1;
-                iconSelectingPage = null;
+                if (iconSelectingPage!=null)
+                {
+                    (iconSelectingPage.BindingContext as IconSelectingPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise1;
+                    iconSelectingPage = null;
+                }
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;
                 });
 
-            }); ;
+            });
 
 
         }
 
         private async void EditNoteTemplatePageViewModel_OnFinishedChooise1(object sender, string e)
         {
-            Console.WriteLine(e);
+            this.Icon=e;
             await navigationService.HidePopupAsync(iconSelectingPage);
 
         }
@@ -330,15 +333,18 @@ namespace MatoProductivity.ViewModels
 
             await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith((e) =>
             {
-                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;
-                noteSegmentStoreListPage = null;
+                if (noteSegmentStoreListPage!=null)
+                {
+                    (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNoteTemplatePageViewModel_OnFinishedChooise;
+                    noteSegmentStoreListPage = null;
+                }
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;
                     CreateSegmentFromStore.ChangeCanExecute();
                 });
 
-            }); ;
+            });
 
 
         }

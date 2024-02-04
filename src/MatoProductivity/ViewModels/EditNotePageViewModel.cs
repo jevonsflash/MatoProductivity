@@ -371,15 +371,18 @@ namespace MatoProductivity.ViewModels
 
             await navigationService.ShowPopupAsync(noteSegmentStoreListPage).ContinueWith(async (e) =>
             {
-                (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
-                noteSegmentStoreListPage = null;
+                if (noteSegmentStoreListPage!=null)
+                {
+                    (noteSegmentStoreListPage.BindingContext as NoteSegmentStoreListPageViewModel).OnFinishedChooise -= EditNotePageViewModel_OnFinishedChooise;
+                    noteSegmentStoreListPage = null;
+                }
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     PopupLoading = false;
                     CreateSegmentFromStore.ChangeCanExecute();
                 });
 
-            }); ;
+            });
 
         }
 
