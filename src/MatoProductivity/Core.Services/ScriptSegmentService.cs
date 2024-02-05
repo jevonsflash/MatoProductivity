@@ -1,13 +1,18 @@
 ﻿using Abp.Dependency;
 using Abp.Domain.Repositories;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Views;
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Maui.Views;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Infrastructure.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Size = Microsoft.Maui.Graphics.Size;
@@ -36,7 +41,8 @@ namespace MatoProductivity.Core.Services
         public Command Storage { get; set; }
         public Command Clear { get; set; }
         public Command RemovePhoto { get; set; }
-
+        public Command ShareDocument { get; set; }
+        public Command SaveDocument { get; set; }
         public Func<Size> GetImageSize { get; set; }
 
         public ScriptSegmentService(
@@ -44,21 +50,114 @@ namespace MatoProductivity.Core.Services
         {
             PropertyChanged += ScriptSegmentViewModel_PropertyChanged;
             this.Undo = new Command(UndoAction);
-            this.Storage = new Command(StorageAction);
-            this.Clear = new Command(ClearAction, IsScriptValid);
+            this.Clear = new Command(ClearAction, () => IsScriptValid);
             this.RemovePhoto = new Command(RemovePhotoAction);
-            ScriptLines=new ObservableCollection<IDrawingLine>();
-            ScriptLines.CollectionChanged+=ScriptLines_CollectionChanged;
+            this.ShareDocument = new Command(ShareDocumentAction, () => IsScriptValid);
+            this.SaveDocument = new Command(SaveDocumentAction, () => IsScriptValid);
             this.LineColorSelectorSource=DefaultLineColorList;
             this.DrawingLineSizeSelectorSource=DefaultDrawingLineSizeList;
             this.LineColor=this.LineColorSelectorSource.FirstOrDefault();
             this.DrawingLineSize=this.DrawingLineSizeSelectorSource.FirstOrDefault();
 
 
+
         }
 
-        private void ScriptLines_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        public async void ShareDocumentAction()
         {
+            await this.GetScriptImage();
+
+            string fn = this.Title+".png";
+
+            // Create an output filename
+            string targetFile = Path.Combine(FileSystem.Current.CacheDirectory, fn);
+            using (var outputStream = File.Create(targetFile))
+            using (var inputStream = new MemoryStream(this.FileContent))
+            {
+                // Copy the file to the AppDataDirectory
+                await inputStream.CopyToAsync(outputStream);
+            }
+            await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = "分享"+fn,
+                File = new ShareFile(targetFile)
+            });
+        }
+
+        public async void SaveDocumentAction()
+        {
+            await this.GetScriptImage();
+
+            string fn = this.Title+".png";
+
+            // Create an output filename
+            using (var inputStream = new MemoryStream(this.FileContent))
+            {
+
+
+
+                var fileSaverResult = await FileSaver.Default.SaveAsync(fn, inputStream, CancellationToken.None);
+                if (fileSaverResult.IsSuccessful)
+                {
+                    await Toast.Make($"文件已保存: {fileSaverResult.FilePath}").Show();
+                }
+                else
+                {
+                    await Toast.Make($"文件保存失败: {fileSaverResult.Exception.Message}").Show();
+                }
+            }
+        }
+
+
+        protected override void FileSegmentViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(NoteSegment))
+            {
+                var defaultTitle = this.CreateNoteSegmentPayload(nameof(Title), NoteSegment.Title);
+                var title = NoteSegment?.GetOrSetNoteSegmentPayload(nameof(Title), defaultTitle);
+                Title = title.GetStringValue();
+
+                var serializedScriptLines = NoteSegment?.GetNoteSegmentPayload(nameof(ScriptLines));
+                if (serializedScriptLines!=null)
+                {
+                    try
+                    {
+                        var deserializedScriptLines = JsonConvert.DeserializeObject<IEnumerable<DrawingLine>>(serializedScriptLines.StringValue);
+                        ScriptLines =new ObservableCollection<IDrawingLine>(deserializedScriptLines);
+                        ScriptLines.CollectionChanged+=ScriptLines_CollectionChanged;
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Warn(ex.Message);
+                    }
+                }
+                else
+                {
+                    ScriptLines=new ObservableCollection<IDrawingLine>();
+                    ScriptLines.CollectionChanged+=ScriptLines_CollectionChanged;
+
+                }
+
+            }
+
+
+            else if (e.PropertyName == nameof(Title))
+            {
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
+            }
+        }
+
+
+        private void ScriptLines_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.ScriptLines.Count>0)
+            {
+                var serializedScriptLines = JsonConvert.SerializeObject(this.ScriptLines);
+                NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(ScriptLines), serializedScriptLines));
+            }
+
             this.Clear.ChangeCanExecute();
         }
 
@@ -123,6 +222,7 @@ namespace MatoProductivity.Core.Services
             {
                 _scriptLines = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsScriptValid));
             }
         }
 
@@ -137,10 +237,10 @@ namespace MatoProductivity.Core.Services
 
         }
 
-        public override void SubmitAction(object obj)
+        public override async void SubmitAction(object obj)
         {
             base.SubmitAction(obj);
-            this.Storage.Execute(null);
+            await GetScriptImage();
         }
         public void RemovePhotoAction()
         {
@@ -153,9 +253,11 @@ namespace MatoProductivity.Core.Services
         }
 
 
-        public async void StorageAction()
+
+
+        private async Task GetScriptImage()
         {
-            if (!IsScriptValid())
+            if (!IsScriptValid)
             {
                 return;
             }
@@ -174,13 +276,10 @@ namespace MatoProductivity.Core.Services
                     this.FileContent=  fileStream.ToArray();
                 }
             }
-
         }
 
-        private bool IsScriptValid()
-        {
-            return this.ScriptLines!=null && this.ScriptLines.Count>0;
-        }
+        public bool IsScriptValid => this.ScriptLines!=null && this.ScriptLines.Count>0;
+
 
         public void ClearAction()
         {

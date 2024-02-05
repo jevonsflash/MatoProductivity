@@ -6,17 +6,8 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MatoProductivity.Core.Views.ScriptSegmentView">
     <Grid>
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <Image Source="{Binding PreviewImage}"></Image>
-
-        </VerticalStackLayout>
-
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
-            <Image Source="{Binding PreviewImage}"
-                   IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}"></Image>
-
+        <VerticalStackLayout>
             <toolkit:DrawingView x:Name="MainEditor"
-                                 IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}"
                                  Lines="{Binding ScriptLines}"
                                  LineColor="{Binding LineColor}"
                                  LineWidth="{Binding DrawingLineSize.Value}"
@@ -107,11 +98,26 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </VerticalStackLayout>
-            <Grid  IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=False}">
-                <Button Text="重新绘制"
-                        Command="{Binding RemovePhoto}"></Button>
+
+            <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Text="保存到设备"
+                        Style="{StaticResource Plain_Button}"
+                        Grid.Column="0"
+                        Command="{Binding SaveDocument}"></Button>
+                <Button Text="分享"
+                        Style="{StaticResource Plain_Button}"
+                        Grid.Column="1"
+                        Command="{Binding ShareDocument}"></Button>
+
+
+
             </Grid>
-            <Grid  IsVisible="{Binding FileContent, Converter={x:StaticResource IsValid2BoolConverter}, ConverterParameter=True}">
+            <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
