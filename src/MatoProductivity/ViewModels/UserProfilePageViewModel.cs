@@ -32,6 +32,7 @@ namespace MatoProductivity.ViewModels
         {
             AppActionSetting = new Command(AppActionSettingAction, (o) => !PopupLoading);
             AboutMe = new Command(AboutMeAction, (o) => !PopupLoading);
+            Login = new Command(LoginAction, (o) => !PopupLoading);
             PrivacyPolicy = new Command(PrivacyPolicyAction, (o) => !PopupLoading);
             ThirdPartyLicenses = new Command(ThirdPartyLicensesAction, (o) => !PopupLoading);
             Version = new Command(VersionAction, (o) => !PopupLoading);
@@ -40,6 +41,11 @@ namespace MatoProductivity.ViewModels
             this.iocResolver=iocResolver;
             PropertyChanged+=UserProfilePageViewModel_PropertyChanged;
             Init();
+        }
+
+        private void LoginAction(object obj)
+        {
+            CommonHelper.Alert("敬请期待..");
         }
 
         private async void ThirdPartyLicensesAction(object obj)
@@ -235,6 +241,7 @@ namespace MatoProductivity.ViewModels
         public Command PrivacyPolicy { get; set; }
         public Command ThirdPartyLicenses { get; set; }
         public Command Version { get; set; }
+        public Command Login { get; set; }
 
 
     }

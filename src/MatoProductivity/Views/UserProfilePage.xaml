@@ -11,20 +11,15 @@
         </Style>
     </ContentPage.Resources>
     <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
-          RowDefinitions="Auto,Auto, *">
+          RowDefinitions="Auto,Auto">
 
         <Grid Grid.Row="0"
               Margin="20, 20, 0, 20"
               HorizontalOptions="FillAndExpand">
             <Grid.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding BackCommand}"></TapGestureRecognizer>
+                <TapGestureRecognizer Command="{Binding Login}"></TapGestureRecognizer>
             </Grid.GestureRecognizers>
-            <Label Text="&#xf060;"
-                   FontSize="{StaticResource Headline4FontSize}"
-                   FontFamily="FontAwesome_Solid"
-                   TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Start"></Label>
+
             <StackLayout HorizontalOptions="CenterAndExpand">
                 <Label Text="&#xf2bd;"
                        TextColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
@@ -35,41 +30,8 @@
                 </Label>
                 <Label HorizontalOptions="Center"
                        Style="{StaticResource Headline4_MulishBlack}"
-                       Text="{Binding Username}"
+                       Text="未登录"
                        TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
-                <Grid ColumnDefinitions="*, *, *"
-                      Margin="30, 0, 30, 0">
-                    <StackLayout Grid.Column="0"
-                                 Spacing="0">
-                        <Label Style="{StaticResource Body1_MulishRegular}"
-                               Text="Tasks"
-                               TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
-                               HorizontalTextAlignment="Center"></Label>
-                        <Label Style="{StaticResource Body1_MulishBold}"
-                               Text="{Binding ProfileDetails.TotalTasks}"
-                               HorizontalTextAlignment="Center"></Label>
-                    </StackLayout>
-                    <StackLayout Grid.Column="1"
-                                 Spacing="0">
-                        <Label Style="{StaticResource Body1_MulishRegular}"
-                               Text="Done"
-                               TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
-                               HorizontalTextAlignment="Center"></Label>
-                        <Label Style="{StaticResource Body1_MulishBold}"
-                               Text="{Binding ProfileDetails.DoneTasks}"
-                               HorizontalTextAlignment="Center"></Label>
-                    </StackLayout>
-                    <StackLayout Grid.Column="2"
-                                 Spacing="0">
-                        <Label Style="{StaticResource Body1_MulishRegular}"
-                               Text="Lists"
-                               TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
-                               HorizontalTextAlignment="Center"></Label>
-                        <Label Style="{StaticResource Body1_MulishBold}"
-                               Text="{Binding ProfileDetails.TotalLists}"
-                               HorizontalTextAlignment="Center"></Label>
-                    </StackLayout>
-                </Grid>
             </StackLayout>
         </Grid>
         <StackLayout Grid.Row="2"

@@ -60,7 +60,6 @@
                                    Grid.Column="1"
                                    Text="{Binding Desc}"
                                    TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
-                                   FontAttributes="Italic"
                                    VerticalOptions="End" />
                         </Grid>
                     </DataTemplate>

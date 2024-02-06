@@ -29,20 +29,20 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20"></RowDefinition>
                             <RowDefinition></RowDefinition>
-                            <RowDefinition Height="20"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Button Grid.Column="2"
-                                    HorizontalOptions="End"
-                                    Style="{StaticResource Emphatic_Button}"
-                                    Margin="0" Padding="10,0"
-                                    Text="&#xf141;"
-                                    FontFamily="FontAwesome_Solid"
-                                    Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.OpenContextMenu}"
-                                    CommandParameter="{TemplateBinding Path= BindingContext}"></Button>
-                        </Grid>
-                        <ContentPresenter Grid.Row="1" Grid.RowSpan="2" />
-                        <Border Grid.Row="2"
+                        <Button Grid.Column="2"
+                                HorizontalOptions="End"
+                                Style="{StaticResource Emphatic_Button}"
+                                Margin="0"
+                                Padding="10,0"
+                                Text="&#xf141;"
+                                FontFamily="FontAwesome_Solid"
+                                Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.OpenContextMenu}"
+                                CommandParameter="{TemplateBinding Path= BindingContext}"></Button>
+                        <ContentPresenter Grid.Row="1"
+                                          Grid.RowSpan="2" />
+                        <Border Grid.RowSpan="2"
+                                Padding="10"
                                 BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                                 IsVisible="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
                                 StrokeThickness="0"
@@ -83,7 +83,7 @@
                         Command="{TemplateBinding BindingContext.Remove}"
                         FontFamily="FontAwesome_Solid"
                         Text="&#xf068;"
-                        HorizontalOptions="End"
+                        HorizontalOptions="Start"
                         VerticalOptions="Start"></Button>
             </Grid>
         </ControlTemplate>
@@ -108,19 +108,22 @@
                         Padding="8">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="10"></RowDefinition>
-                            <RowDefinition></RowDefinition>
                             <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Button Grid.Column="2"
-                                    Style="{StaticResource Plain_Button}"
-                                    Text="..."
-                                    Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.OpenContextMenu}"
-                                    CommandParameter="{TemplateBinding Path= BindingContext}"></Button>
-                        </Grid>
-                        <ContentPresenter Grid.Row="1" Grid.RowSpan="2" />
-                        <Border Grid.Row="2"
+                        <Button Grid.Column="2"
+                                HorizontalOptions="End"
+                                Style="{StaticResource Emphatic_Button}"
+                                Margin="0"
+                                Padding="10,0"
+                                Text="&#xf141;"
+                                FontFamily="FontAwesome_Solid"
+                                Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.OpenContextMenu}"
+                                CommandParameter="{TemplateBinding Path= BindingContext}"></Button>
+                        <ContentPresenter Grid.Row="1"
+                                          Grid.RowSpan="2" />
+                        <Border Grid.RowSpan="2"
+                                Padding="10"
                                 BackgroundColor="{AppThemeBinding Light={StaticResource LightButtonColor}, Dark={StaticResource DarkButtonColor}}"
                                 IsVisible="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.IsEditing}"
                                 StrokeThickness="0"
@@ -161,7 +164,7 @@
                         Command="{TemplateBinding BindingContext.Remove}"
                         FontFamily="FontAwesome_Solid"
                         Text="&#xf068;"
-                        HorizontalOptions="End"
+                        HorizontalOptions="Start"
                         VerticalOptions="Start"></Button>
             </Grid>
 
@@ -197,13 +200,13 @@
             <Label Grid.Column="1"
                    Grid.Row="0"
                    Style="{StaticResource Body1_MulishBold}"
-                   Text="Hello"
+                   Text="登录以同步数据"
                    TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"></Label>
             <Label Grid.Column="1"
                    Grid.Row="1"
                    Margin="0, -2, 0, 0"
                    Style="{StaticResource Subtitle1_MulishBlack}"
-                   Text="Name"
+                   Text="未登录"
                    TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
 
             <HorizontalStackLayout Grid.Column="2"
@@ -328,7 +331,7 @@
                 <Border Margin="2,2"
                         HeightRequest="200"
                         Padding="8">
-                   
+
                     <Border BackgroundColor="Transparent"
                             StrokeThickness="2"
                             StrokeDashArray="1,1"
@@ -343,7 +346,7 @@
                                    HorizontalOptions="Center"
                                    Text="没有找到你想要的场景?"
                                    TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
-                                Margin="5, 0, 5, 0" />
+                                   Margin="5, 0, 5, 0" />
 
                             <Label Grid.Row="0"
                                    Grid.RowSpan="2"

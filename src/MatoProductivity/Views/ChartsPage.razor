@@ -1,7 +1,7 @@
 ﻿@using MatoProductivity.ViewModels
 @inject IJSRuntime JSRuntime
 
-<button @onclick=Refresh>刷新</button>
+<button class="button" @onclick=Refresh>刷新</button>
 
 
 <div class="list-group" style="overflow:auto">
@@ -197,7 +197,18 @@
 
 
 </script>
-
+<style>
+    .button {
+        background-color: black;
+        border-width: 0;
+        color: #fff;
+        border-radius: 20px;
+        font-size: 12px;
+        letter-spacing: -.32px;
+        line-height: 19px;
+        padding: 5px 22px;
+    }
+</style>
 
 @code {
     [Parameter]

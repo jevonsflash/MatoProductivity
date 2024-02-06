@@ -102,8 +102,6 @@
                                    ComponentType="{x:Type views:ChartsPage}" />
                 </BlazorWebView.RootComponents>
             </BlazorWebView>
-            <Label Text="您还没有创建数据"
-                   IsVisible="{Binding KeyValueStatisticGroups, Converter={StaticResource IsValid2BoolConverter}, ConverterParameter=true}"></Label>
         </Grid>
 
     </Grid>
