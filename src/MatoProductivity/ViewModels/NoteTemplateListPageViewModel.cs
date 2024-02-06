@@ -127,12 +127,15 @@ namespace MatoProductivity.ViewModels
         private async void CreateActionAsync(object obj)
         {
 
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = 0 }))
-            {
-                (objWrapper.Object.BindingContext as EditNoteTemplatePageViewModel).Create.Execute(null);
+            var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = 0 });
 
-                await navigationService.PushAsync(objWrapper.Object);
-            }
+            (objWrapper.Object.BindingContext as EditNoteTemplatePageViewModel).Create.Execute(null);
+            objWrapper.Object.Disappearing+=(o, e) =>
+            {
+                objWrapper.Dispose();
+            };
+            await navigationService.PushAsync(objWrapper.Object);
+
         }
 
         private async void RemoveAction(object obj)
@@ -155,10 +158,13 @@ namespace MatoProductivity.ViewModels
         {
             var noteTemplateWrapper = (NoteTemplateWrapper)obj;
             var note = noteTemplateWrapper.NoteTemplate;
-            using (var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = note.Id }))
+            var objWrapper = iocResolver.ResolveAsDisposable<EditNoteTemplatePage>(new { NoteId = note.Id });
+            objWrapper.Object.Disappearing+=(o, e) =>
             {
-                await navigationService.PushAsync(objWrapper.Object);
-            }
+                objWrapper.Dispose();
+            };
+            await navigationService.PushAsync(objWrapper.Object);
+
         }
 
         private async void CreateNoteAction(object obj)

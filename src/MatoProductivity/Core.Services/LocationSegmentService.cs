@@ -245,7 +245,7 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-        public bool IsAutoSet { get; set; } = true;
+        public bool IsAutoSet => true;
 
 
 

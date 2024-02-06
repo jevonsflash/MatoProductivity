@@ -8,7 +8,7 @@
                      x:Name="BoxView01"
                      HeightRequest="10"
                      WidthRequest="10"
-                     BackgroundColor="Red"
+                     BackgroundColor="{StaticResource Red}"
                      VerticalOptions="Center"
                      HorizontalOptions="Start">
 

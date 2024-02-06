@@ -14,6 +14,7 @@ namespace MatoProductivity.Services
 
     public class NoteSynchronizer :
        IEventHandler<EntityCreatedEventData<Note>>,
+       IEventHandler<EntityUpdatedEventData<Note>>,
        IEventHandler<EntityDeletedEventData<Note>>, ISingletonDependency
     {
         private readonly NoteListPageViewModel noteListPageViewModel;
@@ -56,5 +57,19 @@ namespace MatoProductivity.Services
                 }
             }
         }
+
+        public void HandleEvent(EntityUpdatedEventData<Note> eventData)
+        {
+            var entity = eventData.Entity;
+            if (entity!=null)
+            {
+                var currentOne = noteListPageViewModel.Notes?.FirstOrDefault(c => c.Id==entity.Id);
+                if (currentOne!=null)
+                {
+                    currentOne=entity;
+                }
+            }
+        }
+
     }
 }

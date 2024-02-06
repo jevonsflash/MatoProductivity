@@ -72,6 +72,8 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20"></ColumnDefinition>
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Grid.GestureRecognizers>
                                     <DragGestureRecognizer CanDrag="True"
@@ -90,8 +92,36 @@
                                        Grid.Column="1"
                                        VerticalOptions="Center">
                                 </Entry>
+                                <Border IsVisible="{TemplateBinding BindingContext.IsAutoSet}"
+                                        StrokeShape="RoundRectangle 100"
+                                        Stroke="Transparent"
+                                        BackgroundColor="{StaticResource Green}"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center"
+                                        HeightRequest="15"
+                                        WidthRequest="15"
+                                        Grid.Column="2">
+                                    <Label TextColor="White"
+                                           FontSize="8"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span FontFamily="FontAwesome_Solid"
+                                                      Text="&#xf069;"></Span>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+
+                                    </Label>
+
+                                </Border>
                                 <ContentPresenter Grid.Row="1"
-                                                  Grid.ColumnSpan="2" />
+                                                  Grid.ColumnSpan="3" />
+                                <Grid Grid.Row="0"
+                                      Grid.Column="3"
+                                      Grid.RowSpan="2">
+                                    <Image Source="more"></Image>
+                                </Grid>
                             </Grid>
                         </Border>
                     </StackLayout>
@@ -472,7 +502,9 @@
                                 VerticalOptions="Center"
                                 Grid.Column="1">
                             <Label TextColor="White"
-                                   Margin="5,0">
+                                   Margin="5,0"
+                                   ToolTipProperties.Text="快速创建：可不通过编辑页面，直接接创建笔记。除此之外您还可以从图标快捷方式创建笔记。                                  
+                                   ">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span FontFamily="FontAwesome_Solid"
@@ -480,7 +512,6 @@
                                         <Span Text="{Binding CanSimplified, Converter={StaticResource Bool2StringConverter}, ConverterParameter= 支持快速创建|不支持快速创建}"></Span>
                                     </FormattedString>
                                 </Label.FormattedText>
-
                             </Label>
 
                         </Border>

@@ -33,8 +33,11 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
                             <Button Grid.Column="2"
-                                    Style="{StaticResource Plain_Button}"
-                                    Text="..."
+                                    HorizontalOptions="End"
+                                    Style="{StaticResource Emphatic_Button}"
+                                    Margin="0" Padding="10,0"
+                                    Text="&#xf141;"
+                                    FontFamily="FontAwesome_Solid"
                                     Command="{Binding Source={x:Reference MainCollectionView}, Path= BindingContext.OpenContextMenu}"
                                     CommandParameter="{TemplateBinding Path= BindingContext}"></Button>
                         </Grid>
@@ -75,7 +78,7 @@
                         HeightRequest="25"
                         WidthRequest="25"
                         Padding="0"
-                        BackgroundColor="Red"
+                        BackgroundColor="{StaticResource Red}"
                         TextColor="White"
                         Command="{TemplateBinding BindingContext.Remove}"
                         FontFamily="FontAwesome_Solid"
@@ -153,7 +156,7 @@
                         HeightRequest="25"
                         WidthRequest="25"
                         Padding="0"
-                        BackgroundColor="Red"
+                        BackgroundColor="{StaticResource Red}"
                         TextColor="White"
                         Command="{TemplateBinding BindingContext.Remove}"
                         FontFamily="FontAwesome_Solid"
@@ -296,7 +299,7 @@
                                     <Border IsVisible="{Binding NoteTemplate.CanSimplified}"
                                             StrokeShape="RoundRectangle 100"
                                             Stroke="Transparent"
-                                            BackgroundColor="Green"
+                                            BackgroundColor="{StaticResource Green}"
                                             HorizontalOptions="End"
                                             VerticalOptions="Center"
                                             HeightRequest="25"

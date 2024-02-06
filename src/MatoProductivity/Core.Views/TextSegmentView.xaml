@@ -5,16 +5,31 @@
              xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
              x:Class="MatoProductivity.Core.Views.TextSegmentView">
     <Grid>
-        <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
-            <Label Text="{Binding Content}"></Label>
-        </VerticalStackLayout>
+        <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
+            <Label MinimumHeightRequest="90"
+                   Text="{Binding Content}"></Label>
+            <Grid IsVisible="{Binding Content, Converter={StaticResource IsValid2BoolConverter}, ConverterParameter=true}">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label 
+                       VerticalOptions="End"
+                       HorizontalTextAlignment="Center"
+                       Text="(无内容)"></Label>
+                <!--<Button VerticalOptions="Start"
+                        Grid.Row="1"
+                        Style="{StaticResource Text_Button}"
+                        Text="编辑内容"></Button>-->
+            </Grid>
+        </Grid>
 
         <VerticalStackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}">
             <Border Style="{StaticResource Base_FrameEntry}">
 
                 <Editor Text="{Binding Content}"
                         AutoSize="TextChanges"
-                        MinimumHeightRequest="100"
+                        MinimumHeightRequest="90"
                         Placeholder="{Binding PlaceHolder}"></Editor>
             </Border>
             <Grid IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.Config}}">
@@ -23,7 +38,8 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Label Text="PlaceHolder"></Label>
-                <Border Grid.Row="1" Style="{StaticResource Base_FrameEntry}">
+                <Border Grid.Row="1"
+                        Style="{StaticResource Base_FrameEntry}">
 
                     <Entry  Text="{Binding PlaceHolder}"
                             Placeholder="请输入PlaceHolder" />

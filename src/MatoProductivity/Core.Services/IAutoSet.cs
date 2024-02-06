@@ -2,7 +2,7 @@
 {
     public interface IAutoSet
     {
-        bool IsAutoSet { get; set; }
+        bool IsAutoSet { get;  }
         event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
 
     }

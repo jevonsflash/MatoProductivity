@@ -79,7 +79,7 @@
                     <StackLayout Orientation="Vertical"
                                  VerticalOptions="Center">
                         <Label Text="&#xf111;"
-                               TextColor="Red"
+                               TextColor="{StaticResource Red}"
                                FontSize="{StaticResource Headline4FontSize}"
                                FontFamily="FontAwesome_Solid"
                                HorizontalOptions="Center">

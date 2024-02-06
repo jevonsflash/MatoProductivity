@@ -35,8 +35,7 @@
                             </SwipeItemView>
                             <SwipeItemView  Command="{TemplateBinding BindingContext.GoToState}"
                                             CommandParameter="{x:Static service:NoteSegmentState.Edit}"
-                                            IsVisible="{TemplateBinding BindingContext.NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}"
-                                            >
+                                            IsVisible="{TemplateBinding BindingContext.NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}">
                                 <Border Padding="15, 0">
                                     <StackLayout Orientation="Vertical"
                                                  VerticalOptions="Center">
@@ -109,11 +108,12 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"></RowDefinition>
                                     <RowDefinition></RowDefinition>
-                                    <RowDefinition Height="30"></RowDefinition>
+                                    <RowDefinition Height="20"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20"></ColumnDefinition>
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Grid.GestureRecognizers>
                                     <DragGestureRecognizer CanDrag="True"
@@ -172,6 +172,12 @@
                                         </Label.FormattedText>
                                     </Label>
 
+                                </Grid>
+                                <Grid Grid.Row="0"
+                                      Grid.Column="2"
+                                      IsVisible="{TemplateBinding BindingContext.NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
+                                      Grid.RowSpan="3">
+                                    <Image Source="more"></Image>
                                 </Grid>
 
                             </Grid>

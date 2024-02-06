@@ -10,6 +10,9 @@
     <Color x:Key="FailColor">#D04C41</Color>
     <Color x:Key="SuccessColor">#00AF49</Color>
 
+    <Color x:Key="Red">#D04C41</Color>
+    <Color x:Key="Green">#00AF49</Color>
+
     <!--App Theme Light-->
     <Color x:Key="LightPrimaryTextColor">#212121</Color>
     <Color x:Key="LightSecondaryTextColor">#757575</Color>

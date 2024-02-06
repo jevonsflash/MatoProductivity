@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class TextSegmentService : NoteSegmentService, ITransientDependency
+    public class TextSegmentService : NoteSegmentService, ITransientDependency, IAutoSet
     {
 
         private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
+        public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
         public TextSegmentService(
             INoteSegment noteSegment) : base(noteSegment)
         {
@@ -54,6 +55,10 @@ namespace MatoProductivity.Core.Services
             {
                 NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
             }
+            else if (e.PropertyName == nameof(IsAutoSet))
+            {
+                OnAutoSetChanged?.Invoke(this, new AutoSetChangedEventArgs(this.IsAutoSet));
+            }
         }
 
         public override void CreateAction(object obj)
@@ -70,6 +75,7 @@ namespace MatoProductivity.Core.Services
             {
                 _content = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsAutoSet));
             }
         }
 
@@ -87,6 +93,7 @@ namespace MatoProductivity.Core.Services
         }
 
 
+        public bool IsAutoSet => !string.IsNullOrEmpty(Content);
 
 
     }

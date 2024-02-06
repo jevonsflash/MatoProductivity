@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class KeyValueSegmentService : NoteSegmentService, ITransientDependency
+    public class KeyValueSegmentService : NoteSegmentService, ITransientDependency, IAutoSet
     {
 
         private INoteSegmentPayload DefaultContentSegmentPayload => this.CreateNoteSegmentPayload(nameof(Content), "");
         private INoteSegmentPayload DefaultUnitSegmentPayload => this.CreateNoteSegmentPayload(nameof(Unit), "");
+
+        public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
         public KeyValueSegmentService(
             INoteSegment noteSegment) : base(noteSegment)
         {
@@ -60,8 +62,13 @@ namespace MatoProductivity.Core.Services
                 NoteSegment?.SetNoteSegmentPayload(this.CreateNoteSegmentPayload(nameof(Title), Title));
                 this.PlaceHolder= "请输入" + Title;
             }
+
+            else if (e.PropertyName == nameof(IsAutoSet))
+            {
+                OnAutoSetChanged?.Invoke(this, new AutoSetChangedEventArgs(this.IsAutoSet));
+            }
         }
-  
+
         public override void CreateAction(object obj)
         {
 
@@ -76,6 +83,7 @@ namespace MatoProductivity.Core.Services
             {
                 _content = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsAutoSet));
             }
         }
 
@@ -91,9 +99,10 @@ namespace MatoProductivity.Core.Services
             }
         }
 
-    
+
 
         private string _placeHolder;
+
 
         public string PlaceHolder
         {
@@ -104,6 +113,9 @@ namespace MatoProductivity.Core.Services
                 RaisePropertyChanged();
             }
         }
+
+
+        public bool IsAutoSet => !string.IsNullOrEmpty(Content);
 
 
 

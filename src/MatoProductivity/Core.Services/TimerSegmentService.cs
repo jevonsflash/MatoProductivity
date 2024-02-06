@@ -13,10 +13,11 @@ using System.Threading.Tasks;
 
 namespace MatoProductivity.Core.Services
 {
-    public class TimerSegmentService : NoteSegmentService, ITransientDependency, IHasTimer
+    public class TimerSegmentService : NoteSegmentService, ITransientDependency, IAutoSet, IHasTimer
     {
         private readonly AbpAsyncTimer timer;
         private readonly IBackgroundJobManager backgroundJobManager;
+        public event EventHandler<AutoSetChangedEventArgs> OnAutoSetChanged;
         private INoteSegmentPayload DefaultIsShowFromNowNoteSegmentPayload => this.CreateNoteSegmentPayload(nameof(IsShowFromNow), false.ToString());
         private INoteSegmentPayload DefaultTimeNoteSegmentPayload => this.CreateNoteSegmentPayload(nameof(Time), (DateTime.Now+new TimeSpan(5, 0, 0)).ToString());
         public TimerSegmentService(
@@ -146,6 +147,7 @@ namespace MatoProductivity.Core.Services
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(ExactTime));
                 RaisePropertyChanged(nameof(TimeFromNow));
+                RaisePropertyChanged(nameof(IsAutoSet));
             }
         }
 
@@ -272,5 +274,8 @@ namespace MatoProductivity.Core.Services
 
 
         }
+
+        public bool IsAutoSet => Time!=default;
+
     }
 }
