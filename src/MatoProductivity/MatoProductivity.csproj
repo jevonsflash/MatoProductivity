@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-ios;net8.0-android34.0</TargetFrameworks>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.22621.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
@@ -15,7 +16,7 @@
 		<ApplicationTitle>凡事摘要</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.matoproductivity</ApplicationId>
+		<ApplicationId>com.mato.matoproductivity</ApplicationId>
 		<ApplicationIdGuid>d5fedd16-9c40-45f4-8fa0-92eba02d4d0a</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -37,6 +38,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <RunAOTCompilation>False</RunAOTCompilation>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
