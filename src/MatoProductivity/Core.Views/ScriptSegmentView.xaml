@@ -7,16 +7,20 @@
              x:Class="MatoProductivity.Core.Views.ScriptSegmentView">
     <Grid>
         <VerticalStackLayout>
-            <toolkit:DrawingView x:Name="MainEditor"
-                                 Lines="{Binding ScriptLines}"
-                                 LineColor="{Binding LineColor}"
-                                 LineWidth="{Binding DrawingLineSize.Value}"
-                                 HeightRequest="250"
-                                 BackgroundColor="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}"
-                                 IsMultiLineModeEnabled="true"
-                                 ShouldClearOnFinish="false" />
+            <Grid>
+                <toolkit:DrawingView x:Name="MainEditor"
+                                     Lines="{Binding ScriptLines}"
+                                     LineColor="{Binding LineColor}"
+                                     LineWidth="{Binding DrawingLineSize.Value}"
+                                     HeightRequest="250"
+                                     BackgroundColor="{AppThemeBinding Light={StaticResource LightEntryBackgroundColor}, Dark={StaticResource DarkEntryBackgroundColor}}"
+                                     IsMultiLineModeEnabled="true" />
+                <Button BackgroundColor="Transparent"
+                        IsVisible="{Binding NoteSegmentState, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static service:NoteSegmentState.PreView}}"></Button>
 
-            <StackLayout Orientation="Horizontal"
+            </Grid>
+            <StackLayout IsVisible="{Binding NoteSegmentState, Converter={StaticResource EditOrConfigToBoolConverter}}"
+                         Orientation="Horizontal"
                          HorizontalOptions="End">
                 <Button  Text="&#xf067;"
                          FontFamily="FontAwesome_Solid"

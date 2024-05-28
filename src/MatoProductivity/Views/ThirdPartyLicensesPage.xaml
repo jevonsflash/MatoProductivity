@@ -28,33 +28,8 @@
             <StackLayout HorizontalOptions="CenterAndExpand">
             </StackLayout>
         </Grid>
-        <StackLayout Grid.Row="2"
-                     Padding="20, 0, 20, 0">
-            <Label Text="开源信息"></Label>
-            <Label Text="Powered by .NET Multi-platform App UI (.NET MAUI)"></Label>
-            <Label Text="已使用的第三方服务"></Label>
-            <Label>
-                <Label.Text>
-百度智能云
-和风天气
-高德开放平台
-                </Label.Text>
-            </Label>
-            <Label Text="已使用的开源组件库"></Label>
-            <Label>
-                <Label.Text>
-.NET Runtime
-C#/WinRT
-Xamarin.Forms
-ASP.NET Core Blazor
-AutoMapper
-ASP.NET Boilerplate (Abp)
-CommunityToolkit.Maui
-Castle.Windsor
-Newtonsoft.Json                  
-Microsoft.EntityFrameworkCore
-                </Label.Text>
-            </Label>
+        <StackLayout Grid.Row="2">
+            <WebView Source="https://blog.matoapp.net/apps/matoproductivity/common-share.html"></WebView>  
         </StackLayout>
     </Grid>
 

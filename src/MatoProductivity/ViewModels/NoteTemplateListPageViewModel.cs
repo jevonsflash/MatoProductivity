@@ -224,10 +224,14 @@ namespace MatoProductivity.ViewModels
             {
                 if (SelectedNoteTemplate != default)
                 {
-                    using (var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = SelectedNoteTemplate.NoteTemplate.Id }))
+                    var objWrapper = iocResolver.ResolveAsDisposable<EditNotePage>(new { NoteId = 0, NoteTemplateId = SelectedNoteTemplate.NoteTemplate.Id });
+                    objWrapper.Object.Disappearing+=(o, e) =>
                     {
-                        await navigationService.PushAsync(objWrapper.Object);
-                    }
+                        objWrapper.Dispose();
+                    };
+
+                    await navigationService.PushAsync(objWrapper.Object);
+
 
                     SelectedNoteTemplate = default;
                 }
