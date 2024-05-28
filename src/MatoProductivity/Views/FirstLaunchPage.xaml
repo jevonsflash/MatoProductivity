@@ -28,7 +28,7 @@
                 </StackLayout>
             </Grid>
             <Grid Grid.Row="1"
-                  Padding="20, 0, 20, 0">
+                  >
                 <Label LineBreakMode="CharacterWrap">
                     <Label.FormattedText>
                         <FormattedString>
