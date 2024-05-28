@@ -13,6 +13,11 @@ namespace MatoProductivity
             InitializeComponent();
         }
 
+        public PrivacyPolicyPage(string url) : this()
+        {
+            this.MainWebView.Source=url;
+        }
+
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
             await navigationService.PopAsync();

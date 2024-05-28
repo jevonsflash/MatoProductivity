@@ -14,12 +14,16 @@ namespace MatoProductivity.ViewModels
 {
     public class NoteTemplateListPageViewModel : ViewModelBase, ISingletonDependency
     {
+        private FirstLaunchPage firstLaunchPage;
+        private string isAgree;
+        private readonly IRepository<Setting, string> settingRepository;
         private readonly IRepository<NoteTemplate, long> repository;
         private readonly IIocResolver iocResolver;
         private readonly NavigationService navigationService;
         private readonly IUnitOfWorkManager unitOfWorkManager;
 
         public NoteTemplateListPageViewModel(
+            IRepository<Setting, string> settingRepository,
             IRepository<NoteTemplate, long> repository,
             IIocResolver iocResolver,
             NavigationService navigationService,
@@ -32,7 +36,7 @@ namespace MatoProductivity.ViewModels
             CreateNote = new Command(CreateNoteAction);
             this.GoToState = new Command(GoToStateAction);
             OpenContextMenu = new Command(OpenContextMenuAction);
-
+            this.settingRepository=settingRepository;
             this.repository = repository;
             this.iocResolver = iocResolver;
             this.navigationService = navigationService;
@@ -214,8 +218,57 @@ namespace MatoProductivity.ViewModels
 
                     var noteTemplates = await this.repository.GetAll().Include(c => c.NoteSegmentTemplates).ToListAsync();
                     this.NoteTemplates = new ObservableCollection<NoteTemplateWrapper>(noteTemplates.Select(c => new NoteTemplateWrapper(c) { Container = this }));
-                }).ContinueWith((e) => { Loading = false; });
+                }).ContinueWith(async (e) =>
+                {
+                    Loading = false;
+
+                    isAgree = settingRepository.FirstOrDefault(c => c.Id=="IsAgree")?.Value;
+                    if (string.IsNullOrEmpty(isAgree) || !bool.Parse(isAgree))
+                    {
+                        await PopupFirstLaunchPage();
+                    }
+
+
+                });
             });
+        }
+
+        private async Task PopupFirstLaunchPage()
+        {
+            using (var objWrapper = iocResolver.ResolveAsDisposable<FirstLaunchPage>())
+            {
+                firstLaunchPage = objWrapper.Object;
+                firstLaunchPage.OnFinishedChooise+=FirstLaunchPage_OnFinishedChooise;
+                MainThread.BeginInvokeOnMainThread(async () =>
+
+                    await navigationService.ShowPopupAsync(firstLaunchPage));
+            }
+        }
+
+        private async void FirstLaunchPage_OnFinishedChooise(object sender, bool e)
+        {
+            await navigationService.HidePopupAsync(firstLaunchPage);
+
+            if (e)
+            {
+                if (string.IsNullOrEmpty(isAgree))
+                {
+                    isAgree = settingRepository.Insert(new Setting("IsAgree", true.ToString()))?.Value;
+
+                }
+                else
+                {
+                    isAgree = settingRepository.Update("IsAgree", c => c.Value=true.ToString())?.Value;
+
+                }
+
+            }
+            else
+            {
+                Application.Current.Quit();
+            }
+            (sender as FirstLaunchPage).OnFinishedChooise -= FirstLaunchPage_OnFinishedChooise;
+
         }
 
         private async void NoteTemplatePageViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)

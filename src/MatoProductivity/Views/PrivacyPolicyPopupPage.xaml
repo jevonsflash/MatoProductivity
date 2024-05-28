@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                x:Class="MatoProductivity.Core.Views.PrivacyPolicyPopupPage"
+                xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
+                xmlns:views="clr-namespace:MatoProductivity.Views;assembly=MatoProductivity"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                VerticalOptions="End"
+                HorizontalOptions="Fill">
+
+    <Border StrokeShape="RoundRectangle 20">
+        <Grid
+              BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+              RowDefinitions="Auto, *">
+
+            <Grid Grid.Row="0"
+                  Margin="20, 20, 20, 20"
+                  HorizontalOptions="FillAndExpand">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                </Grid.GestureRecognizers>
+                <Label Text="&#xf00d;"
+                       FontSize="{StaticResource Headline4FontSize}"
+                       FontFamily="FontAwesome_Solid"
+                       TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                       HorizontalOptions="End"
+                       VerticalOptions="Start"></Label>
+                <StackLayout HorizontalOptions="CenterAndExpand">
+                </StackLayout>
+            </Grid>
+            <ScrollView Grid.Row="1">
+                <WebView x:Name="MainWebView"
+                         Source="https://blog.matoapp.net/apps/matoproductivity/privacy.html"></WebView>
+            </ScrollView>
+        </Grid>
+       
+    </Border>
+</mato:PopupBase>

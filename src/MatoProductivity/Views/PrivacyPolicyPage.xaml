@@ -4,12 +4,6 @@
                       xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
                       Title="PrivacyPolicyPage"
                       x:Class="MatoProductivity.PrivacyPolicyPage">
-    <ContentPage.Resources>
-        <Style TargetType="RadioButton">
-            <Setter Property="ControlTemplate"
-                    Value="{StaticResource RadioButtonTemplate}" />
-        </Style>
-    </ContentPage.Resources>
     <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
           RowDefinitions="Auto,Auto, *">
 
@@ -28,9 +22,9 @@
             <StackLayout HorizontalOptions="CenterAndExpand">
             </StackLayout>
         </Grid>
-        <StackLayout Grid.Row="2">
-            <WebView Source="https://blog.matoapp.net/apps/matoproductivity/privacy.html"></WebView>
-        </StackLayout>
+        <ScrollView Grid.Row="2">
+            <WebView x:Name="MainWebView" Source="https://blog.matoapp.net/apps/matoproductivity/privacy.html"></WebView>
+        </ScrollView>
     </Grid>
 
 

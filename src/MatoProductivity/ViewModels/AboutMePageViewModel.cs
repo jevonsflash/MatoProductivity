@@ -19,8 +19,6 @@ namespace MatoProductivity.ViewModels
     {
         private readonly NavigationService navigationService;
 
-        public event EventHandler<AppAction> OnFinishedChooise;
-
         public AboutMePageViewModel(
             NavigationService navigationService
             )

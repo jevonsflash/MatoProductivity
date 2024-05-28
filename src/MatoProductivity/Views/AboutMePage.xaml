@@ -62,6 +62,7 @@
                 <StackLayout Orientation="Horizontal">
                     <Button FontFamily="FontAwesome"
                             Text="&#xf044;"
+                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                             IsEnabled="False"
                             Margin="0,20,20,20"
                             Command="{Binding GoUriCommand}"
@@ -70,12 +71,14 @@
                             WidthRequest="22"></Button>
                     <Button FontFamily="FontAwesome"
                             Text="&#xf044;"
+                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                             Margin="0,20,20,20"
                             Command="{Binding GoUriCommand}"
                             CommandParameter="mailto:jevons@hotmail.com"
                             HeightRequest="22"
                             WidthRequest="22"></Button>
                     <Button Text="&#xf044;"
+                            TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
                             FontFamily="FontAwesome"
                             Margin="0,20,20,20"
                             Command="{Binding GoUriCommand}"

@@ -1,0 +1,78 @@
+﻿<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
+                x:Class="MatoProductivity.FirstLaunchPage"
+                Opened="PopupBase_Opened"
+                xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
+                xmlns:views="clr-namespace:MatoProductivity.Views;assembly=MatoProductivity"
+                Size="{Binding PopupSize}"
+                CanBeDismissedByTappingOutsideOfPopup="False"
+                Color="Transparent"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+    <Border StrokeShape="RoundRectangle 20">
+        <Grid 
+            BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+              RowDefinitions="Auto,*, Auto">
+
+            <Grid Grid.Row="0"
+                  Margin="20, 20, 0, 20"
+                  HorizontalOptions="FillAndExpand">
+                <Label Text="服务协议与隐私政策"
+                       FontSize="{StaticResource Headline4FontSize}"
+                       FontFamily="FontAwesome_Solid"
+                       TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"></Label>
+                <StackLayout HorizontalOptions="CenterAndExpand">
+                </StackLayout>
+            </Grid>
+            <Grid Grid.Row="1"
+                  Padding="20, 0, 20, 0">
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="感谢您使用凡事摘要APP，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读" />
+                            <Span Text="《服务协议》"
+                                  TextColor="Blue"
+                                  TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                            <Span Text=" 与 " />
+
+                            <Span Text="《隐私政策》"
+                                  TextColor="Blue"
+                                  TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer  Tapped="TapGestureRecognizer_Tapped_1" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                            <Span Text="，并确定完全了解我们对您个人信息的处理规则。如您同意《服务协议》与《隐私政策》，请点击“同意”开始使用凡事摘要，我们会尽全力保护您的个人信息安全。" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+
+
+            </Grid>
+            <Grid Grid.Row="2"
+                  Margin="10,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Text="不同意"
+                        Style="{StaticResource Plain_Button}"
+                        Clicked="Button_Clicked_1"></Button>
+                <Button Text="同意"
+                        Style="{StaticResource Emphatic_Button}"
+                        Clicked="Button_Clicked"
+                        Grid.Column="1"></Button>
+            </Grid>
+
+        </Grid>
+    </Border>
+</mato:PopupBase>

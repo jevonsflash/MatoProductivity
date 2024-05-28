@@ -1,0 +1,116 @@
+﻿<mato:PopupBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:mato="clr-namespace:MatoProductivity;assembly=MatoProductivity"
+                xmlns:core="clr-namespace:MatoProductivity.Core;assembly=MatoProductivity.Core"
+                x:Class="MatoProductivity.LoginPage"
+                Opened="PopupBase_Opened"
+                xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
+                xmlns:views="clr-namespace:MatoProductivity.Views;assembly=MatoProductivity"
+                Size="{Binding PopupSize}"
+                Color="Transparent"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+    <Border StrokeShape="RoundRectangle 20">
+        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource LightPageBackgroundColor}, Dark={StaticResource DarkPageBackgroundColor}}"
+              RowDefinitions="Auto,1.5*, *, Auto">
+
+            <Grid Grid.Row="0"
+                  Margin="20, 20, 20, 20"
+                  HorizontalOptions="FillAndExpand">
+                <Label Text="登录"
+                       FontSize="{StaticResource Headline4FontSize}"
+                       FontFamily="FontAwesome_Solid"
+                       TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"></Label>
+                <StackLayout HorizontalOptions="End">
+                    <Label Text="&#xf00d;"
+                           FontSize="{StaticResource Headline4FontSize}"
+                           FontFamily="FontAwesome_Solid"
+                           TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"
+                           HorizontalOptions="End"
+                           VerticalOptions="End">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2"></TapGestureRecognizer>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </Grid>
+            <Grid Grid.Row="1"
+                  Margin="10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0"
+                        Style="{StaticResource Base_FrameEntry}">
+
+                    <Entry  Text="{Binding UserName}"
+                            Placeholder="请输入用户名" />
+                </Border>
+                <Border Grid.Row="1"
+                        Style="{StaticResource Base_FrameEntry}">
+
+                    <Entry  Text="{Binding Password}"
+                            Placeholder="请输入密码" />
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2"
+                  Padding="10, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <controls:IsDoneToggleButton  VerticalOptions="Center" IsToggled="{Binding IsAgree, Mode=TwoWay}"></controls:IsDoneToggleButton>
+                <StackLayout Grid.Column="1"
+                             VerticalOptions="Center"
+                             Orientation="Vertical">
+                    <Label Text="我已阅读并同意:"></Label>
+
+                    <Label MaxLines="3"
+                           LineBreakMode="CharacterWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="《服务协议》"
+                                      TextColor="Blue"
+                                      TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text=" 与 " />
+
+                                <Span Text="《隐私政策》"
+                                      TextColor="Blue"
+                                      TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer  Tapped="TapGestureRecognizer_Tapped_1" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                </StackLayout>
+
+
+
+            </Grid>
+            <Grid Grid.Row="3"
+                  Margin="10,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Text="注册"
+                        IsEnabled="False"></Button>
+                <Button Text="登录"
+                        Style="{StaticResource Emphatic_Button}"
+                        Command="{Binding Login}"
+                        Grid.Column="1"></Button>
+            </Grid>
+            <ActivityIndicator Grid.RowSpan="4"
+                               IsRunning="{Binding Loading}"></ActivityIndicator>
+        </Grid>
+    </Border>
+</mato:PopupBase>

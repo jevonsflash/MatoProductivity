@@ -28,9 +28,9 @@
             <StackLayout HorizontalOptions="CenterAndExpand">
             </StackLayout>
         </Grid>
-        <StackLayout Grid.Row="2">
+        <ScrollView Grid.Row="2">
             <WebView Source="https://blog.matoapp.net/apps/matoproductivity/common-share.html"></WebView>  
-        </StackLayout>
+        </ScrollView>
     </Grid>
 
 

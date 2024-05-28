@@ -16,6 +16,7 @@ namespace MatoProductivity.ViewModels
     public class UserProfilePageViewModel : ViewModelBase, ISingletonDependency, IPopupContainerViewModelBase
     {
 
+        private Popup loginPage;
         private Popup shortCutSettingPage;
         private readonly NavigationService navigationService;
         private readonly IRepository<Setting, string> settingRepository;
@@ -30,6 +31,7 @@ namespace MatoProductivity.ViewModels
             IIocResolver iocResolver
             )
         {
+            this.CurrentUserName="未登录";
             AppActionSetting = new Command(AppActionSettingAction, (o) => !PopupLoading);
             AboutMe = new Command(AboutMeAction, (o) => !PopupLoading);
             Login = new Command(LoginAction, (o) => !PopupLoading);
@@ -43,14 +45,55 @@ namespace MatoProductivity.ViewModels
             Init();
         }
 
-        private void LoginAction(object obj)
+        private async void LoginAction(object obj)
         {
-            CommonHelper.Alert("敬请期待..");
+            PopupLoading = true;
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<LoginPage>())
+            {
+                loginPage = objWrapper.Object;
+                (loginPage.BindingContext as LoginPageViewModel).OnFinishedLogin += LoginPageViewModel_OnFinishedChooise;
+            }
+
+            await navigationService.ShowPopupAsync(loginPage).ContinueWith(async (e) =>
+            {
+                if (loginPage!=null)
+                {
+                    (loginPage.BindingContext as LoginPageViewModel).OnFinishedLogin -= LoginPageViewModel_OnFinishedChooise;
+                    loginPage = null;
+                }
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    PopupLoading = false;
+                });
+
+            });
         }
+
+        private async void LoginPageViewModel_OnFinishedChooise(object sender, UserInfo args)
+        {
+            this.CurrentUserName=args.Name;
+
+            (sender as LoginPageViewModel).OnFinishedLogin -= LoginPageViewModel_OnFinishedChooise;
+            await navigationService.HidePopupAsync(loginPage);
+        }
+        private string _currentUserName;
+
+        public string CurrentUserName
+        {
+            get { return _currentUserName; }
+            set
+            {
+                _currentUserName = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
 
         private async void ThirdPartyLicensesAction(object obj)
         {
-            var objWrapper = iocResolver.ResolveAsDisposable<ThirdPartyLicensesPage>();
+            using var objWrapper = iocResolver.ResolveAsDisposable<ThirdPartyLicensesPage>();
             await navigationService.PushAsync(objWrapper.Object);
         }
 
@@ -75,7 +118,7 @@ namespace MatoProductivity.ViewModels
 
         private async void PrivacyPolicyAction(object obj)
         {
-            var objWrapper = iocResolver.ResolveAsDisposable<PrivacyPolicyPage>();
+            using var objWrapper = iocResolver.ResolveAsDisposable<PrivacyPolicyPage>();
             await navigationService.PushAsync(objWrapper.Object);
         }
 
@@ -218,7 +261,6 @@ namespace MatoProductivity.ViewModels
 
 
         private bool _popupLoading;
-
 
         public bool PopupLoading
         {

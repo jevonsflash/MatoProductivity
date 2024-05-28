@@ -30,7 +30,7 @@
                 </Label>
                 <Label HorizontalOptions="Center"
                        Style="{StaticResource Headline4_MulishBlack}"
-                       Text="未登录"
+                       Text="{Binding CurrentUserName}"
                        TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
             </StackLayout>
         </Grid>
@@ -98,7 +98,7 @@
                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
                                   Command="{Binding PrivacyPolicy}" />
 
-                        <TextCell Text="开源信息"
+                        <TextCell Text="权限和SDK说明"
                                   TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"
                                   Command="{Binding ThirdPartyLicenses}" />
                         <TextCell Text="凡事摘要 版本 1.0"
