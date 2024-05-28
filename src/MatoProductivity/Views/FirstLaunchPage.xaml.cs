@@ -4,12 +4,14 @@ using Abp.Dependency;
 using MatoProductivity.Core.Settings;
 using MatoProductivity.Core.Views;
 using MatoProductivity.ViewModels;
+using Microsoft.Maui.Devices;
 
 namespace MatoProductivity
 {
     public partial class FirstLaunchPage : PopupBase, ITransientDependency
     {
         private readonly IIocResolver iocResolver;
+        private readonly DisplayInfo displayInfo;
 
         public event EventHandler<bool> OnFinishedChooise;
         public FirstLaunchPage(IIocResolver iocResolver)
@@ -20,6 +22,8 @@ namespace MatoProductivity
 
         private async void PopupBase_Opened(object sender, CommunityToolkit.Maui.Core.PopupOpenedEventArgs e)
         {
+
+            Size=new Size(280, 300);
         }
 
 

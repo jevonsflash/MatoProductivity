@@ -6,7 +6,6 @@
                 Opened="PopupBase_Opened"
                 xmlns:controls="clr-namespace:MatoProductivity.Core.Controls;assembly=MatoProductivity"
                 xmlns:views="clr-namespace:MatoProductivity.Views;assembly=MatoProductivity"
-                Size="{Binding PopupSize}"
                 CanBeDismissedByTappingOutsideOfPopup="False"
                 Color="Transparent"
                 VerticalOptions="Center"
@@ -30,7 +29,7 @@
             </Grid>
             <Grid Grid.Row="1"
                   Padding="20, 0, 20, 0">
-                <Label>
+                <Label LineBreakMode="CharacterWrap">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="感谢您使用凡事摘要APP，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读" />
