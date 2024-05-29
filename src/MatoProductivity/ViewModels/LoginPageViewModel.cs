@@ -2,6 +2,7 @@
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Extensions;
+using MatoProductivity.Core.Models;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Helper;

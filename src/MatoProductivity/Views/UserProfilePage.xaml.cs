@@ -13,8 +13,9 @@ namespace MatoProductivity
         public UserProfilePage(UserProfilePageViewModel noteTemplateListPageViewModel)
         {
             InitializeComponent();
-            this.BindingContext = noteTemplateListPageViewModel;
+            this.BindingContext = noteTemplateListPageViewModel;           
         }
+
 
         private void TextCell_Tapped(object sender, EventArgs e)
         {

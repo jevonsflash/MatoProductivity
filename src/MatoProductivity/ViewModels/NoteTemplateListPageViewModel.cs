@@ -2,6 +2,8 @@
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Castle.MicroKernel.Registration;
+using CommunityToolkit.Maui.Views;
+using MatoProductivity.Core.Models;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Helper;
@@ -12,8 +14,9 @@ using System.Collections.ObjectModel;
 
 namespace MatoProductivity.ViewModels
 {
-    public class NoteTemplateListPageViewModel : ViewModelBase, ISingletonDependency
+    public class NoteTemplateListPageViewModel : ViewModelBase, ISingletonDependency, IPopupContainerViewModelBase
     {
+        private Popup loginPage;
         private FirstLaunchPage firstLaunchPage;
         private string isAgree;
         private readonly IRepository<Setting, string> settingRepository;
@@ -31,6 +34,7 @@ namespace MatoProductivity.ViewModels
             )
         {
             this.Create = new Command(CreateActionAsync);
+            this.ProfileCommand = new Command(ProfileCommandActionAsync);
             Remove = new Command(RemoveAction);
             Edit = new Command(EditAction);
             CreateNote = new Command(CreateNoteAction);
@@ -44,6 +48,42 @@ namespace MatoProductivity.ViewModels
             this.PropertyChanged += NoteTemplatePageViewModel_PropertyChangedAsync;
             //Init();
         }
+
+        private async void ProfileCommandActionAsync(object obj)
+        {
+        
+            PopupLoading = true;
+
+            using (var objWrapper = iocResolver.ResolveAsDisposable<LoginPage>())
+            {
+                loginPage = objWrapper.Object;
+                (loginPage.BindingContext as LoginPageViewModel).OnFinishedLogin += LoginPageViewModel_OnFinishedChooise;
+            }
+
+            await navigationService.ShowPopupAsync(loginPage).ContinueWith(async (e) =>
+            {
+                if (loginPage!=null)
+                {
+                    (loginPage.BindingContext as LoginPageViewModel).OnFinishedLogin -= LoginPageViewModel_OnFinishedChooise;
+                    loginPage = null;
+                }
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    PopupLoading = false;
+                });
+
+            });
+        }
+
+        private async void LoginPageViewModel_OnFinishedChooise(object sender, UserInfo args)
+        {
+            this.CurrentUserInfo=args;
+
+            (sender as LoginPageViewModel).OnFinishedLogin -= LoginPageViewModel_OnFinishedChooise;
+            await navigationService.HidePopupAsync(loginPage);
+        }
+        
+
 
         private async void OpenContextMenuAction(object obj)
         {
@@ -332,9 +372,26 @@ namespace MatoProductivity.ViewModels
             }
         }
         public SelectionMode SelectionMode => IsEditing ? SelectionMode.Multiple : SelectionMode.Single;
+        private bool _popupLoading;
 
+        public bool PopupLoading
+        {
+            get { return _popupLoading; }
+            set
+            {
+                _popupLoading = value;
+                RaisePropertyChanged();
+
+            }
+        }
+        public async Task CloseAllPopup()
+        {
+            await navigationService.HidePopupAsync(firstLaunchPage);
+            await navigationService.HidePopupAsync(loginPage);
+        }
         public Command GoToState { get; set; }
         public Command Create { get; set; }
+        public Command ProfileCommand { get; set; }
         public Command CreateNote { get; set; }
 
         public Command Remove { get; set; }

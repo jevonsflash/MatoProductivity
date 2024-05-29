@@ -200,13 +200,13 @@
             <Label Grid.Column="1"
                    Grid.Row="0"
                    Style="{StaticResource Body1_MulishBold}"
-                   Text="登录以同步数据"
+                   Text="{Binding CurrentUserInfo.Nickname}"
                    TextColor="{AppThemeBinding Light={StaticResource LightSecondaryTextColor}, Dark={StaticResource DarkSecondaryTextColor}}"></Label>
             <Label Grid.Column="1"
                    Grid.Row="1"
                    Margin="0, -2, 0, 0"
                    Style="{StaticResource Subtitle1_MulishBlack}"
-                   Text="未登录"
+                   Text="{Binding CurrentUserInfo.Name}"
                    TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
 
             <HorizontalStackLayout Grid.Column="2"

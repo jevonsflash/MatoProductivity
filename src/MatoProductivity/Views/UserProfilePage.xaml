@@ -30,7 +30,7 @@
                 </Label>
                 <Label HorizontalOptions="Center"
                        Style="{StaticResource Headline4_MulishBlack}"
-                       Text="{Binding CurrentUserName}"
+                       Text="{Binding CurrentUserInfo.Nickname}"
                        TextColor="{AppThemeBinding Light={StaticResource LightPrimaryTextColor}, Dark={StaticResource DarkPrimaryTextColor}}"></Label>
             </StackLayout>
         </Grid>

@@ -77,8 +77,8 @@
 	  <PackageReference Include="Abp" Version="8.4.0" />
 	  <PackageReference Include="Abp.AutoMapper" Version="8.4.0" />
 	  <PackageReference Include="Abp.Castle.Log4Net" Version="8.4.0" />
-	  <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-	  <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="8.0.3" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="9.0.0" />
+	  <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="8.0.14" />
 	</ItemGroup>
 
 	<ItemGroup>	
@@ -323,6 +323,15 @@
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows')) != true">
 		<Compile Remove="**\**\*.Windows.cs" />
 		<None Include="**\**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.14" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.14" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
 	</ItemGroup>
 
 </Project>

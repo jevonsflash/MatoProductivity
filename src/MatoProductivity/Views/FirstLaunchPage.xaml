@@ -28,11 +28,21 @@
                 </StackLayout>
             </Grid>
             <Grid Grid.Row="1"
-                  >
+                  Margin="20, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
                 <Label LineBreakMode="CharacterWrap">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="感谢您使用凡事摘要APP，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读" />
+                            <Span Text="感谢您使用凡事摘要APP，在您使用本软件过程中，我们可能会对您的部分个人信息进行收集、使用和共享。请您仔细阅读下列条款：" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label LineBreakMode="CharacterWrap" Grid.Row="1">
+                    <Label.FormattedText>
+                        <FormattedString>
                             <Span Text="《服务协议》"
                                   TextColor="Blue"
                                   TextDecorations="Underline">

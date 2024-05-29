@@ -9,6 +9,7 @@ using System.Text;
 using Abp;
 using Abp.Dependency;
 using Abp.Domain.Services;
+using MatoProductivity.Core.Models;
 
 namespace MatoProductivity.Core.ViewModels
 {
@@ -79,6 +80,20 @@ namespace MatoProductivity.Core.ViewModels
             set
             {
                 _loading = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+
+        private static UserInfo _currentUserInfo = new UserInfo() { Name="未登录", Nickname="登录以同步数据" };
+
+        public UserInfo CurrentUserInfo
+        {
+            get { return _currentUserInfo; }
+            set
+            {
+                _currentUserInfo = value;
                 RaisePropertyChanged();
 
             }

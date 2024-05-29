@@ -23,7 +23,7 @@ namespace MatoProductivity
         private async void PopupBase_Opened(object sender, CommunityToolkit.Maui.Core.PopupOpenedEventArgs e)
         {
 
-            Size=new Size(280, 300);
+            Size=new Size(290, 360);
         }
 
 

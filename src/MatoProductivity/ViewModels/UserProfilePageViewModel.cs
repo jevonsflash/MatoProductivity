@@ -2,6 +2,7 @@
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using CommunityToolkit.Maui.Views;
+using MatoProductivity.Core.Models;
 using MatoProductivity.Core.Models.Entities;
 using MatoProductivity.Core.ViewModels;
 using MatoProductivity.Helper;
@@ -31,7 +32,6 @@ namespace MatoProductivity.ViewModels
             IIocResolver iocResolver
             )
         {
-            this.CurrentUserName="未登录";
             AppActionSetting = new Command(AppActionSettingAction, (o) => !PopupLoading);
             AboutMe = new Command(AboutMeAction, (o) => !PopupLoading);
             Login = new Command(LoginAction, (o) => !PopupLoading);
@@ -72,23 +72,12 @@ namespace MatoProductivity.ViewModels
 
         private async void LoginPageViewModel_OnFinishedChooise(object sender, UserInfo args)
         {
-            this.CurrentUserName=args.Name;
+            this.CurrentUserInfo=args;
 
             (sender as LoginPageViewModel).OnFinishedLogin -= LoginPageViewModel_OnFinishedChooise;
             await navigationService.HidePopupAsync(loginPage);
         }
-        private string _currentUserName;
-
-        public string CurrentUserName
-        {
-            get { return _currentUserName; }
-            set
-            {
-                _currentUserName = value;
-                RaisePropertyChanged();
-
-            }
-        }
+        
 
 
         private async void ThirdPartyLicensesAction(object obj)
@@ -275,6 +264,7 @@ namespace MatoProductivity.ViewModels
         public async Task CloseAllPopup()
         {
             await navigationService.HidePopupAsync(shortCutSettingPage);
+            await navigationService.HidePopupAsync(loginPage);
         }
 
 
