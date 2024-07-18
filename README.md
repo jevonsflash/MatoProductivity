@@ -1,15 +1,19 @@
-# MatoMusic
-使用.NET MAUI开发的音乐播放器
-
-
+# MatoProductivity
 
 ![](./Assets/1.png)
 
-## 技术博客
-系列文章将分步解读音乐播放器核心业务及代码：
+完全开源的记事App - 凡事摘要，已上架腾讯应用商店。
 
-* [深入解读.NET MAUI音乐播放器项目（一）：概述与架构](https://blog.csdn.net/jevonsflash/article/details/128960586)
-* [深入解读.NET MAUI音乐播放器项目（二）：播放内核](https://blog.csdn.net/jevonsflash/article/details/128986962)
-* [深入解读.NET MAUI音乐播放器项目（三）：界面交互](https://blog.csdn.net/jevonsflash/article/details/129112689)
+[【凡事摘要官方下载-凡事摘要 app 最新版本免费下载-应用宝官网】](https://sj.qq.com/appdetail/com.mato.matoproductivity)
+
+欢迎提交PR
+
+
+## 技术博客
+系列文章将带你了解核心功能和代码：
+
+* [[MAUI 项目实战] 笔记App：程序设计](https://blog.csdn.net/jevonsflash/article/details/140523571)
+* [MAUI 项目实战] 笔记App：数据库设计
+* [MAUI 项目实战] 笔记App：界面与交互
 
 
